@@ -1,0 +1,339 @@
+
+\documentclass[oneside]{ausarbeitung}
+\bibliography{latexlit}
+
+
+% ----------------------------------------------------------------------
+
+\begin{document}
+
+%--- Sprachauswahl
+% Erlaubte Werte:
+%   \selectlanguage{english}
+%   \selectlanguage{ngerman}
+\selectlanguage{ngerman}
+
+%--- Art der Arbeit
+% Erlaubte Werte:
+%   \Praxissemesterbericht
+%   \Projektbericht
+%   \Bachelorarbeit
+%   \Seminararbeit
+%   \Masterarbeit
+
+\Projektbericht
+
+%--- Studiengang:
+% Erlaubte Werte:
+%   \Informatik
+%   \Elektronik
+%   \DataScience
+\Informatik
+
+\title{Entwicklung einer Augmented Reality Applikation zur Wiedererkennung bereits eingelernter Objekte}
+
+\author{Michael Schlosser}
+\matrikelnr{75984}
+
+%--- Ist der Erstbetreuer (\examinerA) an der Hochschule ein Professor?
+% Erlaubte Werte:
+%   \examinerIsAProfessortrue   % Ja
+%   \examinerIsAProfessorfalse  % Nein
+
+\examinerIsAProfessorfalse % Nein
+%--- Betreuer
+\examinerA{~Dr.~Marc~Hermann}
+%\examinerB{Prof.~Dr.~Ulrich~Klauck}
+
+%--- Einreichungsdatum
+\date{\today}
+
+%--- Angaben zur Firma
+% Auskommentieren, wenn die Arbeit nicht bei einer ext. Firma gemacht wurde.
+%\companyname{Beispielfirma}
+%\industrialsector{Beispielbranche}
+%\department{Beispielabteilung}
+%\companystreet{Beispielstr. 1}
+%companycity{12345 Musterstadt}
+
+%--- Angaben zum Betreuer bei dieser Firma
+%\advisorname{Name des Betreuers}
+%\advisorphone{(01234) 567-890}
+%\advisoremail{name@company.xxx}
+
+%--- Titelseite Anzeigen
+\maketitle
+\cleardoublepage
+
+%---
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+%--- Firmendaten Anzeigen
+% Auskommentieren, wenn die Arbeit nicht bei einer ext. Firma gemacht wurde.
+%\makeworkplace
+%\cleardoublepage
+
+%--- Eidesstattliche Erklärung anzeigen
+\makeaffirmation
+\cleardoublepage
+
+%---
+\begin{abstract}
+  Ziel der Kurzfassung ist es, einen (eiligen) Leser zu informieren, so 
+  dass dieser entscheiden kann, ob der Bericht für ihn hilfreich ist oder 
+  nicht (neudeutsch: Management Summary). Die Kurzfassung gibt daher eine 
+  kurze Darstellung
+
+  \begin{itemize}
+    \item des in der Arbeit angegangenen Problems
+    \item der verwendeten Methode(n)
+    \item des in der Arbeit erzielten Fortschritts.
+  \end{itemize}
+
+  Dabei sollte nicht auf die Struktur der Arbeit eingegangen werden, also 
+  Kapitel~\ref{cha:grundlagen} etc. denn die Kurzfassung soll ja gerade 
+  das Wichtigste der Arbeit vermitteln, ohne dass diese gelesen werden muss.
+  Eine Kapitelbezogene Darstellung sollte sich in Kapitel~%
+  \ref{cha:einleitung} unter Vorgehen befinden.
+
+  Länge: Maximal 1 Seite.
+\end{abstract}
+%-----------------------------------------------------------------------
+\cleardoublepage
+\tableofcontents
+
+%---
+\listoffigures
+
+%---
+\listoftables
+
+%---
+\lstlistoflistings
+
+%---
+\listofabbreviations
+\begin{acronym}[Bsp.]  % Längstes Kürzel in der nachfolgenden
+                       % Liste um die Breite der Spalte für die
+                       % Abkürzungen zu bestimmen.
+
+%% Eintrag: \acro{Referenzname}[Kürzel]{Langform}
+%% Im Text wird die Abkürzung dann mit \ac{Referenzname} benutzt.
+\acro{rup}[RUP]{Rational Unified Process}
+%\acro{bsp}[Bsp.]{Beispiel}
+\end{acronym}
+%---
+
+
+\cleardoublepage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% ----------------------------------------------------------------------
+\chapter{Einleitung}
+\label{cha:einleitung}
+
+Die Einleitung dient dazu, beim Leser Interesse für die Inhalte 
+Praxissemesterberichts zu wecken, die behandelten Probleme aufzuzeigen 
+und die zu ihrer Lösung entwickelten Konzepte zu beschreiben.
+
+% ---
+\chapter{Analyse und Spezifikation}
+\label{cha:analyse}
+Zur Erarbeitung der Anforderungen der gegebenen Aufgabenstellung, werden diese hinsichtlich ihrer Umsetzungsrelevanz gegliedert und gewichtet.
+\begin{itemize}
+\item \textbf{Must-Have-Anforderungen} sind unbedingt umzusetzen. Sie umfassen die Kernfunktionalitäten, die zur Lösung der gegebenen Aufgabenstellung essentiell sind.
+\item \textbf{Should-Have-Anforderungen} beschreiben Eigenschaften des Systems, die vorteilhaft für die Lösung der gegebenen Aufgabenstellung sind und einen großen Mehrwert für die Softwarebieten, jedoch nicht zwingend erforderlich sind.
+\item \textbf{Could-Have-Anforderungen} sind optionale Anforderungen an Eigenschaften des Systems, die ebenfalls einen relevanten Mehrwert bieten können, welcher jedoch nicht zwingend erforderlich für die Lösung der gegebenen Aufgabenstellung ist. 
+\item \textbf{Nice-To-Have-Anforderungen} sind ebenfalls optionale Anforderungen an Eigenschaften des Softwaresystems. Diese sind jedoch von untergeordneter Bedeutung.
+\end{itemize}
+Im Folgenden werden die Anforderungen an das zu entwickelnde Softwaresystem thematisch gruppiert und unterteilt in funktionale und nicht-funktionale Anforderungen.
+\section{Funktionale Anforderungen}
+Funktionale Anforderungen erklären, welche Funktionen und Dienste vom Software-System bereitzustellen sind und insbesondere die Beziehungen zwischen den Ein- und Ausgabedaten.
+
+\subsection{Entwicklung einer Android-App}
+Eine auf einem aktuellen Android-Betriebssystem lauffähige Applikation soll entwickelt und auf einem Smartphone in den Betrieb genommen werden. Es wird gefordert, dass das Software-System die im Smartphone integrierte Kamera nutzt und diese als Eingabe für das Einlernen und die Wiedererkennung eines Objektes nutzt.  -- \textit{Gewichtung:} Must-Have-Anforderung.
+\subsection{Entwicklung einer graphischen Benutzeroberfläche}
+Es wird gefordert eine Graphische Benutzeroberfläche zur Verfügung zu stellen, mit welcher der Nutzer interagieren kann. Der Touchscreen des Smartphones sollte das Haupteingabegerät zur Steuerung der Applikation des Nutzers sein. -- \textit{Gewichtung:} Must-Have-Anforderung.
+\subsection{Einlernen von Objekten mithilfe einer Kamera}
+Es wird gefordert, dass ein Objekt mit der integrierten Smartphone-Kamera, bei guten Licht- und Kotrastverhältnissen eingelernt werden kann. Bei schlechten Licht- und Konstrastverhältnissen, die das Einlernen des Objekts erschweren oder gar technisch unmöglich machen, soll der Nutzer darauf hingewiesen werden, um mit dem Einlernen des Objektes fortfahren zu können. Bei erfolgreicher Abspeicherung der Daten, soll dem Nutzer dies mitgeteilt werden. Der Nutzer hat nun die Möglichkeit das eingelernte Objekt mit Daten zu versehen, wie beispielsweise einem Namen. Die Informationen über das nun eingelernte Objekt werden in einer Datenbank persistent abgespeichert, um sie wieder abrufen zu können. -- \textit{Gewichtung:} Must-Have-Anforderung.
+
+\subsection{Wiedererkennung bereits eingelernter Objekte mithilfe einer Kamera}
+Ein bereits eingelerntes Objekt soll bei guten Licht- und Kontrastverhältnissen vom Softwaresystem in Echtzeit wiedererkannt werden. -- \textit{Gewichtung:} Must-Have-Anforderung.
+
+\subsection{Markierung der wiedererkannten Objekte}
+Wenn ein Objekt von der Applikation erkannt wird, soll es beispielsweise durch einen Begrenzungsrahmen markiert werden, um dem Nutzer mitzuteilen, dass das eingelernte Objekt wieder auf dem Display des Smartphones zu sehen ist. -- \textit{Gewichtung:} Should-Have-Anforderung.
+\subsection{Graphisches Overlay bei wiedererkannten Objekten}
+Die beim eingelernten Objekt gespeicherten Daten sollen als ein graphisches Overlay auf dem Display des Nutzers dargestellt werden, wenn das Objekt erneut erkannt worden ist. -- \textit{Gewichtung:} Could-Have-Anforderung.
+\subsection{Anbindung eines Datenbank-Servers zur}
+Um bereits eingelernte Objekte mit anderen Nutzern teilen zu können, wird gefordert einen Datenbank-Server an die Applikation anzubinden. Ein Nutzer hat nun die Möglichkeit die Verbindung zu einem Datenbank-Server herzustellen. Dies ermöglicht es eingelernten Objekte von anderen Nutzern lokal abzuspeichern und wiederzuerkennen. -- \textit{Gewichtung:} Nice-To-Have-Anforderung.
+%
+\section{Nicht-funktionale Anforderungen}
+% Wie gut soll das System das leisten? 
+Im Folgenden werden die Einschränkungen und Qualitätsmerkmale an die Entwicklung und den Betrieb des Systems erklärt.
+
+\subsection{Lauffähigkeit auf einem Smartphone}
+Die Kompatibilität und ein angemessenes Laufzeitverhalten auf einem aktuellen Android-basierten Smartphone wird gefordert, um eine benutzerfreundliche Applikation bereitstellen zu können. -- \textit{Gewichtung:} Must-Have-Anforderung.
+
+\subsection{Dauer und Umstände des Erlernens der Objekte}
+Ein Objekt soll in annehmbarer Zeit eingelernt werden. Bei schlechten Lichtverhältnissen oder anderen Umständen, die es der Technologie unmöglich macht ein Objekt einzulernen, soll der Nutzer darauf hingewiesen werden, die Lichtverhältnisse oder andere Umstände zu verbessern, um mit dem Anwenden der Applikation fortfahren zu können. -- \textit{Gewichtung:} Must-Have-Anforderung.
+
+\subsection{Benutzerfreundlichkeit}
+Die Graphische Benutzeroberfläche ist so intuitiv wie möglich zu gestalten, um die Bedienung des Systems ohne größeren Einarbeitungsaufwand erlernen zu können. -- \textit{Gewichtung:} Should-Have-Anforderung.
+
+\subsection{Wartbarkeit und Erweiterbarkeit}
+Änderungen und Erweiterungen des Software-Systems sollten mit hinnehmbarem Aufwand bewerkstelligt werden können. Demnach sollte der Quellcode modular, strukturiert und dokumentiert sein. -- \textit{Gewichtung:} Should-Have-Anforderung.
+% ---
+\chapter{Grundlagen}
+\label{cha:grundlagen}
+
+In diesem Kapitel das für das Praktikum relevante Grundlagenwissen 
+dargestellt. Der Praktikant soll hierzu das ihm durch Vorlesungen 
+bekannte, bzw. durch Recherchen vertiefte theoretische Wissen 
+darstellen, das für die Lösung der im Praktikum gestellten Probleme 
+notwendig ist.
+
+Dabei ist darauf zu achten, nur solche Inhalte in das Grundlagenkapitel 
+aufzunehmen, die später auch verwendet werden (Problembezogenheit). 
+Ebenso ist auf eine ausreichend tiefe und vollständige Darstellung der 
+Grundlagen zu achten.
+
+Für die Erstellung des Literaturverzeichnisses 
+wird das Werkzeug JabRef\autocite{JabRef:JabRef} verwendet. 
+
+Sie können aber auch das Werkzeug Citavi\autocite{SAS:Citavi} benutzen
+und dort nach \textsc{Bib}\TeX{} exportieren.
+\section{Objektdetektion}
+\label{sec:basics:objektdetektion}
+
+\subsection{Android}
+\label{sub:basics:android}
+
+%---
+\chapter{Entwurf}
+\label{cha:Entwurf}
+Auf der Basis der im vorangegangenen Kapitel erstellten Problemanalyse 
+und der im Grundlagenkapitel aufgearbeiteten theoretischen Kenntnisse 
+wird ein Lösungskonzept erarbeitet.
+
+Bei Software-Projekten entspricht dieses Kapitel typischerweise der 
+Analyse \& Design-Phase des \ac{rup}. Typische Ergebnisse dieser Phase sind 
+Klassendiagramme etc.
+\section{Grobentwurf}
+Hier kommen Komponenten UMLs rein, Software Architektur
+\section{Feinentwurf}
+Feine UMLs über Klassen, Sequenzdiagramme, Algorithmen Flussdiagramme, Verarbeitungspipelines
+
+%---
+\chapter{Implementierung}
+\label{cha:implementierung}
+
+In diesem Kapitel wird die konkrete Implementierung des im Kapitel
+\ref{cha:loesungskonzept} entwickelten Lösungskonzepts beschrieben.
+Hierbei wird auf die konkret verwendeten Entwicklungswerkzeuge etc. 
+Bezug genommen.
+
+Bei Software-Projekten besteht dieses Kapitel typischerweise aus den 
+Phasen Implementierung \& Test im \ac{rup}.
+
+Zum Beispiel kann man hier auch ein kleines Listing einfügen.
+
+\begin{lstlisting}[language=c,%
+                   caption={Überschrift des Quelltexts}]
+#include<stdio.h>
+
+int main() {
+    // Kommentar
+    int answer = 20 << 1;
+    answer += 2;
+    printf("Hallöchen Welt!\n");
+    printf("Die Antwort ist: %d\n", answer);
+    return 0;
+}
+\end{lstlisting}
+
+Manchmal hilft auch eine kleine Tabelle:
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Messwert a} & \textbf{Messwert b} \\ \hline
+9 & 5 \\ \hline
+1 & 4 \\ \hline
+1 & 3 \\ \hline
+\end{tabular}
+\caption{Überschrift der Tabelle}
+\label{tab:my-table}
+\end{table}
+
+Details siehe Tabelle~\ref{tab:my-table}.
+%---
+\chapter{Tests}
+\label{cha:tests}
+
+Aufgabe des Kapitels Inbetriebnahme ist es, die Überführung der in 
+Kapitel \ref{cha:implementierung} entwickelte Lösung in das betriebliche 
+Umfeld aufzuzeigen. Dabei wird beispielsweise die Inbetriebnahme eines 
+Programms beschrieben oder die Integration eines erstellten 
+Programmodules dargestellt.
+
+Bei der Software-Erstellung entspricht dieses Kapitel der 
+Auslieferungsphase (Deployment) im \ac{rup}.
+
+%---
+\chapter{Evaluation}
+\label{cha:evaluation}
+Aufgabe des Kapitels Evaluierung ist es, in wie weit die Ziele der 
+Arbeit erreicht wurden. Es sollen also die erreichten Arbeitsergebnisse 
+mit den Zielen verglichen werden. Ergebnis der Evaluierung kann auch 
+sein, das bestimmte Ziele nicht erreicht werden konnten, wobei die 
+Ursachen hierfür auch außerhalb des Verantwortungsbereichs des 
+Praktikanten liegen können.
+
+%---
+\chapter{Zusammenfassung und Ausblick}
+\label{cha:zusammenfassung}
+
+\section{Erreichte Ergebnisse}
+\label{sec:ergebnisse}
+
+Die Zusammenfassung dient dazu, die wesentlichen Ergebnisse des 
+Praktikums und vor allem die entwickelte Problemlösung und den 
+erreichten Fortschritt darzustellen. (Sie haben Ihr Ziel erreicht und 
+dies nachgewiesen).
+
+\section{Ausblick}
+\label{sec:ausblick}
+
+Im Ausblick werden Ideen für die Weiterentwicklung der erstellten Lösung 
+aufgezeigt. Der Ausblick sollte daher zeigen, dass die Ergebnisse der 
+Arbeit nicht nur für die in der Arbeit identifizierten Problemstellungen 
+verwendbar sind, sondern darüber hinaus erweitert sowie auf andere 
+Probleme übertragen werden können.
+
+\subsection{Erweiterbarkeit der Ergebnisse}
+\label{sub:erweiterbarkeit}
+
+Hier kann man was über die Erweiterbarkeit der Ergebnisse sagen.
+
+\subsection{Übertragbarkeit der Ergebnisse}
+\label{sub:uebertragbarkeit}
+
+Und hier etwas über deren Übertragbarkeit.
+
+%-----------------------------------------------------------------------
+\appendix
+
+%---
+\printbibliography[heading=bibintoc]
+
+%---
+\chapter{Anhang A}
+
+%---
+\chapter{Anhang B}
+
+
+\end{document}

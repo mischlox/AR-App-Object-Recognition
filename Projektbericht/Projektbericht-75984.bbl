@@ -1,0 +1,83 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.9 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{JabRef:JabRef}{online}{}
+      \name{author}{1}{}{%
+        {{hash=8a9afbc350ba2d1275f579b92a0fd64f}{%
+           family={{JabRef contributers}},
+           familyi={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{8a9afbc350ba2d1275f579b92a0fd64f}
+      \strng{fullhash}{8a9afbc350ba2d1275f579b92a0fd64f}
+      \strng{bibnamehash}{8a9afbc350ba2d1275f579b92a0fd64f}
+      \strng{authorbibnamehash}{8a9afbc350ba2d1275f579b92a0fd64f}
+      \strng{authornamehash}{8a9afbc350ba2d1275f579b92a0fd64f}
+      \strng{authorfullhash}{8a9afbc350ba2d1275f579b92a0fd64f}
+      \field{sortinit}{J}
+      \field{sortinithash}{fce5f8d0bd05e8d93f3dbe21c78897ca}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{JabRef}
+      \field{urlday}{12}
+      \field{urlmonth}{1}
+      \field{urlyear}{2015}
+      \field{year}{2003-2015}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb http://www.jabref.org
+      \endverb
+      \verb{url}
+      \verb http://www.jabref.org
+      \endverb
+    \endentry
+    \entry{SAS:Citavi}{online}{}
+      \name{author}{1}{}{%
+        {{hash=dbd2f70c4fe8476c7211768a58ae714a}{%
+           family={{Swiss Academic Software}},
+           familyi={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{dbd2f70c4fe8476c7211768a58ae714a}
+      \strng{fullhash}{dbd2f70c4fe8476c7211768a58ae714a}
+      \strng{bibnamehash}{dbd2f70c4fe8476c7211768a58ae714a}
+      \strng{authorbibnamehash}{dbd2f70c4fe8476c7211768a58ae714a}
+      \strng{authornamehash}{dbd2f70c4fe8476c7211768a58ae714a}
+      \strng{authorfullhash}{dbd2f70c4fe8476c7211768a58ae714a}
+      \field{sortinit}{S}
+      \field{sortinithash}{322b1d5276f2f6c1bccdcd15920dbee6}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Citavi - Wissen organisieren. Literatutverwaltung, Wissensorganisation und Aufgabenplanung}
+      \field{urlday}{12}
+      \field{urlmonth}{1}
+      \field{urlyear}{2016}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb http://www.citavi.de
+      \endverb
+      \verb{url}
+      \verb http://www.citavi.de
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
