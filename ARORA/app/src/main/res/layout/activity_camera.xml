@@ -7,16 +7,23 @@
     android:background="#E6E6FF"
     tools:context=".CameraActivity">
 
-    <VideoView
+    <FrameLayout
         android:id="@+id/camView"
-        android:layout_width="423dp"
-        android:layout_height="593dp"
+        android:layout_width="367dp"
+        android:layout_height="476dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/confidenceText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/trainingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -37,11 +44,11 @@
         android:layout_marginBottom="4dp"
         android:text="Sample"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button3"
-        app:layout_constraintStart_toEndOf="@+id/button" />
+        app:layout_constraintEnd_toStartOf="@+id/stopTraining"
+        app:layout_constraintStart_toEndOf="@+id/trainingButton" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/stopTraining"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -50,5 +57,16 @@
         android:text="Help"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/confidenceText"
+        android:layout_width="wrap_content"
+        android:layout_height="72dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="64dp"
+        android:text="Class:\nConfidence:\nFPS:"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
