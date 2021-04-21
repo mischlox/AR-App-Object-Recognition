@@ -22,16 +22,18 @@
 \BOOKMARK [2][-]{subsection.2.2.4}{Wartbarkeit und Erweiterbarkeit}{section.2.2}% 22
 \BOOKMARK [0][-]{chapter.3}{Grundlagen}{}% 23
 \BOOKMARK [1][-]{section.3.1}{Wiedererkennung von Objekten}{chapter.3}% 24
-\BOOKMARK [0][-]{chapter.4}{Entwurf}{}% 25
-\BOOKMARK [1][-]{section.4.1}{Grobentwurf}{chapter.4}% 26
-\BOOKMARK [1][-]{section.4.2}{Feinentwurf}{chapter.4}% 27
-\BOOKMARK [0][-]{chapter.5}{Implementierung}{}% 28
-\BOOKMARK [0][-]{chapter.6}{Tests}{}% 29
-\BOOKMARK [0][-]{chapter.7}{Evaluation}{}% 30
-\BOOKMARK [0][-]{chapter.8}{Zusammenfassung und Ausblick}{}% 31
-\BOOKMARK [1][-]{section.8.1}{Erreichte Ergebnisse}{chapter.8}% 32
-\BOOKMARK [1][-]{section.8.2}{Ausblick}{chapter.8}% 33
-\BOOKMARK [2][-]{subsection.8.2.1}{Erweiterbarkeit der Ergebnisse}{section.8.2}% 34
-\BOOKMARK [2][-]{subsection.8.2.2}{\334bertragbarkeit der Ergebnisse}{section.8.2}% 35
-\BOOKMARK [0][-]{appendix.A}{Anhang A}{}% 36
-\BOOKMARK [0][-]{appendix.B}{Anhang B}{}% 37
+\BOOKMARK [1][-]{section.3.2}{Android}{chapter.3}% 25
+\BOOKMARK [2][-]{subsection.3.2.1}{App-Entwicklung}{section.3.2}% 26
+\BOOKMARK [0][-]{chapter.4}{Entwurf}{}% 27
+\BOOKMARK [1][-]{section.4.1}{Grobentwurf}{chapter.4}% 28
+\BOOKMARK [1][-]{section.4.2}{Feinentwurf}{chapter.4}% 29
+\BOOKMARK [0][-]{chapter.5}{Implementierung}{}% 30
+\BOOKMARK [0][-]{chapter.6}{Tests}{}% 31
+\BOOKMARK [0][-]{chapter.7}{Evaluation}{}% 32
+\BOOKMARK [0][-]{chapter.8}{Zusammenfassung und Ausblick}{}% 33
+\BOOKMARK [1][-]{section.8.1}{Erreichte Ergebnisse}{chapter.8}% 34
+\BOOKMARK [1][-]{section.8.2}{Ausblick}{chapter.8}% 35
+\BOOKMARK [2][-]{subsection.8.2.1}{Erweiterbarkeit der Ergebnisse}{section.8.2}% 36
+\BOOKMARK [2][-]{subsection.8.2.2}{\334bertragbarkeit der Ergebnisse}{section.8.2}% 37
+\BOOKMARK [0][-]{appendix.A}{Anhang A}{}% 38
+\BOOKMARK [0][-]{appendix.B}{Anhang B}{}% 39

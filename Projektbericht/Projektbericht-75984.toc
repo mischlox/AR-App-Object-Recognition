@@ -25,6 +25,8 @@
 \contentsline {subsection}{\numberline {2.2.4}Wartbarkeit und Erweiterbarkeit}{5}{subsection.2.2.4}
 \contentsline {chapter}{\numberline {3}Grundlagen}{6}{chapter.3}
 \contentsline {section}{\numberline {3.1}Wiedererkennung von Objekten}{6}{section.3.1}
+\contentsline {section}{\numberline {3.2}Android}{6}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}App-Entwicklung}{6}{subsection.3.2.1}
 \contentsline {chapter}{\numberline {4}Entwurf}{7}{chapter.4}
 \contentsline {section}{\numberline {4.1}Grobentwurf}{7}{section.4.1}
 \contentsline {section}{\numberline {4.2}Feinentwurf}{7}{section.4.2}
