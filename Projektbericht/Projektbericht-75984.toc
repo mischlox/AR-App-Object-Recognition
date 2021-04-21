@@ -8,23 +8,23 @@
 \contentsline {chapter}{Quelltextverzeichnis}{vi}{chapter*.5}
 \contentsline {chapter}{Abk\IeC {\"u}rzungsverzeichnis}{vii}{chapter*.6}
 \contentsline {chapter}{\numberline {1}Einleitung}{1}{chapter.1}
-\contentsline {chapter}{\numberline {2}Analyse und Spezifikation}{2}{chapter.2}
+\contentsline {chapter}{\numberline {2}Anforderungsanalyse}{2}{chapter.2}
 \contentsline {section}{\numberline {2.1}Funktionale Anforderungen}{2}{section.2.1}
-\contentsline {subsection}{\numberline {2.1.1}Entwicklung einer Android-App}{3}{subsection.2.1.1}
+\contentsline {subsection}{\numberline {2.1.1}Lauff\IeC {\"a}higkeit als Android-App}{3}{subsection.2.1.1}
 \contentsline {subsection}{\numberline {2.1.2}Entwicklung einer graphischen Benutzeroberfl\IeC {\"a}che}{3}{subsection.2.1.2}
 \contentsline {subsection}{\numberline {2.1.3}Einlernen von Objekten mithilfe einer Kamera}{3}{subsection.2.1.3}
 \contentsline {subsection}{\numberline {2.1.4}Wiedererkennung bereits eingelernter Objekte mithilfe einer Kamera}{3}{subsection.2.1.4}
-\contentsline {subsection}{\numberline {2.1.5}Markierung der wiedererkannten Objekte}{3}{subsection.2.1.5}
+\contentsline {subsection}{\numberline {2.1.5}Markierung der wiedererkannten Objekte}{4}{subsection.2.1.5}
 \contentsline {subsection}{\numberline {2.1.6}Graphisches Overlay bei wiedererkannten Objekten}{4}{subsection.2.1.6}
-\contentsline {subsection}{\numberline {2.1.7}Anbindung eines Datenbank-Servers zur}{4}{subsection.2.1.7}
+\contentsline {subsection}{\numberline {2.1.7}Anbindung eines Datenbank-Servers}{4}{subsection.2.1.7}
+\contentsline {subsection}{\numberline {2.1.8}Nutzerprofil}{4}{subsection.2.1.8}
 \contentsline {section}{\numberline {2.2}Nicht-funktionale Anforderungen}{4}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}Lauff\IeC {\"a}higkeit auf einem Smartphone}{4}{subsection.2.2.1}
-\contentsline {subsection}{\numberline {2.2.2}Dauer und Umst\IeC {\"a}nde des Erlernens der Objekte}{4}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Lauff\IeC {\"a}higkeit auf einem Smartphone}{5}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Dauer und Umst\IeC {\"a}nde des Erlernens der Objekte}{5}{subsection.2.2.2}
 \contentsline {subsection}{\numberline {2.2.3}Benutzerfreundlichkeit}{5}{subsection.2.2.3}
 \contentsline {subsection}{\numberline {2.2.4}Wartbarkeit und Erweiterbarkeit}{5}{subsection.2.2.4}
 \contentsline {chapter}{\numberline {3}Grundlagen}{6}{chapter.3}
-\contentsline {section}{\numberline {3.1}Objektdetektion}{6}{section.3.1}
-\contentsline {subsection}{\numberline {3.1.1}Android}{6}{subsection.3.1.1}
+\contentsline {section}{\numberline {3.1}Wiedererkennung von Objekten}{6}{section.3.1}
 \contentsline {chapter}{\numberline {4}Entwurf}{7}{chapter.4}
 \contentsline {section}{\numberline {4.1}Grobentwurf}{7}{section.4.1}
 \contentsline {section}{\numberline {4.2}Feinentwurf}{7}{section.4.2}
@@ -36,6 +36,5 @@
 \contentsline {section}{\numberline {8.2}Ausblick}{11}{section.8.2}
 \contentsline {subsection}{\numberline {8.2.1}Erweiterbarkeit der Ergebnisse}{11}{subsection.8.2.1}
 \contentsline {subsection}{\numberline {8.2.2}\IeC {\"U}bertragbarkeit der Ergebnisse}{11}{subsection.8.2.2}
-\contentsline {chapter}{\nonumberline Literatur}{12}{chapter*.9}
-\contentsline {chapter}{\numberline {A}Anhang A}{13}{appendix.A}
-\contentsline {chapter}{\numberline {B}Anhang B}{14}{appendix.B}
+\contentsline {chapter}{\numberline {A}Anhang A}{12}{appendix.A}
+\contentsline {chapter}{\numberline {B}Anhang B}{13}{appendix.B}

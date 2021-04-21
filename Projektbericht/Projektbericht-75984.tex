@@ -1,6 +1,6 @@
 
 \documentclass[oneside]{ausarbeitung}
-\bibliography{latexlit}
+\bibliography{latexlit.bib}
 
 
 % ----------------------------------------------------------------------
@@ -139,12 +139,12 @@ Praxissemesterberichts zu wecken, die behandelten Probleme aufzuzeigen
 und die zu ihrer Lösung entwickelten Konzepte zu beschreiben.
 
 % ---
-\chapter{Analyse und Spezifikation}
+\chapter{Anforderungsanalyse}
 \label{cha:analyse}
 Zur Erarbeitung der Anforderungen der gegebenen Aufgabenstellung, werden diese hinsichtlich ihrer Umsetzungsrelevanz gegliedert und gewichtet.
 \begin{itemize}
 \item \textbf{Must-Have-Anforderungen} sind unbedingt umzusetzen. Sie umfassen die Kernfunktionalitäten, die zur Lösung der gegebenen Aufgabenstellung essentiell sind.
-\item \textbf{Should-Have-Anforderungen} beschreiben Eigenschaften des Systems, die vorteilhaft für die Lösung der gegebenen Aufgabenstellung sind und einen großen Mehrwert für die Softwarebieten, jedoch nicht zwingend erforderlich sind.
+\item \textbf{Should-Have-Anforderungen} beschreiben Eigenschaften des Systems, die vorteilhaft für die Lösung der gegebenen Aufgabenstellung sind und einen großen Mehrwert für die Software bieten, jedoch nicht zwingend erforderlich sind.
 \item \textbf{Could-Have-Anforderungen} sind optionale Anforderungen an Eigenschaften des Systems, die ebenfalls einen relevanten Mehrwert bieten können, welcher jedoch nicht zwingend erforderlich für die Lösung der gegebenen Aufgabenstellung ist. 
 \item \textbf{Nice-To-Have-Anforderungen} sind ebenfalls optionale Anforderungen an Eigenschaften des Softwaresystems. Diese sind jedoch von untergeordneter Bedeutung.
 \end{itemize}
@@ -152,22 +152,24 @@ Im Folgenden werden die Anforderungen an das zu entwickelnde Softwaresystem them
 \section{Funktionale Anforderungen}
 Funktionale Anforderungen erklären, welche Funktionen und Dienste vom Software-System bereitzustellen sind und insbesondere die Beziehungen zwischen den Ein- und Ausgabedaten.
 
-\subsection{Entwicklung einer Android-App}
-Eine auf einem aktuellen Android-Betriebssystem lauffähige Applikation soll entwickelt und auf einem Smartphone in den Betrieb genommen werden. Es wird gefordert, dass das Software-System die im Smartphone integrierte Kamera nutzt und diese als Eingabe für das Einlernen und die Wiedererkennung eines Objektes nutzt.  -- \textit{Gewichtung:} Must-Have-Anforderung.
+\subsection{Lauffähigkeit als Android-App}
+Eine auf einem aktuellen Android-Betriebssystem lauffähige Applikation soll entwickelt und auf einem Smartphone in den Betrieb genommen werden. Es wird gefordert, dass der Nutzer des Software-Systems die im Smartphone integrierte Kamera nutzt und diese als Eingabe für das Einlernen und die Wiedererkennung eines Objektes nutzt.  -- \textit{Gewichtung:} Must-Have-Anforderung.
 \subsection{Entwicklung einer graphischen Benutzeroberfläche}
 Es wird gefordert eine Graphische Benutzeroberfläche zur Verfügung zu stellen, mit welcher der Nutzer interagieren kann. Der Touchscreen des Smartphones sollte das Haupteingabegerät zur Steuerung der Applikation des Nutzers sein. -- \textit{Gewichtung:} Must-Have-Anforderung.
 \subsection{Einlernen von Objekten mithilfe einer Kamera}
-Es wird gefordert, dass ein Objekt mit der integrierten Smartphone-Kamera, bei guten Licht- und Kotrastverhältnissen eingelernt werden kann. Bei schlechten Licht- und Konstrastverhältnissen, die das Einlernen des Objekts erschweren oder gar technisch unmöglich machen, soll der Nutzer darauf hingewiesen werden, um mit dem Einlernen des Objektes fortfahren zu können. Bei erfolgreicher Abspeicherung der Daten, soll dem Nutzer dies mitgeteilt werden. Der Nutzer hat nun die Möglichkeit das eingelernte Objekt mit Daten zu versehen, wie beispielsweise einem Namen. Die Informationen über das nun eingelernte Objekt werden in einer Datenbank persistent abgespeichert, um sie wieder abrufen zu können. -- \textit{Gewichtung:} Must-Have-Anforderung.
+Es wird gefordert, dass ein Objekt mit der integrierten Smartphone-Kamera, bei guten Licht- und Kontrastverhältnissen eingelernt werden kann. Bei schlechten Licht- und Kontrastverhältnissen, die das Einlernen des Objekts erschweren oder gar technisch unmöglich machen, soll der Nutzer darauf hingewiesen werden, um mit dem Einlernen des Objektes fortfahren zu können. Bei erfolgreicher Abspeicherung der Daten, soll dem Nutzer dies mitgeteilt werden. Der Nutzer hat nun die Möglichkeit das eingelernte Objekt mit Daten zu versehen, wie beispielsweise einem Namen. Die Informationen über das nun eingelernte Objekt werden in einer Datenbank persistent abgespeichert, um sie wieder abrufen zu können. -- \textit{Gewichtung:} Must-Have-Anforderung.
 
 \subsection{Wiedererkennung bereits eingelernter Objekte mithilfe einer Kamera}
-Ein bereits eingelerntes Objekt soll bei guten Licht- und Kontrastverhältnissen vom Softwaresystem in Echtzeit wiedererkannt werden. -- \textit{Gewichtung:} Must-Have-Anforderung.
+Ein bereits eingelerntes Objekt soll bei guten Licht- und Kontrastverhältnissen vom Softwaresystem in Echtzeit wiedererkannt werden. Bei schlechten Licht- und Kontrastverhältnissen soll der Nutzer auf diese Schwierigkeiten hingewiesen werden, um diese gegebenfalls zu beheben. -- \textit{Gewichtung:} Must-Have-Anforderung.
 
 \subsection{Markierung der wiedererkannten Objekte}
 Wenn ein Objekt von der Applikation erkannt wird, soll es beispielsweise durch einen Begrenzungsrahmen markiert werden, um dem Nutzer mitzuteilen, dass das eingelernte Objekt wieder auf dem Display des Smartphones zu sehen ist. -- \textit{Gewichtung:} Should-Have-Anforderung.
 \subsection{Graphisches Overlay bei wiedererkannten Objekten}
-Die beim eingelernten Objekt gespeicherten Daten sollen als ein graphisches Overlay auf dem Display des Nutzers dargestellt werden, wenn das Objekt erneut erkannt worden ist. -- \textit{Gewichtung:} Could-Have-Anforderung.
-\subsection{Anbindung eines Datenbank-Servers zur}
+Die beim eingelernten Objekt gespeicherten Daten sollen als ein graphisches Overlay auf dem Bildschirm des Smartphones dargestellt werden, wenn das Objekt erneut erkannt worden ist. -- \textit{Gewichtung:} Could-Have-Anforderung.
+\subsection{Anbindung eines Datenbank-Servers}
 Um bereits eingelernte Objekte mit anderen Nutzern teilen zu können, wird gefordert einen Datenbank-Server an die Applikation anzubinden. Ein Nutzer hat nun die Möglichkeit die Verbindung zu einem Datenbank-Server herzustellen. Dies ermöglicht es eingelernten Objekte von anderen Nutzern lokal abzuspeichern und wiederzuerkennen. -- \textit{Gewichtung:} Nice-To-Have-Anforderung.
+\subsection{Nutzerprofil}
+Nutzer sollten sich mit einem Namen und einem Passwort anmelden können und dadurch ihre gespeicherten Daten einsehen können. Die Nutzerdaten werden auf einem Datenbank-Server persistent abgespeichert. Die Graphische Oberfläche des Software-Systems soll einen Anmeldebildschirm zur Verfügung stellen. Wenn der Nutzer einen Nutzername und ein Passwort eingibt und seine Eingabe bestätigt sollen diese mit der Datenbank abgeglichen werden. Wenn die Anmeldedaten gespeichert sind, wird der Nutzer angemeldet. In allen anderen Fällen wird eine entsprechende Fehlermeldung ausgegeben. -- \textit{Gewichtung:} Nice-To-Have-Anforderung.
 %
 \section{Nicht-funktionale Anforderungen}
 % Wie gut soll das System das leisten? 
@@ -188,26 +190,14 @@ Die Graphische Benutzeroberfläche ist so intuitiv wie möglich zu gestalten, um
 \chapter{Grundlagen}
 \label{cha:grundlagen}
 
-In diesem Kapitel das für das Praktikum relevante Grundlagenwissen 
-dargestellt. Der Praktikant soll hierzu das ihm durch Vorlesungen 
-bekannte, bzw. durch Recherchen vertiefte theoretische Wissen 
-darstellen, das für die Lösung der im Praktikum gestellten Probleme 
-notwendig ist.
-
 Dabei ist darauf zu achten, nur solche Inhalte in das Grundlagenkapitel 
 aufzunehmen, die später auch verwendet werden (Problembezogenheit). 
 Ebenso ist auf eine ausreichend tiefe und vollständige Darstellung der 
 Grundlagen zu achten.
+grgrg
+\section{Wiedererkennung von Objekten}
+\label{sec:basics:wiedererkennung}
 
-Für die Erstellung des Literaturverzeichnisses 
-wird das Werkzeug JabRef\autocite{JabRef:JabRef} verwendet. 
-
-Sie können aber auch das Werkzeug Citavi\autocite{SAS:Citavi} benutzen
-und dort nach \textsc{Bib}\TeX{} exportieren.
-\section{Objektdetektion}
-\label{sec:basics:objektdetektion}
-
-\subsection{Android}
 \label{sub:basics:android}
 
 %---

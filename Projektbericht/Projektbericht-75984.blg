@@ -1,17 +1,9 @@
 [0] Config.pm:302> INFO - This is Biber 2.9
 [0] Config.pm:305> INFO - Logfile is 'Projektbericht-75984.blg'
-[20] biber:313> INFO - === Di Apr 13, 2021, 20:15:32
-[36] Biber.pm:371> INFO - Reading 'Projektbericht-75984.bcf'
-[81] Biber.pm:857> INFO - Found 2 citekeys in bib section 0
-[90] Biber.pm:3981> INFO - Processing section 0
-[98] Biber.pm:4154> INFO - Looking for bibtex format file 'latexlit.bib' for section 0
-[99] bibtex.pm:1468> INFO - LaTeX decoding ...
-[110] bibtex.pm:1294> INFO - Found BibTeX data source 'latexlit.bib'
-[115] Utils.pm:169> WARN - year field '2003-2015' in entry 'JabRef:JabRef' is not an integer - this will probably not sort properly.
-[124] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[124] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[124] Biber.pm:3809> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
-[124] Biber.pm:3815> INFO - No sort tailoring available for locale 'en-US'
-[129] bbl.pm:617> INFO - Writing 'Projektbericht-75984.bbl' with encoding 'UTF-8'
-[129] bbl.pm:720> INFO - Output to Projektbericht-75984.bbl
-[130] Biber.pm:110> INFO - WARNINGS: 1
+[19] biber:313> INFO - === Mi Apr 21, 2021, 12:59:35
+[43] Biber.pm:371> INFO - Reading 'Projektbericht-75984.bcf'
+[89] Biber.pm:857> INFO - Found 0 citekeys in bib section 0
+[94] Utils.pm:169> WARN - The file 'Projektbericht-75984.bcf' does not contain any citations!
+[99] bbl.pm:617> INFO - Writing 'Projektbericht-75984.bbl' with encoding 'UTF-8'
+[99] bbl.pm:720> INFO - Output to Projektbericht-75984.bbl
+[112] Biber.pm:110> INFO - WARNINGS: 1
