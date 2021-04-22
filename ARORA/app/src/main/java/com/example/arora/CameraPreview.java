@@ -57,9 +57,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         // set preview size and make any resize, rotate or
         // reformatting changes here
-        Camera.Parameters mParameters = mCamera.getParameters();
-        mParameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-        mCamera.setParameters(mParameters);
         // start preview with new settings
         try {
             mCamera.setPreviewDisplay(mHolder);
