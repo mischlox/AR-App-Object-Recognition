@@ -21,6 +21,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, CameraActivity.class));
             }
         });
+
+        Button experimentalButton = findViewById(R.id.experimentalButton);
+        experimentalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ComputerVisionActivity.class));
+            }
+        });
     }
 
 }

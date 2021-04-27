@@ -14,13 +14,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-
 /**
  * Activity with Embedded Camera View and all Informations needed
  * */
 public class CameraActivity extends AppCompatActivity {
     private static final String TAG = "CameraActivity";
-
 
     private Camera mCamera;
     private CameraPreview mPreview;
