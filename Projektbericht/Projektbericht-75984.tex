@@ -122,6 +122,8 @@
 %% Im Text wird die Abkürzung dann mit \ac{Referenzname} benutzt.
 \acro{rup}[RUP]{Rational Unified Process}
 %\acro{bsp}[Bsp.]{Beispiel}
+\acro{cnn}[CNN]{Convolutional Neural Network}
+\acro{ml}[ML]{Machine Learning}
 \end{acronym}
 %---
 
@@ -190,13 +192,31 @@ Die Graphische Benutzeroberfläche ist so intuitiv wie möglich zu gestalten, um
 \chapter{Grundlagen}
 \label{cha:grundlagen}
 
-Dabei ist darauf zu achten, nur solche Inhalte in das Grundlagenkapitel 
-aufzunehmen, die später auch verwendet werden (Problembezogenheit). 
-Ebenso ist auf eine ausreichend tiefe und vollständige Darstellung der 
-Grundlagen zu achten. Mit einem sogenannten Intent, können Activities Daten austauschen.
 
 \section{Wiedererkennung von Objekten}
 \label{sec:basics:wiedererkennung}
+Das Einlernen und Wiedererkennen von Objekten ist im Bereich des Maschinelles Lernens noch heute eine Herausforderung für eingebettete beziehungsweise mobile Endgeräte, aufgrund der geringen Rechenleistung, die zur Verfügung steht. Ein naiver Ansatz, um dieses Problem lösen zu können ist ein  \ac{cnn} bei Eingang neuer Trainingsdaten erneut zu trainieren mitsamt den bereits vorhandenen Daten. Ein derart riesiger Lernvorgang ist jedoch nicht praktikabel und könnte mehrere Stunden oder sogar Tage dauern. Wenn lediglich die neuen Daten für das Training verwendet werden, resultiert dies im bekannten Phänomen des \glqq Katastrophalen Vergessen\grqq. Dies bedeutet, dass alte bereits eingelernte Objekte nicht mehr erkannt werden können. Bessere Ansätze zur Behebung dieses Problems werden im Folgenden erklärt. 
+\subsection{Latent-Replay-Algorithmus}
+Im Rahmen dieser Thematik wurde für den gegebenen Anwendungsfall der Latent-Replay Algorithmus von Lorenzo Pellegrini et al. analysiert, jedoch aufgrund der hohen Komplexität und weniger Implementierungsbeispiele nicht für das Projekt verwendet. Um eine Vollständigkeit der Projektarbeit gewährleisten zu können wird dieser im Folgenden dennoch erläutert.\\
+\cite{Pellegrini2019}
+\subsection{Transfer Learning}
+%Aufgaben die mit Maschinellem Lernen gelöst werden können, wie beispielsweise die Wiedererkennung von Objekten in Bildern, werden mithilfe von riesigen Datensätzen trainiert mit dem Ziel so generisch wie möglich zu sein
+Im traditionellen Ansatz des Maschinellen Lernens wird ein Datensatz aufbereitet, welcher für eine bestimmte Aufgabe zugeschnitten ist.\\
+Die grundlegende Aufgabe, die in dieser Arbeit zu erfüllen ist, ist jedoch das Einlernen von neuen Trainingsdaten. Hierfür kann der Ansatz des sogenannten Transfer Learnings Anwendung finden.\\
+Beim Transfer Learning wird ein bereits trainiertes \ac{ml}-Modell verwendet. Das bereits errungene Wissen kann hierbei weiterverwendet werden, um mit einem kleineren Trainingsdatensatz eine neue ähnliche Aufgabe erfüllen zu können. Erkannte Merkmale wie Formen, Kanten und Ecken können demnach durch den Wissenstransfer mit einem Modell geteilt werden (\textbf{Abbildung??}).
+\\
+\cite{Sarkar2019}
+%\subsubsection{Formale Definition}
+%Eine Domäne $D$ ist ein Tupel mit zwei Elementen, bestehend aus dem Merkmalsraum (engl.: Feature Space) $\chi$ und der Grenzwahrscheinlichkeit $P(X)$, wobei $X = \{x_1, ..., x_n\}, x_i \in \chi$ ein Beispieldatenpunkt ist. Dann lässt sich die Domäne $D$ mathematisch darstellen als $D = \{{\chi}, P(X) \}$.\\
+%Eine Aufgabe $T$ ist ein Tupel mit zwei Elementen bestehend aus dem Auszeichnungsraum (engl.: Label Space) $\gamma$ und einer Zielfunktion $\eta$. Die Zielfunktion kann aus probabilistischer Sicht auch als $P(\gamma|X)$ bezeichnet werden.\\
+%Dementsprechend ist für eine Domäne $D$ eine Aufgabe $T$ folgendermaßen definiert:
+%\begin{equation}
+%	T = \{ \gamma, P(Y | X)\} = \{\gamma, \eta\} 
+%	\quad \quad \quad
+%	Y = \{y_1, ..., y_n\}, y_i \in \gamma
+%\end{equation}
+% \cite{Sarkar2019}
+%Die Zielfunktion $\eta$ ist dementsprechend gelernt worden durch die Paare von Vektoren und Auszeichnungen $(x_i, y_i), x_i \in \chi, y_i \in \gamma $
 
 \section{Android}
 \label{sub:basics:android}

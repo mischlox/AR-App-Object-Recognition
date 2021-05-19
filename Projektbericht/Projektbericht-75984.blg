@@ -1,9 +1,17 @@
-[0] Config.pm:302> INFO - This is Biber 2.9
-[0] Config.pm:305> INFO - Logfile is 'Projektbericht-75984.blg'
-[24] biber:313> INFO - === Mi Apr 21, 2021, 13:09:52
-[50] Biber.pm:371> INFO - Reading 'Projektbericht-75984.bcf'
-[119] Biber.pm:857> INFO - Found 0 citekeys in bib section 0
-[127] Utils.pm:169> WARN - The file 'Projektbericht-75984.bcf' does not contain any citations!
-[143] bbl.pm:617> INFO - Writing 'Projektbericht-75984.bbl' with encoding 'UTF-8'
-[143] bbl.pm:720> INFO - Output to Projektbericht-75984.bbl
-[144] Biber.pm:110> INFO - WARNINGS: 1
+[0] Config.pm:304> INFO - This is Biber 2.14 (beta)
+[0] Config.pm:307> INFO - Logfile is 'Projektbericht-75984.blg'
+[46] biber:322> INFO - === Mi Mai 19, 2021, 19:27:53
+[55] Biber.pm:415> INFO - Reading 'Projektbericht-75984.bcf'
+[97] Biber.pm:943> INFO - Found 2 citekeys in bib section 0
+[105] Biber.pm:4256> INFO - Processing section 0
+[105] Utils.pm:75> INFO - Globbing data source 'latexlit.bib'
+[105] Utils.pm:91> INFO - Globbed data source 'latexlit.bib' to latexlit.bib
+[112] Biber.pm:4455> INFO - Looking for bibtex format file 'latexlit.bib' for section 0
+[112] bibtex.pm:1653> INFO - LaTeX decoding ...
+[116] bibtex.pm:1471> INFO - Found BibTeX data source 'latexlit.bib'
+[139] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[139] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[139] Biber.pm:4084> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[139] Biber.pm:4090> INFO - No sort tailoring available for locale 'en-US'
+[143] bbl.pm:652> INFO - Writing 'Projektbericht-75984.bbl' with encoding 'UTF-8'
+[144] bbl.pm:755> INFO - Output to Projektbericht-75984.bbl

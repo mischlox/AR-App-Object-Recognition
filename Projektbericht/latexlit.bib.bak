@@ -1,11 +1,31 @@
 % Encoding: UTF-8
 
-@Thesis{kochimagerecog,
-  author      = {Gregor Koch},
-  date        = {2015},
-  institution = {University of Toronto},
-  title       = {Siamese Neuran Networks for One-Shot Image Recognition},
-  type        = {Masterarbeit},
+@WWW{Senchanka2019,
+  author  = {Senchanka, Pavel},
+  date    = {2019-12-12},
+  title   = {Example on-device model personalization with TensorFlow Lite},
+  url     = {https://blog.tensorflow.org/2019/12/example-on-device-model-personalization.html},
+  urldate = {2021-05-12},
+}
+
+@WWW{Sarkar2019,
+  author  = {Dipanjan Sarkar},
+  date    = {2019-11-14},
+  title   = {A Comprehensive Hands-on Guide to Transfer Learning with Real-World Applications in Deep Learning},
+  url     = {https://towardsdatascience.com/a-comprehensive-hands-on-guide-to-transfer-learning-with-real-world-applications-in-deep-learning-212bf3b2f27a},
+  urldate = {2021-05-12},
+}
+
+@Article{Pellegrini2019,
+  author      = {Lorenzo Pellegrini and Gabriele Graffieti and Vincenzo Lomonaco and Davide Maltoni},
+  date        = {2019-12-02},
+  title       = {Latent Replay for Real-Time Continual Learning},
+  eprint      = {1912.01100},
+  eprintclass = {cs.LG},
+  eprinttype  = {arXiv},
+  abstract    = {Training deep neural networks at the edge on light computational devices, embedded systems and robotic platforms is nowadays very challenging. Continual learning techniques, where complex models are incrementally trained on small batches of new data, can make the learning problem tractable even for CPU-only embedded devices enabling remarkable levels of adaptiveness and autonomy. However, a number of practical problems need to be solved: catastrophic forgetting before anything else. In this paper we introduce an original technique named "Latent Replay" where, instead of storing a portion of past data in the input space, we store activations volumes at some intermediate layer. This can significantly reduce the computation and storage required by native rehearsal. To keep the representation stable and the stored activations valid we propose to slow-down learning at all the layers below the latent replay one, leaving the layers above free to learn at full pace. In our experiments we show that Latent Replay, combined with existing continual learning techniques, achieves state-of-the-art performance on complex video benchmarks such as CORe50 NICv2 (with nearly 400 small and highly non-i.i.d. batches) and OpenLORIS. Finally, we demonstrate the feasibility of nearly real-time continual learning on the edge through the deployment of the proposed technique on a smartphone device.},
+  file        = {:http\://arxiv.org/pdf/1912.01100v2:PDF},
+  keywords    = {cs.LG, cs.CV, stat.ML},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}

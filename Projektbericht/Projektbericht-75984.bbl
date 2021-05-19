@@ -1,5 +1,5 @@
 % $ biblatex auxiliary file $
-% $ biblatex bbl format version 2.9 $
+% $ biblatex bbl format version 3.1 $
 % Do not modify the above lines!
 %
 % This is an auxiliary file used by the 'biblatex' package.
@@ -16,5 +16,90 @@
   {}
 \endgroup
 
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{Pellegrini2019}{article}{}
+      \name{author}{4}{}{%
+        {{hash=039a5850759acf381701bfab65da480c}{%
+           family={Pellegrini},
+           familyi={P\bibinitperiod},
+           given={Lorenzo},
+           giveni={L\bibinitperiod}}}%
+        {{hash=888a3bcd6943397326b0b6bfa831849d}{%
+           family={Graffieti},
+           familyi={G\bibinitperiod},
+           given={Gabriele},
+           giveni={G\bibinitperiod}}}%
+        {{hash=6a7c5911d55747e366da21bca7e5b1f9}{%
+           family={Lomonaco},
+           familyi={L\bibinitperiod},
+           given={Vincenzo},
+           giveni={V\bibinitperiod}}}%
+        {{hash=b2dedcb8d10b943599293c936b49b66a}{%
+           family={Maltoni},
+           familyi={M\bibinitperiod},
+           given={Davide},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{c0d811484cc0fd9e02686e852f52ea60}
+      \strng{fullhash}{ad8fc996962c2c0ac60bfd041c041932}
+      \strng{bibnamehash}{c0d811484cc0fd9e02686e852f52ea60}
+      \strng{authorbibnamehash}{c0d811484cc0fd9e02686e852f52ea60}
+      \strng{authornamehash}{c0d811484cc0fd9e02686e852f52ea60}
+      \strng{authorfullhash}{ad8fc996962c2c0ac60bfd041c041932}
+      \field{sortinit}{P}
+      \field{sortinithash}{bb5b15f2db90f7aef79bb9e83defefcb}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Training deep neural networks at the edge on light computational devices, embedded systems and robotic platforms is nowadays very challenging. Continual learning techniques, where complex models are incrementally trained on small batches of new data, can make the learning problem tractable even for CPU-only embedded devices enabling remarkable levels of adaptiveness and autonomy. However, a number of practical problems need to be solved: catastrophic forgetting before anything else. In this paper we introduce an original technique named "Latent Replay" where, instead of storing a portion of past data in the input space, we store activations volumes at some intermediate layer. This can significantly reduce the computation and storage required by native rehearsal. To keep the representation stable and the stored activations valid we propose to slow-down learning at all the layers below the latent replay one, leaving the layers above free to learn at full pace. In our experiments we show that Latent Replay, combined with existing continual learning techniques, achieves state-of-the-art performance on complex video benchmarks such as CORe50 NICv2 (with nearly 400 small and highly non-i.i.d. batches) and OpenLORIS. Finally, we demonstrate the feasibility of nearly real-time continual learning on the edge through the deployment of the proposed technique on a smartphone device.}
+      \field{day}{2}
+      \field{eprintclass}{cs.LG}
+      \field{eprinttype}{arXiv}
+      \field{month}{12}
+      \field{title}{Latent Replay for Real-Time Continual Learning}
+      \field{year}{2019}
+      \field{dateera}{ce}
+      \verb{eprint}
+      \verb 1912.01100
+      \endverb
+      \keyw{cs.LG,cs.CV,stat.ML}
+    \endentry
+    \entry{Sarkar2019}{online}{}
+      \name{author}{1}{}{%
+        {{hash=19620e2d7ebdec18c9c7f5c60d155d33}{%
+           family={Sarkar},
+           familyi={S\bibinitperiod},
+           given={Dipanjan},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{19620e2d7ebdec18c9c7f5c60d155d33}
+      \strng{fullhash}{19620e2d7ebdec18c9c7f5c60d155d33}
+      \strng{bibnamehash}{19620e2d7ebdec18c9c7f5c60d155d33}
+      \strng{authorbibnamehash}{19620e2d7ebdec18c9c7f5c60d155d33}
+      \strng{authornamehash}{19620e2d7ebdec18c9c7f5c60d155d33}
+      \strng{authorfullhash}{19620e2d7ebdec18c9c7f5c60d155d33}
+      \field{sortinit}{S}
+      \field{sortinithash}{c319cff79d99c853d775f88277d4e45f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{14}
+      \field{month}{11}
+      \field{title}{A Comprehensive Hands-on Guide to Transfer Learning with Real-World Applications in Deep Learning}
+      \field{urlday}{12}
+      \field{urlmonth}{5}
+      \field{urlyear}{2021}
+      \field{year}{2019}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://towardsdatascience.com/a-comprehensive-hands-on-guide-to-transfer-learning-with-real-world-applications-in-deep-learning-212bf3b2f27a
+      \endverb
+      \verb{url}
+      \verb https://towardsdatascience.com/a-comprehensive-hands-on-guide-to-transfer-learning-with-real-world-applications-in-deep-learning-212bf3b2f27a
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
 \endinput
 

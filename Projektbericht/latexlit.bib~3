@@ -1,0 +1,11 @@
+@comment{x-kbibtex-encoding=utf-8}
+
+@comment{jabref-meta: databaseType:biblatex;}
+
+@misc{tflite,
+	author = {Senchanka, Pavel},
+	month = dec,
+	title = {Example on-device model personalization with TensorFlow Lite},
+	year = {2019}
+}
+

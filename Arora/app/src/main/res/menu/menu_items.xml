@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item android:title="">
+        <group android:checkableBehavior="single" >
+            <item
+                android:id="@+id/nav_camera"
+                android:icon="@drawable/ic_eye"
+                android:title="Recognize Objects"/>
+            <item
+                android:id="@+id/nav_object_overview"
+                android:icon="@drawable/ic_library"
+                android:title="Object Overview" />
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_gear_wheel"
+                android:title="Settings" />
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_help"
+                android:title="Help" />
+        </group>
+    </item>
+    <item android:title="Actions">
+        <menu>
+            <item
+                android:id="@+id/nav_delete"
+                android:icon="@drawable/ic_delete"
+                android:title="Delete All Objects" />
+            <item
+                android:id="@+id/nav_dark_mode"
+                android:icon="@drawable/ic_darkmode"
+                android:title="Toggle Darkmode" />
+        </menu>
+    </item>
+</menu>
