@@ -13,6 +13,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+/**
+ * Main Activity handles camera permission request,
+ * welcomes the user and is the entrypoint for the Camera Activity
+ *
+ * @author Michael Schlosser
+ */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 

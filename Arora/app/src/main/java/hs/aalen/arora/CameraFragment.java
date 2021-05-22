@@ -4,20 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
-import android.graphics.Rect;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.camera.core.CameraX;
-import androidx.camera.core.ImageAnalysis;
-import androidx.camera.core.ImageAnalysisConfig;
-import androidx.camera.core.ImageProxy;
-import androidx.camera.core.Preview;
-import androidx.camera.core.PreviewConfig;
-
-import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.DisplayMetrics;
@@ -30,9 +17,16 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 
-import com.google.common.util.concurrent.ListenableFuture;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.camera.core.CameraX;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageAnalysisConfig;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
+import androidx.camera.core.PreviewConfig;
+import androidx.fragment.app.Fragment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,72 +34,34 @@ import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.UUID;
 
-
+/**
+ * Class that handles the Camera Usage
+ * <p>
+ * Parts of this code are taken from:
+ * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/android/app/src/main/java/org/tensorflow/lite/examples/transfer/CameraFragment.java
+ *
+ * @author Michael Schlosser
+ */
 public class CameraFragment extends Fragment {
     private static final String TAG = CameraFragment.class.getSimpleName();
 
+    // Front or back camera
     private static final CameraX.LensFacing LENS_FACING = CameraX.LensFacing.BACK;
     private static final int LOWER_BYTE_MASK = 0xFF;
-    // Use TextureView to get input Stream
+
+
     private TextureView viewFinder;
     private Integer viewFinderRotation = null;
-
     private Size bufferDimens = new Size(0, 0);
-    private Size viewFinderDimens = new Size(0, 0);
 
     // TODO Add Concurrent Linked Queue to save video frames to process them later
     // ...
-
+    private Size viewFinderDimens = new Size(0, 0);
     private CameraFragmentViewModel viewModel;
 
-    private void startCamera() {
-        viewFinderRotation = getDisplaySurfaceRotation(viewFinder.getDisplay());
-        if (viewFinderRotation == null) {
-            viewFinderRotation = 0;
-        }
-        DisplayMetrics metrics = new DisplayMetrics();
-        viewFinder.getDisplay().getRealMetrics(metrics);
-
-        Rational screenAspectRatio = new Rational(metrics.widthPixels, metrics.heightPixels-385);
-
-        PreviewConfig config = new PreviewConfig.Builder()
-                .setLensFacing(LENS_FACING)
-                .setTargetAspectRatio(screenAspectRatio)
-                .setTargetRotation(viewFinder.getDisplay().getRotation())
-                .build();
-
-        Preview preview = new Preview(config);
-
-        preview.setOnPreviewOutputUpdateListener(previewOutput -> {
-            ViewGroup parent = (ViewGroup) viewFinder.getParent();
-            parent.removeView(viewFinder);
-            parent.addView(viewFinder, 0);
-
-            viewFinder.setSurfaceTexture(previewOutput.getSurfaceTexture());
-
-            Integer rotation = getDisplaySurfaceRotation(viewFinder.getDisplay());
-            updateTransform(rotation, previewOutput.getTextureSize(), viewFinderDimens);
-        });
-        viewFinder.addOnLayoutChangeListener((
-                view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            Size newViewFinderDimens = new Size(right - left, bottom - top);
-            Integer rotation = getDisplaySurfaceRotation(viewFinder.getDisplay());
-            updateTransform(rotation, bufferDimens, newViewFinderDimens);
-        });
-        HandlerThread inferenceThread = new HandlerThread("InferenceThread");
-        inferenceThread.start();
-        ImageAnalysisConfig analysisConfig = new ImageAnalysisConfig.Builder()
-                .setLensFacing(LENS_FACING)
-                .setCallbackHandler(new Handler(inferenceThread.getLooper()))
-                .setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE)
-                .setTargetRotation(viewFinder.getDisplay().getRotation())
-                .build();
-
-        ImageAnalysis imageAnalysis = new ImageAnalysis(analysisConfig);
-        imageAnalysis.setAnalyzer(inferenceAnalyzer);
-
-        CameraX.bindToLifecycle(this, preview, imageAnalysis);
-    }
+    /**
+     * Analyzer is responsible for processing camera input (including inference) into an RGB Float matrix
+     */
     private final ImageAnalysis.Analyzer inferenceAnalyzer =
             (imageProxy, rotationDegrees) -> {
                 final String imageId = UUID.randomUUID().toString();
@@ -113,28 +69,16 @@ public class CameraFragment extends Fragment {
                 float[] rgbImage = prepareCameraImage(yuvCameraImageToBitmap(imageProxy), rotationDegrees);
             };
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_camera, container, false);
-    }
-
-
-    @Override
-    public void onViewCreated(@NonNull @org.jetbrains.annotations.NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        viewFinder = getActivity().findViewById(R.id.view_finder);
-        viewFinder.post(this::startCamera);
-    }
-
+    /**
+     * Takes an ImageProxy object in YUV format
+     * and converts it into a RGB Bitmap
+     *
+     * @param imageProxy the image that will be converted
+     * @return the converted image as a Bitmap
+     */
     private static Bitmap yuvCameraImageToBitmap(ImageProxy imageProxy) {
         if (imageProxy.getFormat() != ImageFormat.YUV_420_888) {
+            // TODO fix error that when you change mode while camera is running no YUV image is there but null
             throw new IllegalArgumentException(
                     "Expected a YUV420 image, but got " + imageProxy.getFormat());
         }
@@ -168,10 +112,15 @@ public class CameraFragment extends Fragment {
     }
 
     /**
-     * Normalizes a camera image to [0; 1], cropping it
-     * to size expected by the model and adjusting for camera rotation.
+     * Normalizes a camera image to [0 ; 1] and crops it
+     * to the size that is expected by the model
+     *
+     * @param bitmap          The converted image that will be normalized and cropped
+     * @param rotationDegrees Handles landscape/portrait mode with post rotation if necessary
+     *
+     * @return the cropped and normalized image
      */
-    private static float[] prepareCameraImage(Bitmap bitmap, int rotationDegrees)  {
+    private static float[] prepareCameraImage(Bitmap bitmap, int rotationDegrees) {
         int modelImageSize = 224; //TransferLearningModelWrapper.IMAGE_SIZE;
 
         Bitmap paddedBitmap = padToSquare(bitmap);
@@ -202,6 +151,12 @@ public class CameraFragment extends Fragment {
         return normalizedRgb;
     }
 
+    /**
+     * Crop image into square format
+     *
+     * @param   source image to be cropped
+     * @return  cropped image
+     */
     private static Bitmap padToSquare(Bitmap source) {
         int width = source.getWidth();
         int height = source.getHeight();
@@ -215,11 +170,111 @@ public class CameraFragment extends Fragment {
         canvas.drawBitmap(source, paddingX, paddingY, null);
         return paddedBitmap;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_camera, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @org.jetbrains.annotations.NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        viewFinder = getActivity().findViewById(R.id.view_finder);
+        viewFinder.post(this::startCamera);
+    }
+
     /**
-     * Fit the camera preview into [viewFinder].
+     * Setup the Camera Preview and Analysis Method using CameraX
+     */
+    private void startCamera() {
+        // Check if display is in portrait or landscape mode
+        viewFinderRotation = getDisplaySurfaceRotation(viewFinder.getDisplay());
+        if (viewFinderRotation == null) {
+            viewFinderRotation = 0;
+        }
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        viewFinder.getDisplay().getRealMetrics(metrics);
+
+        // Workaround: display metrics will return width and height of display WITH action bar at the top
+        // Therefore I had to subtract the height of Pixels
+        // TODO find a way to do this without hardcoding it
+        Rational screenAspectRatio = new Rational(metrics.widthPixels, metrics.heightPixels - 385);
+
+        PreviewConfig config = new PreviewConfig.Builder()
+                .setLensFacing(LENS_FACING)
+                .setTargetAspectRatio(screenAspectRatio)
+                .setTargetRotation(viewFinder.getDisplay().getRotation())
+                .build();
+        Preview preview = new Preview(config);
+
+        preview.setOnPreviewOutputUpdateListener(previewOutput -> {
+            ViewGroup parent = (ViewGroup) viewFinder.getParent();
+            parent.removeView(viewFinder);
+            parent.addView(viewFinder, 0);
+
+            viewFinder.setSurfaceTexture(previewOutput.getSurfaceTexture());
+
+            Integer rotation = getDisplaySurfaceRotation(viewFinder.getDisplay());
+            updateTransform(rotation, previewOutput.getTextureSize(), viewFinderDimens);
+        });
+        viewFinder.addOnLayoutChangeListener((
+                view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            Size newViewFinderDimens = new Size(right - left, bottom - top);
+            Integer rotation = getDisplaySurfaceRotation(viewFinder.getDisplay());
+            updateTransform(rotation, bufferDimens, newViewFinderDimens);
+        });
+        HandlerThread inferenceThread = new HandlerThread("InferenceThread");
+        inferenceThread.start();
+        ImageAnalysisConfig analysisConfig = new ImageAnalysisConfig.Builder()
+                .setLensFacing(LENS_FACING)
+                .setCallbackHandler(new Handler(inferenceThread.getLooper()))
+                .setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE)
+                .setTargetRotation(viewFinder.getDisplay().getRotation())
+                .build();
+
+        ImageAnalysis imageAnalysis = new ImageAnalysis(analysisConfig);
+        imageAnalysis.setAnalyzer(inferenceAnalyzer);
+
+        CameraX.bindToLifecycle(this, preview, imageAnalysis);
+    }
+
+    /**
+     * Get the display rotation
      *
-     * @param rotation view finder rotation.
-     * @param newBufferDimens camera preview dimensions.
+     * @param display android display
+     * @return rotation value
+     */
+    private static Integer getDisplaySurfaceRotation(Display display) {
+        if (display == null) {
+            return null;
+        }
+
+        switch (display.getRotation()) {
+            case Surface.ROTATION_0:
+                return 0;
+            case Surface.ROTATION_90:
+                return 90;
+            case Surface.ROTATION_180:
+                return 180;
+            case Surface.ROTATION_270:
+                return 270;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Fit the camera preview into the ViewFinder
+     *
+     * @param rotation            view finder rotation.
+     * @param newBufferDimens     camera preview dimensions.
      * @param newViewFinderDimens view finder dimensions.
      */
     private void updateTransform(Integer rotation, Size newBufferDimens, Size newViewFinderDimens) {
@@ -276,25 +331,5 @@ public class CameraFragment extends Fragment {
         matrix.preScale(xScale, yScale, centerX, centerY);
 
         viewFinder.setTransform(matrix);
-    }
-
-    /**
-     * Get the display rotation
-     *
-     * @param display android display
-     * @return rotation value
-     */
-    private static Integer getDisplaySurfaceRotation(Display display) {
-        if (display == null) {
-            return null;
-        }
-
-        switch (display.getRotation()) {
-            case Surface.ROTATION_0: return 0;
-            case Surface.ROTATION_90: return 90;
-            case Surface.ROTATION_180: return 180;
-            case Surface.ROTATION_270: return 270;
-            default: return null;
-        }
     }
 }
