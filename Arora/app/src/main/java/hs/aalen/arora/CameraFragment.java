@@ -1,64 +1,300 @@
 package hs.aalen.arora;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.ImageFormat;
+import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.camera.core.CameraX;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageAnalysisConfig;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
+import androidx.camera.core.PreviewConfig;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.Rational;
+import android.util.Size;
+import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.Surface;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CameraFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.common.util.concurrent.ListenableFuture;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.nio.ByteBuffer;
+import java.util.Objects;
+import java.util.UUID;
+
+
 public class CameraFragment extends Fragment {
+    private static final String TAG = CameraFragment.class.getSimpleName();
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final CameraX.LensFacing LENS_FACING = CameraX.LensFacing.BACK;
+    private static final int LOWER_BYTE_MASK = 0xFF;
+    // Use TextureView to get input Stream
+    private TextureView viewFinder;
+    private Integer viewFinderRotation = null;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Size bufferDimens = new Size(0, 0);
+    private Size viewFinderDimens = new Size(0, 0);
 
-    public CameraFragment() {
-        // Required empty public constructor
+    // TODO Add Concurrent Linked Queue to save video frames to process them later
+    // ...
+
+    private CameraFragmentViewModel viewModel;
+
+    private void startCamera() {
+        viewFinderRotation = getDisplaySurfaceRotation(viewFinder.getDisplay());
+        if (viewFinderRotation == null) {
+            viewFinderRotation = 0;
+        }
+        DisplayMetrics metrics = new DisplayMetrics();
+        viewFinder.getDisplay().getRealMetrics(metrics);
+
+        Rational screenAspectRatio = new Rational(metrics.widthPixels, metrics.heightPixels-385);
+
+        PreviewConfig config = new PreviewConfig.Builder()
+                .setLensFacing(LENS_FACING)
+                .setTargetAspectRatio(screenAspectRatio)
+                .setTargetRotation(viewFinder.getDisplay().getRotation())
+                .build();
+
+        Preview preview = new Preview(config);
+
+        preview.setOnPreviewOutputUpdateListener(previewOutput -> {
+            ViewGroup parent = (ViewGroup) viewFinder.getParent();
+            parent.removeView(viewFinder);
+            parent.addView(viewFinder, 0);
+
+            viewFinder.setSurfaceTexture(previewOutput.getSurfaceTexture());
+
+            Integer rotation = getDisplaySurfaceRotation(viewFinder.getDisplay());
+            updateTransform(rotation, previewOutput.getTextureSize(), viewFinderDimens);
+        });
+        viewFinder.addOnLayoutChangeListener((
+                view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            Size newViewFinderDimens = new Size(right - left, bottom - top);
+            Integer rotation = getDisplaySurfaceRotation(viewFinder.getDisplay());
+            updateTransform(rotation, bufferDimens, newViewFinderDimens);
+        });
+        HandlerThread inferenceThread = new HandlerThread("InferenceThread");
+        inferenceThread.start();
+        ImageAnalysisConfig analysisConfig = new ImageAnalysisConfig.Builder()
+                .setLensFacing(LENS_FACING)
+                .setCallbackHandler(new Handler(inferenceThread.getLooper()))
+                .setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE)
+                .setTargetRotation(viewFinder.getDisplay().getRotation())
+                .build();
+
+        ImageAnalysis imageAnalysis = new ImageAnalysis(analysisConfig);
+        imageAnalysis.setAnalyzer(inferenceAnalyzer);
+
+        CameraX.bindToLifecycle(this, preview, imageAnalysis);
     }
+    private final ImageAnalysis.Analyzer inferenceAnalyzer =
+            (imageProxy, rotationDegrees) -> {
+                final String imageId = UUID.randomUUID().toString();
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CameraFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CameraFragment newInstance(String param1, String param2) {
-        CameraFragment fragment = new CameraFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+                float[] rgbImage = prepareCameraImage(yuvCameraImageToBitmap(imageProxy), rotationDegrees);
+            };
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_camera, container, false);
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull @org.jetbrains.annotations.NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        viewFinder = getActivity().findViewById(R.id.view_finder);
+        viewFinder.post(this::startCamera);
+    }
+
+    private static Bitmap yuvCameraImageToBitmap(ImageProxy imageProxy) {
+        if (imageProxy.getFormat() != ImageFormat.YUV_420_888) {
+            throw new IllegalArgumentException(
+                    "Expected a YUV420 image, but got " + imageProxy.getFormat());
+        }
+
+        ImageProxy.PlaneProxy yPlane = imageProxy.getPlanes()[0];
+        ImageProxy.PlaneProxy uPlane = imageProxy.getPlanes()[1];
+
+        int width = imageProxy.getWidth();
+        int height = imageProxy.getHeight();
+
+        byte[][] yuvBytes = new byte[3][];
+        int[] argbArray = new int[width * height];
+        for (int i = 0; i < imageProxy.getPlanes().length; i++) {
+            final ByteBuffer buffer = imageProxy.getPlanes()[i].getBuffer();
+            yuvBytes[i] = new byte[buffer.capacity()];
+            buffer.get(yuvBytes[i]);
+        }
+
+        ImageUtils.convertYUV420ToARGB8888(
+                yuvBytes[0],
+                yuvBytes[1],
+                yuvBytes[2],
+                width,
+                height,
+                yPlane.getRowStride(),
+                uPlane.getRowStride(),
+                uPlane.getPixelStride(),
+                argbArray);
+
+        return Bitmap.createBitmap(argbArray, width, height, Bitmap.Config.ARGB_8888);
+    }
+
+    /**
+     * Normalizes a camera image to [0; 1], cropping it
+     * to size expected by the model and adjusting for camera rotation.
+     */
+    private static float[] prepareCameraImage(Bitmap bitmap, int rotationDegrees)  {
+        int modelImageSize = 224; //TransferLearningModelWrapper.IMAGE_SIZE;
+
+        Bitmap paddedBitmap = padToSquare(bitmap);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(
+                paddedBitmap, modelImageSize, modelImageSize, true);
+
+        Matrix rotationMatrix = new Matrix();
+        rotationMatrix.postRotate(rotationDegrees);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(
+                scaledBitmap, 0, 0, modelImageSize, modelImageSize, rotationMatrix, false);
+
+        float[] normalizedRgb = new float[modelImageSize * modelImageSize * 3];
+        int nextIdx = 0;
+        for (int y = 0; y < modelImageSize; y++) {
+            for (int x = 0; x < modelImageSize; x++) {
+                int rgb = rotatedBitmap.getPixel(x, y);
+
+                float r = ((rgb >> 16) & LOWER_BYTE_MASK) * (1 / 255.f);
+                float g = ((rgb >> 8) & LOWER_BYTE_MASK) * (1 / 255.f);
+                float b = (rgb & LOWER_BYTE_MASK) * (1 / 255.f);
+
+                normalizedRgb[nextIdx++] = r;
+                normalizedRgb[nextIdx++] = g;
+                normalizedRgb[nextIdx++] = b;
+            }
+        }
+
+        return normalizedRgb;
+    }
+
+    private static Bitmap padToSquare(Bitmap source) {
+        int width = source.getWidth();
+        int height = source.getHeight();
+
+        int paddingX = width < height ? (height - width) / 2 : 0;
+        int paddingY = height < width ? (width - height) / 2 : 0;
+        Bitmap paddedBitmap = Bitmap.createBitmap(
+                width + 2 * paddingX, height + 2 * paddingY, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(paddedBitmap);
+        canvas.drawARGB(0xFF, 0xFF, 0xFF, 0xFF);
+        canvas.drawBitmap(source, paddingX, paddingY, null);
+        return paddedBitmap;
+    }
+    /**
+     * Fit the camera preview into [viewFinder].
+     *
+     * @param rotation view finder rotation.
+     * @param newBufferDimens camera preview dimensions.
+     * @param newViewFinderDimens view finder dimensions.
+     */
+    private void updateTransform(Integer rotation, Size newBufferDimens, Size newViewFinderDimens) {
+        if (Objects.equals(rotation, viewFinderRotation)
+                && Objects.equals(newBufferDimens, bufferDimens)
+                && Objects.equals(newViewFinderDimens, viewFinderDimens)) {
+            return;
+        }
+
+        if (rotation == null) {
+            return;
+        } else {
+            viewFinderRotation = rotation;
+        }
+
+        if (newBufferDimens.getWidth() == 0 || newBufferDimens.getHeight() == 0) {
+            return;
+        } else {
+            bufferDimens = newBufferDimens;
+        }
+
+        if (newViewFinderDimens.getWidth() == 0 || newViewFinderDimens.getHeight() == 0) {
+            return;
+        } else {
+            viewFinderDimens = newViewFinderDimens;
+        }
+
+        Log.d(TAG, String.format("Applying output transformation.\n"
+                + "View finder size: %s.\n"
+                + "Preview output size: %s\n"
+                + "View finder rotation: %s\n", viewFinderDimens, bufferDimens, viewFinderRotation));
+        Matrix matrix = new Matrix();
+
+        float centerX = viewFinderDimens.getWidth() / 2f;
+        float centerY = viewFinderDimens.getHeight() / 2f;
+
+        matrix.postRotate(-viewFinderRotation.floatValue(), centerX, centerY);
+
+        float bufferRatio = bufferDimens.getHeight() / (float) bufferDimens.getWidth();
+
+        int scaledWidth;
+        int scaledHeight;
+        if (viewFinderDimens.getWidth() > viewFinderDimens.getHeight()) {
+            scaledHeight = viewFinderDimens.getWidth();
+            scaledWidth = Math.round(viewFinderDimens.getWidth() * bufferRatio);
+        } else {
+            scaledHeight = viewFinderDimens.getHeight();
+            scaledWidth = Math.round(viewFinderDimens.getHeight() * bufferRatio);
+        }
+
+        float xScale = scaledWidth / (float) viewFinderDimens.getWidth();
+        float yScale = scaledHeight / (float) viewFinderDimens.getHeight();
+
+        matrix.preScale(xScale, yScale, centerX, centerY);
+
+        viewFinder.setTransform(matrix);
+    }
+
+    /**
+     * Get the display rotation
+     *
+     * @param display android display
+     * @return rotation value
+     */
+    private static Integer getDisplaySurfaceRotation(Display display) {
+        if (display == null) {
+            return null;
+        }
+
+        switch (display.getRotation()) {
+            case Surface.ROTATION_0: return 0;
+            case Surface.ROTATION_90: return 90;
+            case Surface.ROTATION_180: return 180;
+            case Surface.ROTATION_270: return 270;
+            default: return null;
+        }
     }
 }

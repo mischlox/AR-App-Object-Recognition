@@ -1,2 +1,4 @@
-package hs.aalen.arora;public class CameraFragmentViewModel {
+package hs.aalen.arora;
+
+public class CameraFragmentViewModel {
 }

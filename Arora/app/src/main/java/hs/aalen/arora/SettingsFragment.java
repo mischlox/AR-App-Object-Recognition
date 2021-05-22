@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import org.jetbrains.annotations.NotNull;
 
 public class SettingsFragment extends Fragment {
+    private static final String TAG = SettingsFragment.class.getSimpleName();
+
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override

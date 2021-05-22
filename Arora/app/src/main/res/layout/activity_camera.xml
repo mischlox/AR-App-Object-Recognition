@@ -26,25 +26,39 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_nav_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
+                app:menu="@menu/bottom_nav"/>
+
+        </com.google.android.material.bottomappbar.BottomAppBar>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_object_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add"
+            app:layout_anchor="@id/bottom_appbar"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:id="@+id/nav_view"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/menu_items"/>
-
-
-
-    <!--    <FrameLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
-
-<!--        <androidx.fragment.app.FragmentContainerView-->
-<!--            android:id="@+id/camera_fragment_container"-->
-<!--            android:name="hs.aalen.arora.CameraFragment"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content" />-->
-<!--    </FrameLayout>-->
-
+        app:menu="@menu/side_nav"/>
 </androidx.drawerlayout.widget.DrawerLayout>
