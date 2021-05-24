@@ -1,5 +1,6 @@
 package hs.aalen.arora;
 
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ImageFormat;
@@ -21,6 +22,8 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,6 +46,8 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Class that handles the Camera Usage and shows Object Information in Real Time
@@ -55,11 +60,12 @@ import java.util.UUID;
 public class CameraFragment extends Fragment {
     private static final String TAG = CameraFragment.class.getSimpleName();
 
-    TextView objectInfoColumns;
-    TextView objectInfoValues;
-    ImageView objectPreviewImage;
-    FloatingActionButton expandCollapseButton;
-    CardView objectData;
+    // Expandable Object Data CardView
+    private TextView objectInfoColumns;
+    private TextView objectInfoValues;
+    private ImageView objectPreviewImage;
+    private FloatingActionButton expandCollapseButton;
+    private CardView objectData;
 
     // Front or back camera
     private static final CameraX.LensFacing LENS_FACING = CameraX.LensFacing.BACK;
@@ -70,8 +76,11 @@ public class CameraFragment extends Fragment {
     private Integer viewFinderRotation = null;
     private Size bufferDimens = new Size(0, 0);
 
-    // TODO Add Concurrent Linked Queue to save video frames to process them later
-    // ...
+    /**
+     * Class that is trained will be saved to this queue
+     */
+    private final ConcurrentLinkedQueue<String> addSampleRequests = new ConcurrentLinkedQueue<>();
+
     private Size viewFinderDimens = new Size(0, 0);
     private CameraFragmentViewModel viewModel;
 

@@ -27,4 +27,12 @@
     <string name="preview_image">Preview Image</string>
     <string name="expand">Show More</string>
     <string name="collapse">Collapse</string>
+
+    <!-- Object Dialog -->
+    <string name="dialog_title">Add Information To Object</string>
+    <string name="dialog_start_training">Training</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_hint_object_name">Object Name</string>
+    <string name="dialog_hint_object_type">Object Type</string>
+    <string name="dialog_hint_object_additional_data">Additional Data</string>
 </resources>

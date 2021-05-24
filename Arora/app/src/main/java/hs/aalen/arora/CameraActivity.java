@@ -1,9 +1,11 @@
 package hs.aalen.arora;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,10 +35,19 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     private final SettingsFragment settingsFragment = new SettingsFragment();
     private final StatisticsFragment statisticsFragment = new StatisticsFragment();
     private final HelpFragment helpFragment = new HelpFragment();
+    FloatingActionButton buttonCamera;
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private BottomNavigationView bottomNavigationView;
     private Fragment selectedFragment = cameraFragment;
+
+    // Add Object Dialog items
+    private AlertDialog.Builder addObjectDialogBuilder;
+    private AlertDialog addObjectDialog;
+    private EditText dialogObjectName;
+    private EditText dialogObjectType;
+    private EditText dialogObjectAdditionalData;
+    private Button cancelDialogButton, startTrainingButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,19 +63,19 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         bottomNavigationView.getMenu().getItem(2).setEnabled(false);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-        FloatingActionButton buttonCamera = findViewById(R.id.nav_bottom_camera_button);
+        buttonCamera = findViewById(R.id.nav_bottom_camera_button);
         buttonCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // If not in Camera Fragment, go into it
                 if (selectedFragment != cameraFragment) {
+                    buttonCamera.setImageResource(R.drawable.ic_add);
                     selectedFragment = cameraFragment;
                     getSupportFragmentManager().beginTransaction().replace(R.id.navbar_container, selectedFragment).commit();
                     setTitle(navigationView.getMenu().findItem(R.id.nav_camera).getTitle());
                     syncNavBars(R.id.nav_camera, R.id.nav_bottom_placeholder);
                 } else {
-                    // TODO implement dialog to add object
-                    System.out.println("Magic");
+                    createAddObjectDialog();
                 }
             }
         });
@@ -95,26 +106,31 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_camera:
+                buttonCamera.setImageResource(R.drawable.ic_add);
                 syncNavBars(R.id.nav_camera, R.id.nav_bottom_placeholder);
                 selectedFragment = cameraFragment;
                 break;
             case R.id.nav_object_overview:
             case R.id.nav_bottom_object_overview:
+                buttonCamera.setImageResource(R.drawable.ic_eye);
                 syncNavBars(R.id.nav_object_overview, R.id.nav_bottom_object_overview);
                 selectedFragment = objectOverviewFragment;
                 break;
             case R.id.nav_settings:
             case R.id.nav_bottom_settings:
+                buttonCamera.setImageResource(R.drawable.ic_eye);
                 syncNavBars(R.id.nav_settings, R.id.nav_bottom_settings);
                 selectedFragment = settingsFragment;
                 break;
             case R.id.nav_statistics:
             case R.id.nav_bottom_statistics:
+                buttonCamera.setImageResource(R.drawable.ic_eye);
                 syncNavBars(R.id.nav_statistics, R.id.nav_bottom_statistics);
                 selectedFragment = statisticsFragment;
                 break;
             case R.id.nav_help:
             case R.id.nav_bottom_help:
+                buttonCamera.setImageResource(R.drawable.ic_eye);
                 syncNavBars(R.id.nav_help, R.id.nav_bottom_help);
                 selectedFragment = helpFragment;
                 break;
@@ -155,5 +171,35 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void createAddObjectDialog(){
+        addObjectDialogBuilder = new AlertDialog.Builder(this);
+        final View addObjectDialogView = getLayoutInflater().inflate(R.layout.add_object_dialog_popup, null);
+        dialogObjectName = addObjectDialogView.findViewById(R.id.dialog_object_name);
+        dialogObjectType = addObjectDialogView.findViewById(R.id.dialog_object_type);
+        dialogObjectAdditionalData = addObjectDialogView.findViewById(R.id.dialog_object_additional_data);
+
+        startTrainingButton = addObjectDialogView.findViewById(R.id.dialog_start_training);
+        cancelDialogButton = addObjectDialogView.findViewById(R.id.dialog_cancel);
+
+        addObjectDialogBuilder.setView(addObjectDialogView);
+        addObjectDialog = addObjectDialogBuilder.create();
+        addObjectDialog.show();
+
+        startTrainingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO INFERENCE!
+            }
+        });
+
+        cancelDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addObjectDialog.dismiss();
+            }
+        });
+
     }
 }

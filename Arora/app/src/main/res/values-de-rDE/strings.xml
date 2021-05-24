@@ -20,4 +20,10 @@
     <string name="nightmode_disabled">Nachtmodus ist deaktiviert</string>
     <string name="collapse">Ausblenden</string>
     <string name="expand">Mehr Anzeigen</string>
+    <string name="dialog_title">"Füge Daten an "</string>
+    <string name="dialog_start_training">Training</string>
+    <string name="dialog_cancel">Abbrechen</string>
+    <string name="dialog_hint_object_name">Objektname</string>
+    <string name="dialog_hint_object_type">Objekttyp</string>
+    <string name="dialog_hint_object_additional_data">Zusätzliche Daten</string>
 </resources>
