@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Arora</string>
+    <string name="navigation_drawer_open">Öffne Navigation am linken Rand</string>
+    <string name="navigation_drawer_close">Schließe Navigation am linken Rand</string>
+    <string name="next">Nächste</string>
+    <string name="previous">Vorherige</string>
+    <string name="actions">Aktionen</string>
+    <string name="recognize_objects">Objekterkennung</string>
+    <string name="object_overview">Objektübersicht</string>
+    <string name="statistics">Statistiken</string>
+    <string name="settings">Einstellungen</string>
+    <string name="help">Hilfe</string>
+    <string name="delete_all_objects">Lösche alle Objekte</string>
+    <string name="enable_nightmode">Wechsle in Nachtmodus</string>
+    <string name="object_name">Objekt</string>
+    <string name="preview_image">Vorschaubild</string>
+    <string name="nightmode">Nachtmodus</string>
+    <string name="nightmode_enabled">Nachtmodus ist aktiviert</string>
+    <string name="nightmode_disabled">Nachtmodus ist deaktiviert</string>
+    <string name="collapse">Ausblenden</string>
+    <string name="expand">Mehr Anzeigen</string>
+</resources>

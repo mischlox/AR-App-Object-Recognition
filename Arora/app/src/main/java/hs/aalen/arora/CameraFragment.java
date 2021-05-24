@@ -7,6 +7,10 @@ import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.transition.AutoTransition;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.transition.TransitionManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Rational;
@@ -17,6 +21,9 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +33,10 @@ import androidx.camera.core.ImageAnalysisConfig;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +45,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Class that handles the Camera Usage
+ * Class that handles the Camera Usage and shows Object Information in Real Time
  * <p>
  * Parts of this code are taken from:
  * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/android/app/src/main/java/org/tensorflow/lite/examples/transfer/CameraFragment.java
@@ -44,6 +54,12 @@ import java.util.UUID;
  */
 public class CameraFragment extends Fragment {
     private static final String TAG = CameraFragment.class.getSimpleName();
+
+    TextView objectInfoColumns;
+    TextView objectInfoValues;
+    ImageView objectPreviewImage;
+    FloatingActionButton expandCollapseButton;
+    CardView objectData;
 
     // Front or back camera
     private static final CameraX.LensFacing LENS_FACING = CameraX.LensFacing.BACK;
@@ -171,6 +187,23 @@ public class CameraFragment extends Fragment {
         return paddedBitmap;
     }
 
+    private void showMore() {
+        if(objectInfoColumns.getVisibility() == View.GONE && objectInfoValues.getVisibility() == View.GONE && objectPreviewImage.getVisibility() == View.GONE) {
+            TransitionManager.beginDelayedTransition(objectData, new AutoTransition());
+            objectInfoColumns.setVisibility(View.VISIBLE);
+            objectInfoValues.setVisibility(View.VISIBLE);
+            objectPreviewImage.setVisibility(View.VISIBLE);
+            expandCollapseButton.setImageResource(R.drawable.ic_collapse);
+        } else {
+            TransitionManager.beginDelayedTransition(objectData, new AutoTransition());
+            objectInfoColumns.setVisibility(View.GONE);
+            objectInfoValues.setVisibility(View.GONE);
+            objectPreviewImage.setVisibility(View.GONE);
+            expandCollapseButton.setImageResource(R.drawable.ic_expand);
+
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,6 +218,19 @@ public class CameraFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @org.jetbrains.annotations.NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        objectData = getActivity().findViewById(R.id.object_metadata);
+        objectInfoColumns = getActivity().findViewById(R.id.object_info_columns);
+        objectInfoValues = getActivity().findViewById(R.id.object_info_values);
+        objectPreviewImage = getActivity().findViewById(R.id.object_info_preview_image);
+        expandCollapseButton = getActivity().findViewById(R.id.expand_collapse_button);
+        expandCollapseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMore();
+            }
+        });
+
         viewFinder = getActivity().findViewById(R.id.view_finder);
         viewFinder.post(this::startCamera);
     }

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
     <TextureView
         android:id="@+id/view_finder"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:elevation="10dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,50 +20,81 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardElevation="50dp"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
             <TextView
                 android:id="@+id/object_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:fontFamily="sans-serif-black"
-                android:text="Object"
+                android:text="@string/object_name"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="30sp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-                android:id="@+id/object_information"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="32dp"
-                android:fontFamily="sans-serif"
-                android:text="Genre:\tLogo\nDate:\t2021/05/05\nMock:\tText"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toRightOf="@id/object_name"
+                android:layout_marginLeft="16dp"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/expand_collapse_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/preview_image"
+                android:src="@drawable/ic_expand"
+                app:fabSize="mini"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="16dp"/>
+
+            <TextView
+                android:visibility="gone"
+
+                android:id="@+id/object_info_columns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/object_columns"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/expand_collapse_button" />
+
+            <TextView
+                android:visibility="gone"
+
+                android:id="@+id/object_info_values"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+
+                android:text="@string/object_values"
+                app:layout_constraintLeft_toRightOf="@id/object_info_columns"
+                app:layout_constraintTop_toBottomOf="@id/expand_collapse_button" />
+
             <ImageView
-                android:id="@+id/object_preview"
-                android:layout_width="224px"
-                android:layout_height="224px"
+                android:visibility="gone"
+
+                android:id="@+id/object_info_preview_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
                 android:background="@color/blue_200"
+                android:elevation="20dp"
                 android:src="@drawable/method_draw_image_1_"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/expand_collapse_button" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

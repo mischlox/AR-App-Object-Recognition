@@ -2,15 +2,29 @@
     <string name="app_name">Arora</string>
     <string name="navigation_drawer_open"> Open navigation drawer</string>
     <string name="navigation_drawer_close"> Close navigation drawer</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_camera">CameraActivity</string>
+
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="first_fragment_label" translatable="false">First Fragment</string>
+    <string name="second_fragment_label" translatable="false">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- Navigation menu -->
+    <string name="actions">Actions</string>
+    <string name="recognize_objects">Recognize Objects</string>
+    <string name="object_overview">Object Overview</string>
+    <string name="statistics">Statistics</string>
+    <string name="settings">Settings</string>
+    <string name="help">Help</string>
+    <string name="delete_all_objects">Delete All Objects</string>
+    <string name="enable_nightmode">Enable Night Mode</string>
+    <string name="nightmode">Night Mode</string>
+    <string name="nightmode_enabled">Night Mode is activated</string>
+    <string name="nightmode_disabled">Night Mode is deactivated</string>
+    <!-- Camera Fragment-->
+    <string name="object_name">Object</string>
+    <string name="object_columns" translatable="false">Genre:\nDate:\nMock:\nAge:\nSimilar to:</string>
+    <string name="object_values" translatable="false">Logo\n2021/05/05\nText\n4 Months\nAnother Object</string>
+    <string name="preview_image">Preview Image</string>
+    <string name="expand">Show More</string>
+    <string name="collapse">Collapse</string>
 </resources>

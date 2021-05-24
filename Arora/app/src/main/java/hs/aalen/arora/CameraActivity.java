@@ -36,7 +36,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private BottomNavigationView bottomNavigationView;
-    private Fragment selectedFragment = null;
+    private Fragment selectedFragment = cameraFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
