@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
+        app:cardBackgroundColor="@color/transparent_background"
         android:id="@+id/object_metadata"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

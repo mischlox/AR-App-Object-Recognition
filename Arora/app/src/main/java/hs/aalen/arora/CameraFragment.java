@@ -48,6 +48,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Class that handles the Camera Usage and shows Object Information in Real Time
@@ -83,6 +84,7 @@ public class CameraFragment extends Fragment {
 
     private Size viewFinderDimens = new Size(0, 0);
     private CameraFragmentViewModel viewModel;
+    private TransferLearningModelWrapper transferLearningModel;
 
     /**
      * Analyzer is responsible for processing camera input (including inference) into an RGB Float matrix
@@ -90,8 +92,24 @@ public class CameraFragment extends Fragment {
     private final ImageAnalysis.Analyzer inferenceAnalyzer =
             (imageProxy, rotationDegrees) -> {
                 final String imageId = UUID.randomUUID().toString();
-
+                // Preprocess camera images all the time, because it is needed by inference and by training
                 float[] rgbImage = prepareCameraImage(yuvCameraImageToBitmap(imageProxy), rotationDegrees);
+
+                // Get the head of queue
+                String sampleClass = addSampleRequests.poll();
+
+                // Training Mode
+                if(sampleClass != null) {
+                    try {
+                        transferLearningModel.addSample(rgbImage, sampleClass).get();
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException("Failed to add sample to model", e.getCause());
+                    } catch (InterruptedException e) {}
+                }
+                // Inference Mode
+                else {
+
+                }
             };
 
     /**
@@ -216,6 +234,8 @@ public class CameraFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        transferLearningModel = new TransferLearningModelWrapper(getActivity());
     }
 
     @Nullable
@@ -386,5 +406,21 @@ public class CameraFragment extends Fragment {
         matrix.preScale(xScale, yScale, centerX, centerY);
 
         viewFinder.setTransform(matrix);
+    }
+
+    public ConcurrentLinkedQueue<String> getAddSampleRequests(){
+        return addSampleRequests;
+    }
+
+    /**
+     * Add specific amount of Training Data to queue
+     *
+     * @param classname name of object to train
+     * @param amount    amount of input samples for training
+     */
+    public void addSamples(String classname, int amount) {
+        for (int i = 0; i < amount; i++) {
+            addSampleRequests.add(classname);
+        }
     }
 }

@@ -52,6 +52,8 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     // For Database Access
     DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
+    // For access to camera Fragment method
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -204,11 +206,14 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
 
                     if(success) {
                         Toast.makeText(CameraActivity.this, "Sucessfully inserted object!", Toast.LENGTH_SHORT).show();
+
+                        // TODO INFERENCE
+                        cameraFragment.addSamples(dialogObjectName.getText().toString(), 30);
+
+                        // Reset text
                         dialogObjectName.setText("");
                         dialogObjectType.setText("");
                         dialogObjectAdditionalData.setText("");
-
-                        // TODO INFERENCE
                     }
                 }
             }

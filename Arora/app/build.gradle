@@ -26,6 +26,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    aaptOptions {
+        noCompress "tflite"
+    }
     buildFeatures {
         viewBinding true
     }
@@ -44,7 +47,34 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'org.jetbrains:annotations:15.0'
+    implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly-SNAPSHOT'
+    implementation project(path: ':transfer_api')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
+
+// The code below downloads a transfer learning model used in the example app automatically.
+// Remove it if you are using your own model!
+
+def modelUrl = 'https://storage.googleapis.com/download.tensorflow.org/models/tflite/transfer_learning_mobilenet_v2_100_224x224_quant_softmax_4_sgd.zip'
+def modelArchivePath = "${buildDir}/model.zip"
+def modelTargetLocation = 'src/main/assets/model'
+
+task downloadModel(type: DefaultTask) {
+    doFirst {
+        println "Downloading and unpacking the model..."
+        mkdir project.buildDir
+    }
+
+    doLast {
+        ant.mkdir(dir: modelTargetLocation)
+        // If you want to use your own models rather than pre-built models,
+        // comment out the following three lines.
+        ant.get(src: modelUrl, dest: modelArchivePath)
+        ant.unzip(src: modelArchivePath, dest: modelTargetLocation)
+        ant.delete(file: modelArchivePath)
+    }
+}
+
+preBuild.dependsOn downloadModel
