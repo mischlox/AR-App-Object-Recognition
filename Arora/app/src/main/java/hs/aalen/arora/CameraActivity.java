@@ -1,6 +1,7 @@
 package hs.aalen.arora;
 
 import android.app.AlertDialog;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +50,9 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     private EditText dialogObjectAdditionalData;
     private Button cancelDialogButton, startTrainingButton;
 
+    // For Database Access
+    DatabaseHelper databaseHelper = new DatabaseHelper(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +79,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                     setTitle(navigationView.getMenu().findItem(R.id.nav_camera).getTitle());
                     syncNavBars(R.id.nav_camera, R.id.nav_bottom_placeholder);
                 } else {
+                    // Start inference from here
                     createAddObjectDialog();
                 }
             }
@@ -179,7 +184,6 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         dialogObjectName = addObjectDialogView.findViewById(R.id.dialog_object_name);
         dialogObjectType = addObjectDialogView.findViewById(R.id.dialog_object_type);
         dialogObjectAdditionalData = addObjectDialogView.findViewById(R.id.dialog_object_additional_data);
-
         startTrainingButton = addObjectDialogView.findViewById(R.id.dialog_start_training);
         cancelDialogButton = addObjectDialogView.findViewById(R.id.dialog_cancel);
 
@@ -190,7 +194,24 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         startTrainingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO INFERENCE!
+                String objectName = dialogObjectName.getText().toString();
+                String objectType = dialogObjectType.getText().toString();
+                String objectAdditionalData = dialogObjectAdditionalData.getText().toString();
+                if(objectName.length() != 0 &&
+                        objectType.length() != 0 &&
+                        objectAdditionalData.length() != 0) {
+
+                    boolean success = addData(objectName, objectType, objectAdditionalData);
+
+                    if(success) {
+                        Toast.makeText(CameraActivity.this, "Sucessfully inserted object!", Toast.LENGTH_SHORT).show();
+                        dialogObjectName.setText("");
+                        dialogObjectType.setText("");
+                        dialogObjectAdditionalData.setText("");
+
+                        // TODO INFERENCE
+                    }
+                }
             }
         });
 
@@ -201,5 +222,17 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
             }
         });
 
+    }
+
+    /**
+     * Add a new object to Database
+     *
+     * @param objectName Name of object
+     * @param objectType Type of object
+     * @param objectAdditionalData Additional data of object
+     * @return true if successful, false otherwise
+     */
+    private boolean addData(String objectName, String objectType, String objectAdditionalData) {
+        return databaseHelper.addData(objectName, objectType, objectAdditionalData);
     }
 }

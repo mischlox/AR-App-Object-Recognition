@@ -26,4 +26,7 @@
     <string name="dialog_hint_object_name">Objektname</string>
     <string name="dialog_hint_object_type">Objekttyp</string>
     <string name="dialog_hint_object_additional_data">Zusätzliche Daten</string>
+    <string name="add_new_object">Neues Objekt</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="delete">Löschen</string>
 </resources>
