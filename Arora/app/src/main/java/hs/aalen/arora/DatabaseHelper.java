@@ -46,9 +46,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Insert object to DB
      *
-     * @param objectName name of object
-     * @param objectType type of object
-     * @param objectAdditionalData additional data to object
+     * @param objectName            name of object
+     * @param objectType            type of object
+     * @param objectAdditionalData  additional data to object
      *
      * @return true if successful, false otherwise
      */
@@ -82,5 +82,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d(TAG, "deletebyId: Delete item with ID " + id);
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME, "ID=?", new String[]{id}) > 0;
+    }
+
+    /**
+     * Edit object by ID
+     *
+     * @param id                    ID of Object
+     * @param objectName            Name of Object
+     * @param objectType            Type of Object
+     * @param objectAdditionalData  Additional Data of Object
+     *
+     * @return True if successful, false otherwise
+     */
+    public boolean editData(String id, String objectName, String objectType, String objectAdditionalData) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL1, objectName);
+        contentValues.put(COL2, objectType);
+        contentValues.put(COL3, objectAdditionalData);
+
+        Log.d(TAG, "editData: Editing " + objectName);
+
+        long success = db.update(TABLE_NAME, contentValues, "ID=?", new String[]{id});
+
+        return success != -1;
     }
 }

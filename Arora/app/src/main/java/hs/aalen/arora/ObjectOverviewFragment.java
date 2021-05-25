@@ -1,5 +1,6 @@
 package hs.aalen.arora;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -25,6 +27,11 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * Class that contains a list of all saved Objects in the SQLite Database
+ *
+ * @author Michael Schlosser
+ */
 public class ObjectOverviewFragment extends ListFragment {
     private static final String TAG = ObjectOverviewFragment.class.getSimpleName();
 
@@ -78,6 +85,15 @@ public class ObjectOverviewFragment extends ListFragment {
         ArrayList<String> additionalInfo;
         ArrayList<Integer> images;
 
+        // Edit Object Dialog items
+        private AlertDialog.Builder editObjectDialogBuilder;
+        private AlertDialog editObjectDialog;
+        private EditText dialogObjectName;
+        private EditText dialogObjectType;
+        private EditText dialogObjectAdditionalData;
+        private ImageButton confirmButton;
+        private ImageButton cancelButton;
+
         ObjectOverviewAdapter(Context c, ArrayList<String> title, ArrayList<String> type, ArrayList<String> additionalInfo, ArrayList<Integer> images) {
             super(c, R.layout.object_item, R.id.list_object_name, title);
             this.context = c;
@@ -95,7 +111,7 @@ public class ObjectOverviewFragment extends ListFragment {
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO edit button
+                    createEditObjectDialog(position);
                 }
             });
             ImageButton deleteButton = item.findViewById(R.id.list_delete_button);
@@ -130,6 +146,69 @@ public class ObjectOverviewFragment extends ListFragment {
             objectNames.remove(position);
             objectTypes.remove(position);
             objectAdditionalDatas.remove(position);
+        }
+
+        /**
+         * Edit all Attributes from list item in GUI
+         *
+         * @param position      Position of list item
+         * @param name          Name of list item
+         * @param type          Type of list item
+         * @param additional    Additional Information of list item
+         */
+        private void editItem(int position, String name, String type, String additional) {
+            objectNames.set(position, name);
+            objectTypes.set(position, type);
+            objectAdditionalDatas.set(position, additional);
+        }
+
+        /**
+         * Edit Object popup
+         *
+         * @param position needed to recognize clicked item and show binded information
+         */
+        private void createEditObjectDialog(int position) {
+            editObjectDialogBuilder = new AlertDialog.Builder(getActivity());
+            final View editObjectDialogView = getLayoutInflater().inflate(R.layout.edit_object_dialog_popup, null);
+            dialogObjectName = editObjectDialogView.findViewById(R.id.edit_dialog_object_name);
+            dialogObjectName.setText(objectNames.get(position));
+
+            dialogObjectType = editObjectDialogView.findViewById(R.id.edit_dialog_object_type);
+            dialogObjectType.setText(objectTypes.get(position));
+
+            dialogObjectAdditionalData = editObjectDialogView.findViewById(R.id.edit_dialog_object_additional_data);
+            dialogObjectAdditionalData.setText(objectAdditionalDatas.get(position));
+
+            confirmButton = editObjectDialogView.findViewById(R.id.edit_dialog_confirm);
+            cancelButton = editObjectDialogView.findViewById(R.id.edit_dialog_cancel);
+
+            editObjectDialogBuilder.setView(editObjectDialogView);
+            editObjectDialog = editObjectDialogBuilder.create();
+            editObjectDialog.show();
+
+            confirmButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String name = dialogObjectName.getText().toString();
+                    String type = dialogObjectType.getText().toString();
+                    String additional = dialogObjectAdditionalData.getText().toString();
+
+                    if(databaseHelper.editData(objectIds.get(position), name, type, additional)) {
+                        editItem(position, name, type, additional);
+                        Toast.makeText(context, "Successfully edited Object!", Toast.LENGTH_SHORT).show();
+                        notifyDataSetChanged();
+                        editObjectDialog.dismiss();
+                    }
+                }
+            });
+
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editObjectDialog.dismiss();
+                }
+            });
+
         }
     }
 

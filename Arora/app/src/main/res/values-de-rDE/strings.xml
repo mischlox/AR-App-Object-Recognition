@@ -29,4 +29,6 @@
     <string name="add_new_object">Neues Objekt</string>
     <string name="edit">Bearbeiten</string>
     <string name="delete">Löschen</string>
+    <string name="confirm">Bestätigen</string>
+    <string name="edit_dialog_title">Objekt bearbeiten</string>
 </resources>

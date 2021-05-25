@@ -1,7 +1,6 @@
 package hs.aalen.arora;
 
 import android.app.AlertDialog;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -181,11 +180,11 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     public void createAddObjectDialog(){
         addObjectDialogBuilder = new AlertDialog.Builder(this);
         final View addObjectDialogView = getLayoutInflater().inflate(R.layout.add_object_dialog_popup, null);
-        dialogObjectName = addObjectDialogView.findViewById(R.id.dialog_object_name);
-        dialogObjectType = addObjectDialogView.findViewById(R.id.dialog_object_type);
-        dialogObjectAdditionalData = addObjectDialogView.findViewById(R.id.dialog_object_additional_data);
-        startTrainingButton = addObjectDialogView.findViewById(R.id.dialog_start_training);
-        cancelDialogButton = addObjectDialogView.findViewById(R.id.dialog_cancel);
+        dialogObjectName = addObjectDialogView.findViewById(R.id.add_dialog_object_name);
+        dialogObjectType = addObjectDialogView.findViewById(R.id.add_dialog_object_type);
+        dialogObjectAdditionalData = addObjectDialogView.findViewById(R.id.add_dialog_object_additional_data);
+        startTrainingButton = addObjectDialogView.findViewById(R.id.add_dialog_start_training);
+        cancelDialogButton = addObjectDialogView.findViewById(R.id.add_dialog_cancel);
 
         addObjectDialogBuilder.setView(addObjectDialogView);
         addObjectDialog = addObjectDialogBuilder.create();
