@@ -78,6 +78,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return data;
     }
 
+    /**
+     * Get object names
+     * This is helpful for model initialization
+     * @return
+     */
+    public Cursor getObjectNames() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query ="SELECT " + COL1 + " FROM " + TABLE_NAME;
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
+
     public boolean deletebyId(String id) {
         Log.d(TAG, "deletebyId: Delete item with ID " + id);
         SQLiteDatabase db = this.getWritableDatabase();

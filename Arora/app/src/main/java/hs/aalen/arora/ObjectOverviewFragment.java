@@ -60,7 +60,13 @@ public class ObjectOverviewFragment extends ListFragment {
         return view;
     }
 
+    /**
+     * Fill List View with data from our Database
+     */
     private void populateView() {
+        // Make array list instances empty, so they wont get added twice to the View
+        // When populateView gets called several times
+        clearArrayLists();
         Cursor data = databaseHelper.getData();
         ArrayList<String> listData = new ArrayList<>();
         while(data.moveToNext()) {
@@ -71,6 +77,16 @@ public class ObjectOverviewFragment extends ListFragment {
         }
         ListAdapter adapter = new ObjectOverviewAdapter(getActivity().getApplicationContext(), objectNames, objectTypes, objectAdditionalDatas, null);
         objectListView.setAdapter(adapter);
+    }
+
+    /**
+     * Clear Array Lists
+     */
+    private void clearArrayLists() {
+        objectIds.clear();
+        objectNames.clear();
+        objectTypes.clear();
+        objectAdditionalDatas.clear();
     }
 
     /**
