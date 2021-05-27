@@ -21,6 +21,7 @@ import org.tensorflow.lite.examples.transfer.api.AssetModelLoader;
 import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -31,7 +32,7 @@ import java.util.concurrent.Future;
  * run-once API of TransferLearningModel.
  *
  * This code is taken from:
- * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/android/app/src/main/java/org/tensorflow/lite/examples/transfer/CameraFragment.java
+ * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/
  */
 public class TransferLearningModelWrapper {
     public static final int IMAGE_SIZE = 224;
@@ -41,10 +42,10 @@ public class TransferLearningModelWrapper {
     private final ConditionVariable shouldTrain = new ConditionVariable();
     private volatile TransferLearningModel.LossConsumer lossConsumer;
 
-    TransferLearningModelWrapper(Context context) {
+    TransferLearningModelWrapper(Context context, Collection<String> classes) {
         model =
                 new TransferLearningModel(
-                        new AssetModelLoader(context, "model"), Arrays.asList("1", "2", "3", "4"));
+                        new AssetModelLoader(context, "model"), classes);
 
         new Thread(() -> {
             while (!Thread.interrupted()) {

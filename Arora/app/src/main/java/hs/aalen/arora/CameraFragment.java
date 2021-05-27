@@ -1,6 +1,7 @@
 package hs.aalen.arora;
 
 import android.app.AlertDialog;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ImageFormat;
@@ -42,8 +43,13 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
+import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -52,9 +58,9 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Class that handles the Camera Usage and shows Object Information in Real Time
- * <p>
+ *
  * Parts of this code are taken from:
- * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/android/app/src/main/java/org/tensorflow/lite/examples/transfer/CameraFragment.java
+ * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/
  *
  * @author Michael Schlosser
  */
@@ -76,6 +82,8 @@ public class CameraFragment extends Fragment {
     private TextureView viewFinder;
     private Integer viewFinderRotation = null;
     private Size bufferDimens = new Size(0, 0);
+
+    private DatabaseHelper databaseHelper;
 
     /**
      * Class that is trained will be saved to this queue
@@ -100,15 +108,25 @@ public class CameraFragment extends Fragment {
 
                 // Training Mode
                 if(sampleClass != null) {
-                    try {
-                        transferLearningModel.addSample(rgbImage, sampleClass).get();
-                    } catch (ExecutionException e) {
-                        throw new RuntimeException("Failed to add sample to model", e.getCause());
-                    } catch (InterruptedException e) {}
+//                    try {
+//                        transferLearningModel.addSample(rgbImage, sampleClass).get();
+//                    } catch (ExecutionException e) {
+//                        throw new RuntimeException("Failed to add sample to model", e.getCause());
+//                    } catch (InterruptedException e) {}
+                    viewModel.increaseNumSamples(sampleClass);
                 }
                 // Inference Mode
                 else {
+                    // We don't perform inference when adding samples, since we should be in capture mode
+                    // at the time, so the inference results are not actually displayed.
+                    TransferLearningModel.Prediction[] predictions = transferLearningModel.predict(rgbImage);
+                    if (predictions == null) {
+                        return;
+                    }
 
+                    for (TransferLearningModel.Prediction prediction : predictions) {
+//                        viewModel.setConfidence(prediction.getClassName(), prediction.getConfidence());
+                    }
                 }
             };
 
@@ -214,6 +232,10 @@ public class CameraFragment extends Fragment {
         return paddedBitmap;
     }
 
+    /**
+     * expand the cardview and show all object info at the top of the fragment
+     * when clicking the expand/collapse button
+     */
     private void showMore() {
         if(objectInfoColumns.getVisibility() == View.GONE && objectInfoValues.getVisibility() == View.GONE && objectPreviewImage.getVisibility() == View.GONE) {
             TransitionManager.beginDelayedTransition(objectData, new AutoTransition());
@@ -234,8 +256,23 @@ public class CameraFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        databaseHelper = new DatabaseHelper(getActivity());
+        List<String> classes = new ArrayList<>();
+        Cursor data = databaseHelper.getObjectNames();
 
-        transferLearningModel = new TransferLearningModelWrapper(getActivity());
+        while (data.moveToNext()) {
+            classes.add(data.getString(0));
+            Log.i(TAG, "OnCreate: Add " + data.getString(0) + " to Inference Model");
+        }
+        // Workaround that model is not flexible
+        // TODO make model generic
+        if (classes.size() != 4){
+            Log.d(TAG, "OnCreate: (Workaround) classes.size() = " + classes.size());
+            Log.w(TAG, "OnCreate: DB is empty! Initialized with default values");
+            // Change to default
+            classes = Arrays.asList("1", "2", "3", "4");
+        }
+        transferLearningModel = new TransferLearningModelWrapper(getActivity(), classes);
     }
 
     @Nullable

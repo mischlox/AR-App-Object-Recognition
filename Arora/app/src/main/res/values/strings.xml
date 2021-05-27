@@ -40,4 +40,7 @@
     <string name="delete">Delete</string>
     <string name="confirm">Confirm</string>
     <string name="edit_dialog_title">Edit Object</string>
+
+    <!-- Info -->
+    <string name="training..." translatable="false">Training...</string>
 </resources>

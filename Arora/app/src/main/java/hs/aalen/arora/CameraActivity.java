@@ -50,7 +50,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     private Button cancelDialogButton, startTrainingButton;
 
     // For Database Access
-    DatabaseHelper databaseHelper = new DatabaseHelper(this);
+    private DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
     // For access to camera Fragment method
 
