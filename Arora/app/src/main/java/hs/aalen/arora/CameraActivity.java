@@ -224,9 +224,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                         dialogObjectType.setText("");
                         dialogObjectAdditionalData.setText("");
                         addObjectDialog.dismiss();
-                        cameraFragment.addSamples(className, amountSamples);
-
-
+                        cameraFragment.addSamples(className, 50);
                     }
                 }
             }

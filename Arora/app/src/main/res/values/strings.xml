@@ -22,6 +22,7 @@
     <string name="nightmode_disabled">Night Mode is deactivated</string>
     <!-- Camera Fragment-->
     <string name="object_name">Object</string>
+    <string name="confidence_score">Confidence: </string>
     <string name="object_columns" translatable="false">Genre:\nDate:\nMock:\nAge:\nSimilar to:</string>
     <string name="object_values" translatable="false">Logo\n2021/05/05\nText\n4 Months\nAnother Object</string>
     <string name="preview_image">Preview Image</string>

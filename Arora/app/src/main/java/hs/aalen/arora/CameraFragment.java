@@ -43,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
 import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
 
 import java.nio.ByteBuffer;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,6 +69,7 @@ public class CameraFragment extends Fragment {
 
     // Expandable Object Data CardView
     private TextView objectName;
+    private TextView objectConfidence;
     private TextView objectInfoColumns;
     private TextView objectInfoValues;
     private ImageView objectPreviewImage;
@@ -335,6 +337,7 @@ public class CameraFragment extends Fragment {
 
         // Initialize CardView and including view when the view is created
         objectName = getActivity().findViewById(R.id.object_name);
+        objectConfidence = getActivity().findViewById(R.id.object_confidence);
         objectDataCardView = getActivity().findViewById(R.id.object_metadata_cardview);
         objectInfoColumns = getActivity().findViewById(R.id.object_info_columns);
         objectInfoValues = getActivity().findViewById(R.id.object_info_values);
@@ -394,6 +397,12 @@ public class CameraFragment extends Fragment {
             public void onChanged(String s) {
                 // TODO Search in DB for object with this name and display everythin
                 objectName.setText(s);
+                try {
+                    float confidence = viewModel.getConfidence().getValue().get(s);
+                    float confidencePercent = confidence * 100;
+                    DecimalFormat df = new DecimalFormat("##.#");
+                    objectConfidence.setText(df.format(confidencePercent) + " %");
+                } catch (NullPointerException e) {}
             }
         };
         viewModel.getFirstChoice().observe(getViewLifecycleOwner(), firstChoiceObserver);

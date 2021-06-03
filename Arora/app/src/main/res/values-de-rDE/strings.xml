@@ -34,4 +34,5 @@
     <string name="settings_training">Konfiguration des Trainings</string>
     <string name="settings_num_samples">Anzahl neuer Daten pro Training</string>
     <string name="settings_hint_num_samples">Anzahl neuer Daten, die in das Modell gegeben werden, wenn ein neues Objekt hinzugefügt wird</string>
+    <string name="confidence_score">"Wahrscheinlichkeit: "</string>
 </resources>
