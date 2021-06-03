@@ -87,9 +87,9 @@ public class CameraFragment extends Fragment {
 
     private DatabaseHelper databaseHelper;
 
-    WaitForTrainingThread waitForTrainingThread;
     static final Object sync = new Object();
 
+    int numSamplesPerClass;
 
     /**
      * Class that is trained will be saved to this queue
@@ -117,33 +117,37 @@ public class CameraFragment extends Fragment {
                 // Training Mode
                 if(sampleClass != null) {
                     try {
-                        synchronized (sync) {
-                            viewModel.increaseNumSamples(sampleClass);
-                            Log.d(TAG, "addSamples: add Sample for " + sampleClass);
-                            transferLearningModel.addSample(rgbImage, sampleClass).get();
-                            Log.d(TAG, "addSamples: No of total samples: " + viewModel.getNumSamples().getValue().get(sampleClass));
-                        }
+                        Log.d(TAG, "addSamples: training: add Sample for " + sampleClass);
+
+                        transferLearningModel.addSample(rgbImage, sampleClass).get();
+                        Log.d(TAG, "addSamples: training: No of total samples: " + viewModel.getNumSamples().getValue().get(sampleClass));
+
                     } catch (ExecutionException e) {
                         throw new RuntimeException("Failed to add sample to model", e.getCause());
                     } catch (InterruptedException | NullPointerException e) {}
-
+                    viewModel.increaseNumSamples(sampleClass);
+                    if(numSamplesPerClass > 20) {
+                        viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.STARTED);
+                    }
                 }
                 // Inference Mode
                 else {
-                    viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
                     // We don't perform inference when adding samples, since we should be in capture mode
                     // at the time, so the inference results are not actually displayed.
+                    TransferLearningModel.Prediction[] predictions = null;
+                    try {
+                        predictions = transferLearningModel.predict(rgbImage);
+                    } catch (NullPointerException e) {
 
-                    TransferLearningModel.Prediction[] predictions = transferLearningModel.predict(rgbImage);
-
+                    }
                     if (predictions == null) {
                         return;
                     }
                     for (TransferLearningModel.Prediction prediction : predictions) {
                         viewModel.setConfidence(prediction.getClassName(), prediction.getConfidence());
-                        Log.d(TAG, "addSamples: new Prediction: " + prediction.getClassName() + " conf: " + prediction.getConfidence());
+                        Log.d(TAG, "addSamples: inference: new Prediction: " + prediction.getClassName() + " conf: " + prediction.getConfidence());
                     }
-                    Log.d(TAG, "addSamples: object is: " + viewModel.getFirstChoice());
+                    Log.d(TAG, "addSamples: inference: object is: " + viewModel.getFirstChoice());
                 }
             };
 
@@ -308,7 +312,8 @@ public class CameraFragment extends Fragment {
             trainingProgressBarTextView.setVisibility(VISIBLE);
         }
         trainingProgressBar.setProgress(progress);
-        trainingProgressBarTextView.setText(progress + "%");
+        int relativeProgress = (int) (((float)progress / (float)trainingProgressBar.getMax()) * 100);
+        trainingProgressBarTextView.setText(relativeProgress + "%");
 
     }
 
@@ -348,7 +353,6 @@ public class CameraFragment extends Fragment {
                 .observe(
                         getViewLifecycleOwner(),
                         trainingState -> {
-                            trainingProgressBar.setMax(addSampleRequests.size());
                             switch (trainingState) {
                                 case STARTED:
                                     transferLearningModel.enableTraining((epoch, loss) -> viewModel.setLastLoss(loss));
@@ -371,15 +375,18 @@ public class CameraFragment extends Fragment {
                 .observe(
                         getViewLifecycleOwner(),
                         numSamples -> {
+                            trainingProgressBar.setMax(viewModel.getNumSamplesMax().getValue());
                             int progress;
                             try {
-                                progress = numSamples.get(addSampleRequests.peek());
+                                this.numSamplesPerClass = numSamples.get(addSampleRequests.peek());
+                                progress = viewModel.getNumSamplesCurrent().getValue().get(addSampleRequests.peek());
                             } catch(NullPointerException e) {
                                 progress = 0;
                             }
                             setProgressCircle(progress);
                         }
                 );
+        // TODO choice observer
 
         viewFinder = getActivity().findViewById(R.id.view_finder);
         viewFinder.post(this::startCamera);
@@ -547,9 +554,7 @@ public class CameraFragment extends Fragment {
      */
     public void addSamples(String classname, int amount) {
         Thread addSamplesThread = new AddSamplesThread(classname, amount);
-        waitForTrainingThread = new WaitForTrainingThread(classname);
         addSamplesThread.start();
-        waitForTrainingThread.start();
     }
 
     /**
@@ -571,48 +576,9 @@ public class CameraFragment extends Fragment {
                 addSampleRequests.add(classname);
                 Log.d(TAG, "addSamples: Add sample #" + i + " with name: " + classname + "(queue size: "+addSampleRequests.size()+")");
             }
+            viewModel.setNumSamplesMax(addSampleRequests.size());
             viewModel.setCaptureMode(false);
             Log.d(TAG, "addSamples: Capture Mode is disabled!");
-        }
-    }
-
-    /**
-     * Thread observes the num of samples in order to notify the Inference Analyzer when enough
-     * samples are stored for training
-     */
-    class WaitForTrainingThread extends Thread {
-        String classname;
-        WaitForTrainingThread(String classname) {
-            this.classname = classname;
-        }
-        @Override
-        public void run() {
-            int numSamples = 0;
-                synchronized (sync) {
-                    while (true) {
-                        try {
-                            numSamples = viewModel.getNumSamples().getValue().get(classname);
-                            Log.d(TAG, "addSamples1:  WaitForTrainingThread: num samples is: " + numSamples);
-                        } catch (NullPointerException e) {
-                            Log.e(TAG,"addSamples1: "+ e.toString());
-                            e.printStackTrace();
-                        }
-                        if(numSamples < 20) {
-                            Log.d(TAG, "addSamples1: Total Samples < 20 (" + numSamples + ")");
-                            try {
-                                sync.wait();
-                            } catch (InterruptedException e) {
-                                Log.e(TAG, "addSamples: Interrupted Exception: ");
-                                e.printStackTrace();
-                            }
-                        }
-                        else {
-                            sync.notify();
-                            break;
-                        }
-                    }
-                }
-                viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.STARTED);
         }
     }
 }

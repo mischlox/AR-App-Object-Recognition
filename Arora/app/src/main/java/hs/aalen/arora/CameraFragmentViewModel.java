@@ -1,6 +1,5 @@
 package hs.aalen.arora;
 
-import android.nfc.Tag;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -38,9 +37,10 @@ public class CameraFragmentViewModel extends ViewModel {
     private MutableLiveData<Boolean> captureMode = new MutableLiveData<>(false);
     private MutableLiveData<Map<String, Float>> confidence = new MutableLiveData<>(new TreeMap<>());
     private MutableLiveData<Integer> trainBatchSize = new MutableLiveData<>(0);
+    private MutableLiveData<Map<String, Integer>> numSamplesCurrent = new MutableLiveData<>(new TreeMap<>());
+    private MutableLiveData<Integer> numSamplesMax = new MutableLiveData<>(0);
     private MutableLiveData<Map<String, Integer>> numSamples = new MutableLiveData<>(new TreeMap<>());
-    private MutableLiveData<TrainingState> trainingState =
-            new MutableLiveData<>(TrainingState.NOT_STARTED);
+    private MutableLiveData<TrainingState> trainingState = new MutableLiveData<>(TrainingState.NOT_STARTED);
     private MutableLiveData<Float> lastLoss = new MutableLiveData<>();
     private MutableLiveData<Boolean> inferenceSnackbarWasDisplayed = new MutableLiveData<>(false);
 
@@ -49,7 +49,6 @@ public class CameraFragmentViewModel extends ViewModel {
     private LiveData<Integer> totalSamples;
     private LiveData<Integer> neededSamples;
 
-    private MutableLiveData<String> currentClass = new MutableLiveData<>("");
     /**
      * Whether capture mode is enabled.
      */
@@ -61,11 +60,24 @@ public class CameraFragmentViewModel extends ViewModel {
         captureMode.postValue(newValue);
     }
 
+
     /**
      * Number of added samples for each class.
      */
     public LiveData<Map<String, Integer>> getNumSamples() {
         return numSamples;
+    }
+
+    public MutableLiveData<Integer> getNumSamplesMax() {
+        return numSamplesMax;
+    }
+
+    public void setNumSamplesMax(int newValue) {
+        numSamplesMax.postValue(newValue);
+    }
+
+    public MutableLiveData<Map<String, Integer>> getNumSamplesCurrent() {
+        return numSamplesCurrent;
     }
 
     public void increaseNumSamples(String className) {
@@ -77,8 +89,24 @@ public class CameraFragmentViewModel extends ViewModel {
             currentNumber = 0;
         }
         map.put(className, currentNumber + 1);
+        increaseNumSamplesCurrent(className);
         numSamples.postValue(map);
     }
+
+    private void increaseNumSamplesCurrent(String className) {
+        Map<String, Integer> map = numSamplesCurrent.getValue();
+        int currentNumber;
+        if (map.containsKey(className)) {
+            currentNumber = map.get(className);
+            if (currentNumber > numSamplesMax.getValue()) currentNumber = 0;
+        } else {
+            currentNumber = 0;
+        }
+        map.put(className, currentNumber + 1);
+        numSamplesCurrent.postValue(map);
+    }
+
+
 
     /**
      * Confidence values for each class from inference.
