@@ -1,6 +1,5 @@
 package hs.aalen.arora;
 
-import android.app.AlertDialog;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,8 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.transition.AutoTransition;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.transition.TransitionManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -23,10 +20,8 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +34,7 @@ import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -48,13 +44,15 @@ import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static java.lang.Thread.sleep;
 
 /**
  * Class that handles the Camera Usage and shows Object Information in Real Time
@@ -72,7 +70,11 @@ public class CameraFragment extends Fragment {
     private TextView objectInfoValues;
     private ImageView objectPreviewImage;
     private FloatingActionButton expandCollapseButton;
-    private CardView objectData;
+    private CardView objectDataCardView;
+
+    private ProgressBar trainingProgressBar;
+    private TextView trainingProgressBarLabel;
+    private TextView trainingProgressBarTextView;
 
     // Front or back camera
     private static final CameraX.LensFacing LENS_FACING = CameraX.LensFacing.BACK;
@@ -85,6 +87,10 @@ public class CameraFragment extends Fragment {
 
     private DatabaseHelper databaseHelper;
 
+    WaitForTrainingThread waitForTrainingThread;
+    static final Object sync = new Object();
+
+
     /**
      * Class that is trained will be saved to this queue
      */
@@ -95,7 +101,9 @@ public class CameraFragment extends Fragment {
     private TransferLearningModelWrapper transferLearningModel;
 
     /**
-     * Analyzer is responsible for processing camera input (including inference) into an RGB Float matrix
+     * Analyzer is responsible for processing camera input
+     * (including inference and send training samples to transfer learning model)
+     * into an RGB Float matrix
      */
     private final ImageAnalysis.Analyzer inferenceAnalyzer =
             (imageProxy, rotationDegrees) -> {
@@ -108,25 +116,34 @@ public class CameraFragment extends Fragment {
 
                 // Training Mode
                 if(sampleClass != null) {
-//                    try {
-//                        transferLearningModel.addSample(rgbImage, sampleClass).get();
-//                    } catch (ExecutionException e) {
-//                        throw new RuntimeException("Failed to add sample to model", e.getCause());
-//                    } catch (InterruptedException e) {}
-                    viewModel.increaseNumSamples(sampleClass);
+                    try {
+                        synchronized (sync) {
+                            viewModel.increaseNumSamples(sampleClass);
+                            Log.d(TAG, "addSamples: add Sample for " + sampleClass);
+                            transferLearningModel.addSample(rgbImage, sampleClass).get();
+                            Log.d(TAG, "addSamples: No of total samples: " + viewModel.getNumSamples().getValue().get(sampleClass));
+                        }
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException("Failed to add sample to model", e.getCause());
+                    } catch (InterruptedException | NullPointerException e) {}
+
                 }
                 // Inference Mode
                 else {
+                    viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
                     // We don't perform inference when adding samples, since we should be in capture mode
                     // at the time, so the inference results are not actually displayed.
+
                     TransferLearningModel.Prediction[] predictions = transferLearningModel.predict(rgbImage);
+
                     if (predictions == null) {
                         return;
                     }
-
                     for (TransferLearningModel.Prediction prediction : predictions) {
-//                        viewModel.setConfidence(prediction.getClassName(), prediction.getConfidence());
+                        viewModel.setConfidence(prediction.getClassName(), prediction.getConfidence());
+                        Log.d(TAG, "addSamples: new Prediction: " + prediction.getClassName() + " conf: " + prediction.getConfidence());
                     }
+                    Log.d(TAG, "addSamples: object is: " + viewModel.getFirstChoice());
                 }
             };
 
@@ -237,17 +254,17 @@ public class CameraFragment extends Fragment {
      * when clicking the expand/collapse button
      */
     private void showMore() {
-        if(objectInfoColumns.getVisibility() == View.GONE && objectInfoValues.getVisibility() == View.GONE && objectPreviewImage.getVisibility() == View.GONE) {
-            TransitionManager.beginDelayedTransition(objectData, new AutoTransition());
-            objectInfoColumns.setVisibility(View.VISIBLE);
-            objectInfoValues.setVisibility(View.VISIBLE);
-            objectPreviewImage.setVisibility(View.VISIBLE);
+        if(objectInfoColumns.getVisibility() == GONE && objectInfoValues.getVisibility() == GONE && objectPreviewImage.getVisibility() == GONE) {
+            TransitionManager.beginDelayedTransition(objectDataCardView, new AutoTransition());
+            objectInfoColumns.setVisibility(VISIBLE);
+            objectInfoValues.setVisibility(VISIBLE);
+            objectPreviewImage.setVisibility(VISIBLE);
             expandCollapseButton.setImageResource(R.drawable.ic_collapse);
         } else {
-            TransitionManager.beginDelayedTransition(objectData, new AutoTransition());
-            objectInfoColumns.setVisibility(View.GONE);
-            objectInfoValues.setVisibility(View.GONE);
-            objectPreviewImage.setVisibility(View.GONE);
+            TransitionManager.beginDelayedTransition(objectDataCardView, new AutoTransition());
+            objectInfoColumns.setVisibility(GONE);
+            objectInfoValues.setVisibility(GONE);
+            objectPreviewImage.setVisibility(GONE);
             expandCollapseButton.setImageResource(R.drawable.ic_expand);
 
         }
@@ -256,6 +273,8 @@ public class CameraFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        viewModel = new ViewModelProvider(this).get(CameraFragmentViewModel.class);
         databaseHelper = new DatabaseHelper(getActivity());
         List<String> classes = new ArrayList<>();
         Cursor data = databaseHelper.getObjectNames();
@@ -275,17 +294,40 @@ public class CameraFragment extends Fragment {
         transferLearningModel = new TransferLearningModelWrapper(getActivity(), classes);
     }
 
+    /**
+     * Helper function to set percentual amount of progress in progress bar
+     */
+    private void setProgressCircle(int progress) {
+        Log.d(TAG, "addSamples setProgressCircle Max: " + trainingProgressBar.getMax() + " progress: " + progress);
+        if(progress == 0){
+            trainingProgressBarLabel.setVisibility(GONE);
+            trainingProgressBarTextView.setVisibility(GONE);
+        }
+        else {
+            trainingProgressBarLabel.setVisibility(VISIBLE);
+            trainingProgressBarTextView.setVisibility(VISIBLE);
+        }
+        trainingProgressBar.setProgress(progress);
+        trainingProgressBarTextView.setText(progress + "%");
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_camera, container, false);
+        Log.d(TAG, "onCreateView: entrypoint");
+        View inflatedView = inflater.inflate(R.layout.fragment_camera, container, false);
+
+        return inflatedView;
     }
 
     @Override
     public void onViewCreated(@NonNull @org.jetbrains.annotations.NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onViewCreated: entrypoint");
         super.onViewCreated(view, savedInstanceState);
 
-        objectData = getActivity().findViewById(R.id.object_metadata);
+        // Initialize CardView and including view when the view is created
+        objectDataCardView = getActivity().findViewById(R.id.object_metadata_cardview);
         objectInfoColumns = getActivity().findViewById(R.id.object_info_columns);
         objectInfoValues = getActivity().findViewById(R.id.object_info_values);
         objectPreviewImage = getActivity().findViewById(R.id.object_info_preview_image);
@@ -297,8 +339,57 @@ public class CameraFragment extends Fragment {
             }
         });
 
+        trainingProgressBar = getActivity().findViewById(R.id.progressbar_training);
+        trainingProgressBarLabel = getActivity().findViewById(R.id.progressbar_training_text);
+        trainingProgressBarTextView = getActivity().findViewById(R.id.progressbar_textview);
+        // Enable/Disable training
+        viewModel
+                .getTrainingState()
+                .observe(
+                        getViewLifecycleOwner(),
+                        trainingState -> {
+                            trainingProgressBar.setMax(addSampleRequests.size());
+                            switch (trainingState) {
+                                case STARTED:
+                                    transferLearningModel.enableTraining((epoch, loss) -> viewModel.setLastLoss(loss));
+                                    Log.d(TAG, "addSamples:  training enabled");
+                                    break;
+                                case PAUSED:
+                                    transferLearningModel.disableTraining();
+                                    Log.d(TAG, "addSamples: training disabled (pause)");
+                                    setProgressCircle(0);
+
+                                    break;
+                                case NOT_STARTED:
+                                    Log.d(TAG, "addSamples: training disabled (not started)");
+                                    setProgressCircle(0);
+                                    break;
+                            }
+                        });
+        viewModel
+                .getNumSamples()
+                .observe(
+                        getViewLifecycleOwner(),
+                        numSamples -> {
+                            int progress;
+                            try {
+                                progress = numSamples.get(addSampleRequests.peek());
+                            } catch(NullPointerException e) {
+                                progress = 0;
+                            }
+                            setProgressCircle(progress);
+                        }
+                );
+
         viewFinder = getActivity().findViewById(R.id.view_finder);
         viewFinder.post(this::startCamera);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        transferLearningModel.close();
+        transferLearningModel = null;
     }
 
     /**
@@ -448,7 +539,6 @@ public class CameraFragment extends Fragment {
     public ConcurrentLinkedQueue<String> getAddSampleRequests(){
         return addSampleRequests;
     }
-
     /**
      * Add specific amount of Training Data to queue
      *
@@ -456,8 +546,73 @@ public class CameraFragment extends Fragment {
      * @param amount    amount of input samples for training
      */
     public void addSamples(String classname, int amount) {
-        for (int i = 0; i < amount; i++) {
-            addSampleRequests.add(classname);
+        Thread addSamplesThread = new AddSamplesThread(classname, amount);
+        waitForTrainingThread = new WaitForTrainingThread(classname);
+        addSamplesThread.start();
+        waitForTrainingThread.start();
+    }
+
+    /**
+     * Background Thread to add Sample Requests
+     */
+    class AddSamplesThread extends Thread {
+        int amount;
+        String classname;
+
+        AddSamplesThread(String classname, int amount) {
+            this.classname = classname;
+            this.amount = amount;
+        }
+        @Override
+        public void run() {
+            viewModel.setCaptureMode(true);
+            Log.d(TAG, "addSamples: Capture Mode is enabled!");
+            for(int i = 0; i < amount; i++) {
+                addSampleRequests.add(classname);
+                Log.d(TAG, "addSamples: Add sample #" + i + " with name: " + classname + "(queue size: "+addSampleRequests.size()+")");
+            }
+            viewModel.setCaptureMode(false);
+            Log.d(TAG, "addSamples: Capture Mode is disabled!");
+        }
+    }
+
+    /**
+     * Thread observes the num of samples in order to notify the Inference Analyzer when enough
+     * samples are stored for training
+     */
+    class WaitForTrainingThread extends Thread {
+        String classname;
+        WaitForTrainingThread(String classname) {
+            this.classname = classname;
+        }
+        @Override
+        public void run() {
+            int numSamples = 0;
+                synchronized (sync) {
+                    while (true) {
+                        try {
+                            numSamples = viewModel.getNumSamples().getValue().get(classname);
+                            Log.d(TAG, "addSamples1:  WaitForTrainingThread: num samples is: " + numSamples);
+                        } catch (NullPointerException e) {
+                            Log.e(TAG,"addSamples1: "+ e.toString());
+                            e.printStackTrace();
+                        }
+                        if(numSamples < 20) {
+                            Log.d(TAG, "addSamples1: Total Samples < 20 (" + numSamples + ")");
+                            try {
+                                sync.wait();
+                            } catch (InterruptedException e) {
+                                Log.e(TAG, "addSamples: Interrupted Exception: ");
+                                e.printStackTrace();
+                            }
+                        }
+                        else {
+                            sync.notify();
+                            break;
+                        }
+                    }
+                }
+                viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.STARTED);
         }
     }
 }

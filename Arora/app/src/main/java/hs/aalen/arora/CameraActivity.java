@@ -2,6 +2,7 @@ package hs.aalen.arora;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CameraActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
     // Fragments as single instance in order to not recreate them
+    private static final String TAG = "CameraActivity";
+
     private final CameraFragment cameraFragment = new CameraFragment();
     private final ObjectOverviewFragment objectOverviewFragment = new ObjectOverviewFragment();
     private final SettingsFragment settingsFragment = new SettingsFragment();
@@ -52,14 +55,14 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     // For Database Access
     private DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
-    // For access to camera Fragment method
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: entrypoint");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
+        // Bind navigation views
         setSupportActionBar(toolbar);
         navigationView = findViewById(R.id.nav_view);
         bottomNavigationView = findViewById(R.id.bottom_nav_view);
@@ -76,11 +79,11 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                 if (selectedFragment != cameraFragment) {
                     buttonCamera.setImageResource(R.drawable.ic_add);
                     selectedFragment = cameraFragment;
-                    getSupportFragmentManager().beginTransaction().replace(R.id.navbar_container, selectedFragment).commit();
                     setTitle(navigationView.getMenu().findItem(R.id.nav_camera).getTitle());
                     syncNavBars(R.id.nav_camera, R.id.nav_bottom_placeholder);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.navbar_container, selectedFragment).commit();
                 } else {
-                    // Start inference from here
+                    // Start inference/training dialog from here
                     createAddObjectDialog();
                 }
             }
@@ -94,8 +97,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         toggle.syncState();
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.navbar_container,
-                    new CameraFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.navbar_container, cameraFragment).commit();
             navigationView.setCheckedItem(R.id.nav_camera);
             bottomNavigationView.setSelectedItemId(R.id.nav_bottom_placeholder);
         }
@@ -206,14 +208,16 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
 
                     if(success) {
                         Toast.makeText(CameraActivity.this, "Sucessfully inserted object!", Toast.LENGTH_SHORT).show();
-
-                        // TODO INFERENCE
-                        cameraFragment.addSamples(dialogObjectName.getText().toString(), 30);
-
                         // Reset text
+                        String className = dialogObjectName.getText().toString();
                         dialogObjectName.setText("");
                         dialogObjectType.setText("");
                         dialogObjectAdditionalData.setText("");
+                        addObjectDialog.dismiss();
+                        // TODO INFERENCE
+                        cameraFragment.addSamples(className, 100);
+
+
                     }
                 }
             }

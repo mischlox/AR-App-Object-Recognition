@@ -1,9 +1,13 @@
 package hs.aalen.arora;
 
+import android.nfc.Tag;
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,8 +24,8 @@ import java.util.TreeMap;
  *
  * @author Michael Schlosser
  */
-public class CameraFragmentViewModel {
-
+public class CameraFragmentViewModel extends ViewModel {
+    private static final String TAG = "CameraFragmentViewModel";
     /**
      * Current state of training.
      */
@@ -45,6 +49,7 @@ public class CameraFragmentViewModel {
     private LiveData<Integer> totalSamples;
     private LiveData<Integer> neededSamples;
 
+    private MutableLiveData<String> currentClass = new MutableLiveData<>("");
     /**
      * Whether capture mode is enabled.
      */
@@ -84,6 +89,7 @@ public class CameraFragmentViewModel {
 
     public void setConfidence(String className, float confidenceScore) {
         Map<String, Float> map = confidence.getValue();
+        assert map != null;
         map.put(className, confidenceScore);
         confidence.postValue(map);
     }
@@ -102,8 +108,10 @@ public class CameraFragmentViewModel {
         return trainingState;
     }
 
-    public void setTrainingState(TrainingState newValue) {
+    public void setTrainingState(TrainingState newValue)
+    {
         trainingState.postValue(newValue);
+        Log.d(TAG, "addSamples: Set Training State to " + newValue.toString());
     }
 
     /**
