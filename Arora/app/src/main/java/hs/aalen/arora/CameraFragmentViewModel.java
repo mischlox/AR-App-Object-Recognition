@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -173,6 +174,13 @@ public class CameraFragmentViewModel extends ViewModel {
                 if (map.isEmpty()) {
                     return null;
                 }
+                String choice;
+            try{
+                choice = mapEntriesDecreasingValue(map).get(0).getKey();
+            } catch (ConcurrentModificationException | NullPointerException e) {
+                Log.e(TAG, "mapEntriesDecreasingValue: " + e.toString());
+                return "";
+            }
                 return mapEntriesDecreasingValue(map).get(0).getKey();
             });
         }
@@ -232,8 +240,10 @@ public class CameraFragmentViewModel extends ViewModel {
     }
 
     private static List<Map.Entry<String, Float>> mapEntriesDecreasingValue(Map<String, Float> map) {
-        List<Map.Entry<String, Float>> entryList = new ArrayList<>(map.entrySet());
+        List<Map.Entry<String, Float>> entryList = null;
+        entryList = new ArrayList<>(map.entrySet());
         Collections.sort(entryList, (e1, e2) -> -Float.compare(e1.getValue(), e2.getValue()));
+
         return entryList;
     }
 }

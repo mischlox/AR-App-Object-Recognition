@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:title="@string/enable_nightmode">
@@ -7,6 +8,18 @@
             android:title="@string/nightmode"
             android:summaryOn="@string/nightmode_enabled"
             android:summaryOff="@string/nightmode_disabled"/>
-
     </PreferenceCategory>
+
+    <PreferenceCategory
+    android:title="@string/settings_training">
+        <SeekBarPreference
+            android:key="@string/key_seekbar"
+            android:title="@string/settings_num_samples"
+            android:summary="@string/settings_hint_num_samples"
+            android:defaultValue="50"
+            app:min="20"
+            android:max="120"
+            app:showSeekBarValue="true" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

@@ -1,6 +1,7 @@
 package hs.aalen.arora;
 
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -54,6 +56,9 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
 
     // For Database Access
     private DatabaseHelper databaseHelper = new DatabaseHelper(this);
+
+    // Further configuration
+    private int amountSamples = 50;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +132,11 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
             case R.id.nav_settings:
             case R.id.nav_bottom_settings:
                 buttonCamera.setImageResource(R.drawable.ic_eye);
+
+                // Apply preferences
+                amountSamples = settingsFragment.getNumSamples();
+                Log.d(TAG, "sharedPrefs: amountSamples = " + amountSamples);
+
                 syncNavBars(R.id.nav_settings, R.id.nav_bottom_settings);
                 selectedFragment = settingsFragment;
                 break;
@@ -214,8 +224,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                         dialogObjectType.setText("");
                         dialogObjectAdditionalData.setText("");
                         addObjectDialog.dismiss();
-                        // TODO INFERENCE
-                        cameraFragment.addSamples(className, 100);
+                        cameraFragment.addSamples(className, amountSamples);
 
 
                     }
@@ -243,4 +252,6 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     private boolean addData(String objectName, String objectType, String objectAdditionalData) {
         return databaseHelper.addData(objectName, objectType, objectAdditionalData);
     }
+
+
 }

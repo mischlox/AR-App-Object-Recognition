@@ -34,6 +34,7 @@ import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -66,6 +67,7 @@ public class CameraFragment extends Fragment {
     private static final String TAG = CameraFragment.class.getSimpleName();
 
     // Expandable Object Data CardView
+    private TextView objectName;
     private TextView objectInfoColumns;
     private TextView objectInfoValues;
     private ImageView objectPreviewImage;
@@ -147,7 +149,7 @@ public class CameraFragment extends Fragment {
                         viewModel.setConfidence(prediction.getClassName(), prediction.getConfidence());
                         Log.d(TAG, "addSamples: inference: new Prediction: " + prediction.getClassName() + " conf: " + prediction.getConfidence());
                     }
-                    Log.d(TAG, "addSamples: inference: object is: " + viewModel.getFirstChoice());
+                    Log.d(TAG, "addSamples: inference: object is: " + viewModel.getFirstChoice().getValue());
                 }
             };
 
@@ -332,6 +334,7 @@ public class CameraFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Initialize CardView and including view when the view is created
+        objectName = getActivity().findViewById(R.id.object_name);
         objectDataCardView = getActivity().findViewById(R.id.object_metadata_cardview);
         objectInfoColumns = getActivity().findViewById(R.id.object_info_columns);
         objectInfoValues = getActivity().findViewById(R.id.object_info_values);
@@ -386,7 +389,15 @@ public class CameraFragment extends Fragment {
                             setProgressCircle(progress);
                         }
                 );
-        // TODO choice observer
+        final Observer<String> firstChoiceObserver = new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                // TODO Search in DB for object with this name and display everythin
+                objectName.setText(s);
+            }
+        };
+        viewModel.getFirstChoice().observe(getViewLifecycleOwner(), firstChoiceObserver);
+
 
         viewFinder = getActivity().findViewById(R.id.view_finder);
         viewFinder.post(this::startCamera);
