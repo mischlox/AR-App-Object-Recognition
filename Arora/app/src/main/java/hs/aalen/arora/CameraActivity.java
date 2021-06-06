@@ -32,9 +32,9 @@ import org.jetbrains.annotations.NotNull;
  * @author Michael Schlosser
  */
 public class CameraActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
-    // Fragments as single instance in order to not recreate them
     private static final String TAG = "CameraActivity";
 
+    // Fragments as single instance in order to not recreate them
     private final CameraFragment cameraFragment = new CameraFragment();
     private final ObjectOverviewFragment objectOverviewFragment = new ObjectOverviewFragment();
     private final SettingsFragment settingsFragment = new SettingsFragment();
@@ -117,6 +117,16 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+        // set Training Status to paused when going to different fragment
+        if (item.getItemId() != R.id.nav_camera && selectedFragment == cameraFragment) {
+            try {
+                Log.d(TAG, "onNavigationItemSelected: set Training State to paused");
+                cameraFragment.getViewModel().setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                Log.e(TAG, "onNavigationItemSelected: ViewModel not created yet");
+            }
+        }
         switch (item.getItemId()) {
             case R.id.nav_camera:
                 buttonCamera.setImageResource(R.drawable.ic_add);
@@ -250,6 +260,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     private boolean addData(String objectName, String objectType, String objectAdditionalData) {
         return databaseHelper.addData(objectName, objectType, objectAdditionalData);
     }
+
 
 
 }

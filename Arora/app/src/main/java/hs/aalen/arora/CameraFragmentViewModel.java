@@ -45,6 +45,8 @@ public class CameraFragmentViewModel extends ViewModel {
     private MutableLiveData<Float> lastLoss = new MutableLiveData<>();
     private MutableLiveData<Boolean> inferenceSnackbarWasDisplayed = new MutableLiveData<>(false);
 
+    private ArrayList<String> classes = new ArrayList<>();
+
     private LiveData<String> firstChoice;
     private LiveData<String> secondChoice;
     private LiveData<Integer> totalSamples;
@@ -61,6 +63,13 @@ public class CameraFragmentViewModel extends ViewModel {
         captureMode.postValue(newValue);
     }
 
+    public void removeClass() {
+
+    }
+
+    public ArrayList<String> getClasses() {
+        return classes;
+    }
 
     /**
      * Number of added samples for each class.
@@ -241,7 +250,9 @@ public class CameraFragmentViewModel extends ViewModel {
 
     private static List<Map.Entry<String, Float>> mapEntriesDecreasingValue(Map<String, Float> map) {
         List<Map.Entry<String, Float>> entryList = null;
-        entryList = new ArrayList<>(map.entrySet());
+        try {
+            entryList = new ArrayList<>(map.entrySet());
+        }catch (ConcurrentModificationException e){e.printStackTrace();}
         Collections.sort(entryList, (e1, e2) -> -Float.compare(e1.getValue(), e2.getValue()));
 
         return entryList;

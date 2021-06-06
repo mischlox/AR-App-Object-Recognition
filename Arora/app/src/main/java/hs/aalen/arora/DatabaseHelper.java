@@ -5,9 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Class that handles Database queries to add and modify object meta data
@@ -22,6 +25,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL1 = "object_name";
     private static final String COL2 = "object_type";
     private static final String COL3 = "object_additional_data";
+    private static final String COL4 = "object_created_at";
+    private static final String COL5 = "object_image";
+    private static final String COL6 = "model_pos";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, TABLE_NAME, null, 1);
@@ -33,7 +39,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
                                 + COL1 + " TEXT, "
                                 + COL2 + " TEXT, "
-                                + COL3 + " TEXT)";
+                                + COL3 + " TEXT, "
+                                + COL4 + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
+                                + COL5 + " BLOB, "
+                                + COL6 + " TEXT)";
         db.execSQL(createTable);
     }
 
@@ -52,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @return true if successful, false otherwise
      */
-    public boolean addData(String objectName, String objectType, String objectAdditionalData ) {
+    public boolean addData(String objectName, String objectType, String objectAdditionalData) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL1, objectName);
@@ -66,26 +75,55 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return success != -1;
     }
 
+    public boolean updateImageBlob(String objectID, Bitmap bitmap) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] image = bos.toByteArray();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL5, image);
+
+        long success = db.update(TABLE_NAME, contentValues, "ID=?", new String[]{objectID});
+
+        return success != -1;
+    }
+
+    public boolean updateModelPos(String objectName, String modelPos) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL6, modelPos);
+
+        long success = db.update(TABLE_NAME, contentValues, "object_name=?", new String[]{objectName});
+
+        return success != -1;
+    }
+
+
     /**
-     * Returns all data from Database
+     * Returns all data from Object Table
      *
      * @return All data from Table
      */
-    public Cursor getData() {
+    public Cursor getAllObjects() {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME;
         Cursor data = db.rawQuery(query, null);
         return data;
     }
 
-    /**
-     * Get object names
-     * This is helpful for model initialization
-     * @return
-     */
-    public Cursor getObjectNames() {
+    public Cursor getByID(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query ="SELECT " + COL1 + " FROM " + TABLE_NAME;
+        String query = "SELECT * FROM " + TABLE_NAME
+                + " WHERE " + COL0 + " = " + id;
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
+
+    public Cursor getByModelPos(String pos) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME
+                + " WHERE " + COL6 + " = " + pos;
         Cursor data = db.rawQuery(query, null);
         return data;
     }

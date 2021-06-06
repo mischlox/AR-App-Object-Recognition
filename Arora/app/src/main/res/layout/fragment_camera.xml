@@ -102,37 +102,72 @@
 
             <TextView
                 android:visibility="gone"
-                android:id="@+id/object_info_columns"
+                android:id="@+id/type_object_info_columns"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/object_columns"
+                android:text="@string/type_object_columns"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/expand_collapse_button" />
-
             <TextView
                 android:visibility="gone"
-
-                android:id="@+id/object_info_values"
+                android:id="@+id/additional_object_info_columns"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="2dp"
+                android:text="@string/additional_object_columns"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/type_object_info_columns" />
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/timestamp_object_info_columns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="2dp"
+                android:text="@string/timestamp_object_columns"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/additional_object_info_columns" />
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/type_object_info_values"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="16dp"
-
-                android:text="@string/object_values"
-                app:layout_constraintLeft_toRightOf="@id/object_info_columns"
+                android:text="@string/type_object_values"
+                app:layout_constraintLeft_toRightOf="@id/type_object_info_columns"
                 app:layout_constraintTop_toBottomOf="@id/expand_collapse_button" />
-
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/additional_object_info_values"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:text="@string/additional_object_values"
+                app:layout_constraintLeft_toRightOf="@id/additional_object_info_columns"
+                app:layout_constraintTop_toBottomOf="@id/type_object_info_values" />
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/timestamp_object_info_values"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:text="@string/timestamp_object_values"
+                app:layout_constraintLeft_toRightOf="@id/timestamp_object_info_columns"
+                app:layout_constraintTop_toBottomOf="@id/additional_object_info_values" />
             <ImageView
                 android:visibility="gone"
                 android:contentDescription="@string/preview_image"
                 android:id="@+id/object_info_preview_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="16dp"
-                android:background="@color/blue_200"
                 android:elevation="50dp"
                 android:src="@drawable/method_draw_image_1_"
                 app:layout_constraintRight_toRightOf="parent"

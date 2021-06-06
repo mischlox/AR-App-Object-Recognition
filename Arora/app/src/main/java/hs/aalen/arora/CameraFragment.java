@@ -2,6 +2,7 @@ package hs.aalen.arora;
 
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
@@ -23,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -54,55 +56,53 @@ import java.util.concurrent.ExecutionException;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static java.lang.Thread.sleep;
 
 /**
  * Class that handles the Camera Usage and shows Object Information in Real Time
- *
+ * <p>
  * Parts of this code are taken from:
  * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/
  *
  * @author Michael Schlosser
  */
 public class CameraFragment extends Fragment {
+    static final Object sync = new Object();
     private static final String TAG = CameraFragment.class.getSimpleName();
-
-    // Expandable Object Data CardView
-    private TextView objectName;
-    private TextView objectConfidence;
-    private TextView objectInfoColumns;
-    private TextView objectInfoValues;
-    private ImageView objectPreviewImage;
-    private FloatingActionButton expandCollapseButton;
-    private CardView objectDataCardView;
-
-    private ProgressBar trainingProgressBar;
-    private TextView trainingProgressBarLabel;
-    private TextView trainingProgressBarTextView;
-
     // Front or back camera
     private static final CameraX.LensFacing LENS_FACING = CameraX.LensFacing.BACK;
     private static final int LOWER_BYTE_MASK = 0xFF;
-
-
-    private TextureView viewFinder;
-    private Integer viewFinderRotation = null;
-    private Size bufferDimens = new Size(0, 0);
-
-    private DatabaseHelper databaseHelper;
-
-    static final Object sync = new Object();
-
-    int numSamplesPerClass;
-
+    // Amount of classes
+    private static final int NUM_TFL_CLASSES = 4;
     /**
      * Class that is trained will be saved to this queue
      */
     private final ConcurrentLinkedQueue<String> addSampleRequests = new ConcurrentLinkedQueue<>();
-
+    int numSamplesPerClass;
+    // Expandable Object Data CardView
+    private TextView objectName;
+    private TextView objectConfidence;
+    private TextView typeObjectInfoColumns;
+    private TextView typeObjectInfoValues;
+    private TextView additionalObjectInfoColumns;
+    private TextView additionalObjectInfoValues;
+    private TextView timestampObjectInfoColumns;
+    private TextView timestampObjectInfoValues;
+    private ImageView objectPreviewImage;
+    // Put all items to this list for simpler use
+    private final ArrayList<TextView> expandableViewList = new ArrayList<>();
+    private FloatingActionButton expandCollapseButton;
+    private CardView objectDataCardView;
+    private ProgressBar trainingProgressBar;
+    private TextView trainingProgressBarLabel;
+    private TextView trainingProgressBarTextView;
+    private TextureView viewFinder;
+    private Integer viewFinderRotation = null;
+    private Size bufferDimens = new Size(0, 0);
+    private DatabaseHelper databaseHelper;
     private Size viewFinderDimens = new Size(0, 0);
     private CameraFragmentViewModel viewModel;
     private TransferLearningModelWrapper transferLearningModel;
+    private Bitmap preview = null;
 
     /**
      * Analyzer is responsible for processing camera input
@@ -113,29 +113,36 @@ public class CameraFragment extends Fragment {
             (imageProxy, rotationDegrees) -> {
                 final String imageId = UUID.randomUUID().toString();
                 // Preprocess camera images all the time, because it is needed by inference and by training
-                float[] rgbImage = prepareCameraImage(yuvCameraImageToBitmap(imageProxy), rotationDegrees);
-
+                Bitmap rgbBitmap;
+                try {
+                    rgbBitmap = yuvCameraImageToBitmap(imageProxy);
+                } catch (NullPointerException e) {return;}
+                float[] rgbImage = prepareCameraImage(rgbBitmap, rotationDegrees);
                 // Get the head of queue
                 String sampleClass = addSampleRequests.poll();
 
                 // Training Mode
-                if(sampleClass != null) {
+                if (sampleClass != null) {
+                    if(preview == null) {
+                        Log.d(TAG, "addSamples preview: put Image to object " + sampleClass);
+                        preview = rgbBitmap;
+                        databaseHelper.updateImageBlob(sampleClass, preview);
+                    }
                     try {
-                        Log.d(TAG, "addSamples: training: add Sample for " + sampleClass);
-
                         transferLearningModel.addSample(rgbImage, sampleClass).get();
-                        Log.d(TAG, "addSamples: training: No of total samples: " + viewModel.getNumSamples().getValue().get(sampleClass));
-
                     } catch (ExecutionException e) {
                         throw new RuntimeException("Failed to add sample to model", e.getCause());
-                    } catch (InterruptedException | NullPointerException e) {}
+                    } catch (InterruptedException | NullPointerException e) {
+                    }
                     viewModel.increaseNumSamples(sampleClass);
-                    if(numSamplesPerClass > 20) {
+                    if (numSamplesPerClass > 20) {
                         viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.STARTED);
                     }
                 }
                 // Inference Mode
                 else {
+                    // reset preview because training mode is not active
+                    preview = null;
                     // We don't perform inference when adding samples, since we should be in capture mode
                     // at the time, so the inference results are not actually displayed.
                     TransferLearningModel.Prediction[] predictions = null;
@@ -162,7 +169,7 @@ public class CameraFragment extends Fragment {
      * @param imageProxy the image that will be converted
      * @return the converted image as a Bitmap
      */
-    private static Bitmap yuvCameraImageToBitmap(ImageProxy imageProxy) {
+    private static Bitmap yuvCameraImageToBitmap(ImageProxy imageProxy) throws NullPointerException {
         if (imageProxy.getFormat() != ImageFormat.YUV_420_888) {
             // TODO fix error that when you change mode while camera is running no YUV image is there but null
             throw new IllegalArgumentException(
@@ -203,7 +210,6 @@ public class CameraFragment extends Fragment {
      *
      * @param bitmap          The converted image that will be normalized and cropped
      * @param rotationDegrees Handles landscape/portrait mode with post rotation if necessary
-     *
      * @return the cropped and normalized image
      */
     private static float[] prepareCameraImage(Bitmap bitmap, int rotationDegrees) {
@@ -240,8 +246,8 @@ public class CameraFragment extends Fragment {
     /**
      * Crop image into square format
      *
-     * @param   source image to be cropped
-     * @return  cropped image
+     * @param source image to be cropped
+     * @return cropped image
      */
     private static Bitmap padToSquare(Bitmap source) {
         int width = source.getWidth();
@@ -258,48 +264,140 @@ public class CameraFragment extends Fragment {
     }
 
     /**
+     * Get the display rotation
+     *
+     * @param display android display
+     * @return rotation value
+     */
+    private static Integer getDisplaySurfaceRotation(Display display) {
+        if (display == null) {
+            return null;
+        }
+
+        switch (display.getRotation()) {
+            case Surface.ROTATION_0:
+                return 0;
+            case Surface.ROTATION_90:
+                return 90;
+            case Surface.ROTATION_180:
+                return 180;
+            case Surface.ROTATION_270:
+                return 270;
+            default:
+                return null;
+        }
+    }
+
+    /**
      * expand the cardview and show all object info at the top of the fragment
      * when clicking the expand/collapse button
      */
     private void showMore() {
-        if(objectInfoColumns.getVisibility() == GONE && objectInfoValues.getVisibility() == GONE && objectPreviewImage.getVisibility() == GONE) {
+        if (viewIsVisible()) {
             TransitionManager.beginDelayedTransition(objectDataCardView, new AutoTransition());
-            objectInfoColumns.setVisibility(VISIBLE);
-            objectInfoValues.setVisibility(VISIBLE);
-            objectPreviewImage.setVisibility(VISIBLE);
-            expandCollapseButton.setImageResource(R.drawable.ic_collapse);
-        } else {
-            TransitionManager.beginDelayedTransition(objectDataCardView, new AutoTransition());
-            objectInfoColumns.setVisibility(GONE);
-            objectInfoValues.setVisibility(GONE);
+            setVisibilityAll(GONE);
             objectPreviewImage.setVisibility(GONE);
             expandCollapseButton.setImageResource(R.drawable.ic_expand);
+        } else {
+            TransitionManager.beginDelayedTransition(objectDataCardView, new AutoTransition());
+            setVisibilityAll(VISIBLE);
+            objectPreviewImage.setVisibility(VISIBLE);
+            expandCollapseButton.setImageResource(R.drawable.ic_collapse);
+        }
+    }
 
+    /**
+     * Helper function for showMore that checks if items are visible or not
+     *
+     * @return true if view is visible, false otherwise
+     */
+    private boolean viewIsVisible() {
+        for (TextView item : expandableViewList) {
+            if (item.getVisibility() == VISIBLE) {
+                Log.d(TAG, "showMore: viewIsVisible: " + item.getVisibility());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Helper function for showMore
+     * that makes textViews un-/visible
+     *
+     * @param visibility either GONE oder VISIBLE
+     */
+    private void setVisibilityAll(int visibility) {
+        for (TextView item : expandableViewList) {
+            Log.d(TAG, "showMore: setVisibilityAll: for " + item.getText());
+
+            item.setVisibility(visibility);
+        }
+    }
+
+    /**
+     * Updates all item from expandable cardview with data from DB
+     *
+     * @param pos primary key of data
+     */
+    private void updateAllViewItems(String pos) {
+        Log.d(TAG, "updateView setTextAll: " + pos);
+        Cursor data = databaseHelper.getByModelPos(pos);
+//        printObjectFromDB(data);
+        if (data.moveToFirst()) {
+            Log.d(TAG, "updateView updating ...: ");
+            // Object name
+            objectName.setText(data.getString(1));
+            // Preview image
+            if(data.getBlob(5) != null) {
+                byte[] image = data.getBlob(5);
+                objectPreviewImage.setImageBitmap(
+                        BitmapFactory.decodeByteArray(image, 0, image.length));
+            }
+
+
+            // expandable view
+            for (TextView item : expandableViewList) {
+                Log.d(TAG, "updateView update expandable view " + item.getId());
+                if (item == typeObjectInfoValues) {
+                    item.setText(data.getString(2));
+                } else if (item == additionalObjectInfoValues) {
+                    item.setText(data.getString(3));
+                } else if (item == timestampObjectInfoValues) {
+                    item.setText(data.getString(4));
+                }
+            }
+        }
+        else {
+            Log.e(TAG, "updateView updateAllViewItems: No object in View!");
         }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         viewModel = new ViewModelProvider(this).get(CameraFragmentViewModel.class);
         databaseHelper = new DatabaseHelper(getActivity());
-        List<String> classes = new ArrayList<>();
-        Cursor data = databaseHelper.getObjectNames();
+        List<String> classList = Arrays.asList("1", "2", "3", "4");
+        this.viewModel.getClasses().addAll(classList);
+        mapObjectsFromDB();
+        transferLearningModel = new TransferLearningModelWrapper(getActivity(), classList);
+    }
 
-        while (data.moveToNext()) {
-            classes.add(data.getString(0));
-            Log.i(TAG, "OnCreate: Add " + data.getString(0) + " to Inference Model");
+    private void mapObjectsFromDB() {
+        Cursor data = databaseHelper.getAllObjects();
+        while(data.moveToNext()) {
+            try{
+                viewModel.getClasses().remove(data.getString(6));
+            } catch (IllegalStateException e) {
+                return;
+            }
+            Log.d(TAG, "mapObjectsFromDB: pop open pos " + data.getString(6));
+            if(viewModel.getClasses().isEmpty()) {
+                Log.w(TAG, "mapObjectsFromDB: Model is full! Cannot add further data");
+                return;
+            }
         }
-        // Workaround that model is not flexible
-        // TODO make model generic
-        if (classes.size() != 4){
-            Log.d(TAG, "OnCreate: (Workaround) classes.size() = " + classes.size());
-            Log.w(TAG, "OnCreate: DB is empty! Initialized with default values");
-            // Change to default
-            classes = Arrays.asList("1", "2", "3", "4");
-        }
-        transferLearningModel = new TransferLearningModelWrapper(getActivity(), classes);
     }
 
     /**
@@ -307,16 +405,15 @@ public class CameraFragment extends Fragment {
      */
     private void setProgressCircle(int progress) {
         Log.d(TAG, "addSamples setProgressCircle Max: " + trainingProgressBar.getMax() + " progress: " + progress);
-        if(progress == 0){
+        if (progress == 0) {
             trainingProgressBarLabel.setVisibility(GONE);
             trainingProgressBarTextView.setVisibility(GONE);
-        }
-        else {
+        } else {
             trainingProgressBarLabel.setVisibility(VISIBLE);
             trainingProgressBarTextView.setVisibility(VISIBLE);
         }
         trainingProgressBar.setProgress(progress);
-        int relativeProgress = (int) (((float)progress / (float)trainingProgressBar.getMax()) * 100);
+        int relativeProgress = (int) (((float) progress / (float) trainingProgressBar.getMax()) * 100);
         trainingProgressBarTextView.setText(relativeProgress + "%");
 
     }
@@ -339,10 +436,20 @@ public class CameraFragment extends Fragment {
         objectName = getActivity().findViewById(R.id.object_name);
         objectConfidence = getActivity().findViewById(R.id.object_confidence);
         objectDataCardView = getActivity().findViewById(R.id.object_metadata_cardview);
-        objectInfoColumns = getActivity().findViewById(R.id.object_info_columns);
-        objectInfoValues = getActivity().findViewById(R.id.object_info_values);
+        typeObjectInfoColumns = getActivity().findViewById(R.id.type_object_info_columns);
+        typeObjectInfoValues = getActivity().findViewById(R.id.type_object_info_values);
+        additionalObjectInfoColumns = getActivity().findViewById(R.id.additional_object_info_columns);
+        additionalObjectInfoValues = getActivity().findViewById(R.id.additional_object_info_values);
+        timestampObjectInfoColumns = getActivity().findViewById(R.id.timestamp_object_info_columns);
+        timestampObjectInfoValues = getActivity().findViewById(R.id.timestamp_object_info_values);
         objectPreviewImage = getActivity().findViewById(R.id.object_info_preview_image);
         expandCollapseButton = getActivity().findViewById(R.id.expand_collapse_button);
+
+        List<TextView> itemsCardView = Arrays.asList(typeObjectInfoColumns, typeObjectInfoValues,
+                additionalObjectInfoColumns, additionalObjectInfoValues,
+                timestampObjectInfoColumns, timestampObjectInfoValues);
+        expandableViewList.addAll(itemsCardView);
+
         expandCollapseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -376,6 +483,7 @@ public class CameraFragment extends Fragment {
                                     break;
                             }
                         });
+        // For determinate progress bar
         viewModel
                 .getNumSamples()
                 .observe(
@@ -386,27 +494,27 @@ public class CameraFragment extends Fragment {
                             try {
                                 this.numSamplesPerClass = numSamples.get(addSampleRequests.peek());
                                 progress = viewModel.getNumSamplesCurrent().getValue().get(addSampleRequests.peek());
-                            } catch(NullPointerException e) {
+                            } catch (NullPointerException e) {
                                 progress = 0;
                             }
                             setProgressCircle(progress);
                         }
                 );
+        // For showing object information
         final Observer<String> firstChoiceObserver = new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                // TODO Search in DB for object with this name and display everythin
-                objectName.setText(s);
                 try {
                     float confidence = viewModel.getConfidence().getValue().get(s);
                     float confidencePercent = confidence * 100;
                     DecimalFormat df = new DecimalFormat("##.#");
                     objectConfidence.setText(df.format(confidencePercent) + " %");
-                } catch (NullPointerException e) {}
+                    if(!s.isEmpty()) updateAllViewItems(s);
+                } catch (NullPointerException e) {
+                }
             }
         };
         viewModel.getFirstChoice().observe(getViewLifecycleOwner(), firstChoiceObserver);
-
 
         viewFinder = getActivity().findViewById(R.id.view_finder);
         viewFinder.post(this::startCamera);
@@ -476,31 +584,6 @@ public class CameraFragment extends Fragment {
     }
 
     /**
-     * Get the display rotation
-     *
-     * @param display android display
-     * @return rotation value
-     */
-    private static Integer getDisplaySurfaceRotation(Display display) {
-        if (display == null) {
-            return null;
-        }
-
-        switch (display.getRotation()) {
-            case Surface.ROTATION_0:
-                return 0;
-            case Surface.ROTATION_90:
-                return 90;
-            case Surface.ROTATION_180:
-                return 180;
-            case Surface.ROTATION_270:
-                return 270;
-            default:
-                return null;
-        }
-    }
-
-    /**
      * Fit the camera preview into the ViewFinder
      *
      * @param rotation            view finder rotation.
@@ -563,18 +646,53 @@ public class CameraFragment extends Fragment {
         viewFinder.setTransform(matrix);
     }
 
-    public ConcurrentLinkedQueue<String> getAddSampleRequests(){
+    @Override
+    public void onResume() {
+        mapObjectsFromDB();
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    public ConcurrentLinkedQueue<String> getAddSampleRequests() {
         return addSampleRequests;
     }
+
     /**
      * Add specific amount of Training Data to queue
+     * Also maps a open model position to the object
      *
      * @param classname name of object to train
      * @param amount    amount of input samples for training
      */
     public void addSamples(String classname, int amount) {
-        Thread addSamplesThread = new AddSamplesThread(classname, amount);
-        addSamplesThread.start();
+        String openPos = getOpenModelPosition();
+        if(openPos.equals("")) {
+            Toast.makeText(getContext(), "Model is full!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(databaseHelper.updateModelPos(classname, openPos)) {
+            Thread addSamplesThread = new AddSamplesThread(openPos, amount);
+            addSamplesThread.start();
+        }
+        else {
+            Toast.makeText(getContext(), "An error occured!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String getOpenModelPosition() {
+        String openPosition = "";
+        if(viewModel.getClasses().isEmpty()) {
+            Log.w(TAG, "getOpenModelPosition: No Model Position open!");
+        }
+        else {
+            openPosition = viewModel.getClasses().get(0);
+            viewModel.getClasses().remove(0);
+        }
+        return openPosition;
     }
 
     /**
@@ -582,23 +700,58 @@ public class CameraFragment extends Fragment {
      */
     class AddSamplesThread extends Thread {
         int amount;
-        String classname;
+        String className;
 
-        AddSamplesThread(String classname, int amount) {
-            this.classname = classname;
+        AddSamplesThread(String className, int amount) {
+            this.className = className;
             this.amount = amount;
         }
+
         @Override
         public void run() {
             viewModel.setCaptureMode(true);
             Log.d(TAG, "addSamples: Capture Mode is enabled!");
-            for(int i = 0; i < amount; i++) {
-                addSampleRequests.add(classname);
-                Log.d(TAG, "addSamples: Add sample #" + i + " with name: " + classname + "(queue size: "+addSampleRequests.size()+")");
+            for (int i = 0; i < amount; i++) {
+                addSampleRequests.add(className);
+                Log.d(TAG, "addSamples: Add sample #" + i + " with name: " + className + "(queue size: " + addSampleRequests.size() + ")");
             }
             viewModel.setNumSamplesMax(addSampleRequests.size());
             viewModel.setCaptureMode(false);
             Log.d(TAG, "addSamples: Capture Mode is disabled!");
         }
+    }
+
+    public CameraFragmentViewModel getViewModel() {
+        return viewModel;
+    }
+
+    /**
+     * For debug purposes print the open positions and model positions of objects
+     */
+    private void printModelMapping() {
+        Log.d(TAG, "(model mapping) printModelMapping: open pos:" + viewModel.getClasses().toString());
+        Cursor data = databaseHelper.getAllObjects();
+        while(data.moveToNext()){
+            String name = data.getString(1);
+            String modelPos = data.getString(6);
+            Log.d(TAG, "(model mapping) printModelMapping: name: " + name + " pos: " + modelPos);
+        }
+    }
+
+    /**
+     * For debug purposes print object information
+     */
+    private void printObjectFromDB(Cursor data) {
+        Log.d(TAG, "updateView printObjectFromDB: <<< OBJECT INFO BEGIN >>>");
+        while(data.moveToNext()) {
+            Log.d(TAG, "updateView printObjectFromDB: id: " + data.getString(0));
+            Log.d(TAG, "updateView printObjectFromDB: name: " + data.getString(1));
+            Log.d(TAG, "updateView printObjectFromDB: type: " + data.getString(2));
+            Log.d(TAG, "updateView printObjectFromDB: additional: " + data.getString(3));
+            Log.d(TAG, "updateView printObjectFromDB: timestamp: " + data.getString(4));
+            Log.d(TAG, "updateView printObjectFromDB: blob: " + data.getBlob(5).toString());
+            Log.d(TAG, "updateView printObjectFromDB: modelpos: " + data.getString(6));
+        }
+        Log.d(TAG, "updateView printObjectFromDB: <<< OBJECT INFO END >>>");
     }
 }
