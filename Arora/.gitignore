@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+/Arora/transfer_api/build/intermediates
+/Arora/transfer_api/build/.transforms/
