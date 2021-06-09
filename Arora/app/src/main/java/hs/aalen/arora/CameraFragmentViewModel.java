@@ -1,5 +1,6 @@
 package hs.aalen.arora;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -51,7 +52,6 @@ public class CameraFragmentViewModel extends ViewModel {
     private LiveData<String> secondChoice;
     private LiveData<Integer> totalSamples;
     private LiveData<Integer> neededSamples;
-
     /**
      * Whether capture mode is enabled.
      */

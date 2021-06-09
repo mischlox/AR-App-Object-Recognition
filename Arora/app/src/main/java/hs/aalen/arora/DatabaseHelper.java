@@ -84,7 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL5, image);
 
-        long success = db.update(TABLE_NAME, contentValues, "ID=?", new String[]{objectID});
+        long success = db.update(TABLE_NAME, contentValues, "object_name=?", new String[]{objectID});
 
         return success != -1;
     }
@@ -156,5 +156,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long success = db.update(TABLE_NAME, contentValues, "ID=?", new String[]{id});
 
         return success != -1;
+    }
+
+    public String tableToString() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String tableName = TABLE_NAME;
+        Log.d("","tableToString called");
+        String tableString = String.format("Table %s:\n", tableName);
+        Cursor allRows  = db.rawQuery("SELECT * FROM " + tableName, null);
+        tableString += cursorToString(allRows);
+        return tableString;
+    }
+
+
+    public String cursorToString(Cursor cursor){
+        String cursorString = "";
+        if (cursor.moveToFirst() ){
+            String[] columnNames = cursor.getColumnNames();
+            for (String name: columnNames)
+                cursorString += String.format("%s ][ ", name);
+            cursorString += "\n";
+            do {
+                for (String name: columnNames) {
+                    if(name.equals("object_image")) {
+                        cursorString += String.format("%s ][ ",
+                                (cursor.getBlob(cursor.getColumnIndex(name)) != null));
+                    }
+                    else {
+                        cursorString += String.format("%s ][ ",
+                                cursor.getString(cursor.getColumnIndex(name)));
+                    }
+                }
+                cursorString += "\n";
+            } while (cursor.moveToNext());
+        }
+        return cursorString;
     }
 }

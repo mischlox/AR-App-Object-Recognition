@@ -40,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
         experimentalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // startActivity(new Intent(MainActivity.this, ComputerVisionActivity.class));
+                DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
+                String table = dbHelper.tableToString();
+                Log.d(TAG, "TABLE INFO: " +  table);
             }
         });
     }

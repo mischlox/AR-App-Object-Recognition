@@ -3,6 +3,7 @@ package hs.aalen.arora;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ public class ObjectOverviewFragment extends ListFragment {
     private ArrayList<String> objectTypes = new ArrayList<>();
     private ArrayList<String> objectAdditionalDatas = new ArrayList<>();
     private ArrayList<String> objectCreationDates = new ArrayList<>();
+    private ArrayList<byte[]> objectPreviewImages = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -61,8 +63,6 @@ public class ObjectOverviewFragment extends ListFragment {
      * Fill List View with data from our Database
      */
     private void populateView() {
-        // Make array list instances empty, so they wont get added twice to the View
-        // When populateView gets called several times
         clearArrayLists();
         Cursor data = databaseHelper.getAllObjects();
         ArrayList<String> listData = new ArrayList<>();
@@ -71,8 +71,15 @@ public class ObjectOverviewFragment extends ListFragment {
             objectNames.add(data.getString(1));
             objectTypes.add(data.getString(2));
             objectAdditionalDatas.add(data.getString(3));
+            objectCreationDates.add(data.getString(4));
+            objectPreviewImages.add(data.getBlob(5));
         }
-        ListAdapter adapter = new ObjectOverviewAdapter(getActivity().getApplicationContext(), objectNames, objectTypes, objectAdditionalDatas, null);
+        ListAdapter adapter = new ObjectOverviewAdapter(getActivity().getApplicationContext(),
+                                                        objectNames,
+                                                        objectTypes,
+                                                        objectAdditionalDatas,
+                                                        objectCreationDates,
+                                                        objectPreviewImages);
         objectListView.setAdapter(adapter);
     }
 
@@ -96,7 +103,8 @@ public class ObjectOverviewFragment extends ListFragment {
         ArrayList<String> title;
         ArrayList<String> type;
         ArrayList<String> additionalInfo;
-        ArrayList<Integer> images;
+        ArrayList<String> createdAt;
+        ArrayList<byte[]> image;
 
         // Edit Object Dialog items
         private AlertDialog.Builder editObjectDialogBuilder;
@@ -107,13 +115,19 @@ public class ObjectOverviewFragment extends ListFragment {
         private ImageButton confirmButton;
         private ImageButton cancelButton;
 
-        ObjectOverviewAdapter(Context c, ArrayList<String> title, ArrayList<String> type, ArrayList<String> additionalInfo, ArrayList<Integer> images) {
+        ObjectOverviewAdapter(Context c,
+                              ArrayList<String> title,
+                              ArrayList<String> type,
+                              ArrayList<String> additionalInfo,
+                              ArrayList<String> createdAt,
+                              ArrayList<byte[]> previewImage) {
             super(c, R.layout.object_item, R.id.list_object_name, title);
             this.context = c;
             this.title = title;
             this.type = type;
             this.additionalInfo = additionalInfo;
-            this.images = images;
+            this.createdAt = createdAt;
+            this.image = previewImage;
         }
 
         @Override
@@ -137,15 +151,21 @@ public class ObjectOverviewFragment extends ListFragment {
                     }
                 }
             });
-            ImageView images = item.findViewById(R.id.list_image_preview);
+            ImageView previewImageView = item.findViewById(R.id.list_image_preview);
             TextView title = item.findViewById(R.id.list_object_name);
             TextView type = item.findViewById(R.id.list_object_type);
             TextView additionalInfo = item.findViewById(R.id.list_object_additional_data);
+            TextView date = item.findViewById(R.id.list_object_date);
 
-            images.setImageResource(R.drawable.method_draw_image_1_);
+            previewImageView.setImageResource(R.drawable.method_draw_image_1_);
             title.setText(this.title.get(position));
-            type.setText(this.title.get(position));
+            type.setText(this.type.get(position));
             additionalInfo.setText(this.additionalInfo.get(position));
+            date.setText(this.createdAt.get(position));
+            byte[] imageBitmap = this.image.get(position);
+            assert imageBitmap != null;
+            previewImageView.setImageBitmap(
+                    BitmapFactory.decodeByteArray(imageBitmap, 0, imageBitmap.length));
             return item;
         }
 

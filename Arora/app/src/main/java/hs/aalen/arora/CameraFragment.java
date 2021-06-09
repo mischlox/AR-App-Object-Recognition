@@ -103,6 +103,8 @@ public class CameraFragment extends Fragment {
     private CameraFragmentViewModel viewModel;
     private TransferLearningModelWrapper transferLearningModel;
     private Bitmap preview = null;
+    private String currentClass; // for mapping preview image correctly
+
 
     /**
      * Analyzer is responsible for processing camera input
@@ -125,8 +127,8 @@ public class CameraFragment extends Fragment {
                 if (sampleClass != null) {
                     if(preview == null) {
                         Log.d(TAG, "addSamples preview: put Image to object " + sampleClass);
-                        preview = rgbBitmap;
-                        databaseHelper.updateImageBlob(sampleClass, preview);
+                        preview = scaleAndRotateBitmap(rgbBitmap, rotationDegrees, TransferLearningModelWrapper.IMAGE_SIZE);
+                        databaseHelper.updateImageBlob(currentClass, preview);
                     }
                     try {
                         transferLearningModel.addSample(rgbImage, sampleClass).get();
@@ -171,7 +173,6 @@ public class CameraFragment extends Fragment {
      */
     private static Bitmap yuvCameraImageToBitmap(ImageProxy imageProxy) throws NullPointerException {
         if (imageProxy.getFormat() != ImageFormat.YUV_420_888) {
-            // TODO fix error that when you change mode while camera is running no YUV image is there but null
             throw new IllegalArgumentException(
                     "Expected a YUV420 image, but got " + imageProxy.getFormat());
         }
@@ -213,16 +214,8 @@ public class CameraFragment extends Fragment {
      * @return the cropped and normalized image
      */
     private static float[] prepareCameraImage(Bitmap bitmap, int rotationDegrees) {
-        int modelImageSize = 224; //TransferLearningModelWrapper.IMAGE_SIZE;
-
-        Bitmap paddedBitmap = padToSquare(bitmap);
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(
-                paddedBitmap, modelImageSize, modelImageSize, true);
-
-        Matrix rotationMatrix = new Matrix();
-        rotationMatrix.postRotate(rotationDegrees);
-        Bitmap rotatedBitmap = Bitmap.createBitmap(
-                scaledBitmap, 0, 0, modelImageSize, modelImageSize, rotationMatrix, false);
+        int modelImageSize = TransferLearningModelWrapper.IMAGE_SIZE;
+        Bitmap rotatedBitmap = scaleAndRotateBitmap(bitmap, rotationDegrees, modelImageSize);
 
         float[] normalizedRgb = new float[modelImageSize * modelImageSize * 3];
         int nextIdx = 0;
@@ -241,6 +234,18 @@ public class CameraFragment extends Fragment {
         }
 
         return normalizedRgb;
+    }
+
+    private static Bitmap scaleAndRotateBitmap(Bitmap bitmap, int rotationDegrees, int modelImageSize) {
+
+        Bitmap paddedBitmap = padToSquare(bitmap);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(
+                paddedBitmap, modelImageSize, modelImageSize, true);
+
+        Matrix rotationMatrix = new Matrix();
+        rotationMatrix.postRotate(rotationDegrees);
+        return Bitmap.createBitmap(
+                scaledBitmap, 0, 0, modelImageSize, modelImageSize, rotationMatrix, false);
     }
 
     /**
@@ -336,14 +341,14 @@ public class CameraFragment extends Fragment {
     }
 
     /**
-     * Updates all item from expandable cardview with data from DB
+     * Populates all item from expandable cardview with data from DB
      *
      * @param pos primary key of data
      */
-    private void updateAllViewItems(String pos) {
+    private void populateAllViewItems(String pos) {
         Log.d(TAG, "updateView setTextAll: " + pos);
         Cursor data = databaseHelper.getByModelPos(pos);
-//        printObjectFromDB(data);
+        printObjectFromDB(data);
         if (data.moveToFirst()) {
             Log.d(TAG, "updateView updating ...: ");
             // Object name
@@ -355,10 +360,8 @@ public class CameraFragment extends Fragment {
                         BitmapFactory.decodeByteArray(image, 0, image.length));
             }
 
-
             // expandable view
             for (TextView item : expandableViewList) {
-                Log.d(TAG, "updateView update expandable view " + item.getId());
                 if (item == typeObjectInfoValues) {
                     item.setText(data.getString(2));
                 } else if (item == additionalObjectInfoValues) {
@@ -509,7 +512,7 @@ public class CameraFragment extends Fragment {
                     float confidencePercent = confidence * 100;
                     DecimalFormat df = new DecimalFormat("##.#");
                     objectConfidence.setText(df.format(confidencePercent) + " %");
-                    if(!s.isEmpty()) updateAllViewItems(s);
+                    if(!s.isEmpty()) populateAllViewItems(s);
                 } catch (NullPointerException e) {
                 }
             }
@@ -669,6 +672,8 @@ public class CameraFragment extends Fragment {
      * @param amount    amount of input samples for training
      */
     public void addSamples(String classname, int amount) {
+        currentClass = classname;
+        Log.d(TAG, "addSamples: current class: " + classname);
         String openPos = getOpenModelPosition();
         if(openPos.equals("")) {
             Toast.makeText(getContext(), "Model is full!", Toast.LENGTH_SHORT).show();
@@ -749,7 +754,7 @@ public class CameraFragment extends Fragment {
             Log.d(TAG, "updateView printObjectFromDB: type: " + data.getString(2));
             Log.d(TAG, "updateView printObjectFromDB: additional: " + data.getString(3));
             Log.d(TAG, "updateView printObjectFromDB: timestamp: " + data.getString(4));
-            Log.d(TAG, "updateView printObjectFromDB: blob: " + data.getBlob(5).toString());
+            Log.d(TAG, "updateView printObjectFromDB: blob: " + (data.getBlob(5) != null));
             Log.d(TAG, "updateView printObjectFromDB: modelpos: " + data.getString(6));
         }
         Log.d(TAG, "updateView printObjectFromDB: <<< OBJECT INFO END >>>");
