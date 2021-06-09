@@ -80,24 +80,9 @@
 
 %---
 \begin{abstract}
-  Ziel der Kurzfassung ist es, einen (eiligen) Leser zu informieren, so 
-  dass dieser entscheiden kann, ob der Bericht für ihn hilfreich ist oder 
-  nicht (neudeutsch: Management Summary). Die Kurzfassung gibt daher eine 
-  kurze Darstellung
-
-  \begin{itemize}
-    \item des in der Arbeit angegangenen Problems
-    \item der verwendeten Methode(n)
-    \item des in der Arbeit erzielten Fortschritts.
-  \end{itemize}
-
-  Dabei sollte nicht auf die Struktur der Arbeit eingegangen werden, also 
-  Kapitel~\ref{cha:grundlagen} etc. denn die Kurzfassung soll ja gerade 
-  das Wichtigste der Arbeit vermitteln, ohne dass diese gelesen werden muss.
-  Eine Kapitelbezogene Darstellung sollte sich in Kapitel~%
-  \ref{cha:einleitung} unter Vorgehen befinden.
-
-  Länge: Maximal 1 Seite.
+	Das Einlernen und Wiedererkennen von beliebigen Objekten ist im Bereich des Maschinellen Sehens immer noch ein aktuelles Thema. Ein exemplarischer Anwendungsfall hierfür, wäre dem Nutzer die Möglichkeit zu bieten durch eine Kamera ein Objekt einzulesen und das Kamerabild bei Erkennung des Objektes mit bildunterstützenden Elementen zu ergänzen.\\
+	Die geringe Rechenleistung von Mobile und Embedded Devices stellt jedoch den Einsatz dieser Technologie auf diesen Geräten vor eine Herausforderung. Verschiedene Ansätze, um die Rechenintensität eines Einlern-/ und Wiedererkennungsalgorithmus gering zu halten, sind bereits verfügbar und einsetzbar. \\
+	Im Rahmen dieser Arbeit wird eine Android-Applikation für mobile Endgeräte entwickelt, welche den im obigen beschriebenen Anwendungsfall erfüllen kann. Zum Einlernen und Wiedererkennen werden bereits trainierte Deep Learning Architekturen mithilfe der Methode \glqq Modellgeneralisierung\grqq\ erweitert, um die Kernfunktionalität erbringen zu können.
 \end{abstract}
 %-----------------------------------------------------------------------
 \cleardoublepage
@@ -121,6 +106,7 @@
 %% Eintrag: \acro{Referenzname}[Kürzel]{Langform}
 %% Im Text wird die Abkürzung dann mit \ac{Referenzname} benutzt.
 \acro{rup}[RUP]{Rational Unified Process}
+\acro{ac}[AR]{Augmented Reality}
 %\acro{bsp}[Bsp.]{Beispiel}
 \acro{cnn}[CNN]{Convolutional Neural Network}
 \acro{ml}[ML]{Machine Learning}
@@ -139,7 +125,48 @@
 Die Einleitung dient dazu, beim Leser Interesse für die Inhalte 
 Praxissemesterberichts zu wecken, die behandelten Probleme aufzuzeigen 
 und die zu ihrer Lösung entwickelten Konzepte zu beschreiben.
+% ---
+\chapter{Grundlagen}
+\label{cha:grundlagen}
+Zur Lösung der Problemstellung sind verschiedene Grundlagengebiete zu beherr-
+schen, die zum einen bereits im Rahmen des Informatikstudiums verinnerlicht werden konnten und zum anderen Gebiete und Themen, die erst im Laufe der Recherche und Implentierung der Projektarbeit erarbeitet worden sind.
+\subsection{Deep Neural Networks}
 
+\section{Wiedererkennung von Objekten}
+\label{sec:basics:wiedererkennung}
+Das Einlernen und Wiedererkennen von Objekten ist im Bereich des Maschinelles Lernens noch heute eine Herausforderung für eingebettete beziehungsweise mobile Endgeräte, aufgrund der geringen Rechenleistung, die zur Verfügung steht. Es ist möglich diese Aufgabe mithilfe einer Cloudlösung auf einen externen leistungsstarken Server zu übertragen. Aufgrund von Nachteilen, wie beispielsweise Sicherheitsrisiken, die beim Übertragen von sensitiven Daten auftreten, wird im Rahmen dieser Arbeit eine Applikation programmiert, die den gegebenen Anwendungsfall mit der dem Endgerät zur Verfügung stehenden Hardware löst.\\
+Ein naiver Ansatz, um dieses Problem lösen zu können ist ein  \ac{cnn} bei Eingang neuer Trainingsdaten erneut zu trainieren mitsamt den bereits vorhandenen Daten. Ein derart riesiger Lernvorgang ist jedoch nicht praktikabel und könnte mehrere Stunden oder sogar Tage dauern. Wenn lediglich die neuen Daten für das Training verwendet werden, resultiert dies im bekannten Phänomen des \glqq Katastrophalen Vergessen\grqq. Dies bedeutet, dass alte bereits eingelernte Objekte nicht mehr erkannt werden können. Bessere Ansätze zur Behebung dieses Problems werden im Folgenden erklärt.
+
+\subsection{Latent-Replay-Algorithmus}
+Im Rahmen dieser Thematik wurde für den gegebenen Anwendungsfall der Latent-Replay Algorithmus von Lorenzo Pellegrini et al. analysiert, jedoch aufgrund der hohen Komplexität und weniger Implementierungsbeispiele nicht für das Projekt verwendet. Um eine Vollständigkeit der Projektarbeit gewährleisten zu können wird dieser im Folgenden dennoch erläutert.\\
+\cite{Pellegrini2019}
+\subsection{Transfer Learning}
+%Aufgaben die mit Maschinellem Lernen gelöst werden können, wie beispielsweise die Wiedererkennung von Objekten in Bildern, werden mithilfe von riesigen Datensätzen trainiert mit dem Ziel so generisch wie möglich zu sein
+Jedes menschliche Gehirn, ist dazu fähig Wissen, welches für eine Aufgabe benötigt wird, auf eine andere Aufgabe zu übertragen. So ist es beispielsweise mit geringem Aufwand möglich das Autofahren zu erlernen, wenn man bereits Motorrad fahren kann. Da es eine ähnliche Aufgabe ist, wird nicht versucht die neue Aufgabe von Grund auf neu zu lernen, sondern das Wissen, welches in der Vergangenheit erlernt werden konnte auf ein neuen ähnlichen Anwendungsfall zu transferieren.\\
+Im traditionellen Ansatz des Maschinellen Lernens wird ein Datensatz aufbereitet, welcher für eine bestimmte Aufgabe zugeschnitten ist.\\
+Die grundlegende Aufgabe, die in dieser Arbeit zu erfüllen ist, ist jedoch das Einlernen von neuen Trainingsdaten. Hierfür kann der Ansatz des sogenannten Transfer Learnings Anwendung finden.\\
+Beim Transfer Learning wird ein bereits trainiertes \ac{ml}-Modell verwendet. Das bereits errungene Wissen kann hierbei weiterverwendet werden, um mit einem kleineren Trainingsdatensatz eine neue ähnliche Aufgabe erfüllen zu können. Erkannte Merkmale wie Formen, Kanten und Ecken können demnach durch den Wissenstransfer mit einem Modell geteilt werden (\textbf{Abbildung??}).\\
+
+\cite{Sarkar2019}
+%\subsubsection{Formale Definition}
+%Eine Domäne $D$ ist ein Tupel mit zwei Elementen, bestehend aus dem Merkmalsraum (engl.: Feature Space) $\chi$ und der Grenzwahrscheinlichkeit $P(X)$, wobei $X = \{x_1, ..., x_n\}, x_i \in \chi$ ein Beispieldatenpunkt ist. Dann lässt sich die Domäne $D$ mathematisch darstellen als $D = \{{\chi}, P(X) \}$.\\
+%Eine Aufgabe $T$ ist ein Tupel mit zwei Elementen bestehend aus dem Auszeichnungsraum (engl.: Label Space) $\gamma$ und einer Zielfunktion $\eta$. Die Zielfunktion kann aus probabilistischer Sicht auch als $P(\gamma|X)$ bezeichnet werden.\\
+%Dementsprechend ist für eine Domäne $D$ eine Aufgabe $T$ folgendermaßen definiert:
+%\begin{equation}
+%	T = \{ \gamma, P(Y | X)\} = \{\gamma, \eta\} 
+%	\quad \quad \quad
+%	Y = \{y_1, ..., y_n\}, y_i \in \gamma
+%\end{equation}
+% \cite{Sarkar2019}
+%Die Zielfunktion $\eta$ ist dementsprechend gelernt worden durch die Paare von Vektoren und Auszeichnungen $(x_i, y_i), x_i \in \chi, y_i \in \gamma $
+
+\section{Android}
+\label{sub:basics:android}
+
+\subsection{App-Entwicklung}
+Zur Entwicklung der Android-Applikation wird die Entwicklungsumgebung Android Studio der Firma JetBrains genutzt.
+Jede Seite einer Android App wird als Aktivität (engl. Activity) bezeichnet.
+Das erste Fenster, welches beim Öffnen der App angezeigt wird, wird als Main-Activity bezeichnet.
 % ---
 \chapter{Anforderungsanalyse}
 \label{cha:analyse}
@@ -157,7 +184,7 @@ Funktionale Anforderungen erklären, welche Funktionen und Dienste vom Software-
 \subsection{Lauffähigkeit als Android-App}
 Eine auf einem aktuellen Android-Betriebssystem lauffähige Applikation soll entwickelt und auf einem Smartphone in den Betrieb genommen werden. Es wird gefordert, dass der Nutzer des Software-Systems die im Smartphone integrierte Kamera nutzt und diese als Eingabe für das Einlernen und die Wiedererkennung eines Objektes nutzt.  -- \textit{Gewichtung:} Must-Have-Anforderung.
 \subsection{Entwicklung einer graphischen Benutzeroberfläche}
-Es wird gefordert eine Graphische Benutzeroberfläche zur Verfügung zu stellen, mit welcher der Nutzer interagieren kann. Der Touchscreen des Smartphones sollte das Haupteingabegerät zur Steuerung der Applikation des Nutzers sein. -- \textit{Gewichtung:} Must-Have-Anforderung.
+Es wird gefordert eine Graphische Benutzeroberfläche zur Verfügung zu stellen, mit welcher der Nutzer interagieren kann. Der Touchscreen des Smartphones sollte das Haupteingabegerät des Nutzers zur Steuerung der Applikation sein. -- \textit{Gewichtung:} Must-Have-Anforderung.
 \subsection{Einlernen von Objekten mithilfe einer Kamera}
 Es wird gefordert, dass ein Objekt mit der integrierten Smartphone-Kamera, bei guten Licht- und Kontrastverhältnissen eingelernt werden kann. Bei schlechten Licht- und Kontrastverhältnissen, die das Einlernen des Objekts erschweren oder gar technisch unmöglich machen, soll der Nutzer darauf hingewiesen werden, um mit dem Einlernen des Objektes fortfahren zu können. Bei erfolgreicher Abspeicherung der Daten, soll dem Nutzer dies mitgeteilt werden. Der Nutzer hat nun die Möglichkeit das eingelernte Objekt mit Daten zu versehen, wie beispielsweise einem Namen. Die Informationen über das nun eingelernte Objekt werden in einer Datenbank persistent abgespeichert, um sie wieder abrufen zu können. -- \textit{Gewichtung:} Must-Have-Anforderung.
 
@@ -165,7 +192,7 @@ Es wird gefordert, dass ein Objekt mit der integrierten Smartphone-Kamera, bei g
 Ein bereits eingelerntes Objekt soll bei guten Licht- und Kontrastverhältnissen vom Softwaresystem in Echtzeit wiedererkannt werden. Bei schlechten Licht- und Kontrastverhältnissen soll der Nutzer auf diese Schwierigkeiten hingewiesen werden, um diese gegebenfalls zu beheben. -- \textit{Gewichtung:} Must-Have-Anforderung.
 
 \subsection{Markierung der wiedererkannten Objekte}
-Wenn ein Objekt von der Applikation erkannt wird, soll es beispielsweise durch einen Begrenzungsrahmen markiert werden, um dem Nutzer mitzuteilen, dass das eingelernte Objekt wieder auf dem Display des Smartphones zu sehen ist. -- \textit{Gewichtung:} Should-Have-Anforderung.
+Wenn ein Objekt von der Applikation erkannt wird, soll es beispielsweise durch das Einblenden des Namens des Objektes dem Nutzer mitgeteilt werden, dass das eingelernte Objekt wieder auf dem Display des Smartphones zu sehen ist. -- \textit{Gewichtung:} Should-Have-Anforderung.
 \subsection{Graphisches Overlay bei wiedererkannten Objekten}
 Die beim eingelernten Objekt gespeicherten Daten sollen als ein graphisches Overlay auf dem Bildschirm des Smartphones dargestellt werden, wenn das Objekt erneut erkannt worden ist. -- \textit{Gewichtung:} Could-Have-Anforderung.
 \subsection{Anbindung eines Datenbank-Servers}
@@ -188,43 +215,7 @@ Die Graphische Benutzeroberfläche ist so intuitiv wie möglich zu gestalten, um
 
 \subsection{Wartbarkeit und Erweiterbarkeit}
 Änderungen und Erweiterungen des Software-Systems sollten mit hinnehmbarem Aufwand bewerkstelligt werden können. Demnach sollte der Quellcode modular, strukturiert und dokumentiert sein. -- \textit{Gewichtung:} Should-Have-Anforderung.
-% ---
-\chapter{Grundlagen}
-\label{cha:grundlagen}
 
-
-\section{Wiedererkennung von Objekten}
-\label{sec:basics:wiedererkennung}
-Das Einlernen und Wiedererkennen von Objekten ist im Bereich des Maschinelles Lernens noch heute eine Herausforderung für eingebettete beziehungsweise mobile Endgeräte, aufgrund der geringen Rechenleistung, die zur Verfügung steht. Ein naiver Ansatz, um dieses Problem lösen zu können ist ein  \ac{cnn} bei Eingang neuer Trainingsdaten erneut zu trainieren mitsamt den bereits vorhandenen Daten. Ein derart riesiger Lernvorgang ist jedoch nicht praktikabel und könnte mehrere Stunden oder sogar Tage dauern. Wenn lediglich die neuen Daten für das Training verwendet werden, resultiert dies im bekannten Phänomen des \glqq Katastrophalen Vergessen\grqq. Dies bedeutet, dass alte bereits eingelernte Objekte nicht mehr erkannt werden können. Bessere Ansätze zur Behebung dieses Problems werden im Folgenden erklärt. 
-\subsection{Latent-Replay-Algorithmus}
-Im Rahmen dieser Thematik wurde für den gegebenen Anwendungsfall der Latent-Replay Algorithmus von Lorenzo Pellegrini et al. analysiert, jedoch aufgrund der hohen Komplexität und weniger Implementierungsbeispiele nicht für das Projekt verwendet. Um eine Vollständigkeit der Projektarbeit gewährleisten zu können wird dieser im Folgenden dennoch erläutert.\\
-\cite{Pellegrini2019}
-\subsection{Transfer Learning}
-%Aufgaben die mit Maschinellem Lernen gelöst werden können, wie beispielsweise die Wiedererkennung von Objekten in Bildern, werden mithilfe von riesigen Datensätzen trainiert mit dem Ziel so generisch wie möglich zu sein
-Im traditionellen Ansatz des Maschinellen Lernens wird ein Datensatz aufbereitet, welcher für eine bestimmte Aufgabe zugeschnitten ist.\\
-Die grundlegende Aufgabe, die in dieser Arbeit zu erfüllen ist, ist jedoch das Einlernen von neuen Trainingsdaten. Hierfür kann der Ansatz des sogenannten Transfer Learnings Anwendung finden.\\
-Beim Transfer Learning wird ein bereits trainiertes \ac{ml}-Modell verwendet. Das bereits errungene Wissen kann hierbei weiterverwendet werden, um mit einem kleineren Trainingsdatensatz eine neue ähnliche Aufgabe erfüllen zu können. Erkannte Merkmale wie Formen, Kanten und Ecken können demnach durch den Wissenstransfer mit einem Modell geteilt werden (\textbf{Abbildung??}).
-\\
-\cite{Sarkar2019}
-%\subsubsection{Formale Definition}
-%Eine Domäne $D$ ist ein Tupel mit zwei Elementen, bestehend aus dem Merkmalsraum (engl.: Feature Space) $\chi$ und der Grenzwahrscheinlichkeit $P(X)$, wobei $X = \{x_1, ..., x_n\}, x_i \in \chi$ ein Beispieldatenpunkt ist. Dann lässt sich die Domäne $D$ mathematisch darstellen als $D = \{{\chi}, P(X) \}$.\\
-%Eine Aufgabe $T$ ist ein Tupel mit zwei Elementen bestehend aus dem Auszeichnungsraum (engl.: Label Space) $\gamma$ und einer Zielfunktion $\eta$. Die Zielfunktion kann aus probabilistischer Sicht auch als $P(\gamma|X)$ bezeichnet werden.\\
-%Dementsprechend ist für eine Domäne $D$ eine Aufgabe $T$ folgendermaßen definiert:
-%\begin{equation}
-%	T = \{ \gamma, P(Y | X)\} = \{\gamma, \eta\} 
-%	\quad \quad \quad
-%	Y = \{y_1, ..., y_n\}, y_i \in \gamma
-%\end{equation}
-% \cite{Sarkar2019}
-%Die Zielfunktion $\eta$ ist dementsprechend gelernt worden durch die Paare von Vektoren und Auszeichnungen $(x_i, y_i), x_i \in \chi, y_i \in \gamma $
-
-\section{Android}
-\label{sub:basics:android}
-
-\subsection{App-Entwicklung}
-Zur Entwicklung der Android-Applikation wird die Entwicklungsumgebung Android Studio der Firma JetBrains genutzt.
-Jede Seite einer Android App wird als Aktivität (engl. Activity) bezeichnet.
-Das erste Fenster, welches beim Öffnen der App angezeigt wird, wird als Main-Activity bezeichnet.
 %---
 \chapter{Entwurf}
 \label{cha:Entwurf}
