@@ -15,15 +15,26 @@ limitations under the License.
 package hs.aalen.arora;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.ConditionVariable;
+import android.util.Log;
+
+import androidx.preference.PreferenceManager;
+
+import com.google.gson.Gson;
 
 import org.tensorflow.lite.examples.transfer.api.AssetModelLoader;
 import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
 
+import java.nio.ByteBuffer;
+import java.nio.channels.GatheringByteChannel;
+import java.nio.channels.ScatteringByteChannel;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * App-layer wrapper for TransferLearningModel.
@@ -35,17 +46,24 @@ import java.util.concurrent.Future;
  * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/
  */
 public class TransferLearningModelWrapper {
+    public static final String TAG = TransferLearningModel.class.getSimpleName();
     public static final int IMAGE_SIZE = 224;
 
     private final TransferLearningModel model;
 
     private final ConditionVariable shouldTrain = new ConditionVariable();
     private volatile TransferLearningModel.LossConsumer lossConsumer;
+    private DatabaseHelper databaseHelper;
 
     TransferLearningModelWrapper(Context context, Collection<String> classes) {
-        model =
-                new TransferLearningModel(
-                        new AssetModelLoader(context, "model"), classes);
+        databaseHelper = new DatabaseHelper(context);
+        model = new TransferLearningModel(
+                new AssetModelLoader(context, "model"),
+                classes);
+
+        if(databaseHelper.modelExists()) {
+            loadParametersFromDB();
+        }
 
         new Thread(() -> {
             while (!Thread.interrupted()) {
@@ -59,6 +77,21 @@ public class TransferLearningModelWrapper {
                 }
             }
         }).start();
+    }
+
+    private boolean writeParametersToDB() {
+        Log.d(TAG, "writeParametersToDB: backup: write parameters from db");
+        boolean success = databaseHelper.saveModel("", model.getModelParameters());
+        if(!success) {
+            Log.d(TAG, "backup: model could not be saved sucessfully ");
+        }
+        return success;
+    }
+
+    public void loadParametersFromDB() {
+        Log.d(TAG, "loadParametersFromDB: backup: load Parameters from db");
+        ByteBuffer[] parameters = databaseHelper.getParameters("");
+//        model.setModelParameters(parameters);
     }
 
     // This method is thread-safe.
@@ -93,8 +126,18 @@ public class TransferLearningModelWrapper {
         shouldTrain.close();
     }
 
-    /** Frees all model resources and shuts down all background threads. */
+    /** Stores model parameters,
+     *  frees all model resources and shuts down all background threads. */
     public void close() {
+        boolean success = writeParametersToDB();
+        if(success) {
+            Log.d(TAG, "close: backup: successfully saved parameters!");
+        }
+        else {
+            Log.d(TAG, "close: backup: could not save parameters!");
+        }
+        
+        Log.d(TAG, "backup: ");
         model.close();
     }
 }

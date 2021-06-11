@@ -1,5 +1,7 @@
 package hs.aalen.arora;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -104,6 +106,8 @@ public class CameraFragment extends Fragment {
     private TransferLearningModelWrapper transferLearningModel;
     private Bitmap preview = null;
     private String currentClass; // for mapping preview image correctly
+
+    SharedPreferences sharedPreferences;
 
 
     /**
@@ -347,7 +351,7 @@ public class CameraFragment extends Fragment {
      */
     private void populateAllViewItems(String pos) {
         Log.d(TAG, "updateView setTextAll: " + pos);
-        Cursor data = databaseHelper.getByModelPos(pos);
+        Cursor data = this.databaseHelper.getByModelPos(pos);
         printObjectFromDB(data);
         if (data.moveToFirst()) {
             Log.d(TAG, "updateView updating ...: ");
@@ -379,26 +383,29 @@ public class CameraFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         viewModel = new ViewModelProvider(this).get(CameraFragmentViewModel.class);
         databaseHelper = new DatabaseHelper(getActivity());
-        List<String> classList = Arrays.asList("1", "2", "3", "4");
-        this.viewModel.getClasses().addAll(classList);
         mapObjectsFromDB();
+        List<String> classList = Arrays.asList("1", "2", "3", "4");
         transferLearningModel = new TransferLearningModelWrapper(getActivity(), classList);
+        this.viewModel.getClasses().addAll(classList);
     }
 
     private void mapObjectsFromDB() {
-        Cursor data = databaseHelper.getAllObjects();
-        while(data.moveToNext()) {
-            try{
-                viewModel.getClasses().remove(data.getString(6));
-            } catch (IllegalStateException e) {
-                return;
-            }
-            Log.d(TAG, "mapObjectsFromDB: pop open pos " + data.getString(6));
-            if(viewModel.getClasses().isEmpty()) {
-                Log.w(TAG, "mapObjectsFromDB: Model is full! Cannot add further data");
-                return;
+        if(databaseHelper.objectExists()) {
+            Cursor data = this.databaseHelper.getAllObjects();
+            while (data.moveToNext()) {
+                try {
+                    viewModel.getClasses().remove(data.getString(6));
+                } catch (IllegalStateException e) {
+                    return;
+                }
+                Log.d(TAG, "mapObjectsFromDB: pop open pos " + data.getString(6));
+                if (viewModel.getClasses().isEmpty()) {
+                    Log.w(TAG, "mapObjectsFromDB: Model is full! Cannot add further data");
+                    return;
+                }
             }
         }
     }
@@ -518,7 +525,7 @@ public class CameraFragment extends Fragment {
             }
         };
         viewModel.getFirstChoice().observe(getViewLifecycleOwner(), firstChoiceObserver);
-
+        transferLearningModel.loadParametersFromDB();
         viewFinder = getActivity().findViewById(R.id.view_finder);
         viewFinder.post(this::startCamera);
     }
@@ -657,6 +664,7 @@ public class CameraFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        Log.d(TAG, "onDestroyView: this");
         super.onDestroyView();
     }
 
@@ -735,7 +743,7 @@ public class CameraFragment extends Fragment {
      */
     private void printModelMapping() {
         Log.d(TAG, "(model mapping) printModelMapping: open pos:" + viewModel.getClasses().toString());
-        Cursor data = databaseHelper.getAllObjects();
+        Cursor data = this.databaseHelper.getAllObjects();
         while(data.moveToNext()){
             String name = data.getString(1);
             String modelPos = data.getString(6);

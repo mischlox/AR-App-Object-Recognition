@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 /**
  * Main Activity handles camera permission request,
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
-                String table = dbHelper.tableToString();
+                String table = dbHelper.tableToString("param_table");
                 Log.d(TAG, "TABLE INFO: " +  table);
             }
         });

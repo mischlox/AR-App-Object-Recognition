@@ -1,7 +1,6 @@
 package hs.aalen.arora;
 
 import android.app.AlertDialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -18,7 +17,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -119,9 +117,11 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
         // set Training Status to paused when going to different fragment
         if (item.getItemId() != R.id.nav_camera && selectedFragment == cameraFragment) {
+
             try {
                 Log.d(TAG, "onNavigationItemSelected: set Training State to paused");
                 cameraFragment.getViewModel().setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
+                Log.d(TAG, "onCreate: restoreModel: successfully saved model! ");
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 Log.e(TAG, "onNavigationItemSelected: ViewModel not created yet");
@@ -224,7 +224,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                         objectType.length() != 0 &&
                         objectAdditionalData.length() != 0) {
 
-                    boolean success = addData(objectName, objectType, objectAdditionalData);
+                    boolean success = addObject(objectName, objectType, objectAdditionalData);
 
                     if(success) {
                         Toast.makeText(CameraActivity.this, "Sucessfully inserted object!", Toast.LENGTH_SHORT).show();
@@ -257,8 +257,8 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
      * @param objectAdditionalData Additional data of object
      * @return true if successful, false otherwise
      */
-    private boolean addData(String objectName, String objectType, String objectAdditionalData) {
-        return databaseHelper.addData(objectName, objectType, objectAdditionalData);
+    private boolean addObject(String objectName, String objectType, String objectAdditionalData) {
+        return databaseHelper.insertObject(objectName, objectType, objectAdditionalData);
     }
 
 
