@@ -86,6 +86,18 @@
                 app:layout_constraintTop_toTopOf="@id/progressbar_training"
                 app:layout_constraintLeft_toLeftOf="@id/progressbar_training"
                 app:layout_constraintBottom_toBottomOf="@id/progressbar_training"/>
+            <ImageButton
+                android:id="@+id/training_playbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/ic_pause"
+                android:background="@color/transparent_background"
+                app:layout_constraintRight_toRightOf="@id/progressbar_training"
+                app:layout_constraintTop_toTopOf="@id/progressbar_training"
+                app:layout_constraintLeft_toLeftOf="@id/progressbar_training"
+                app:layout_constraintBottom_toBottomOf="@id/progressbar_training"
+                android:contentDescription="@string/training_state_pause_play" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -120,6 +132,8 @@
                 android:text="@string/additional_object_columns"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/type_object_info_columns" />
+
+
             <TextView
                 android:visibility="gone"
                 android:id="@+id/timestamp_object_info_columns"

@@ -1,5 +1,7 @@
 package hs.aalen.arora;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +23,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -95,6 +98,7 @@ public class CameraFragment extends Fragment {
     private ProgressBar trainingProgressBar;
     private TextView trainingProgressBarLabel;
     private TextView trainingProgressBarTextView;
+    private ImageButton trainingPlayButton;
     private TextureView viewFinder;
     private Integer viewFinderRotation = null;
     private Size bufferDimens = new Size(0, 0);
@@ -104,6 +108,8 @@ public class CameraFragment extends Fragment {
     private TransferLearningModelWrapper transferLearningModel;
     private Bitmap preview = null;
     private String currentClass; // for mapping preview image correctly
+
+    SharedPreferences sharedPreferences;
 
 
     /**
@@ -347,7 +353,7 @@ public class CameraFragment extends Fragment {
      */
     private void populateAllViewItems(String pos) {
         Log.d(TAG, "updateView setTextAll: " + pos);
-        Cursor data = databaseHelper.getByModelPos(pos);
+        Cursor data = this.databaseHelper.getByModelPos(pos);
         printObjectFromDB(data);
         if (data.moveToFirst()) {
             Log.d(TAG, "updateView updating ...: ");
@@ -379,26 +385,29 @@ public class CameraFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         viewModel = new ViewModelProvider(this).get(CameraFragmentViewModel.class);
         databaseHelper = new DatabaseHelper(getActivity());
-        List<String> classList = Arrays.asList("1", "2", "3", "4");
-        this.viewModel.getClasses().addAll(classList);
         mapObjectsFromDB();
+        List<String> classList = Arrays.asList("1", "2", "3", "4");
         transferLearningModel = new TransferLearningModelWrapper(getActivity(), classList);
+        this.viewModel.getClasses().addAll(classList);
     }
 
     private void mapObjectsFromDB() {
-        Cursor data = databaseHelper.getAllObjects();
-        while(data.moveToNext()) {
-            try{
-                viewModel.getClasses().remove(data.getString(6));
-            } catch (IllegalStateException e) {
-                return;
-            }
-            Log.d(TAG, "mapObjectsFromDB: pop open pos " + data.getString(6));
-            if(viewModel.getClasses().isEmpty()) {
-                Log.w(TAG, "mapObjectsFromDB: Model is full! Cannot add further data");
-                return;
+        if(databaseHelper.objectExists()) {
+            Cursor data = this.databaseHelper.getAllObjects();
+            while (data.moveToNext()) {
+                try {
+                    viewModel.getClasses().remove(data.getString(6));
+                } catch (IllegalStateException e) {
+                    return;
+                }
+                Log.d(TAG, "mapObjectsFromDB: pop open pos " + data.getString(6));
+                if (viewModel.getClasses().isEmpty()) {
+                    Log.w(TAG, "mapObjectsFromDB: Model is full! Cannot add further data");
+                    return;
+                }
             }
         }
     }
@@ -463,6 +472,21 @@ public class CameraFragment extends Fragment {
         trainingProgressBar = getActivity().findViewById(R.id.progressbar_training);
         trainingProgressBarLabel = getActivity().findViewById(R.id.progressbar_training_text);
         trainingProgressBarTextView = getActivity().findViewById(R.id.progressbar_textview);
+        trainingPlayButton = getActivity().findViewById(R.id.training_playbutton);
+        trainingPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewModel.getTrainingState().getValue() == CameraFragmentViewModel.TrainingState.STARTED) {
+                    viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
+                }
+                else if(viewModel.getTrainingState().getValue() == CameraFragmentViewModel.TrainingState.PAUSED) {
+                    viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.STARTED);
+                }
+                else {
+                    Log.d(TAG, "onClick: Training not started yet!");
+                }
+            }
+        });
         // Enable/Disable training
         viewModel
                 .getTrainingState()
@@ -472,13 +496,14 @@ public class CameraFragment extends Fragment {
                             switch (trainingState) {
                                 case STARTED:
                                     transferLearningModel.enableTraining((epoch, loss) -> viewModel.setLastLoss(loss));
+                                    trainingPlayButton.setImageDrawable(getActivity().getDrawable(R.drawable.ic_pause));
                                     Log.d(TAG, "addSamples:  training enabled");
                                     break;
                                 case PAUSED:
                                     transferLearningModel.disableTraining();
                                     Log.d(TAG, "addSamples: training disabled (pause)");
+                                    trainingPlayButton.setImageDrawable(getActivity().getDrawable(R.drawable.ic_play));
                                     setProgressCircle(0);
-
                                     break;
                                 case NOT_STARTED:
                                     Log.d(TAG, "addSamples: training disabled (not started)");
@@ -518,7 +543,6 @@ public class CameraFragment extends Fragment {
             }
         };
         viewModel.getFirstChoice().observe(getViewLifecycleOwner(), firstChoiceObserver);
-
         viewFinder = getActivity().findViewById(R.id.view_finder);
         viewFinder.post(this::startCamera);
     }
@@ -657,9 +681,10 @@ public class CameraFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        Log.d(TAG, "onDestroyView: this");
         super.onDestroyView();
     }
-
+    
     public ConcurrentLinkedQueue<String> getAddSampleRequests() {
         return addSampleRequests;
     }
@@ -735,7 +760,7 @@ public class CameraFragment extends Fragment {
      */
     private void printModelMapping() {
         Log.d(TAG, "(model mapping) printModelMapping: open pos:" + viewModel.getClasses().toString());
-        Cursor data = databaseHelper.getAllObjects();
+        Cursor data = this.databaseHelper.getAllObjects();
         while(data.moveToNext()){
             String name = data.getString(1);
             String modelPos = data.getString(6);

@@ -33,7 +33,7 @@ import java.util.ArrayList;
 public class ObjectOverviewFragment extends ListFragment {
     private static final String TAG = ObjectOverviewFragment.class.getSimpleName();
 
-    private DatabaseHelper databaseHelper;
+    private DatabaseHelper objectDatabaseHelper;
     private ListView objectListView;
 
     private ArrayList<String> objectIds = new ArrayList<>();
@@ -53,7 +53,7 @@ public class ObjectOverviewFragment extends ListFragment {
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_object_overview, container, false);
-        databaseHelper = new DatabaseHelper(getActivity());
+        objectDatabaseHelper = new DatabaseHelper(getActivity());
         objectListView = view.findViewById(android.R.id.list);
         populateView();
         return view;
@@ -64,7 +64,7 @@ public class ObjectOverviewFragment extends ListFragment {
      */
     private void populateView() {
         clearArrayLists();
-        Cursor data = databaseHelper.getAllObjects();
+        Cursor data = objectDatabaseHelper.getAllObjects();
         ArrayList<String> listData = new ArrayList<>();
         while(data.moveToNext()) {
             objectIds.add(data.getString(0));
@@ -145,7 +145,7 @@ public class ObjectOverviewFragment extends ListFragment {
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(databaseHelper.deletebyId(objectIds.get(position))) {
+                    if(objectDatabaseHelper.deletebyId(objectIds.get(position))) {
                         deleteItem(position);
                         notifyDataSetChanged();
                     }
@@ -226,7 +226,7 @@ public class ObjectOverviewFragment extends ListFragment {
                     String type = dialogObjectType.getText().toString();
                     String additional = dialogObjectAdditionalData.getText().toString();
 
-                    if(databaseHelper.editData(objectIds.get(position), name, type, additional)) {
+                    if(objectDatabaseHelper.editObject(objectIds.get(position), name, type, additional)) {
                         editItem(position, name, type, additional);
                         Toast.makeText(context, "Successfully edited Object!", Toast.LENGTH_SHORT).show();
                         notifyDataSetChanged();

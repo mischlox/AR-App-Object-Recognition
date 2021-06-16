@@ -16,12 +16,20 @@ package hs.aalen.arora;
 
 import android.content.Context;
 import android.os.ConditionVariable;
+import android.util.Log;
 
 import org.tensorflow.lite.examples.transfer.api.AssetModelLoader;
 import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
 
-import java.util.Arrays;
+import java.io.File;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -35,18 +43,29 @@ import java.util.concurrent.Future;
  * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/
  */
 public class TransferLearningModelWrapper {
+    public static final String TAG = TransferLearningModel.class.getSimpleName();
     public static final int IMAGE_SIZE = 224;
 
     private final TransferLearningModel model;
 
     private final ConditionVariable shouldTrain = new ConditionVariable();
     private volatile TransferLearningModel.LossConsumer lossConsumer;
+    private final DatabaseHelper databaseHelper;
+    private Context context;
+    Path parametersFilePath;
 
     TransferLearningModelWrapper(Context context, Collection<String> classes) {
-        model =
-                new TransferLearningModel(
-                        new AssetModelLoader(context, "model"), classes);
+        this.context = context;
+        databaseHelper = new DatabaseHelper(context);
 
+        model = new TransferLearningModel(
+                new AssetModelLoader(context, "model"),
+                classes);
+        Log.d(TAG, "TransferLearningModelWrapper: backup: create model");
+
+        if(databaseHelper.modelExists()) {
+            loadModel();
+        }
         new Thread(() -> {
             while (!Thread.interrupted()) {
                 shouldTrain.block();
@@ -93,8 +112,72 @@ public class TransferLearningModelWrapper {
         shouldTrain.close();
     }
 
-    /** Frees all model resources and shuts down all background threads. */
+    /**
+     * Starts one of the methods for loading a model
+     * @return
+     */
+    public boolean loadModel() {
+        try{
+            readParametersFromFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Starts one of the methods for saving a model
+     * @return
+     */
+    private boolean saveModel()  {
+        try{
+            writeParametersToFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    private void writeParametersToFile() throws IOException{
+        String filename = generateFileName("model-parameters",".bin");
+        parametersFilePath = Paths.get(context.getFilesDir().toString() + File.separator + filename);
+        Log.d(TAG, "writeParametersToFile: backup1: filepath is " + parametersFilePath.toString());
+        parametersFilePath = Files.createFile(parametersFilePath);
+        if (databaseHelper.insertModel("test", parametersFilePath))
+            model.saveParameters(FileChannel.open(parametersFilePath, StandardOpenOption.WRITE));
+    }
+
+    /**
+     * Generates a random file name
+     *
+     * @return generated random file name
+     */
+    private String generateFileName(String prefix, String suffix) {
+        return prefix+"-" + UUID.randomUUID() + suffix;
+    }
+
+    private void readParametersFromFile() throws IOException {
+        Log.d(TAG, "readParametersFromFile: backup: file");
+        Path path = databaseHelper.getLatestModelPath();
+        Log.d(TAG, "readParametersFromFile: backup1: latest path is: " + path.toString());
+        model.loadParameters(FileChannel.open(databaseHelper.getLatestModelPath(), StandardOpenOption.READ));
+    }
+
+    /** Stores model parameters,
+     *  frees all model resources and shuts down all background threads. */
     public void close() {
+        boolean success = false;
+
+        success = saveModel();
+
+        if(success) {
+            Log.d(TAG, "close: backup: successfully saved parameters!");
+        }
+        else {
+            Log.d(TAG, "close: backup: could not save parameters!");
+        }
         model.close();
     }
 }
