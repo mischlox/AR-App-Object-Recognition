@@ -1,12 +1,20 @@
 package hs.aalen.arora;
 
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +31,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.LinkedList;
 
 /**
  * Main Activity of Application handles Navigation between all fragments
@@ -52,6 +62,17 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     private EditText dialogObjectAdditionalData;
     private Button cancelDialogButton, startTrainingButton;
 
+    // Help Dialog items
+    private AlertDialog.Builder helpDialogBuilder;
+    private AlertDialog helpDialog;
+    private FloatingActionButton backwardButton;
+    private FloatingActionButton forwardButton;
+    private Button trainingButton;
+    private CheckBox notShowAgainCheckBox;
+    private TextView helpTextView;
+    private ProgressBar helpProgress;
+    private TextView helpProgressText;
+
     // For Database Access
     private DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
@@ -63,6 +84,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         Log.d(TAG, "onCreate: entrypoint");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         // Bind navigation views
@@ -87,7 +109,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                     getSupportFragmentManager().beginTransaction().replace(R.id.navbar_container, selectedFragment).commit();
                 } else {
                     // Start inference/training dialog from here
-                    createAddObjectDialog();
+                    createDialog();
                 }
             }
         });
@@ -199,6 +221,103 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void createDialog() {
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        boolean showHelp = prefs.getBoolean("showHelp", true);
+
+        if(showHelp) {
+            createHelpDialog();
+        }
+        else {
+            createAddObjectDialog();
+        }
+    }
+
+    public void createHelpDialog() {
+        helpDialogBuilder = new AlertDialog.Builder(this);
+
+        final View helpDialogView = getLayoutInflater().inflate(R.layout.help_popup, null);
+        backwardButton =helpDialogView.findViewById(R.id.help_backward_button);
+        forwardButton = helpDialogView.findViewById(R.id.help_forward_button);
+        trainingButton = helpDialogView.findViewById(R.id.help_training_button);
+        notShowAgainCheckBox = helpDialogView.findViewById(R.id.help_checkbox);
+        helpTextView = helpDialogView.findViewById(R.id.help_dialog_text);
+        helpProgress = helpDialogView.findViewById(R.id.help_progress);
+        helpProgressText = helpDialogView.findViewById(R.id.help_progress_text);
+
+        helpDialogBuilder.setView(helpDialogView);
+        helpDialog = helpDialogBuilder.create();
+        helpDialog.show();
+
+        // Linked list to browse through text views
+        LinkedList<Pair<Integer, String>> textList = new LinkedList<>();
+        textList.add(Pair.create(2,getString(R.string.help_text_tilt_camera)));
+        textList.add(Pair.create(3,getString(R.string.help_text_pause_training)));
+        textList.add(Pair.create(4,getString(R.string.help_text_havefun)));
+
+
+
+        notShowAgainCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("showHelp", !isChecked);
+                editor.apply();
+            }
+        });
+
+        forwardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startTextAnimation(helpTextView, R.anim.anim_fade_out);
+
+                String currentText = helpTextView.getText().toString();
+                int currentProgress = helpProgress.getProgress();
+                Pair<Integer, String> nextItem = textList.removeFirst();
+
+                helpProgress.setProgress(nextItem.first);
+                startTextAnimation(helpTextView, R.anim.anim_fade_in);
+                helpTextView.setText(nextItem.second, TextView.BufferType.SPANNABLE);
+                helpProgressText.setText(nextItem.first.toString() + " / " + helpProgress.getMax());
+
+                textList.addLast(Pair.create(currentProgress, currentText));
+            }
+        });
+
+        backwardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startTextAnimation(helpTextView, R.anim.anim_fade_out);
+
+                String currentText = helpTextView.getText().toString();
+                int currentProgress = helpProgress.getProgress();
+                Pair<Integer, String> nextItem = textList.removeLast();
+
+                helpProgress.setProgress(nextItem.first);
+                startTextAnimation(helpTextView, R.anim.anim_fade_in);
+                helpTextView.setText(nextItem.second, TextView.BufferType.SPANNABLE);
+                helpProgressText.setText(nextItem.first.toString() + " / " + helpProgress.getMax());
+
+                textList.addFirst(Pair.create(currentProgress, currentText));
+            }
+        });
+
+        trainingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createAddObjectDialog();
+                helpDialog.dismiss();
+            }
+        });
+
+    }
+
+    private void startTextAnimation(TextView textView, int animationResource) {
+        Animation animation = AnimationUtils.loadAnimation(this, animationResource);
+        textView.startAnimation(animation);
     }
 
     public void createAddObjectDialog(){

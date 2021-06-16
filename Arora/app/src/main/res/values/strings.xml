@@ -49,6 +49,17 @@
     <string name="confirm">Confirm</string>
     <string name="edit_dialog_title">Edit Object</string>
 
+    <!-- Help Dialog -->
+    <string name="usage">How it works</string>
+    <string name="do_not_show_again">Do not show again</string>
+    <string name="help_text_add_info">Enter the name of the object and if you want to additional information</string>
+    <string name="help_text_tilt_camera">Move your phone a little bit while training</string>
+    <string name="help_text_pause_training"> You can pause the training with the button in the upper right corner</string>
+    <string name="help_text_havefun">
+    Have Fun!</string>
+    <string name="back" translatable="false">back</string>
+    <string name="forward" translatable="false">forward</string>
+
     <!-- Info -->
     <string name="training..." translatable="false">Training...</string>
 
@@ -58,4 +69,7 @@
     <string name="settings_hint_num_samples">Amount of samples that are feeded to the model when adding a new object</string>
     <string name="key_seekbar" translatable="false">seekbar</string>
     <string name="training_state_pause_play" translatable="false">training state pause play</string>
+    <string name="progress_text_dialog">1 / 4</string>
+
+
 </resources>
