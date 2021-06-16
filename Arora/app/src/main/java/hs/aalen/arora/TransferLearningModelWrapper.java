@@ -15,26 +15,23 @@ limitations under the License.
 package hs.aalen.arora;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.ConditionVariable;
 import android.util.Log;
-
-import androidx.preference.PreferenceManager;
-
-import com.google.gson.Gson;
 
 import org.tensorflow.lite.examples.transfer.api.AssetModelLoader;
 import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
 
-import java.nio.ByteBuffer;
-import java.nio.channels.GatheringByteChannel;
-import java.nio.channels.ScatteringByteChannel;
-import java.util.Arrays;
+import java.io.File;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * App-layer wrapper for TransferLearningModel.
@@ -53,18 +50,22 @@ public class TransferLearningModelWrapper {
 
     private final ConditionVariable shouldTrain = new ConditionVariable();
     private volatile TransferLearningModel.LossConsumer lossConsumer;
-    private DatabaseHelper databaseHelper;
+    private final DatabaseHelper databaseHelper;
+    private Context context;
+    Path parametersFilePath;
 
     TransferLearningModelWrapper(Context context, Collection<String> classes) {
+        this.context = context;
         databaseHelper = new DatabaseHelper(context);
+
         model = new TransferLearningModel(
                 new AssetModelLoader(context, "model"),
                 classes);
+        Log.d(TAG, "TransferLearningModelWrapper: backup: create model");
 
         if(databaseHelper.modelExists()) {
-            loadParametersFromDB();
+            loadModel();
         }
-
         new Thread(() -> {
             while (!Thread.interrupted()) {
                 shouldTrain.block();
@@ -77,21 +78,6 @@ public class TransferLearningModelWrapper {
                 }
             }
         }).start();
-    }
-
-    private boolean writeParametersToDB() {
-        Log.d(TAG, "writeParametersToDB: backup: write parameters from db");
-        boolean success = databaseHelper.saveModel("", model.getModelParameters());
-        if(!success) {
-            Log.d(TAG, "backup: model could not be saved sucessfully ");
-        }
-        return success;
-    }
-
-    public void loadParametersFromDB() {
-        Log.d(TAG, "loadParametersFromDB: backup: load Parameters from db");
-        ByteBuffer[] parameters = databaseHelper.getParameters("");
-//        model.setModelParameters(parameters);
     }
 
     // This method is thread-safe.
@@ -126,18 +112,72 @@ public class TransferLearningModelWrapper {
         shouldTrain.close();
     }
 
+    /**
+     * Starts one of the methods for loading a model
+     * @return
+     */
+    public boolean loadModel() {
+        try{
+            readParametersFromFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Starts one of the methods for saving a model
+     * @return
+     */
+    private boolean saveModel()  {
+        try{
+            writeParametersToFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    private void writeParametersToFile() throws IOException{
+        String filename = generateFileName("model-parameters",".bin");
+        parametersFilePath = Paths.get(context.getFilesDir().toString() + File.separator + filename);
+        Log.d(TAG, "writeParametersToFile: backup1: filepath is " + parametersFilePath.toString());
+        parametersFilePath = Files.createFile(parametersFilePath);
+        if (databaseHelper.insertModel("test", parametersFilePath))
+            model.saveParameters(FileChannel.open(parametersFilePath, StandardOpenOption.WRITE));
+    }
+
+    /**
+     * Generates a random file name
+     *
+     * @return generated random file name
+     */
+    private String generateFileName(String prefix, String suffix) {
+        return prefix+"-" + UUID.randomUUID() + suffix;
+    }
+
+    private void readParametersFromFile() throws IOException {
+        Log.d(TAG, "readParametersFromFile: backup: file");
+        Path path = databaseHelper.getLatestModelPath();
+        Log.d(TAG, "readParametersFromFile: backup1: latest path is: " + path.toString());
+        model.loadParameters(FileChannel.open(databaseHelper.getLatestModelPath(), StandardOpenOption.READ));
+    }
+
     /** Stores model parameters,
      *  frees all model resources and shuts down all background threads. */
     public void close() {
-        boolean success = writeParametersToDB();
+        boolean success = false;
+
+        success = saveModel();
+
         if(success) {
             Log.d(TAG, "close: backup: successfully saved parameters!");
         }
         else {
             Log.d(TAG, "close: backup: could not save parameters!");
         }
-        
-        Log.d(TAG, "backup: ");
         model.close();
     }
 }

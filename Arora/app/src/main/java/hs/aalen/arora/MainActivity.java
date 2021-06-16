@@ -40,8 +40,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
-                String table = dbHelper.tableToString("param_table");
-                Log.d(TAG, "TABLE INFO: " +  table);
+                String param_table = dbHelper.tableToString("model_log_table");
+                String model_table = dbHelper.tableToString("model_table");
+                Log.d(TAG, "TABLE INFO:\n" +  param_table + model_table);
             }
         });
     }

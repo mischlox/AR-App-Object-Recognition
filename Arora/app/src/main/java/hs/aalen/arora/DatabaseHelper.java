@@ -12,7 +12,8 @@ import androidx.annotation.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *  Class that handles object Database queries to add and modify object meta data and model parameters
@@ -24,22 +25,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "arora_db";
 
     private static final String MODEL_TABLE_NAME = "model_table";
-    private static final String MODEL_COL0 = "ID";
+    private static final String MODEL_COL0 = "model_ID";
     private static final String MODEL_COL1 = "model_name";
-
-    private static final String PARAM_TABLE_NAME = "param_table";
-    private static final String PARAM_COL0 = "ID";
-    private static final String PARAM_COL1 = "model_id";
-    private static final String PARAM_COL2 = "parameters";
+    private static final String MODEL_COL2 = "model_path";
 
     private static final String OBJECT_TABLE_NAME = "object_table";
-    private static final String OBJECT_COL0 = "ID";
+    private static final String OBJECT_COL0 = "object_ID";
     private static final String OBJECT_COL1 = "object_name";
     private static final String OBJECT_COL2 = "object_type";
     private static final String OBJECT_COL3 = "object_additional_data";
     private static final String OBJECT_COL4 = "object_created_at";
     private static final String OBJECT_COL5 = "object_image";
     private static final String OBJECT_COL6 = "model_pos";
+    private static final String OBJECT_COL7 = "model_id";
+
+    // Table that logs the last used model
+    private static final String MODEL_LOG_TABLE_NAME = "model_log_table";
+    private static final String MODEL_LOG_COL0 = "model_log_ID";
+    private static final String MODEL_LOG_COL1 = "model_ID";
+    private static final String MODEL_LOG_COL2 = "model_log_timestamp";
+
+
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -57,42 +63,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + table;
         Cursor data = db.rawQuery(query, null);
         int count = data.getCount();
-        Log.d(TAG, "tableExists: backup: count of " + table + ": " + 64);
+        Log.d(TAG, "tableExists: backup: count of " + table + ": " + count);
         data.close();
         return count > 0;
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createModelTable = "CREATE TABLE " + MODEL_TABLE_NAME + " (" +
-                "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + MODEL_COL1 + " TEXT NOT NULL) ";
+        String createModelTable = "CREATE TABLE " + MODEL_TABLE_NAME + " ("
+                + MODEL_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + MODEL_COL1 + " TEXT NOT NULL, "
+                + MODEL_COL2 + " TEXT NOT NULL) ";
 
-        String createParamTable = "CREATE TABLE " + PARAM_TABLE_NAME + " (" +
-                "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + PARAM_COL1 + " INTEGER NOT NULL, "
-                + PARAM_COL2 + " BLOB NOT NULL, "
-                + "FOREIGN KEY(" + PARAM_COL1
-                + ") REFERENCES " + MODEL_TABLE_NAME + "(" + MODEL_COL0 + "))";
 
-        String createObjectTable = "CREATE TABLE " + OBJECT_TABLE_NAME + " (" +
-                "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
+        String createObjectTable = "CREATE TABLE " + OBJECT_TABLE_NAME + " ("
+                + OBJECT_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + OBJECT_COL1 + " TEXT, "
                 + OBJECT_COL2 + " TEXT, "
                 + OBJECT_COL3 + " TEXT, "
                 + OBJECT_COL4 + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
                 + OBJECT_COL5 + " BLOB, "
-                + OBJECT_COL6 + " TEXT)";
+                + OBJECT_COL6 + " TEXT, "
+                + OBJECT_COL7 + " INTEGER, "
+                + " FOREIGN KEY("+OBJECT_COL7+") REFERENCES "+ MODEL_TABLE_NAME+"("+MODEL_COL0+"))";
+
+        String createModelLogTable = "CREATE TABLE " + MODEL_LOG_TABLE_NAME + " ("
+                + MODEL_LOG_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + MODEL_LOG_COL1 + " INTEGER NOT NULL, "
+                + MODEL_LOG_COL2 + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
+                + " FOREIGN KEY("+MODEL_LOG_COL1+") REFERENCES "+ MODEL_TABLE_NAME+"("+MODEL_COL0+"))";
 
         db.execSQL(createObjectTable);
         db.execSQL(createModelTable);
-        db.execSQL(createParamTable);
+        db.execSQL(createModelLogTable);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + MODEL_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + PARAM_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + OBJECT_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + MODEL_LOG_TABLE_NAME);
+
         onCreate(db);
     }
 
@@ -128,7 +138,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(OBJECT_COL5, image);
 
-        long success = db.update(OBJECT_TABLE_NAME, contentValues, "object_name=?", new String[]{objectID});
+        long success = db.update(OBJECT_TABLE_NAME, contentValues, OBJECT_COL1+"=?", new String[]{objectID});
 
         return success != -1;
     }
@@ -138,7 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(OBJECT_COL6, modelPos);
 
-        long success = db.update(OBJECT_TABLE_NAME, contentValues, "object_name=?", new String[]{objectName});
+        long success = db.update(OBJECT_TABLE_NAME, contentValues, OBJECT_COL1+"=?", new String[]{objectName});
 
         return success != -1;
     }
@@ -156,7 +166,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return data;
     }
 
-    public Cursor getByID(String id) {
+    public Cursor getObjectByID(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
                 + " WHERE " + OBJECT_COL0 + " = " + id;
@@ -175,7 +185,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean deletebyId(String id) {
         Log.d(TAG, "deletebyId: Delete item with ID " + id);
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(OBJECT_TABLE_NAME, "ID=?", new String[]{id}) > 0;
+        return db.delete(OBJECT_TABLE_NAME, OBJECT_COL0+"=?", new String[]{id}) > 0;
     }
 
     /**
@@ -197,10 +207,88 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Log.d(TAG, "editData: Editing " + objectName);
 
-        long success = db.update(OBJECT_TABLE_NAME, contentValues, "ID=?", new String[]{id});
+        long success = db.update(OBJECT_TABLE_NAME, contentValues, OBJECT_COL0+"=?", new String[]{id});
 
         return success != -1;
     }
+
+    /**
+     * Searches for the model Path with the newest Timestamp
+     *
+     * @return Path of model
+     */
+    public Path getLatestModelPath() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Path result = null;
+        // Get model ID by latest Timestamp
+        String query = "SELECT " + MODEL_LOG_COL1 + " FROM " + MODEL_LOG_TABLE_NAME
+                + " ORDER BY " + MODEL_LOG_COL2 + " DESC LIMIT 1";
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()) {
+            int modelID = cursor.getInt(0);
+            String modelPath = getModelPathByID(modelID);
+            result = Paths.get(modelPath);
+        }
+        cursor.close();
+        if(result == null) {
+            Log.d(TAG, "getLatestModelPath: backup1: model Path is null!");
+        }
+        return result;
+    }
+
+    private String getModelPathByID(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String modelPath = null;
+        String query = "SELECT " + MODEL_COL2 + " FROM " + MODEL_TABLE_NAME
+                + " WHERE " + MODEL_COL0 + " = " + id;
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst()) {
+            modelPath = cursor.getString(0);
+        }
+        if(modelPath == null) {
+            Log.d(TAG, "getModelPathByID: backup1:  model is null!");
+        }
+        cursor.close();
+        return modelPath;
+    }
+
+    /**
+     * Inserts a model to DB
+     *
+     * @param name name of the model
+     * @param path path of the model parameters binary file
+     *
+     * @return true if successful, false otherwise
+     */
+    public boolean insertModel(String name, Path path) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MODEL_COL1, name);
+        contentValues.put(MODEL_COL2, path.toString());
+
+        long success = db.insert(MODEL_TABLE_NAME, null, contentValues);
+        if(success != -1) {
+            logModel((int)success);
+        }
+        return success != -1;
+    }
+    /**
+     * Inserts a new log with the current model and current date and time
+     *
+     * @return true if successful, false otherwise
+     */
+    private boolean logModel(int modelID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MODEL_LOG_COL1, modelID);
+
+        long success = db.insert(MODEL_LOG_TABLE_NAME, null, contentValues);
+
+        return success != -1;
+    }
+
 
     /**
      * Check if there are models in DB
@@ -209,20 +297,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public boolean modelExists() {
         return tableExists(MODEL_TABLE_NAME);
-    }
-
-    public boolean saveModel(String modelName, ByteBuffer[] parameters) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        boolean successModel = insertModel(modelName);
-        int modelID = getModelID(modelName);
-        boolean success = false;
-        for(ByteBuffer param : parameters) {
-            Log.d(TAG, "saveModel: backup: trying to write buffer");
-            success = insertParameters(modelID, param);
-        }
-        Log.d(TAG, "saveModel: backup: success get bytebuffers: "
-        + success + " success get model id: " + successModel);
-        return success && successModel;
     }
 
     /**
@@ -239,46 +313,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(MODEL_COL1, modelName);
 
         long success = db.insert(MODEL_TABLE_NAME, null, contentValues);
-        Log.d(TAG, "insertModel: backup:");
+        Log.d(TAG, "insertModel: save: backup: success: " + (success != 1) );
         return success != -1;
     }
 
-
-    private boolean insertParameters(int modelID, ByteBuffer parameter) {
-        Log.d(TAG, "insertParameters: backup: trying to save bytebuffers to model with id: "+ modelID);
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        byte[] parameterBlob = convertByteBuffer(parameter);
-
-        contentValues.put(PARAM_COL1, modelID);
-        contentValues.put(PARAM_COL2, parameterBlob);
-
-        long success = db.insert(PARAM_TABLE_NAME, null, contentValues);
-
-        return success != -1;
-    }
-
-    /**
-     * Get model parameters by name
-     *
-     * @param modelName name of model
-     * @return Parameters buffer
-     */
-    public ByteBuffer[] getParameters(String modelName) {
-        Cursor selectedModel = selectModel(modelName);
-        ArrayList<ByteBuffer> allParameters = new ArrayList<>();
-        int modelID = -1;
-        if(selectedModel.moveToFirst())
-            modelID = selectedModel.getInt(0);
-
-        Cursor selectedParameters = selectParameters(modelID);
-
-        while(selectedParameters.moveToNext()) {
-            ByteBuffer parameter = convertBytes(selectedParameters.getBlob(0));
-            allParameters.add(parameter);
-        }
-        return allParameters.toArray(new ByteBuffer[0]);
-    }
 
     /**
      * Query for getting model parameters by name
@@ -292,19 +330,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(modelName.equals("")) modelName = "test";
         String query = "SELECT " + MODEL_COL0 + " FROM " + MODEL_TABLE_NAME
                 + " WHERE " + MODEL_COL1 + " = " + "'"+modelName+"'";
-        return db.rawQuery(query, null);
-    }
-
-    /**
-     * Query for getting all buffers from model parameter
-     * @param modelID id of model (foreign key of parameters table)
-     *
-     * @return Cursor with queried parameters
-     */
-    private Cursor selectParameters(int modelID) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT " + PARAM_COL2 + " FROM " + PARAM_TABLE_NAME
-                + " WHERE " + PARAM_COL1 + " = " + modelID;
         return db.rawQuery(query, null);
     }
 
@@ -334,7 +359,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param modelName name of model
      * @return id of model
      */
-    private int getModelID(String modelName) {
+    private int getModelIDbyName(String modelName) {
         Cursor data = selectModel(modelName);
         if(data.moveToFirst()) return data.getInt(0);
         else return -1;
