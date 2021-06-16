@@ -42,7 +42,7 @@
     <string name="do_not_show_again">Nicht mehr anzeigen</string>
     <string name="help_text">Bewege das Handy ein wenig während des Trainings, damit das Objekt von mehreren Perspektiven aufgenommen werden kann, um die Wiedererkennungsrate zu verbessern</string>
     <string name="help_text_tilt_camera">Bewege das Handy ein wenig während des Trainings\\n</string>
-    <string name="help_text_havefun">Viel Spaß!</string>
+    <string name="help_text_havefun">Viel Spaß!\\n\\n</string>
     <string name="help_text_add_info">Gebe den Namen des Objektes ein und optional weitere Daten</string>
     <string name="help_text_pause_training">Das Training kann mit dem Button in der oberen rechten Ecke pausiert werden</string>
 </resources>

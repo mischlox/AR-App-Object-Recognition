@@ -1,7 +1,9 @@
 package hs.aalen.arora;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,8 +37,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected: settings:");
         switch (item.getItemId()){
-
+            
         }
         return super.onOptionsItemSelected(item);
     }
@@ -45,6 +48,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         seekBarPreference = findPreference(getString(R.string.key_seekbar));
+        seekBarPreference.setUpdatesContinuously(true);
     }
 
     public int getNumSamples() {
@@ -53,8 +57,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
+        Log.d(TAG, "onPreferenceChange: settings ");
         if(seekBarPreference.getKey().equals(preference.getKey())) {
-            numSamples = seekBarPreference.getValue();
+            SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt(getString(R.string.key_seekbar), (int)newValue);
+            Log.d(TAG, "onPreferenceChange: settings "+ (int)newValue);
+            editor.apply();
+            return true;
         }
         return false;
     }

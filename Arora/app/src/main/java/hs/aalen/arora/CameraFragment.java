@@ -109,9 +109,6 @@ public class CameraFragment extends Fragment {
     private Bitmap preview = null;
     private String currentClass; // for mapping preview image correctly
 
-    SharedPreferences sharedPreferences;
-
-
     /**
      * Analyzer is responsible for processing camera input
      * (including inference and send training samples to transfer learning model)
@@ -385,7 +382,6 @@ public class CameraFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         viewModel = new ViewModelProvider(this).get(CameraFragmentViewModel.class);
         databaseHelper = new DatabaseHelper(getActivity());
         mapObjectsFromDB();

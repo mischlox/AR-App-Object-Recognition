@@ -102,6 +102,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
             public void onClick(View v) {
                 // If not in Camera Fragment, go into it
                 if (selectedFragment != cameraFragment) {
+                    applyPreferences();
                     buttonCamera.setImageResource(R.drawable.ic_add);
                     selectedFragment = cameraFragment;
                     setTitle(navigationView.getMenu().findItem(R.id.nav_camera).getTitle());
@@ -139,14 +140,11 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
         // set Training Status to paused when going to different fragment
         if (item.getItemId() != R.id.nav_camera && selectedFragment == cameraFragment) {
-
             try {
                 Log.d(TAG, "onNavigationItemSelected: set Training State to paused");
                 cameraFragment.getViewModel().setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
-                Log.d(TAG, "onCreate: restoreModel: successfully saved model! ");
             } catch (NullPointerException e) {
                 e.printStackTrace();
-                Log.e(TAG, "onNavigationItemSelected: ViewModel not created yet");
             }
         }
         switch (item.getItemId()) {
@@ -164,11 +162,6 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
             case R.id.nav_settings:
             case R.id.nav_bottom_settings:
                 buttonCamera.setImageResource(R.drawable.ic_eye);
-
-                // Apply preferences
-                amountSamples = settingsFragment.getNumSamples();
-                Log.d(TAG, "sharedPrefs: amountSamples = " + amountSamples);
-
                 syncNavBars(R.id.nav_settings, R.id.nav_bottom_settings);
                 selectedFragment = settingsFragment;
                 break;
@@ -191,6 +184,9 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                 Toast.makeText(this, "To be implemented: Delete all Objects", Toast.LENGTH_SHORT).show();
                 break;
         }
+
+        applyPreferences();
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (selectedFragment != null) {
             transaction.replace(R.id.navbar_container, selectedFragment);
@@ -200,6 +196,11 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void applyPreferences() {
+        amountSamples = getSharedPreferences("prefs", MODE_PRIVATE).getInt("seekbar", 50);
+        Log.d(TAG, "sharedPrefs: settings amountSamples = " + amountSamples);
     }
 
     /**
@@ -257,13 +258,12 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         textList.add(Pair.create(3,getString(R.string.help_text_pause_training)));
         textList.add(Pair.create(4,getString(R.string.help_text_havefun)));
 
-
-
         notShowAgainCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("showHelp", !isChecked);
                 editor.putBoolean("showHelp", !isChecked);
                 editor.apply();
             }
@@ -353,7 +353,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                         dialogObjectType.setText("");
                         dialogObjectAdditionalData.setText("");
                         addObjectDialog.dismiss();
-                        cameraFragment.addSamples(className, 50);
+                        cameraFragment.addSamples(className, amountSamples);
                     }
                 }
             }
