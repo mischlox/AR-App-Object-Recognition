@@ -148,6 +148,7 @@ public class CameraFragment extends Fragment {
                     viewModel.increaseNumSamples(sampleClass);
                     if (numSamplesPerClass > 20) {
                         viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.STARTED);
+                        numSamplesPerClass = 0;
                     }
                 }
                 // Inference Mode
@@ -800,7 +801,5 @@ public class CameraFragment extends Fragment {
         locations[2] = center.x + (focusBoxSize/2);
         locations[3] = center.y + (focusBoxSize/2);
         return locations;
-
-
     }
 }
