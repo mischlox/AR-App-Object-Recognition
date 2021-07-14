@@ -3,11 +3,11 @@
     <item android:id="@+id/nav_bottom_object_overview"
         android:title="@string/object_overview"
         android:icon="@drawable/ic_library" />
-    <item android:id="@+id/nav_bottom_statistics"
-        android:title="@string/statistics"
-        android:icon="@drawable/ic_statistics" />
+    <item android:id="@+id/nav_bottom_model_overview"
+        android:title="@string/model_overview"
+        android:icon="@drawable/ic_save" />
     <item android:id="@+id/nav_bottom_placeholder"
-        android:title="" />
+        android:title=""/>
     <item android:id="@+id/nav_bottom_settings"
         android:title="@string/settings"
         android:icon="@drawable/ic_gear_wheel" />

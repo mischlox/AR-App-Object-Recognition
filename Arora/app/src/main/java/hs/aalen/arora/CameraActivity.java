@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -34,6 +35,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 /**
  * Main Activity of Application handles Navigation between all fragments
  *
@@ -46,7 +49,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     private final CameraFragment cameraFragment = new CameraFragment();
     private final ObjectOverviewFragment objectOverviewFragment = new ObjectOverviewFragment();
     private final SettingsFragment settingsFragment = new SettingsFragment();
-    private final StatisticsFragment statisticsFragment = new StatisticsFragment();
+    private final ModelOverviewFragment modelOverviewFragment = new ModelOverviewFragment();
     private final HelpFragment helpFragment = new HelpFragment();
     FloatingActionButton buttonCamera;
     private DrawerLayout drawer;
@@ -165,11 +168,11 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                 syncNavBars(R.id.nav_settings, R.id.nav_bottom_settings);
                 selectedFragment = settingsFragment;
                 break;
-            case R.id.nav_statistics:
-            case R.id.nav_bottom_statistics:
+            case R.id.nav_model_overview:
+            case R.id.nav_bottom_model_overview:
                 buttonCamera.setImageResource(R.drawable.ic_eye);
-                syncNavBars(R.id.nav_statistics, R.id.nav_bottom_statistics);
-                selectedFragment = statisticsFragment;
+                syncNavBars(R.id.nav_model_overview, R.id.nav_bottom_model_overview);
+                selectedFragment = modelOverviewFragment;
                 break;
             case R.id.nav_help:
             case R.id.nav_bottom_help:
@@ -199,7 +202,8 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     }
 
     private void applyPreferences() {
-        amountSamples = getSharedPreferences("prefs", MODE_PRIVATE).getInt("seekbar", 50);
+        // set amount of samples
+        amountSamples = getSharedPreferences("prefs", MODE_PRIVATE).getInt(getString(R.string.key_seekbar), 50);
         Log.d(TAG, "sharedPrefs: settings amountSamples = " + amountSamples);
     }
 

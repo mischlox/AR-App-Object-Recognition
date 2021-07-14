@@ -8,30 +8,45 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SeekBarPreference;
+import androidx.preference.SwitchPreference;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.prefs.PreferencesFactory;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
+/**
+ * Global settings for the application
+ *
+ * @author Michael Schlosser
+ */
 public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener{
     private static final String TAG = SettingsFragment.class.getSimpleName();
 
     private int numSamples;
     private SeekBarPreference seekBarPreference;
+    private SwitchPreference nightModeToggle;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         PreferenceManager.setDefaultValues(getContext(), R.xml.prefs, true);
         addPreferencesFromResource(R.xml.prefs);
         findPreference(getString(R.string.key_seekbar)).setOnPreferenceChangeListener(this);
+        findPreference(getString(R.string.key_nightmode)).setOnPreferenceChangeListener(this);
     }
 
 
@@ -48,6 +63,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         seekBarPreference = findPreference(getString(R.string.key_seekbar));
+        nightModeToggle = findPreference(getString(R.string.key_nightmode));
         seekBarPreference.setUpdatesContinuously(true);
     }
 
@@ -58,12 +74,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         Log.d(TAG, "onPreferenceChange: settings ");
+        SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
         if(seekBarPreference.getKey().equals(preference.getKey())) {
-            SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
             editor.putInt(getString(R.string.key_seekbar), (int)newValue);
             Log.d(TAG, "onPreferenceChange: settings "+ (int)newValue);
             editor.apply();
+            return true;
+        }
+        else if(nightModeToggle.getKey().equals(preference.getKey())) {
+            editor.putBoolean(getString(R.string.key_nightmode), (boolean)newValue);
+            Log.d(TAG, "onPreferenceChange: settings " + (boolean)newValue);
+            editor.apply();
+            Toast.makeText(this.getActivity(), getString(R.string.toast_restart_app), Toast.LENGTH_SHORT).show();
             return true;
         }
         return false;

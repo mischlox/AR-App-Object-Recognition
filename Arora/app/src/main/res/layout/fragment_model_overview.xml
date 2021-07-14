@@ -6,6 +6,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30sp"
-        android:text="STATISTICS"
+        android:text="Model Overview"
         android:layout_centerInParent="true"/>
 </RelativeLayout>

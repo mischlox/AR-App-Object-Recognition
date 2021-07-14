@@ -8,7 +8,7 @@
     <string name="actions">Aktionen</string>
     <string name="recognize_objects">Objekterkennung</string>
     <string name="object_overview">Objektübersicht</string>
-    <string name="statistics">Statistiken</string>
+    <string name="model_overview">Statistiken</string>
     <string name="settings">Einstellungen</string>
     <string name="help">Hilfe</string>
     <string name="delete_all_objects">Lösche alle Objekte</string>
@@ -40,9 +40,15 @@
     <string name="timestamp_object_columns">Zeitstempel</string>
     <string name="usage">So geht\'s</string>
     <string name="do_not_show_again">Nicht mehr anzeigen</string>
-    <string name="help_text">Bewege das Handy ein wenig während des Trainings, damit das Objekt von mehreren Perspektiven aufgenommen werden kann, um die Wiedererkennungsrate zu verbessern</string>
-    <string name="help_text_tilt_camera">Bewege das Handy ein wenig während des Trainings\\n</string>
-    <string name="help_text_havefun">Viel Spaß!\\n\\n</string>
+    <string name="help_text">Neige das Gerät ein wenig während des Trainings, damit das Objekt von mehreren Perspektiven aufgenommen werden kann, um die Wiedererkennungsrate zu verbessern</string>
+    <string name="help_text_tilt_camera">Bewege das Handy ein wenig während des Trainings</string>
+    <string name="help_text_havefun">Viel Spaß!</string>
     <string name="help_text_add_info">Gebe den Namen des Objektes ein und optional weitere Daten</string>
     <string name="help_text_pause_training">Das Training kann mit dem Button in der oberen rechten Ecke pausiert werden</string>
+    <string name="settings_resolution">Auflösung Trainingsdaten</string>
+    <string name="settings_resolution_hint">Auflösung der Trainingsbilder, die in das Model gegeben werden.</string>
+    <string name="settings_resolution_small">Klein (128x128)</string>
+    <string name="settings_resolution_medium">Medium (256x256)</string>
+    <string name="settings_resolution_large">Groß (512x512)</string>
+    <string name="toast_restart_app">Bitte starten Sie die App neu, damit die Änderungen angewendet werden können</string>
 </resources>

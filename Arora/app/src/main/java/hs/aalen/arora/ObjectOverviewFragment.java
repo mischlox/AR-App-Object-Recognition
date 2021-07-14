@@ -55,14 +55,20 @@ public class ObjectOverviewFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_object_overview, container, false);
         objectDatabaseHelper = new DatabaseHelper(getActivity());
         objectListView = view.findViewById(android.R.id.list);
-        populateView();
+        TextView noObjectsText = view.findViewById(R.id.no_objects_info_text);
+        if(populateView())
+            noObjectsText.setVisibility(View.INVISIBLE);
+        else
+            noObjectsText.setVisibility(View.VISIBLE);
         return view;
     }
 
     /**
      * Fill List View with data from our Database
+     *
+     * @return true if list could be populated with records of DB, false otherwise
      */
-    private void populateView() {
+    private boolean populateView() {
         clearArrayLists();
         Cursor data = objectDatabaseHelper.getAllObjects();
         ArrayList<String> listData = new ArrayList<>();
@@ -81,6 +87,10 @@ public class ObjectOverviewFragment extends ListFragment {
                                                         objectCreationDates,
                                                         objectPreviewImages);
         objectListView.setAdapter(adapter);
+
+        TextView noInfoText = objectListView.findViewById(R.id.no_objects_info_text);
+
+        return !adapter.isEmpty();
     }
 
     /**

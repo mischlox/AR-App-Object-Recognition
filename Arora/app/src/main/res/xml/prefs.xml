@@ -4,7 +4,8 @@
 
     <PreferenceCategory
         android:title="@string/enable_nightmode">
-        <CheckBoxPreference
+        <SwitchPreference
+            android:key="@string/key_nightmode"
             android:title="@string/nightmode"
             android:summaryOn="@string/nightmode_enabled"
             android:summaryOff="@string/nightmode_disabled"/>
@@ -20,6 +21,10 @@
             app:min="20"
             android:max="120"
             app:showSeekBarValue="true" />
+        <ListPreference
+            android:key="@string/key_resolution"
+            android:title="@string/settings_resolution"
+            android:summary="@string/settings_resolution_hint"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
