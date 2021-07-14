@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -125,6 +126,8 @@ public class CameraFragment extends Fragment {
                 try {
                     rgbBitmap = yuvCameraImageToBitmap(imageProxy);
                 } catch (NullPointerException | IllegalStateException e) {return;}
+                // TODO CROP TO SPECIFIED SIZE
+
                 float[] rgbImage = prepareCameraImage(rgbBitmap, rotationDegrees);
                 // Get the head of queue
                 String sampleClass = addSampleRequests.poll();
@@ -454,7 +457,7 @@ public class CameraFragment extends Fragment {
         expandCollapseButton = getActivity().findViewById(R.id.expand_collapse_button);
         // define focusbox
         focusBox = getActivity().findViewById(R.id.focus_box);
-        focusBox.setFocusBoxLocation(new int[]{0, 1, 2, 3});
+        focusBox.setFocusBoxLocation(identifyFocusBoxCorners(focusBoxSize));
 
         List<TextView> itemsCardView = Arrays.asList(typeObjectInfoColumns, typeObjectInfoValues,
                 additionalObjectInfoColumns, additionalObjectInfoValues,
@@ -785,5 +788,19 @@ public class CameraFragment extends Fragment {
 
     public void setFocusBoxSize(int focusBoxSize) {
         this.focusBoxSize = focusBoxSize;
+    }
+
+    public int[] identifyFocusBoxCorners(int size) {
+        int displayWidth = this.getResources().getDisplayMetrics().widthPixels;
+        int displayHeight = this.getResources().getDisplayMetrics().heightPixels;
+        Point center = new Point(displayWidth/2, displayHeight/2);
+        int[] locations = new int[4];
+        locations[0] = center.x - (focusBoxSize/2);
+        locations[1] = center.y - (focusBoxSize/2);
+        locations[2] = center.x + (focusBoxSize/2);
+        locations[3] = center.y + (focusBoxSize/2);
+        return locations;
+
+
     }
 }

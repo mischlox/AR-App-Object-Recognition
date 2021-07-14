@@ -97,6 +97,8 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
 
         Toolbar toolbar = findViewById(R.id.toolbar);
 
+        cameraFragment.setFocusBoxSize(getFocusBoxSize());
+
         // Bind navigation views
         setSupportActionBar(toolbar);
         navigationView = findViewById(R.id.nav_view);
