@@ -186,11 +186,11 @@ public class CameraFragmentViewModel extends ViewModel {
                 String choice;
             try{
                 choice = mapEntriesDecreasingValue(map).get(0).getKey();
+                return mapEntriesDecreasingValue(map).get(0).getKey();
             } catch (ConcurrentModificationException | NullPointerException e) {
                 Log.e(TAG, "mapEntriesDecreasingValue: " + e.toString());
                 return "";
             }
-                return mapEntriesDecreasingValue(map).get(0).getKey();
             });
         }
         return firstChoice;
@@ -252,9 +252,8 @@ public class CameraFragmentViewModel extends ViewModel {
         List<Map.Entry<String, Float>> entryList = null;
         try {
             entryList = new ArrayList<>(map.entrySet());
-        }catch (ConcurrentModificationException e){e.printStackTrace();}
-        Collections.sort(entryList, (e1, e2) -> -Float.compare(e1.getValue(), e2.getValue()));
-
+            Collections.sort(entryList, (e1, e2) -> -Float.compare(e1.getValue(), e2.getValue()));
+        }catch (NullPointerException | ConcurrentModificationException e){e.printStackTrace();}
         return entryList;
     }
 }

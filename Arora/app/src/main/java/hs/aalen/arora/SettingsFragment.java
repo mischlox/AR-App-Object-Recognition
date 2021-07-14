@@ -88,12 +88,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             editor.putBoolean(getString(R.string.key_nightmode), (boolean)newValue);
             Log.d(TAG, "onPreferenceChange: settings " + (boolean)newValue);
             editor.apply();
-            Toast.makeText(this.getActivity(), getString(R.string.toast_restart_app), Toast.LENGTH_SHORT).show();
             return true;
         }
         else if(resolutionDropDown.getKey().equals(preference.getKey())) {
             editor.putString(getString(R.string.key_resolution), newValue.toString());
             editor.apply();
+            return true;
         }
         return false;
     }

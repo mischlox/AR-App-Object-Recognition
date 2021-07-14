@@ -87,6 +87,24 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     private GlobalSettings settings;
     private SharedPreferences prefs;
 
+    SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            Log.d(TAG, "onSharedPreferenceChanged: TEST:");
+            if(key.equals(getString(R.string.key_resolution))) {
+                cameraFragment.setFocusBoxSize(getFocusBoxSize());
+            }
+            else if(key.equals(getString(R.string.key_nightmode))) {
+                if(nightModeOn()) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                }
+                else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                }
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: entrypoint");
@@ -126,6 +144,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                 }
             }
         });
+        prefs.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
         drawer = findViewById(R.id.drawer_layout);
         navigationView.setNavigationItemSelectedListener(this);
 
