@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -109,6 +110,9 @@ public class CameraFragment extends Fragment {
     private Bitmap preview = null;
     private String currentClass; // for mapping preview image correctly
 
+    private FocusBoxImage focusBox;
+    private int focusBoxSize;
+
     /**
      * Analyzer is responsible for processing camera input
      * (including inference and send training samples to transfer learning model)
@@ -116,12 +120,11 @@ public class CameraFragment extends Fragment {
      */
     private final ImageAnalysis.Analyzer inferenceAnalyzer =
             (imageProxy, rotationDegrees) -> {
-                final String imageId = UUID.randomUUID().toString();
                 // Preprocess camera images all the time, because it is needed by inference and by training
                 Bitmap rgbBitmap;
                 try {
                     rgbBitmap = yuvCameraImageToBitmap(imageProxy);
-                } catch (NullPointerException e) {return;}
+                } catch (NullPointerException | IllegalStateException e) {return;}
                 float[] rgbImage = prepareCameraImage(rgbBitmap, rotationDegrees);
                 // Get the head of queue
                 String sampleClass = addSampleRequests.poll();
@@ -423,7 +426,6 @@ public class CameraFragment extends Fragment {
         trainingProgressBar.setProgress(progress);
         int relativeProgress = (int) (((float) progress / (float) trainingProgressBar.getMax()) * 100);
         trainingProgressBarTextView.setText(relativeProgress + "%");
-
     }
 
     @Nullable
@@ -437,9 +439,7 @@ public class CameraFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull @org.jetbrains.annotations.NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onViewCreated: entrypoint");
         super.onViewCreated(view, savedInstanceState);
-
         // Initialize CardView and including view when the view is created
         objectName = getActivity().findViewById(R.id.object_name);
         objectConfidence = getActivity().findViewById(R.id.object_confidence);
@@ -452,6 +452,9 @@ public class CameraFragment extends Fragment {
         timestampObjectInfoValues = getActivity().findViewById(R.id.timestamp_object_info_values);
         objectPreviewImage = getActivity().findViewById(R.id.object_info_preview_image);
         expandCollapseButton = getActivity().findViewById(R.id.expand_collapse_button);
+        // define focusbox
+        focusBox = getActivity().findViewById(R.id.focus_box);
+        focusBox.setFocusBoxLocation(new int[]{0, 1, 2, 3});
 
         List<TextView> itemsCardView = Arrays.asList(typeObjectInfoColumns, typeObjectInfoValues,
                 additionalObjectInfoColumns, additionalObjectInfoValues,
@@ -602,7 +605,6 @@ public class CameraFragment extends Fragment {
 
         ImageAnalysis imageAnalysis = new ImageAnalysis(analysisConfig);
         imageAnalysis.setAnalyzer(inferenceAnalyzer);
-
         CameraX.bindToLifecycle(this, preview, imageAnalysis);
     }
 
@@ -779,5 +781,9 @@ public class CameraFragment extends Fragment {
             Log.d(TAG, "updateView printObjectFromDB: modelpos: " + data.getString(6));
         }
         Log.d(TAG, "updateView printObjectFromDB: <<< OBJECT INFO END >>>");
+    }
+
+    public void setFocusBoxSize(int focusBoxSize) {
+        this.focusBoxSize = focusBoxSize;
     }
 }

@@ -51,4 +51,5 @@
     <string name="settings_resolution_medium">Mittel (256x256)</string>
     <string name="settings_resolution_large">Groß (512x512)</string>
     <string name="toast_restart_app">Bitte starten Sie die App neu, damit die Änderungen angewendet werden können</string>
+    <string name="obj_view_no_saved">Noch keine Objekte für das derzeitige Model eingespeichert!</string>
 </resources>

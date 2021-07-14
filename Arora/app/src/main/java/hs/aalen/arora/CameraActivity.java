@@ -34,21 +34,23 @@ import com.google.android.material.navigation.NavigationView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
+import java.util.Set;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+import static hs.aalen.arora.GlobalSettings.MEDIUM;
 
 /**
  * Main Activity of Application handles Navigation between all fragments
  *
  * @author Michael Schlosser
  */
-public class CameraActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
+public class CameraActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener, GlobalSettings {
     private static final String TAG = "CameraActivity";
 
     // Fragments as single instance in order to not recreate them
+    private final SettingsFragment settingsFragment = new SettingsFragment();
     private final CameraFragment cameraFragment = new CameraFragment();
     private final ObjectOverviewFragment objectOverviewFragment = new ObjectOverviewFragment();
-    private final SettingsFragment settingsFragment = new SettingsFragment();
     private final ModelOverviewFragment modelOverviewFragment = new ModelOverviewFragment();
     private final HelpFragment helpFragment = new HelpFragment();
     FloatingActionButton buttonCamera;
@@ -82,10 +84,15 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     // Further configuration
     private int amountSamples = 50;
 
+    private GlobalSettings settings;
+    private SharedPreferences prefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: entrypoint");
         super.onCreate(savedInstanceState);
+        settings = this;
+        prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         setContentView(R.layout.activity_camera);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -203,7 +210,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
 
     private void applyPreferences() {
         // set amount of samples
-        amountSamples = getSharedPreferences("prefs", MODE_PRIVATE).getInt(getString(R.string.key_seekbar), 50);
+        amountSamples = settings.getAmountSamples();
         Log.d(TAG, "sharedPrefs: settings amountSamples = " + amountSamples);
     }
 
@@ -229,8 +236,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     }
 
     public void createDialog() {
-        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        boolean showHelp = prefs.getBoolean("showHelp", true);
+        boolean showHelp = settings.getHelpShowing();
 
         if(showHelp) {
             createHelpDialog();
@@ -265,11 +271,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         notShowAgainCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean("showHelp", !isChecked);
-                editor.putBoolean("showHelp", !isChecked);
-                editor.apply();
+                settings.setHelpShowing(!isChecked);
             }
         });
 
@@ -357,6 +359,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                         dialogObjectType.setText("");
                         dialogObjectAdditionalData.setText("");
                         addObjectDialog.dismiss();
+                        cameraFragment.setFocusBoxSize(getFocusBoxSize());
                         cameraFragment.addSamples(className, amountSamples);
                     }
                 }
@@ -382,6 +385,41 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
      */
     private boolean addObject(String objectName, String objectType, String objectAdditionalData) {
         return databaseHelper.insertObject(objectName, objectType, objectAdditionalData);
+    }
+
+    @Override
+    public int getAmountSamples() {
+        return prefs.getInt(getString(R.string.key_seekbar), 50);
+    }
+
+    @Override
+    public boolean nightModeOn() {
+        return prefs.getBoolean(getString(R.string.key_nightmode), false);
+    }
+
+    @Override
+    public int getFocusBoxSize() {
+        switch (prefs.getString(getString(R.string.key_resolution), "MEDIUM")) {
+            case "LARGE":
+                return LARGE;
+            case "MEDIUM":
+                return MEDIUM;
+            case "SMALL":
+                return SMALL;
+        }
+        return MEDIUM;
+    }
+
+    @Override
+    public void setHelpShowing(boolean show) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("showHelp", show);
+        editor.apply();
+    }
+
+    @Override
+    public boolean getHelpShowing() {
+        return prefs.getBoolean("showHelp", true);
     }
 
 

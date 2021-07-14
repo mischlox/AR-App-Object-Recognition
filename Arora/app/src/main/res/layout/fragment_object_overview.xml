@@ -15,7 +15,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:gravity="center"
-            android:text="Noch keine Objekte für das derzeitige Model eingespeichert!"
+            android:text="@string/obj_view_no_saved"
             android:visibility="invisible"
             android:id="@+id/no_objects_info_text" />
 

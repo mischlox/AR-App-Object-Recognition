@@ -3,6 +3,7 @@ package hs.aalen.arora;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
+import androidx.preference.DropDownPreference;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -37,9 +40,10 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener{
     private static final String TAG = SettingsFragment.class.getSimpleName();
 
-    private int numSamples;
+    SharedPreferences prefs;
     private SeekBarPreference seekBarPreference;
     private SwitchPreference nightModeToggle;
+    private ListPreference resolutionDropDown;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -47,8 +51,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         addPreferencesFromResource(R.xml.prefs);
         findPreference(getString(R.string.key_seekbar)).setOnPreferenceChangeListener(this);
         findPreference(getString(R.string.key_nightmode)).setOnPreferenceChangeListener(this);
+        findPreference(getString(R.string.key_resolution)).setOnPreferenceChangeListener(this);
+        prefs = getContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
@@ -64,17 +69,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         super.onViewCreated(view, savedInstanceState);
         seekBarPreference = findPreference(getString(R.string.key_seekbar));
         nightModeToggle = findPreference(getString(R.string.key_nightmode));
-        seekBarPreference.setUpdatesContinuously(true);
-    }
+        resolutionDropDown = findPreference(getString(R.string.key_resolution));
 
-    public int getNumSamples() {
-        return numSamples;
+        seekBarPreference.setUpdatesContinuously(true);
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         Log.d(TAG, "onPreferenceChange: settings ");
-        SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         if(seekBarPreference.getKey().equals(preference.getKey())) {
             editor.putInt(getString(R.string.key_seekbar), (int)newValue);
@@ -88,6 +90,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             editor.apply();
             Toast.makeText(this.getActivity(), getString(R.string.toast_restart_app), Toast.LENGTH_SHORT).show();
             return true;
+        }
+        else if(resolutionDropDown.getKey().equals(preference.getKey())) {
+            editor.putString(getString(R.string.key_resolution), newValue.toString());
+            editor.apply();
         }
         return false;
     }
