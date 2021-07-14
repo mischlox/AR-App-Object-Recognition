@@ -24,7 +24,9 @@
         <ListPreference
             android:key="@string/key_resolution"
             android:title="@string/settings_resolution"
-            android:summary="@string/settings_resolution_hint"/>
+            android:summary="@string/settings_resolution_hint"
+            android:entries="@array/settings_resolution_entries"
+            android:entryValues="@array/settings_resolution_entry_values"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
