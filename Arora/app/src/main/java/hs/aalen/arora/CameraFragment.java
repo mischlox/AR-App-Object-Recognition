@@ -1,7 +1,5 @@
 package hs.aalen.arora;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -55,7 +52,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 
@@ -112,7 +108,7 @@ public class CameraFragment extends Fragment {
     private String currentClass; // for mapping preview image correctly
 
     private FocusBoxImage focusBox;
-    private int focusBoxSize;
+    private double focusBoxRatio;
 
     /**
      * Analyzer is responsible for processing camera input
@@ -126,9 +122,8 @@ public class CameraFragment extends Fragment {
                 try {
                     rgbBitmap = yuvCameraImageToBitmap(imageProxy);
                 } catch (NullPointerException | IllegalStateException e) {return;}
-                // TODO CROP TO SPECIFIED SIZE
 
-                float[] rgbImage = prepareCameraImage(rgbBitmap, rotationDegrees);
+                float[] rgbImage = prepareCameraImage(rgbBitmap, rotationDegrees, identifyFocusBoxCorners(rgbBitmap.getWidth(), rgbBitmap.getHeight(), focusBoxRatio));
                 // Get the head of queue
                 String sampleClass = addSampleRequests.poll();
 
@@ -136,7 +131,7 @@ public class CameraFragment extends Fragment {
                 if (sampleClass != null) {
                     if(preview == null) {
                         Log.d(TAG, "addSamples preview: put Image to object " + sampleClass);
-                        preview = scaleAndRotateBitmap(rgbBitmap, rotationDegrees, TransferLearningModelWrapper.IMAGE_SIZE);
+                        preview = scaleAndRotateBitmap(rgbBitmap, rotationDegrees, TransferLearningModelWrapper.IMAGE_SIZE, identifyFocusBoxCorners(rgbBitmap.getWidth(), rgbBitmap.getHeight(), focusBoxRatio));
                         databaseHelper.updateImageBlob(currentClass, preview);
                     }
                     try {
@@ -223,9 +218,9 @@ public class CameraFragment extends Fragment {
      * @param rotationDegrees Handles landscape/portrait mode with post rotation if necessary
      * @return the cropped and normalized image
      */
-    private static float[] prepareCameraImage(Bitmap bitmap, int rotationDegrees) {
+    private static float[] prepareCameraImage(Bitmap bitmap, int rotationDegrees, int[] cropLocations) {
         int modelImageSize = TransferLearningModelWrapper.IMAGE_SIZE;
-        Bitmap rotatedBitmap = scaleAndRotateBitmap(bitmap, rotationDegrees, modelImageSize);
+        Bitmap rotatedBitmap = scaleAndRotateBitmap(bitmap, rotationDegrees, modelImageSize, cropLocations);
 
         float[] normalizedRgb = new float[modelImageSize * modelImageSize * 3];
         int nextIdx = 0;
@@ -246,9 +241,9 @@ public class CameraFragment extends Fragment {
         return normalizedRgb;
     }
 
-    private static Bitmap scaleAndRotateBitmap(Bitmap bitmap, int rotationDegrees, int modelImageSize) {
+    private static Bitmap scaleAndRotateBitmap(Bitmap bitmap, int rotationDegrees, int modelImageSize, int[] cropLocations) {
 
-        Bitmap paddedBitmap = padToSquare(bitmap);
+        Bitmap paddedBitmap = padToSquare(bitmap, cropLocations);
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(
                 paddedBitmap, modelImageSize, modelImageSize, true);
 
@@ -264,14 +259,16 @@ public class CameraFragment extends Fragment {
      * @param source image to be cropped
      * @return cropped image
      */
-    private static Bitmap padToSquare(Bitmap source) {
+    private static Bitmap padToSquare(Bitmap source, int[] cropLocations) {
+        // Crop the image to center
+        source = Bitmap.createBitmap(source, cropLocations[0], cropLocations[1], cropLocations[2]-cropLocations[0], cropLocations[3]-cropLocations[1]);
         int width = source.getWidth();
         int height = source.getHeight();
-
+        // Make it square
         int paddingX = width < height ? (height - width) / 2 : 0;
         int paddingY = height < width ? (width - height) / 2 : 0;
         Bitmap paddedBitmap = Bitmap.createBitmap(
-                width + 2 * paddingX, height + 2 * paddingY, Bitmap.Config.ARGB_8888);
+                (int)(width + 2 * paddingX), (int)(height + 2 * paddingY), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(paddedBitmap);
         canvas.drawARGB(0xFF, 0xFF, 0xFF, 0xFF);
         canvas.drawBitmap(source, paddingX, paddingY, null);
@@ -458,7 +455,8 @@ public class CameraFragment extends Fragment {
         expandCollapseButton = getActivity().findViewById(R.id.expand_collapse_button);
         // define focusbox
         focusBox = getActivity().findViewById(R.id.focus_box);
-        focusBox.setFocusBoxLocation(identifyFocusBoxCorners(focusBoxSize));
+        focusBox.setFocusBoxLocation(identifyFocusBoxCorners(this.getResources().getDisplayMetrics().widthPixels,
+                this.getResources().getDisplayMetrics().heightPixels, focusBoxRatio));
 
         List<TextView> itemsCardView = Arrays.asList(typeObjectInfoColumns, typeObjectInfoValues,
                 additionalObjectInfoColumns, additionalObjectInfoValues,
@@ -579,6 +577,7 @@ public class CameraFragment extends Fragment {
                 .setLensFacing(LENS_FACING)
                 .setTargetAspectRatio(screenAspectRatio)
                 .setTargetRotation(viewFinder.getDisplay().getRotation())
+                .setTargetResolution(new Size(metrics.widthPixels, metrics.heightPixels))
                 .build();
         Preview preview = new Preview(config);
 
@@ -787,19 +786,29 @@ public class CameraFragment extends Fragment {
         Log.d(TAG, "updateView printObjectFromDB: <<< OBJECT INFO END >>>");
     }
 
-    public void setFocusBoxSize(int focusBoxSize) {
-        this.focusBoxSize = focusBoxSize;
+    public void setFocusBoxRatio(double focusBoxRatio) {
+        this.focusBoxRatio = focusBoxRatio;
     }
 
-    public int[] identifyFocusBoxCorners(int size) {
-        int displayWidth = this.getResources().getDisplayMetrics().widthPixels;
-        int displayHeight = this.getResources().getDisplayMetrics().heightPixels;
-        Point center = new Point(displayWidth/2, displayHeight/2);
+    /**
+     * Function that identifies the corners of a square in the center of the display
+     *
+     * @param width of Bitmap
+     * @param height of Bitmap
+     * @param ratio crop-factor
+     *
+     * @return the four positions
+     */
+    public int[] identifyFocusBoxCorners(int width, int height, double ratio) {
         int[] locations = new int[4];
-        locations[0] = center.x - (focusBoxSize/2);
-        locations[1] = center.y - (focusBoxSize/2);
-        locations[2] = center.x + (focusBoxSize/2);
-        locations[3] = center.y + (focusBoxSize/2);
+        // You can only square the smaller side. Otherwise there would occur an OutOfBoundsException
+        int size = (int) ((width <= height ? width/2 : height/2) * ratio);
+        Point center = new Point(width/2, height/2);
+        locations[0] = center.x - (size/2); // left
+        locations[1] = center.y - (size/2); // top
+        locations[2] = center.x + (size/2); // right
+        locations[3] = center.y + (size/2); // bottom
+
         return locations;
     }
 }

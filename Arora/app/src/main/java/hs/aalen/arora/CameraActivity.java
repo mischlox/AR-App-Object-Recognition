@@ -34,10 +34,8 @@ import com.google.android.material.navigation.NavigationView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
-import java.util.Set;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
-import static hs.aalen.arora.GlobalSettings.MEDIUM;
 
 /**
  * Main Activity of Application handles Navigation between all fragments
@@ -92,7 +90,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             Log.d(TAG, "onSharedPreferenceChanged: TEST:");
             if(key.equals(getString(R.string.key_resolution))) {
-                cameraFragment.setFocusBoxSize(getFocusBoxSize());
+                cameraFragment.setFocusBoxRatio(getFocusBoxRatio());
             }
             else if(key.equals(getString(R.string.key_nightmode))) {
                 if(nightModeOn()) {
@@ -115,7 +113,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
 
         Toolbar toolbar = findViewById(R.id.toolbar);
 
-        cameraFragment.setFocusBoxSize(getFocusBoxSize());
+        cameraFragment.setFocusBoxRatio(getFocusBoxRatio());
 
         // Bind navigation views
         setSupportActionBar(toolbar);
@@ -380,7 +378,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                         dialogObjectType.setText("");
                         dialogObjectAdditionalData.setText("");
                         addObjectDialog.dismiss();
-                        cameraFragment.setFocusBoxSize(getFocusBoxSize());
+                        cameraFragment.setFocusBoxRatio(getFocusBoxRatio());
                         cameraFragment.addSamples(className, amountSamples);
                     }
                 }
@@ -419,7 +417,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     }
 
     @Override
-    public int getFocusBoxSize() {
+    public double getFocusBoxRatio() {
         switch (prefs.getString(getString(R.string.key_resolution), "MEDIUM")) {
             case "LARGE":
                 return LARGE;
