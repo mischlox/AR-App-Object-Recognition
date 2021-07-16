@@ -97,7 +97,6 @@ public class CameraFragment extends Fragment {
     private ProgressBar trainingProgressBar;
     private TextView trainingProgressBarLabel;
     private TextView trainingProgressBarTextView;
-    private ImageButton trainingPlayButton;
     private TextureView viewFinder;
     private Integer viewFinderRotation = null;
     private Size bufferDimens = new Size(0, 0);
@@ -472,21 +471,7 @@ public class CameraFragment extends Fragment {
         trainingProgressBar = getActivity().findViewById(R.id.progressbar_training);
         trainingProgressBarLabel = getActivity().findViewById(R.id.progressbar_training_text);
         trainingProgressBarTextView = getActivity().findViewById(R.id.progressbar_textview);
-        trainingPlayButton = getActivity().findViewById(R.id.training_playbutton);
-        trainingPlayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (viewModel.getTrainingState().getValue() == CameraFragmentViewModel.TrainingState.STARTED) {
-                    viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
-                }
-                else if(viewModel.getTrainingState().getValue() == CameraFragmentViewModel.TrainingState.PAUSED) {
-                    viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.STARTED);
-                }
-                else {
-                    Log.d(TAG, "onClick: Training not started yet!");
-                }
-            }
-        });
+
         // Enable/Disable training
         viewModel
                 .getTrainingState()
@@ -496,13 +481,11 @@ public class CameraFragment extends Fragment {
                             switch (trainingState) {
                                 case STARTED:
                                     transferLearningModel.enableTraining((epoch, loss) -> viewModel.setLastLoss(loss));
-                                    trainingPlayButton.setImageDrawable(getActivity().getDrawable(R.drawable.ic_pause));
                                     Log.d(TAG, "addSamples:  training enabled");
                                     break;
                                 case PAUSED:
                                     transferLearningModel.disableTraining();
                                     Log.d(TAG, "addSamples: training disabled (pause)");
-                                    trainingPlayButton.setImageDrawable(getActivity().getDrawable(R.drawable.ic_play));
                                     setProgressCircle(0);
                                     break;
                                 case NOT_STARTED:
