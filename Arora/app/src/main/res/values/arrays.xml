@@ -1,14 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="settings_resolution_entries">
-        <item>@string/settings_resolution_small</item>
-        <item>@string/settings_resolution_medium</item>
-        <item>@string/settings_resolution_large</item>
-    </string-array>
-
-    <string-array name="settings_resolution_entry_values">
-        <item>SMALL</item>
-        <item>MEDIUM</item>
-        <item>LARGE</item>
-    </string-array>
 </resources>

@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <PreferenceCategory
-        android:title="@string/enable_nightmode">
-        <SwitchPreference
-            android:key="@string/key_nightmode"
-            android:title="@string/nightmode"
-            android:summaryOn="@string/nightmode_enabled"
-            android:summaryOff="@string/nightmode_disabled"/>
-    </PreferenceCategory>
-
     <PreferenceCategory
     android:title="@string/settings_training">
         <SeekBarPreference
@@ -21,12 +11,28 @@
             app:min="20"
             android:max="120"
             app:showSeekBarValue="true" />
-        <ListPreference
+        <SeekBarPreference
             android:key="@string/key_resolution"
             android:title="@string/settings_resolution"
             android:summary="@string/settings_resolution_hint"
-            android:entries="@array/settings_resolution_entries"
-            android:entryValues="@array/settings_resolution_entry_values"/>
+            android:defaultValue="2"
+            app:min="0"
+            android:max="2"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/enable_nightmode">
+        <SwitchPreference
+            android:key="@string/key_nightmode"
+            android:title="@string/nightmode"
+            android:summaryOn="@string/nightmode_enabled"
+            android:summaryOff="@string/nightmode_disabled"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/settings_language">
+        <DropDownPreference
+            android:key="key_language"
+            android:title="Change Language"
+            android:summary="Change the language of Arora App"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
