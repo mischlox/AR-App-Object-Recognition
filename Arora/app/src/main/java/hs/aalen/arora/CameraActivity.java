@@ -93,7 +93,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                 cameraFragment.setFocusBoxRatio(getFocusBoxRatio());
             }
             else if(key.equals(getString(R.string.key_nightmode))) {
-                if(nightModeOn()) {
+                if(getNightMode()) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 }
                 else {
@@ -364,9 +364,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                 String objectName = dialogObjectName.getText().toString();
                 String objectType = dialogObjectType.getText().toString();
                 String objectAdditionalData = dialogObjectAdditionalData.getText().toString();
-                if(objectName.length() != 0 &&
-                        objectType.length() != 0 &&
-                        objectAdditionalData.length() != 0) {
+                if(objectName.length() != 0) {
 
                     boolean success = addObject(objectName, objectType, objectAdditionalData);
 
@@ -412,18 +410,18 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     }
 
     @Override
-    public boolean nightModeOn() {
+    public boolean getNightMode() {
         return prefs.getBoolean(getString(R.string.key_nightmode), false);
     }
 
     @Override
     public double getFocusBoxRatio() {
-        switch (prefs.getString(getString(R.string.key_resolution), "MEDIUM")) {
-            case "LARGE":
+        switch (prefs.getInt(getString(R.string.key_resolution), 1)) {
+            case 2:
                 return LARGE;
-            case "MEDIUM":
+            case 1:
                 return MEDIUM;
-            case "SMALL":
+            case 0:
                 return SMALL;
         }
         return MEDIUM;
