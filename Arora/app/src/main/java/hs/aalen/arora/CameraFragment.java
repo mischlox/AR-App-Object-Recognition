@@ -1,5 +1,6 @@
 package hs.aalen.arora;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -156,7 +157,7 @@ public class CameraFragment extends Fragment {
                     try {
                         predictions = transferLearningModel.predict(rgbImage);
                     } catch (NullPointerException e) {
-
+                        // do nothing
                     }
                     if (predictions == null) {
                         return;
@@ -268,7 +269,7 @@ public class CameraFragment extends Fragment {
         int paddingX = width < height ? (height - width) / 2 : 0;
         int paddingY = height < width ? (width - height) / 2 : 0;
         Bitmap paddedBitmap = Bitmap.createBitmap(
-                (int)(width + 2 * paddingX), (int)(height + 2 * paddingY), Bitmap.Config.ARGB_8888);
+                (width + 2 * paddingX), (height + 2 * paddingY), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(paddedBitmap);
         canvas.drawARGB(0xFF, 0xFF, 0xFF, 0xFF);
         canvas.drawBitmap(source, paddingX, paddingY, null);
@@ -354,7 +355,7 @@ public class CameraFragment extends Fragment {
      */
     private void populateAllViewItems(String pos) {
         Log.d(TAG, "updateView setTextAll: " + pos);
-        Cursor data = this.databaseHelper.getByModelPos(pos);
+        Cursor data = this.databaseHelper.getObjectByModelPos(pos);
         printObjectFromDB(data);
         if (data.moveToFirst()) {
             Log.d(TAG, "updateView updating ...: ");
@@ -395,7 +396,7 @@ public class CameraFragment extends Fragment {
     }
 
     private void mapObjectsFromDB() {
-        if(databaseHelper.objectExists()) {
+        if(databaseHelper.objectsExist()) {
             Cursor data = this.databaseHelper.getAllObjects();
             while (data.moveToNext()) {
                 try {
@@ -433,9 +434,7 @@ public class CameraFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: entrypoint");
-        View inflatedView = inflater.inflate(R.layout.fragment_camera, container, false);
-
-        return inflatedView;
+        return inflater.inflate(R.layout.fragment_camera, container, false);
     }
 
     @Override
@@ -537,6 +536,7 @@ public class CameraFragment extends Fragment {
                     float confidence = viewModel.getConfidence().getValue().get(s);
                     float confidencePercent = confidence * 100;
                     DecimalFormat df = new DecimalFormat("##.#");
+                    if(databaseHelper.objectsExist())
                     objectConfidence.setText(df.format(confidencePercent) + " %");
                     if(!s.isEmpty()) populateAllViewItems(s);
                 } catch (NullPointerException e) {
@@ -802,7 +802,7 @@ public class CameraFragment extends Fragment {
     public int[] identifyFocusBoxCorners(int width, int height, double ratio) {
         int[] locations = new int[4];
         // You can only square the smaller side. Otherwise there would occur an OutOfBoundsException
-        int size = (int) ((width <= height ? width/2 : height/2) * ratio);
+        int size = (int) ((Math.min(width, height)) * ratio);
         Point center = new Point(width/2, height/2);
         locations[0] = center.x - (size/2); // left
         locations[1] = center.y - (size/2); // top
