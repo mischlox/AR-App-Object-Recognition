@@ -129,7 +129,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return success != -1;
     }
 
-    public boolean updateImageBlob(String objectID, Bitmap bitmap) {
+    public void updateImageBlob(String objectID, Bitmap bitmap) {
         SQLiteDatabase db = this.getWritableDatabase();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
@@ -138,9 +138,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(OBJECT_COL5, image);
 
-        long success = db.update(OBJECT_TABLE_NAME, contentValues, OBJECT_COL1+"=?", new String[]{objectID});
+        db.update(OBJECT_TABLE_NAME, contentValues, OBJECT_COL1+"=?", new String[]{objectID});
 
-        return success != -1;
     }
 
     public boolean updateModelPos(String objectName, String modelPos) {
@@ -162,24 +161,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllObjects() {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME;
-        Cursor data = db.rawQuery(query, null);
-        return data;
+        return db.rawQuery(query, null);
     }
 
     public Cursor getObjectByID(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
                 + " WHERE " + OBJECT_COL0 + " = " + id;
-        Cursor data = db.rawQuery(query, null);
-        return data;
+        return db.rawQuery(query, null);
     }
 
-    public Cursor getByModelPos(String pos) {
+    public Cursor getObjectByModelPos(String pos) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
                 + " WHERE " + OBJECT_COL6 + " = " + pos;
-        Cursor data = db.rawQuery(query, null);
-        return data;
+        return db.rawQuery(query, null);
     }
 
     public boolean deletebyId(String id) {
@@ -277,16 +273,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Inserts a new log with the current model and current date and time
      *
-     * @return true if successful, false otherwise
      */
-    private boolean logModel(int modelID) {
+    private void logModel(int modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(MODEL_LOG_COL1, modelID);
 
-        long success = db.insert(MODEL_LOG_TABLE_NAME, null, contentValues);
-
-        return success != -1;
+        db.insert(MODEL_LOG_TABLE_NAME, null, contentValues);
     }
 
 
@@ -376,34 +369,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public String cursorToString(Cursor cursor){
-        String cursorString = "";
+        StringBuilder cursorString = new StringBuilder();
         if (cursor.moveToFirst() ){
             String[] columnNames = cursor.getColumnNames();
             for (String name: columnNames)
-                cursorString += String.format("%s ][ ", name);
-            cursorString += "\n";
+                cursorString.append(String.format("%s ][ ", name));
+            cursorString.append("\n");
             do {
                 for (String name: columnNames) {
                     if(name.equals("object_image") || name.equals("parameters")) {
-                        cursorString += String.format("%s ][ ",
-                                (cursor.getBlob(cursor.getColumnIndex(name)) != null));
+                        cursorString.append(String.format("%s ][ ",
+                                (cursor.getBlob(cursor.getColumnIndex(name)) != null)));
                     }
                     else {
-                        cursorString += String.format("%s ][ ",
-                                cursor.getString(cursor.getColumnIndex(name)));
+                        cursorString.append(String.format("%s ][ ",
+                                cursor.getString(cursor.getColumnIndex(name))));
                     }
                 }
-                cursorString += "\n";
+                cursorString.append("\n");
             } while (cursor.moveToNext());
         }
-        return cursorString;
+        return cursorString.toString();
     }
     /**
      * Check if there are objects in DB
      *
      * @return true if an object exists in table, false otherwise
      */
-    public boolean objectExists() {
+    public boolean objectsExist() {
         return tableExists(OBJECT_TABLE_NAME);
     }
 }
