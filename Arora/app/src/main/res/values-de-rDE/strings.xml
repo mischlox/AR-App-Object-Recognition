@@ -53,5 +53,6 @@
     <string name="toast_restart_app">Bitte starten Sie die App neu, damit die Änderungen angewendet werden können</string>
     <string name="obj_view_no_saved">Noch keine Objekte für das derzeitige Model eingespeichert!</string>
     <string name="settings_resolution_current">Derzeitige Auflösung: </string>
-    <string name="settings_language">Sprache</string>
+    <string name="dialog_please_set_name">Bitte gebe den Namen des Objekts an!</string>
+    <string name="dialog_inserted_successfully">Objekt erfolgreich gespeichert!</string>
 </resources>

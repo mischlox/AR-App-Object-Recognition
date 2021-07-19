@@ -39,7 +39,7 @@ import java.util.concurrent.Future;
  * <p>This wrapper allows to run training continuously, using start/stop API, in contrast to
  * run-once API of TransferLearningModel.
  *
- * This code is taken from:
+ * This code is based on:
  * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/
  */
 public class TransferLearningModelWrapper {
@@ -63,9 +63,11 @@ public class TransferLearningModelWrapper {
                 classes);
         Log.d(TAG, "TransferLearningModelWrapper: backup: create model");
 
-        if(databaseHelper.modelExists()) {
+        if(databaseHelper.modelsExists()) {
+            Log.d(TAG, "TransferLearningModelWrapper: Load existing Model");
             loadModel();
-        }
+        } else Log.d(TAG, "TransferLearningModelWrapper: Models do not exist!");
+
         new Thread(() -> {
             while (!Thread.interrupted()) {
                 shouldTrain.block();
@@ -74,7 +76,7 @@ public class TransferLearningModelWrapper {
                 } catch (ExecutionException e) {
                     throw new RuntimeException("Exception occurred during model training", e.getCause());
                 } catch (InterruptedException e) {
-                    // no-op
+                    Log.e(TAG, "TransferLearningModelWrapper: Thread was interruped! trying to restart", e.getCause());
                 }
             }
         }).start();
@@ -113,7 +115,7 @@ public class TransferLearningModelWrapper {
     }
 
     /**
-     * Starts one of the methods for loading a model
+     * Calls a method for loading a model
      * @return
      */
     public boolean loadModel() {
@@ -127,7 +129,7 @@ public class TransferLearningModelWrapper {
     }
 
     /**
-     * Starts one of the methods for saving a model
+     * Calls a method for saving the model
      * @return
      */
     private boolean saveModel()  {
@@ -145,6 +147,7 @@ public class TransferLearningModelWrapper {
         parametersFilePath = Paths.get(context.getFilesDir().toString() + File.separator + filename);
         Log.d(TAG, "writeParametersToFile: backup1: filepath is " + parametersFilePath.toString());
         parametersFilePath = Files.createFile(parametersFilePath);
+        // save model to DB. If model with specific name already exists: Update the existing one
         if (databaseHelper.insertModel("test", parametersFilePath))
             model.saveParameters(FileChannel.open(parametersFilePath, StandardOpenOption.WRITE));
     }
@@ -168,9 +171,7 @@ public class TransferLearningModelWrapper {
     /** Stores model parameters,
      *  frees all model resources and shuts down all background threads. */
     public void close() {
-        boolean success = false;
-
-        success = saveModel();
+        boolean success = saveModel();
 
         if(success) {
             Log.d(TAG, "close: backup: successfully saved parameters!");
