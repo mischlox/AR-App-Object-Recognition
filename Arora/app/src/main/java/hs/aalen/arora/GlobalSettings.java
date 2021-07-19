@@ -11,4 +11,10 @@ public interface GlobalSettings {
 
     void setHelpShowing(boolean show);
     boolean getHelpShowing();
+
+    void switchAddSamplesTrigger();
+    boolean getAddSamplesTrigger();
+
+    void setCurrentClassName(String newName);
+    String getCurrentClassName();
 }

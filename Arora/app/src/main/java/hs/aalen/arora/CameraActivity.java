@@ -1,20 +1,10 @@
 package hs.aalen.arora;
 
-import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,16 +23,17 @@ import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedList;
+import hs.aalen.arora.dialogues.DialogFactory;
+import hs.aalen.arora.dialogues.DialogType;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 /**
- * Main Activity of Application handles Navigation between all fragments
+ * Main Activity of Application handles Navigation between all fragments and Global Settings
  *
  * @author Michael Schlosser
  */
-public class CameraActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener, GlobalSettings {
+public class CameraActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "CameraActivity";
 
     // Fragments as single instance in order to not recreate them
@@ -51,54 +42,44 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     private final ObjectOverviewFragment objectOverviewFragment = new ObjectOverviewFragment();
     private final ModelOverviewFragment modelOverviewFragment = new ModelOverviewFragment();
     private final HelpFragment helpFragment = new HelpFragment();
-    FloatingActionButton buttonCamera;
+    private FloatingActionButton buttonCamera;
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private BottomNavigationView bottomNavigationView;
     private Fragment selectedFragment = cameraFragment;
 
-    // Add Object Dialog items
-    private AlertDialog.Builder addObjectDialogBuilder;
-    private AlertDialog addObjectDialog;
-    private EditText dialogObjectName;
-    private EditText dialogObjectType;
-    private EditText dialogObjectAdditionalData;
-    private Button cancelDialogButton, startTrainingButton;
-
-    // Help Dialog items
-    private AlertDialog.Builder helpDialogBuilder;
-    private AlertDialog helpDialog;
-    private FloatingActionButton backwardButton;
-    private FloatingActionButton forwardButton;
-    private Button trainingButton;
-    private CheckBox notShowAgainCheckBox;
-    private TextView helpTextView;
-    private ProgressBar helpProgress;
-    private TextView helpProgressText;
-
-    // For Database Access
-    private DatabaseHelper databaseHelper = new DatabaseHelper(this);
-
     // Further configuration
     private int amountSamples = 50;
+    private String className;
 
     private GlobalSettings settings;
-    private SharedPreferences prefs;
 
     SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            Log.d(TAG, "onSharedPreferenceChanged: TEST:");
             if(key.equals(getString(R.string.key_resolution))) {
-                cameraFragment.setFocusBoxRatio(getFocusBoxRatio());
+                cameraFragment.setFocusBoxRatio(settings.getFocusBoxRatio());
             }
             else if(key.equals(getString(R.string.key_nightmode))) {
-                if(getNightMode()) {
+                if(settings.getNightMode()) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 }
                 else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 }
+            }
+            else if(key.equals(getString(R.string.key_seekbar))) {
+                amountSamples = settings.getAmountSamples();
+            }
+            else if(key.equals("addSamplesState")) {
+                if(settings.getAddSamplesTrigger()) {
+                    Log.d(TAG, "onSharedPreferenceChanged: backup Start training");
+                    cameraFragment.addSamples(className, amountSamples);
+                    settings.switchAddSamplesTrigger();
+                }
+            }
+            else if(key.equals("currentClass")) {
+                className = settings.getCurrentClassName();
             }
         }
     };
@@ -107,15 +88,15 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: entrypoint");
         super.onCreate(savedInstanceState);
-        settings = this;
-        prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        settings = new SharedPrefsHelper(this);
+        SharedPrefsHelper prefsHelper = (SharedPrefsHelper) settings;
+        prefsHelper.getPrefs().registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
         setContentView(R.layout.activity_camera);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
-        cameraFragment.setFocusBoxRatio(getFocusBoxRatio());
+        cameraFragment.setFocusBoxRatio(settings.getFocusBoxRatio());
 
         // Bind navigation views
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         navigationView = findViewById(R.id.nav_view);
         bottomNavigationView = findViewById(R.id.bottom_nav_view);
@@ -130,7 +111,6 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
             public void onClick(View v) {
                 // If not in Camera Fragment, go into it
                 if (selectedFragment != cameraFragment) {
-                    applyPreferences();
                     buttonCamera.setImageResource(R.drawable.ic_add);
                     selectedFragment = cameraFragment;
                     setTitle(navigationView.getMenu().findItem(R.id.nav_camera).getTitle());
@@ -142,7 +122,6 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                 }
             }
         });
-        prefs.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
         drawer = findViewById(R.id.drawer_layout);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -214,8 +193,6 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                 break;
         }
 
-        applyPreferences();
-
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (selectedFragment != null) {
             transaction.replace(R.id.navbar_container, selectedFragment);
@@ -225,12 +202,6 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void applyPreferences() {
-        // set amount of samples
-        amountSamples = settings.getAmountSamples();
-        Log.d(TAG, "sharedPrefs: settings amountSamples = " + amountSamples);
     }
 
     /**
@@ -254,191 +225,19 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         }
     }
 
+    /**
+     * Checks if Show Help is enabled in the Shared Preferences
+     * Skips the showing of the Help Dialog if disabled and starts the Add Object Dialog directly
+     */
     public void createDialog() {
+        DialogFactory dialogFactory = new DialogFactory();
         boolean showHelp = settings.getHelpShowing();
 
         if(showHelp) {
-            createHelpDialog();
+            dialogFactory.getDialog(DialogType.HELP).createDialog(this);
         }
         else {
-            createAddObjectDialog();
+            dialogFactory.getDialog(DialogType.ADD_OBJ).createDialog(this);
         }
     }
-
-    public void createHelpDialog() {
-        helpDialogBuilder = new AlertDialog.Builder(this);
-
-        final View helpDialogView = getLayoutInflater().inflate(R.layout.help_popup, null);
-        backwardButton =helpDialogView.findViewById(R.id.help_backward_button);
-        forwardButton = helpDialogView.findViewById(R.id.help_forward_button);
-        trainingButton = helpDialogView.findViewById(R.id.help_training_button);
-        notShowAgainCheckBox = helpDialogView.findViewById(R.id.help_checkbox);
-        helpTextView = helpDialogView.findViewById(R.id.help_dialog_text);
-        helpProgress = helpDialogView.findViewById(R.id.help_progress);
-        helpProgressText = helpDialogView.findViewById(R.id.help_progress_text);
-
-        helpDialogBuilder.setView(helpDialogView);
-        helpDialog = helpDialogBuilder.create();
-        helpDialog.show();
-
-        // Linked list to browse through text views
-        LinkedList<Pair<Integer, String>> textList = new LinkedList<>();
-        textList.add(Pair.create(2,getString(R.string.help_text_tilt_camera)));
-        textList.add(Pair.create(3,getString(R.string.help_text_pause_training)));
-        textList.add(Pair.create(4,getString(R.string.help_text_havefun)));
-
-        notShowAgainCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                settings.setHelpShowing(!isChecked);
-            }
-        });
-
-        forwardButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startTextAnimation(helpTextView, R.anim.anim_fade_out);
-
-                String currentText = helpTextView.getText().toString();
-                int currentProgress = helpProgress.getProgress();
-                Pair<Integer, String> nextItem = textList.removeFirst();
-
-                helpProgress.setProgress(nextItem.first);
-                startTextAnimation(helpTextView, R.anim.anim_fade_in);
-                helpTextView.setText(nextItem.second, TextView.BufferType.SPANNABLE);
-                helpProgressText.setText(nextItem.first.toString() + " / " + helpProgress.getMax());
-
-                textList.addLast(Pair.create(currentProgress, currentText));
-            }
-        });
-
-        backwardButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startTextAnimation(helpTextView, R.anim.anim_fade_out);
-
-                String currentText = helpTextView.getText().toString();
-                int currentProgress = helpProgress.getProgress();
-                Pair<Integer, String> nextItem = textList.removeLast();
-
-                helpProgress.setProgress(nextItem.first);
-                startTextAnimation(helpTextView, R.anim.anim_fade_in);
-                helpTextView.setText(nextItem.second, TextView.BufferType.SPANNABLE);
-                helpProgressText.setText(nextItem.first.toString() + " / " + helpProgress.getMax());
-
-                textList.addFirst(Pair.create(currentProgress, currentText));
-            }
-        });
-
-        trainingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createAddObjectDialog();
-                helpDialog.dismiss();
-            }
-        });
-
-    }
-
-    private void startTextAnimation(TextView textView, int animationResource) {
-        Animation animation = AnimationUtils.loadAnimation(this, animationResource);
-        textView.startAnimation(animation);
-    }
-
-    public void createAddObjectDialog(){
-        addObjectDialogBuilder = new AlertDialog.Builder(this);
-        final View addObjectDialogView = getLayoutInflater().inflate(R.layout.add_object_dialog_popup, null);
-        dialogObjectName = addObjectDialogView.findViewById(R.id.add_dialog_object_name);
-        dialogObjectType = addObjectDialogView.findViewById(R.id.add_dialog_object_type);
-        dialogObjectAdditionalData = addObjectDialogView.findViewById(R.id.add_dialog_object_additional_data);
-        startTrainingButton = addObjectDialogView.findViewById(R.id.add_dialog_start_training);
-        cancelDialogButton = addObjectDialogView.findViewById(R.id.add_dialog_cancel);
-
-        addObjectDialogBuilder.setView(addObjectDialogView);
-        addObjectDialog = addObjectDialogBuilder.create();
-        addObjectDialog.show();
-
-        startTrainingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String objectName = dialogObjectName.getText().toString();
-                String objectType = dialogObjectType.getText().toString();
-                String objectAdditionalData = dialogObjectAdditionalData.getText().toString();
-                if(objectName.length() != 0) {
-
-                    boolean success = addObject(objectName, objectType, objectAdditionalData);
-
-                    if(success) {
-                        Toast.makeText(CameraActivity.this, "Sucessfully inserted object!", Toast.LENGTH_SHORT).show();
-                        // Reset text
-                        String className = dialogObjectName.getText().toString();
-                        dialogObjectName.setText("");
-                        dialogObjectType.setText("");
-                        dialogObjectAdditionalData.setText("");
-                        addObjectDialog.dismiss();
-                        cameraFragment.setFocusBoxRatio(getFocusBoxRatio());
-                        cameraFragment.addSamples(className, amountSamples);
-                    }
-                }
-            }
-        });
-
-        cancelDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addObjectDialog.dismiss();
-            }
-        });
-
-    }
-
-    /**
-     * Add a new object to Database
-     *
-     * @param objectName Name of object
-     * @param objectType Type of object
-     * @param objectAdditionalData Additional data of object
-     * @return true if successful, false otherwise
-     */
-    private boolean addObject(String objectName, String objectType, String objectAdditionalData) {
-        return databaseHelper.insertObject(objectName, objectType, objectAdditionalData);
-    }
-
-    @Override
-    public int getAmountSamples() {
-        return prefs.getInt(getString(R.string.key_seekbar), 50);
-    }
-
-    @Override
-    public boolean getNightMode() {
-        return prefs.getBoolean(getString(R.string.key_nightmode), false);
-    }
-
-    @Override
-    public double getFocusBoxRatio() {
-        switch (prefs.getInt(getString(R.string.key_resolution), 1)) {
-            case 2:
-                return LARGE;
-            case 1:
-                return MEDIUM;
-            case 0:
-                return SMALL;
-        }
-        return MEDIUM;
-    }
-
-    @Override
-    public void setHelpShowing(boolean show) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean("showHelp", show);
-        editor.apply();
-    }
-
-    @Override
-    public boolean getHelpShowing() {
-        return prefs.getBoolean("showHelp", true);
-    }
-
-
-
 }

@@ -8,8 +8,8 @@
             android:title="@string/settings_num_samples"
             android:summary="@string/settings_hint_num_samples"
             android:defaultValue="50"
-            app:min="20"
-            android:max="120"
+            app:min="25"
+            android:max="125"
             app:showSeekBarValue="true" />
         <SeekBarPreference
             android:key="@string/key_resolution"
@@ -27,12 +27,4 @@
             android:summaryOn="@string/nightmode_enabled"
             android:summaryOff="@string/nightmode_disabled"/>
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/settings_language">
-        <DropDownPreference
-            android:key="key_language"
-            android:title="Change Language"
-            android:summary="Change the language of Arora App"/>
-    </PreferenceCategory>
-
 </PreferenceScreen>

@@ -1,3 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="settings_language_entries">
+        <item>Englisch</item>
+        <item>Deutsch</item>
+    </string-array>
+
+    <string-array name="settings_language_entry_values">
+        <item>default</item>
+        <item>de-rDE</item>
+    </string-array>
 </resources>

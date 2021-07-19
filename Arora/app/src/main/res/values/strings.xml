@@ -48,6 +48,8 @@
     <string name="delete">Delete</string>
     <string name="confirm">Confirm</string>
     <string name="edit_dialog_title">Edit Object</string>
+    <string name="dialog_please_set_name">Please specify the name of the object!</string>
+    <string name="dialog_inserted_successfully">Successfully inserted object!</string>
 
     <!-- Help Dialog -->
     <string name="usage">How it works</string>
@@ -81,5 +83,4 @@
     <string name="settings_resolution_large">Large</string>
     <string name="settings_resolution_current">"Current Resolution: "</string>
     <string name="obj_view_no_saved">No objects saved for the current model yet!</string>
-    <string name="settings_language">Language</string>
 </resources>

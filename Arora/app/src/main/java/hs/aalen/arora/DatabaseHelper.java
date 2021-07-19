@@ -137,7 +137,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(OBJECT_COL5, image);
-
         db.update(OBJECT_TABLE_NAME, contentValues, OBJECT_COL1+"=?", new String[]{objectID});
 
     }
@@ -263,8 +262,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(MODEL_COL1, name);
         contentValues.put(MODEL_COL2, path.toString());
-
-        long success = db.insert(MODEL_TABLE_NAME, null, contentValues);
+        long success;
+        if(modelWithNameExists(name)) {
+            success = db.update(MODEL_TABLE_NAME, contentValues, MODEL_COL1+"=?", new String[]{name});
+        }
+        else {
+            success = db.insert(MODEL_TABLE_NAME, null, contentValues);
+        }
         if(success != -1) {
             logModel((int)success);
         }
@@ -272,7 +276,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     /**
      * Inserts a new log with the current model and current date and time
-     *
      */
     private void logModel(int modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -281,35 +284,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.insert(MODEL_LOG_TABLE_NAME, null, contentValues);
     }
-
+    public boolean modelWithNameExists(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = null;
+        String query = "SELECT " + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME + " WHERE " + MODEL_COL1 + "=?";
+        cursor = db.rawQuery(query, new String[]{name});
+        int count = cursor.getCount();
+        cursor.close();
+        return count > 0;
+    }
 
     /**
      * Check if there are models in DB
      *
      * @return true if a model exists in table, false otherwise
      */
-    public boolean modelExists() {
+    public boolean modelsExists() {
         return tableExists(MODEL_TABLE_NAME);
     }
-
-    /**
-     * Inserts model to DB
-     * @param modelName name of model (if available)
-     *
-     * @return true if successful, false otherwise
-     */
-    private boolean insertModel(String modelName) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-
-        if(modelName.equals("")) modelName = "test";
-        contentValues.put(MODEL_COL1, modelName);
-
-        long success = db.insert(MODEL_TABLE_NAME, null, contentValues);
-        Log.d(TAG, "insertModel: save: backup: success: " + (success != 1) );
-        return success != -1;
-    }
-
 
     /**
      * Query for getting model parameters by name

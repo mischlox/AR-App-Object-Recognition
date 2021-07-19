@@ -1,6 +1,6 @@
 package hs.aalen.arora;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,7 +23,6 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -69,6 +68,7 @@ import static android.view.View.VISIBLE;
  */
 public class CameraFragment extends Fragment {
     static final Object sync = new Object();
+    private Context context;
     private static final String TAG = CameraFragment.class.getSimpleName();
     // Front or back camera
     private static final CameraX.LensFacing LENS_FACING = CameraX.LensFacing.BACK;
@@ -406,6 +406,7 @@ public class CameraFragment extends Fragment {
                 Log.d(TAG, "mapObjectsFromDB: pop open pos " + data.getString(6));
                 if (viewModel.getClasses().isEmpty()) {
                     Log.w(TAG, "mapObjectsFromDB: Model is full! Cannot add further data");
+                    Toast.makeText(context, "Model is full! Please create new model to add further objects", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -675,7 +676,7 @@ public class CameraFragment extends Fragment {
 
     /**
      * Add specific amount of Training Data to queue
-     * Also maps a open model position to the object
+     * Also maps an open model position to the object
      *
      * @param classname name of object to train
      * @param amount    amount of input samples for training
@@ -685,7 +686,7 @@ public class CameraFragment extends Fragment {
         Log.d(TAG, "addSamples: current class: " + classname);
         String openPos = getOpenModelPosition();
         if(openPos.equals("")) {
-            Toast.makeText(getContext(), "Model is full!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Model is full!", Toast.LENGTH_SHORT).show();
             return;
         }
         if(databaseHelper.updateModelPos(classname, openPos)) {
@@ -693,7 +694,7 @@ public class CameraFragment extends Fragment {
             addSamplesThread.start();
         }
         else {
-            Toast.makeText(getContext(), "An error occured!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "An error occured!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -707,6 +708,12 @@ public class CameraFragment extends Fragment {
             viewModel.getClasses().remove(0);
         }
         return openPosition;
+    }
+
+    @Override
+    public void onAttach(@NonNull @NotNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     /**

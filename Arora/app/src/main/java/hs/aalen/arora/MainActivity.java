@@ -1,23 +1,17 @@
 package hs.aalen.arora;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import org.jetbrains.annotations.NotNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
@@ -42,9 +36,10 @@ public class MainActivity extends AppCompatActivity {
         else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-        verifyPermissions();
-        Button startButton = findViewById(R.id.startButton);
 
+        verifyPermissions();
+
+        Button startButton = findViewById(R.id.startButton);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
                 DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
                 String param_table = dbHelper.tableToString("model_log_table");
                 String model_table = dbHelper.tableToString("model_table");
-                Log.d(TAG, "TABLE INFO:\n" +  param_table + model_table);
+                String object_table = dbHelper.tableToString("object_table");
+                Log.d(TAG, "TABLE INFO:\n" +  param_table + model_table + object_table);
             }
         });
     }
@@ -81,7 +77,4 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
         }
     }
-
-
-
 }

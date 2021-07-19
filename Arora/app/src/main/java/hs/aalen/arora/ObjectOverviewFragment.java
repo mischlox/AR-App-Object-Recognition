@@ -173,9 +173,12 @@ public class ObjectOverviewFragment extends ListFragment {
             additionalInfo.setText(this.additionalInfo.get(position));
             date.setText(this.createdAt.get(position));
             byte[] imageBitmap = this.image.get(position);
-            assert imageBitmap != null;
-            previewImageView.setImageBitmap(
-                    BitmapFactory.decodeByteArray(imageBitmap, 0, imageBitmap.length));
+            try {
+                previewImageView.setImageBitmap(
+                        BitmapFactory.decodeByteArray(imageBitmap, 0, imageBitmap.length));
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
             return item;
         }
 
