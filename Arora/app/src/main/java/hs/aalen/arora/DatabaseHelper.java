@@ -16,7 +16,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- *  Class that handles object Database queries to add and modify object meta data and model parameters
+ *  Class that handles object Database queries
+ *  to add and modify object meta data and model parameters
  *
  * @author Michael Schlosser
  */
@@ -46,7 +47,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String MODEL_LOG_COL2 = "model_log_timestamp";
 
 
-
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
@@ -72,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createModelTable = "CREATE TABLE " + MODEL_TABLE_NAME + " ("
                 + MODEL_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + MODEL_COL1 + " TEXT NOT NULL, "
-                + MODEL_COL2 + " TEXT NOT NULL) ";
+                + MODEL_COL2 + " TEXT) ";
 
 
         String createObjectTable = "CREATE TABLE " + OBJECT_TABLE_NAME + " ("
@@ -83,7 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + OBJECT_COL4 + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
                 + OBJECT_COL5 + " BLOB, "
                 + OBJECT_COL6 + " TEXT, "
-                + OBJECT_COL7 + " INTEGER, "
+                + OBJECT_COL7 + " INTEGER NOT NULL, "
                 + " FOREIGN KEY("+OBJECT_COL7+") REFERENCES "+ MODEL_TABLE_NAME+"("+MODEL_COL0+"))";
 
         String createModelLogTable = "CREATE TABLE " + MODEL_LOG_TABLE_NAME + " ("
@@ -115,12 +115,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @return true if successful, false otherwise
      */
-    public boolean insertObject(String objectName, String objectType, String objectAdditionalData) {
+    public boolean insertObject(String objectName,
+                                String objectType,
+                                String objectAdditionalData,
+                                String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(OBJECT_COL1, objectName);
         contentValues.put(OBJECT_COL2, objectType);
         contentValues.put(OBJECT_COL3, objectAdditionalData);
+        contentValues.put(OBJECT_COL7, modelID);
 
         Log.d(TAG, "addData: Adding " + objectName + "to " + OBJECT_TABLE_NAME);
 
@@ -137,7 +141,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(OBJECT_COL5, image);
-        db.update(OBJECT_TABLE_NAME, contentValues, OBJECT_COL1+"=?", new String[]{objectID});
+        db.update(OBJECT_TABLE_NAME,
+                contentValues,
+                OBJECT_COL1+"=?",
+                new String[]{objectID});
 
     }
 
@@ -146,7 +153,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(OBJECT_COL6, modelPos);
 
-        long success = db.update(OBJECT_TABLE_NAME, contentValues, OBJECT_COL1+"=?", new String[]{objectName});
+        long success = db.update(OBJECT_TABLE_NAME,
+                contentValues,
+                OBJECT_COL1+"=?",
+                new String[]{objectName});
 
         return success != -1;
     }
@@ -155,11 +165,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Returns all data from Object Table
      *
-     * @return All data from Table
+     * @return All data from table
      */
     public Cursor getAllObjects() {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME;
+        return db.rawQuery(query, null);
+    }
+
+    /**
+     * Return all data from model table
+     *
+     * @return All data from table
+     */
+    public Cursor getAllModels() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + MODEL_TABLE_NAME;
         return db.rawQuery(query, null);
     }
 
@@ -170,10 +191,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, null);
     }
 
+    public String getModelNameByID(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT "  + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME
+                + " WHERE " + MODEL_COL0 + " = " + id;
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()) {
+            String modelName = cursor.getString(0);
+            cursor.close();
+            return modelName;
+        }
+        return null;
+    }
+
+    public Cursor getObjectNamesByModelID(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + OBJECT_COL1 + " FROM " + OBJECT_TABLE_NAME
+                + " WHERE " + OBJECT_COL7 + " = " + id;
+        return db.rawQuery(query, null);
+    }
+
     public Cursor getObjectByModelPos(String pos) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
                 + " WHERE " + OBJECT_COL6 + " = " + pos;
+        return db.rawQuery(query, null);
+    }
+
+    public Cursor getObjectByModelPosAndModelID(String pos, String ID ) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + OBJECT_TABLE_NAME
+                + " WHERE " + OBJECT_COL6 + " = " + pos
+                + " AND " + OBJECT_COL7 + " = " + ID;
         return db.rawQuery(query, null);
     }
 
@@ -193,7 +243,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @return True if successful, false otherwise
      */
-    public boolean editObject(String id, String objectName, String objectType, String objectAdditionalData) {
+    public boolean editObject(String id,
+                              String objectName,
+                              String objectType,
+                              String objectAdditionalData) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(OBJECT_COL1, objectName);
@@ -202,7 +255,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Log.d(TAG, "editData: Editing " + objectName);
 
-        long success = db.update(OBJECT_TABLE_NAME, contentValues, OBJECT_COL0+"=?", new String[]{id});
+        long success = db.update(OBJECT_TABLE_NAME,
+                contentValues,
+                OBJECT_COL0+"=?",
+                new String[]{id});
 
         return success != -1;
     }
@@ -232,7 +288,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    private String getModelPathByID(int id) {
+    public String getModelPathByID(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         String modelPath = null;
         String query = "SELECT " + MODEL_COL2 + " FROM " + MODEL_TABLE_NAME
@@ -249,14 +305,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Inserts a model to DB
+     * Inserts a model to DB. If it already exists the record gets updated with a new path
      *
      * @param name name of the model
      * @param path path of the model parameters binary file
      *
      * @return true if successful, false otherwise
      */
-    public boolean insertModel(String name, Path path) {
+    public boolean insertOrUpdateModel(String name, Path path) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -264,7 +320,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(MODEL_COL2, path.toString());
         long success;
         if(modelWithNameExists(name)) {
-            success = db.update(MODEL_TABLE_NAME, contentValues, MODEL_COL1+"=?", new String[]{name});
+            success = db.update(MODEL_TABLE_NAME,
+                    contentValues,
+                    MODEL_COL1+"=?",
+                    new String[]{name});
         }
         else {
             success = db.insert(MODEL_TABLE_NAME, null, contentValues);
@@ -274,6 +333,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return success != -1;
     }
+
+    /**
+     * Insert a model with name only.
+     * The path should be updated when the application is closed
+     *
+     * @param name of the model
+     * @return true if successful, false otherwise
+     */
+    public boolean insertModel(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MODEL_COL1, name);
+        long success;
+        if(modelWithNameExists(name)) {
+            success = -1;
+        }
+        else {
+            success = db.insert(MODEL_TABLE_NAME, null, contentValues);
+        }
+        return success != -1;
+    }
+
     /**
      * Inserts a new log with the current model and current date and time
      */
@@ -284,11 +366,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.insert(MODEL_LOG_TABLE_NAME, null, contentValues);
     }
+
     public boolean modelWithNameExists(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = null;
-        String query = "SELECT " + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME + " WHERE " + MODEL_COL1 + "=?";
+        String query = "SELECT " + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME
+                + " WHERE " + MODEL_COL1 + "=?";
         cursor = db.rawQuery(query, new String[]{name});
+        int count = cursor.getCount();
+        cursor.close();
+        return count > 0;
+    }
+
+    public boolean modelWithIdExists(String modelID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = null;
+        String query = "SELECT " + MODEL_COL0 + " FROM " + MODEL_TABLE_NAME
+                + " WHERE " + MODEL_COL0 + "=?";
+        cursor = db.rawQuery(query, new String[]{modelID});
+        int count = cursor.getCount();
+        cursor.close();
+        return count > 0;
+    }
+
+    public boolean modelHasPath(String modelID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = null;
+        String query = "SELECT " + MODEL_COL0 + " FROM " + MODEL_TABLE_NAME
+                + " WHERE " + MODEL_COL0 + "=?" + " AND " + MODEL_COL2 + " IS NOT NULL";
+        cursor = db.rawQuery(query, new String[]{modelID});
         int count = cursor.getCount();
         cursor.close();
         return count > 0;
@@ -344,10 +450,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param modelName name of model
      * @return id of model
      */
-    private int getModelIDbyName(String modelName) {
+    public String getModelIdByName(String modelName) {
         Cursor data = selectModel(modelName);
-        if(data.moveToFirst()) return data.getInt(0);
-        else return -1;
+        if(data.moveToFirst()) return data.getString(0);
+        else return "";
     }
 
     public String tableToString(String tableName) {

@@ -55,6 +55,9 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 
+import hs.aalen.arora.dialogues.DialogFactory;
+import hs.aalen.arora.dialogues.DialogType;
+
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
@@ -107,7 +110,7 @@ public class CameraFragment extends Fragment {
     private Bitmap preview = null;
     private String currentClass; // for mapping preview image correctly
 
-    private FocusBoxImage focusBox;
+    private String modelID;
     private double focusBoxRatio;
 
     /**
@@ -388,12 +391,23 @@ public class CameraFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(CameraFragmentViewModel.class);
         databaseHelper = new DatabaseHelper(getActivity());
+        loadNewModel();
+    }
+    public void loadNewModel() {
         mapObjectsFromDB();
         List<String> classList = Arrays.asList("1", "2", "3", "4");
-        transferLearningModel = new TransferLearningModelWrapper(getActivity(), classList);
+        if(modelID == null) {
+            DialogFactory.getDialog(DialogType.ADD_MODEL).createDialog(context);
+        }
+        else {
+            transferLearningModel = new TransferLearningModelWrapper(getActivity(), classList, modelID);
+        }
         this.viewModel.getClasses().addAll(classList);
     }
 
+    /**
+     * Compares saved model positions of saved objects with open positions in current model
+     */
     private void mapObjectsFromDB() {
         if(databaseHelper.objectsExist()) {
             Cursor data = this.databaseHelper.getAllObjects();
@@ -405,8 +419,6 @@ public class CameraFragment extends Fragment {
                 }
                 Log.d(TAG, "mapObjectsFromDB: pop open pos " + data.getString(6));
                 if (viewModel.getClasses().isEmpty()) {
-                    Log.w(TAG, "mapObjectsFromDB: Model is full! Cannot add further data");
-                    Toast.makeText(context, "Model is full! Please create new model to add further objects", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -453,7 +465,7 @@ public class CameraFragment extends Fragment {
         objectPreviewImage = getActivity().findViewById(R.id.object_info_preview_image);
         expandCollapseButton = getActivity().findViewById(R.id.expand_collapse_button);
         // define focusbox
-        focusBox = getActivity().findViewById(R.id.focus_box);
+        FocusBoxImage focusBox = getActivity().findViewById(R.id.focus_box);
         focusBox.setFocusBoxLocation(identifyFocusBoxCorners(this.getResources().getDisplayMetrics().widthPixels,
                 this.getResources().getDisplayMetrics().heightPixels, focusBoxRatio));
 
@@ -800,5 +812,9 @@ public class CameraFragment extends Fragment {
         locations[3] = center.y + (size/2); // bottom
 
         return locations;
+    }
+
+    public void setModelID(String id) {
+        this.modelID = id;
     }
 }

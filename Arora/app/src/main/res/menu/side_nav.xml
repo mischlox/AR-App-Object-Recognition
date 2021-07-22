@@ -14,7 +14,7 @@
                 android:title="@string/object_overview" />
             <item
                 android:id="@+id/nav_model_overview"
-                android:icon="@drawable/ic_save"
+                android:icon="@drawable/ic_model_overview"
                 android:title="@string/model_overview" />
             <item
                 android:id="@+id/nav_settings"

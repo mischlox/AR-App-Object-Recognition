@@ -16,6 +16,8 @@ import hs.aalen.arora.SharedPrefsHelper;
 /**
  * Dialog for Adding an object that will give the opportunity to set values
  * and starts training afterwards
+ *
+ * @author Michael Schlosser
  */
 public class AddObjectDialog implements Dialog {
     private AlertDialog addObjectDialog;
@@ -50,7 +52,7 @@ public class AddObjectDialog implements Dialog {
                 String objectType = dialogObjectType.getText().toString();
                 String objectAdditionalData = dialogObjectAdditionalData.getText().toString();
                 if(objectName.length() != 0) {
-                    boolean success = addObject(objectName, objectType, objectAdditionalData);
+                    boolean success = addObject(objectName, objectType, objectAdditionalData, settings.getCurrentModel());
                     if(success) {
                         Toast.makeText(context, context.getString(R.string.dialog_inserted_successfully), Toast.LENGTH_SHORT).show();
                         // Reset text
@@ -85,7 +87,7 @@ public class AddObjectDialog implements Dialog {
      * @param objectAdditionalData Additional data of object
      * @return true if successful, false otherwise
      */
-    private boolean addObject(String objectName, String objectType, String objectAdditionalData) {
-        return databaseHelper.insertObject(objectName, objectType, objectAdditionalData);
+    private boolean addObject(String objectName, String objectType, String objectAdditionalData, String modelID) {
+        return databaseHelper.insertObject(objectName, objectType, objectAdditionalData, modelID);
     }
 }

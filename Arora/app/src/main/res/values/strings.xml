@@ -37,7 +37,7 @@
     <string name="collapse">Collapse</string>
 
     <!-- Object Dialog -->
-    <string name="dialog_title">Add Information To Object</string>
+    <string name="add_object_dialog_title">Add Information To Object</string>
     <string name="dialog_start_training">Training</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_hint_object_name">Object Name</string>
@@ -82,5 +82,12 @@
     <string name="settings_resolution_medium">Medium</string>
     <string name="settings_resolution_large">Large</string>
     <string name="settings_resolution_current">"Current Resolution: "</string>
-    <string name="obj_view_no_saved">No objects saved for the current model yet!</string>
+    <string name="obj_view_no_saved">No objects saved yet!</string>
+    <string name="obj_view_no_saved_for_model">No objects saved for the current model yet!</string>
+    <string name="model_name" translatable="false">Model Name</string>
+    <string name="model_view_no_saved">No model saved yet!</string>
+    <string name="saved_objects_dialog">Objects of Model</string>
+    <string name="add_model_dialog_title">Add New Model</string>
+    <string name="dialog_hint_model_name">Model Name</string>
+    <string name="dialog_save">Save</string>
 </resources>

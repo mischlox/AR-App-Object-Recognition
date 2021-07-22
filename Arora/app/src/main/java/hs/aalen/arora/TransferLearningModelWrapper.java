@@ -17,6 +17,7 @@ package hs.aalen.arora;
 import android.content.Context;
 import android.os.ConditionVariable;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.tensorflow.lite.examples.transfer.api.AssetModelLoader;
 import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
@@ -32,6 +33,9 @@ import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+
+import hs.aalen.arora.dialogues.DialogFactory;
+import hs.aalen.arora.dialogues.DialogType;
 
 /**
  * App-layer wrapper for TransferLearningModel.
@@ -53,9 +57,11 @@ public class TransferLearningModelWrapper {
     private final DatabaseHelper databaseHelper;
     private Context context;
     Path parametersFilePath;
+    String modelID;
 
-    TransferLearningModelWrapper(Context context, Collection<String> classes) {
+    TransferLearningModelWrapper(Context context, Collection<String> classes, String modelID) {
         this.context = context;
+        this.modelID = modelID;
         databaseHelper = new DatabaseHelper(context);
 
         model = new TransferLearningModel(
@@ -63,10 +69,9 @@ public class TransferLearningModelWrapper {
                 classes);
         Log.d(TAG, "TransferLearningModelWrapper: backup: create model");
 
-        if(databaseHelper.modelsExists()) {
-            Log.d(TAG, "TransferLearningModelWrapper: Load existing Model");
-            loadModel();
-        } else Log.d(TAG, "TransferLearningModelWrapper: Models do not exist!");
+        if(databaseHelper.modelHasPath(modelID)) {
+            loadModel(modelID);
+        }
 
         new Thread(() -> {
             while (!Thread.interrupted()) {
@@ -116,11 +121,11 @@ public class TransferLearningModelWrapper {
 
     /**
      * Calls a method for loading a model
-     * @return
+     * @return true if successfull, false if IO Exception occured
      */
-    public boolean loadModel() {
-        try{
-            readParametersFromFile();
+    public boolean loadModel(String id) {
+        try {
+            readParametersFromFile(id);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -148,7 +153,7 @@ public class TransferLearningModelWrapper {
         Log.d(TAG, "writeParametersToFile: backup1: filepath is " + parametersFilePath.toString());
         parametersFilePath = Files.createFile(parametersFilePath);
         // save model to DB. If model with specific name already exists: Update the existing one
-        if (databaseHelper.insertModel("test", parametersFilePath))
+        if (databaseHelper.insertOrUpdateModel(databaseHelper.getModelNameByID(modelID), parametersFilePath))
             model.saveParameters(FileChannel.open(parametersFilePath, StandardOpenOption.WRITE));
     }
 
@@ -161,11 +166,30 @@ public class TransferLearningModelWrapper {
         return prefix+"-" + UUID.randomUUID() + suffix;
     }
 
+    /**
+     * Loads the latest model
+     *
+     * @throws IOException
+     */
     private void readParametersFromFile() throws IOException {
         Log.d(TAG, "readParametersFromFile: backup: file");
         Path path = databaseHelper.getLatestModelPath();
         Log.d(TAG, "readParametersFromFile: backup1: latest path is: " + path.toString());
-        model.loadParameters(FileChannel.open(databaseHelper.getLatestModelPath(), StandardOpenOption.READ));
+        model.loadParameters(FileChannel.open(path, StandardOpenOption.READ));
+    }
+
+    /**
+     * Loads a model by id that is saved in DB
+     * (Should only call when shared prefs changed)
+     *
+     * @param id of model
+     * @throws IOException
+     */
+    private void readParametersFromFile(String id) throws IOException {
+        Log.d(TAG, "readParametersFromFile: backup: file");
+        Path path = Paths.get(databaseHelper.getModelPathByID(Integer.parseInt(id)));
+        Log.d(TAG, "readParametersFromFile: backup1: latest path is: " + path.toString());
+        model.loadParameters(FileChannel.open(path, StandardOpenOption.READ));
     }
 
     /** Stores model parameters,

@@ -1,5 +1,10 @@
 package hs.aalen.arora;
 
+/**
+ * Interface for all needed methods for global configuration of the application
+ *
+ * @author Michael Schlosser
+ */
 public interface GlobalSettings {
     double SMALL = 0.5;
     double MEDIUM = 0.75;
@@ -17,4 +22,8 @@ public interface GlobalSettings {
 
     void setCurrentClassName(String newName);
     String getCurrentClassName();
+
+    void setCurrentModel(String id);
+    String getCurrentModel();
+
 }

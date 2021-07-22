@@ -68,10 +68,9 @@ public class ObjectOverviewFragment extends ListFragment {
      *
      * @return true if list could be populated with records of DB, false otherwise
      */
-    private boolean populateView() {
+    public boolean populateView() {
         clearArrayLists();
         Cursor data = objectDatabaseHelper.getAllObjects();
-        ArrayList<String> listData = new ArrayList<>();
         while(data.moveToNext()) {
             objectIds.add(data.getString(0));
             objectNames.add(data.getString(1));
@@ -87,9 +86,6 @@ public class ObjectOverviewFragment extends ListFragment {
                                                         objectCreationDates,
                                                         objectPreviewImages);
         objectListView.setAdapter(adapter);
-
-        TextView noInfoText = objectListView.findViewById(R.id.no_objects_info_text);
-
         return !adapter.isEmpty();
     }
 

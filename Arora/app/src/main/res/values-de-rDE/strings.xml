@@ -20,7 +20,7 @@
     <string name="nightmode_disabled">Nachtmodus ist deaktiviert</string>
     <string name="collapse">Ausblenden</string>
     <string name="expand">Mehr Anzeigen</string>
-    <string name="dialog_title">"Füge Daten an "</string>
+    <string name="add_object_dialog_title">"Füge Daten an "</string>
     <string name="dialog_start_training">Training</string>
     <string name="dialog_cancel">Abbrechen</string>
     <string name="dialog_hint_object_name">Objektname</string>
@@ -51,8 +51,14 @@
     <string name="settings_resolution_medium">Mittel</string>
     <string name="settings_resolution_large">Groß</string>
     <string name="toast_restart_app">Bitte starten Sie die App neu, damit die Änderungen angewendet werden können</string>
-    <string name="obj_view_no_saved">Noch keine Objekte für das derzeitige Model eingespeichert!</string>
+    <string name="obj_view_no_saved">Noch keine Objekte gespeichert!</string>
     <string name="settings_resolution_current">Derzeitige Auflösung: </string>
     <string name="dialog_please_set_name">Bitte gebe den Namen des Objekts an!</string>
     <string name="dialog_inserted_successfully">Objekt erfolgreich gespeichert!</string>
+    <string name="model_view_no_saved">Es wurde noch kein Model gespeichert!</string>
+    <string name="saved_objects_dialog">Objekte des Models</string>
+    <string name="add_model_dialog_title">Neues Model hinzufügen</string>
+    <string name="dialog_hint_model_name">Name des Models</string>
+    <string name="dialog_save">Speichern</string>
+    <string name="obj_view_no_saved_for_model">Noch keine Objekte für das derzeitige Model eingespeichert!</string>
 </resources>

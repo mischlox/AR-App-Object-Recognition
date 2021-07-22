@@ -81,6 +81,15 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
             else if(key.equals("currentClass")) {
                 className = settings.getCurrentClassName();
             }
+            else if(key.equals("currentModel")) {
+                cameraFragment.setModelID(settings.getCurrentModel());
+                if(selectedFragment == cameraFragment) {
+                    cameraFragment.loadNewModel();
+                }
+                else if(selectedFragment == modelOverviewFragment) {
+                    modelOverviewFragment.populateView();
+                }
+            }
         }
     };
 
@@ -94,6 +103,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         setContentView(R.layout.activity_camera);
 
         cameraFragment.setFocusBoxRatio(settings.getFocusBoxRatio());
+        cameraFragment.setModelID(settings.getCurrentModel());
 
         // Bind navigation views
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -230,14 +240,13 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
      * Skips the showing of the Help Dialog if disabled and starts the Add Object Dialog directly
      */
     public void createDialog() {
-        DialogFactory dialogFactory = new DialogFactory();
         boolean showHelp = settings.getHelpShowing();
 
         if(showHelp) {
-            dialogFactory.getDialog(DialogType.HELP).createDialog(this);
+            DialogFactory.getDialog(DialogType.HELP).createDialog(this);
         }
         else {
-            dialogFactory.getDialog(DialogType.ADD_OBJ).createDialog(this);
+            DialogFactory.getDialog(DialogType.ADD_OBJ).createDialog(this);
         }
     }
 }

@@ -5,6 +5,11 @@ import android.content.SharedPreferences;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * Helper class with methods for storing and retrieving settings from Shared Preferences
+ *
+ * @author Michael Schlosser
+ */
 public class SharedPrefsHelper implements GlobalSettings {
     Context context;
     SharedPreferences prefs;
@@ -75,5 +80,17 @@ public class SharedPrefsHelper implements GlobalSettings {
     @Override
     public String getCurrentClassName() {
         return prefs.getString("currentClass", "somethings wrong here");
+    }
+
+    @Override
+    public void setCurrentModel(String id) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("currentModel", id);
+        editor.apply();
+    }
+
+    @Override
+    public String getCurrentModel() {
+        return prefs.getString("currentModel", null);
     }
 }
