@@ -133,8 +133,13 @@ public class CameraFragment extends Fragment {
                 // Training Mode
                 if (sampleClass != null) {
                     if(preview == null) {
-                        Log.d(TAG, "addSamples preview: put Image to object " + sampleClass);
-                        preview = scaleAndRotateBitmap(rgbBitmap, rotationDegrees, TransferLearningModelWrapper.IMAGE_SIZE, identifyFocusBoxCorners(rgbBitmap.getWidth(), rgbBitmap.getHeight(), focusBoxRatio));
+                        preview = scaleAndRotateBitmap(rgbBitmap,
+                                                       rotationDegrees,
+                                                       TransferLearningModelWrapper.IMAGE_SIZE,
+                                                       identifyFocusBoxCorners(rgbBitmap.getWidth(),
+                                                                               rgbBitmap.getHeight(),
+                                                                               focusBoxRatio)
+                                                       );
                         databaseHelper.updateImageBlob(currentClass, preview);
                     }
                     try {
@@ -142,6 +147,7 @@ public class CameraFragment extends Fragment {
                     } catch (ExecutionException e) {
                         throw new RuntimeException("Failed to add sample to model", e.getCause());
                     } catch (InterruptedException | NullPointerException e) {
+                        e.printStackTrace();
                     }
                     viewModel.increaseNumSamples(sampleClass);
                     if (numSamplesPerClass > 20) {
@@ -357,8 +363,7 @@ public class CameraFragment extends Fragment {
      */
     private void populateAllViewItems(String pos) {
         Log.d(TAG, "updateView setTextAll: " + pos);
-        Cursor data = this.databaseHelper.getObjectByModelPos(pos);
-        printObjectFromDB(data);
+        Cursor data = this.databaseHelper.getObjectByModelPosAndModelID(pos, modelID);
         if (data.moveToFirst()) {
             Log.d(TAG, "updateView updating ...: ");
             // Object name
@@ -393,16 +398,21 @@ public class CameraFragment extends Fragment {
         databaseHelper = new DatabaseHelper(getActivity());
         loadNewModel();
     }
+
+    /**
+     * Initialize model with open positions and map them to objects in DB
+     */
     public void loadNewModel() {
-        mapObjectsFromDB();
-        List<String> classList = Arrays.asList("1", "2", "3", "4");
+        List<String> positionList = Arrays.asList("1", "2", "3", "4");
+        this.viewModel.getPositions().addAll(positionList);
         if(modelID == null) {
+            // Create new model in Dialog
             DialogFactory.getDialog(DialogType.ADD_MODEL).createDialog(context);
         }
         else {
-            transferLearningModel = new TransferLearningModelWrapper(getActivity(), classList, modelID);
+            mapObjectsFromDB();
+            transferLearningModel = new TransferLearningModelWrapper(getActivity(), positionList, modelID);
         }
-        this.viewModel.getClasses().addAll(classList);
     }
 
     /**
@@ -410,15 +420,16 @@ public class CameraFragment extends Fragment {
      */
     private void mapObjectsFromDB() {
         if(databaseHelper.objectsExist()) {
-            Cursor data = this.databaseHelper.getAllObjects();
+            Cursor data = this.databaseHelper.getAllObjectsByModelID(modelID);
             while (data.moveToNext()) {
                 try {
-                    viewModel.getClasses().remove(data.getString(6));
+                    // Map the object to its belonging position in the model
+                    viewModel.getPositions().remove(data.getString(6));
                 } catch (IllegalStateException e) {
-                    return;
+                    e.printStackTrace();
                 }
-                Log.d(TAG, "mapObjectsFromDB: pop open pos " + data.getString(6));
-                if (viewModel.getClasses().isEmpty()) {
+                // Return if there are no open positions in the model anymore
+                if (viewModel.getPositions().isEmpty()) {
                     return;
                 }
             }
@@ -701,6 +712,7 @@ public class CameraFragment extends Fragment {
             Toast.makeText(context, "Model is full!", Toast.LENGTH_SHORT).show();
             return;
         }
+        // Add the model position finally to the object in the DB
         if(databaseHelper.updateModelPos(classname, openPos)) {
             Thread addSamplesThread = new AddSamplesThread(openPos, amount);
             addSamplesThread.start();
@@ -710,14 +722,20 @@ public class CameraFragment extends Fragment {
         }
     }
 
+    /**
+     * Chooses the first open position of the model
+     *
+     * @return An open Position that the object can set
+     */
     private String getOpenModelPosition() {
         String openPosition = "";
-        if(viewModel.getClasses().isEmpty()) {
+        if(viewModel.getPositions().isEmpty()) {
             Log.w(TAG, "getOpenModelPosition: No Model Position open!");
         }
         else {
-            openPosition = viewModel.getClasses().get(0);
-            viewModel.getClasses().remove(0);
+            // Set the position of the model to the first open position and remove it afterwards
+            openPosition = viewModel.getPositions().get(0);
+            viewModel.getPositions().remove(0);
         }
         return openPosition;
     }
@@ -732,21 +750,21 @@ public class CameraFragment extends Fragment {
      * Background Thread to add Sample Requests
      */
     class AddSamplesThread extends Thread {
-        int amount;
-        String className;
+        int numSamples;
+        String modelPosition;
 
-        AddSamplesThread(String className, int amount) {
-            this.className = className;
-            this.amount = amount;
+        AddSamplesThread(String modelPosition, int numSamples) {
+            this.modelPosition = modelPosition;
+            this.numSamples = numSamples;
         }
 
         @Override
         public void run() {
             viewModel.setCaptureMode(true);
             Log.d(TAG, "addSamples: Capture Mode is enabled!");
-            for (int i = 0; i < amount; i++) {
-                addSampleRequests.add(className);
-                Log.d(TAG, "addSamples: Add sample #" + i + " with name: " + className + "(queue size: " + addSampleRequests.size() + ")");
+            for (int i = 0; i < numSamples; i++) {
+                addSampleRequests.add(modelPosition);
+                Log.d(TAG, "addSamples: Add sample #" + i + " with name: " + modelPosition + "(queue size: " + addSampleRequests.size() + ")");
             }
             viewModel.setNumSamplesMax(addSampleRequests.size());
             viewModel.setCaptureMode(false);
@@ -762,7 +780,7 @@ public class CameraFragment extends Fragment {
      * For debug purposes print the open positions and model positions of objects
      */
     private void printModelMapping() {
-        Log.d(TAG, "(model mapping) printModelMapping: open pos:" + viewModel.getClasses().toString());
+        Log.d(TAG, "(model mapping) printModelMapping: open pos:" + viewModel.getPositions().toString());
         Cursor data = this.databaseHelper.getAllObjects();
         while(data.moveToNext()){
             String name = data.getString(1);
@@ -792,6 +810,10 @@ public class CameraFragment extends Fragment {
         this.focusBoxRatio = focusBoxRatio;
     }
 
+    public void setModelID(String id) {
+        this.modelID = id;
+    }
+
     /**
      * Function that identifies the corners of a square in the center of the display
      *
@@ -812,9 +834,5 @@ public class CameraFragment extends Fragment {
         locations[3] = center.y + (size/2); // bottom
 
         return locations;
-    }
-
-    public void setModelID(String id) {
-        this.modelID = id;
     }
 }

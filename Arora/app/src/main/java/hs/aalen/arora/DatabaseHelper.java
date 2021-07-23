@@ -174,6 +174,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * Returns all data from Object Table that are saved in a specific model
+     *
+     * @return All data from table
+     */
+    public Cursor getAllObjectsByModelID(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + OBJECT_TABLE_NAME
+                + " WHERE " + OBJECT_COL7 + " = " + id;
+        return db.rawQuery(query, null);
+    }
+
+
+    /**
      * Return all data from model table
      *
      * @return All data from table

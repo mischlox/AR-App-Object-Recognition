@@ -51,15 +51,18 @@ public class AddObjectDialog implements Dialog {
                 String objectName = dialogObjectName.getText().toString();
                 String objectType = dialogObjectType.getText().toString();
                 String objectAdditionalData = dialogObjectAdditionalData.getText().toString();
+
                 if(objectName.length() != 0) {
                     boolean success = addObject(objectName, objectType, objectAdditionalData, settings.getCurrentModel());
                     if(success) {
                         Toast.makeText(context, context.getString(R.string.dialog_inserted_successfully), Toast.LENGTH_SHORT).show();
-                        // Reset text
+                        // Save the name of the object to Global Configuration
                         settings.setCurrentClassName(dialogObjectName.getText().toString());
+                        // Reset text
                         dialogObjectName.setText("");
                         dialogObjectType.setText("");
                         dialogObjectAdditionalData.setText("");
+                        // Trigger adding Samples in Camera Fragment and therefore start training
                         settings.switchAddSamplesTrigger();
                         addObjectDialog.dismiss();
                         // TODO Start Timer

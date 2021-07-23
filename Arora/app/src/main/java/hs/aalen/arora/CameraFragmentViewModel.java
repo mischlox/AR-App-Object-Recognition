@@ -1,6 +1,5 @@
 package hs.aalen.arora;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -46,7 +45,7 @@ public class CameraFragmentViewModel extends ViewModel {
     private MutableLiveData<Float> lastLoss = new MutableLiveData<>();
     private MutableLiveData<Boolean> inferenceSnackbarWasDisplayed = new MutableLiveData<>(false);
 
-    private ArrayList<String> classes = new ArrayList<>();
+    private ArrayList<String> positions = new ArrayList<>();
 
     private LiveData<String> firstChoice;
     private LiveData<String> secondChoice;
@@ -63,12 +62,8 @@ public class CameraFragmentViewModel extends ViewModel {
         captureMode.postValue(newValue);
     }
 
-    public void removeClass() {
-
-    }
-
-    public ArrayList<String> getClasses() {
-        return classes;
+    public ArrayList<String> getPositions() {
+        return positions;
     }
 
     /**
