@@ -391,17 +391,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return count > 0;
     }
 
-    public boolean modelWithIdExists(String modelID) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = null;
-        String query = "SELECT " + MODEL_COL0 + " FROM " + MODEL_TABLE_NAME
-                + " WHERE " + MODEL_COL0 + "=?";
-        cursor = db.rawQuery(query, new String[]{modelID});
-        int count = cursor.getCount();
-        cursor.close();
-        return count > 0;
-    }
-
     public boolean modelHasPath(String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = null;

@@ -9,4 +9,7 @@
     <color name="black">#1E1E1E</color>
     <color name="transparent_background">#56FFFFFF</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#B71C1C</color>
+    <color name="yellow">#F9A825</color>
+    <color name="green">#558B2F</color>
 </resources>

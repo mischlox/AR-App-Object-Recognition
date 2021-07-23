@@ -34,5 +34,24 @@
             android:src="@drawable/ic_model_overview"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/list_model_progress_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4/10"
+            app:layout_constraintTop_toBottomOf="@id/list_model_name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textSize="12sp"/>
+        <ProgressBar
+            android:id="@+id/list_model_progressbar"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:indeterminateOnly="false"
+            android:progress="4"
+            android:max="10"
+            app:layout_constraintTop_toBottomOf="@id/list_model_progress_text"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

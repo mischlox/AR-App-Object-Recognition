@@ -17,12 +17,14 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
 
@@ -78,6 +80,11 @@ public class ModelOverviewFragment extends ListFragment {
         return view;
     }
 
+    /**
+     * Populate the Object Overview list with the models
+     *
+     * @return true if there are any models that can be populated, false otherwise
+     */
     public boolean populateView() {
         modelNames.clear();
         Cursor data = modelDatabaseHelper.getAllModels();
@@ -91,7 +98,7 @@ public class ModelOverviewFragment extends ListFragment {
     }
 
     /**
-     * Custom Array Adapter in order to make a more fitting list
+     * Custom Array Adapter in order to make a more fitting list for the model overview
      *
      * @author Michael Schlosser
      */
@@ -104,6 +111,9 @@ public class ModelOverviewFragment extends ListFragment {
         private Button cancelButton;
         private ListView objectsListView;
         private ArrayList<String> listItems;
+
+        private ProgressBar numObjectsInModelProgressBar;
+        private TextView numObjectsInModelTextView;
 
         ModelOverviewAdapter(Context c, ArrayList<String> name) {
             super(c, R.layout.model_item, R.id.list_model_name, name);
@@ -118,8 +128,13 @@ public class ModelOverviewFragment extends ListFragment {
                     .getApplicationContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View item = layoutInflater.inflate(R.layout.model_item, parent, false);
+
+            numObjectsInModelProgressBar = item.findViewById(R.id.list_model_progressbar);
+            numObjectsInModelTextView = item.findViewById(R.id.list_model_progress_text);
+            updateProgressBar(position);
             TextView modelNameTextView = item.findViewById(R.id.list_model_name);
             modelNameTextView.setText(this.modelName.get(position));
+
             RadioButton modelSelectorButton = item.findViewById(R.id.list_model_radiobutton);
             modelSelectorButton.setChecked(position == selectedPosition);
             modelSelectorButton.setTag(position);
@@ -145,6 +160,42 @@ public class ModelOverviewFragment extends ListFragment {
             return item;
         }
 
+        public void updateProgressBar(int position) {
+            int maxObjects = settings.getMaxObjects();
+            int numCurrentObjects = modelDatabaseHelper.getAllObjectsByModelID((position+1)+"").getCount();
+            numObjectsInModelProgressBar.setMax(maxObjects);
+            numObjectsInModelProgressBar.setProgress(numCurrentObjects);
+            numObjectsInModelTextView.setText(numCurrentObjects+" / "+ maxObjects);
+            setColor(numCurrentObjects, maxObjects);
+        }
+
+        /**
+         * Changes color of progressbar text if it is full / almost full
+         *
+         * @param numCurrentObjects number of current objects
+         * @param maxObjects maximum of objects that can be saved
+         */
+        private void setColor(int numCurrentObjects, int maxObjects) {
+            float THRES_RED = 1.0f;
+            float THRES_YELLOW = 0.75f;
+
+            float fullRatio = ((float) numCurrentObjects / (float)maxObjects);
+            if(fullRatio >= THRES_RED) {
+                numObjectsInModelTextView.setTextColor(getResources().getColor(R.color.red));
+            }
+            else if(fullRatio < THRES_RED && fullRatio >= THRES_YELLOW) {
+                numObjectsInModelTextView.setTextColor(getResources().getColor(R.color.yellow));
+            }
+            else {
+                numObjectsInModelTextView.setTextColor(getResources().getColor(R.color.green));
+            }
+        }
+
+        /**
+         * Dialog that contains a list with all objects that are saved to the selected model
+         *
+         * @param position selected model
+         */
         private void showObjectsOfModelDialog(int position) {
             // Show all objects dialog items
             AlertDialog.Builder showObjectsDialogBuilder = new AlertDialog.Builder(getActivity());
@@ -173,6 +224,13 @@ public class ModelOverviewFragment extends ListFragment {
             showObjectDialog.show();
         }
 
+        /**
+         * Helper method for populating the object list above
+         *
+         * @param position position of selected model in object overview list
+         *
+         * @return true if there are any objects to be populated, false otherwise
+         */
         private boolean populateShowObjectsDialogView(int position) {
             listItems.clear();
             Cursor data = modelDatabaseHelper.getObjectNamesByModelID(position + "");

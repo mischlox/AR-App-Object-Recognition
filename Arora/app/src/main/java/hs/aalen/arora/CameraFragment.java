@@ -75,7 +75,6 @@ public class CameraFragment extends Fragment {
     private static final String TAG = CameraFragment.class.getSimpleName();
     // Front or back camera
     private static final CameraX.LensFacing LENS_FACING = CameraX.LensFacing.BACK;
-    private static final int LOWER_BYTE_MASK = 0xFF;
     // Amount of classes
     private static final int NUM_TFL_CLASSES = 4;
     /**
@@ -112,6 +111,7 @@ public class CameraFragment extends Fragment {
 
     private String modelID;
     private double focusBoxRatio;
+    private ArrayList<String> positionsList;
 
     /**
      * Analyzer is responsible for processing camera input
@@ -123,17 +123,17 @@ public class CameraFragment extends Fragment {
                 // Preprocess camera images all the time, because it is needed by inference and by training
                 Bitmap rgbBitmap;
                 try {
-                    rgbBitmap = yuvCameraImageToBitmap(imageProxy);
+                    rgbBitmap = ImageUtils.yuvCameraImageToBitmap(imageProxy);
                 } catch (NullPointerException | IllegalStateException e) {return;}
 
-                float[] rgbImage = prepareCameraImage(rgbBitmap, rotationDegrees, identifyFocusBoxCorners(rgbBitmap.getWidth(), rgbBitmap.getHeight(), focusBoxRatio));
+                float[] rgbImage = ImageUtils.prepareCameraImage(rgbBitmap, rotationDegrees, identifyFocusBoxCorners(rgbBitmap.getWidth(), rgbBitmap.getHeight(), focusBoxRatio));
                 // Get the head of queue
                 String sampleClass = addSampleRequests.poll();
 
                 // Training Mode
                 if (sampleClass != null) {
                     if(preview == null) {
-                        preview = scaleAndRotateBitmap(rgbBitmap,
+                        preview = ImageUtils.scaleAndRotateBitmap(rgbBitmap,
                                                        rotationDegrees,
                                                        TransferLearningModelWrapper.IMAGE_SIZE,
                                                        identifyFocusBoxCorners(rgbBitmap.getWidth(),
@@ -177,137 +177,6 @@ public class CameraFragment extends Fragment {
                     Log.d(TAG, "addSamples: inference: object is: " + viewModel.getFirstChoice().getValue());
                 }
             };
-
-    /**
-     * Takes an ImageProxy object in YUV format
-     * and converts it into a RGB Bitmap
-     *
-     * @param imageProxy the image that will be converted
-     * @return the converted image as a Bitmap
-     */
-    private static Bitmap yuvCameraImageToBitmap(ImageProxy imageProxy) throws NullPointerException {
-        if (imageProxy.getFormat() != ImageFormat.YUV_420_888) {
-            throw new IllegalArgumentException(
-                    "Expected a YUV420 image, but got " + imageProxy.getFormat());
-        }
-
-        ImageProxy.PlaneProxy yPlane = imageProxy.getPlanes()[0];
-        ImageProxy.PlaneProxy uPlane = imageProxy.getPlanes()[1];
-
-        int width = imageProxy.getWidth();
-        int height = imageProxy.getHeight();
-
-        byte[][] yuvBytes = new byte[3][];
-        int[] argbArray = new int[width * height];
-        for (int i = 0; i < imageProxy.getPlanes().length; i++) {
-            final ByteBuffer buffer = imageProxy.getPlanes()[i].getBuffer();
-            yuvBytes[i] = new byte[buffer.capacity()];
-            buffer.get(yuvBytes[i]);
-        }
-
-        ImageUtils.convertYUV420ToARGB8888(
-                yuvBytes[0],
-                yuvBytes[1],
-                yuvBytes[2],
-                width,
-                height,
-                yPlane.getRowStride(),
-                uPlane.getRowStride(),
-                uPlane.getPixelStride(),
-                argbArray);
-
-        return Bitmap.createBitmap(argbArray, width, height, Bitmap.Config.ARGB_8888);
-    }
-
-    /**
-     * Normalizes a camera image to [0 ; 1] and crops it
-     * to the size that is expected by the model
-     *
-     * @param bitmap          The converted image that will be normalized and cropped
-     * @param rotationDegrees Handles landscape/portrait mode with post rotation if necessary
-     * @return the cropped and normalized image
-     */
-    private static float[] prepareCameraImage(Bitmap bitmap, int rotationDegrees, int[] cropLocations) {
-        int modelImageSize = TransferLearningModelWrapper.IMAGE_SIZE;
-        Bitmap rotatedBitmap = scaleAndRotateBitmap(bitmap, rotationDegrees, modelImageSize, cropLocations);
-
-        float[] normalizedRgb = new float[modelImageSize * modelImageSize * 3];
-        int nextIdx = 0;
-        for (int y = 0; y < modelImageSize; y++) {
-            for (int x = 0; x < modelImageSize; x++) {
-                int rgb = rotatedBitmap.getPixel(x, y);
-
-                float r = ((rgb >> 16) & LOWER_BYTE_MASK) * (1 / 255.f);
-                float g = ((rgb >> 8) & LOWER_BYTE_MASK) * (1 / 255.f);
-                float b = (rgb & LOWER_BYTE_MASK) * (1 / 255.f);
-
-                normalizedRgb[nextIdx++] = r;
-                normalizedRgb[nextIdx++] = g;
-                normalizedRgb[nextIdx++] = b;
-            }
-        }
-
-        return normalizedRgb;
-    }
-
-    private static Bitmap scaleAndRotateBitmap(Bitmap bitmap, int rotationDegrees, int modelImageSize, int[] cropLocations) {
-
-        Bitmap paddedBitmap = padToSquare(bitmap, cropLocations);
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(
-                paddedBitmap, modelImageSize, modelImageSize, true);
-
-        Matrix rotationMatrix = new Matrix();
-        rotationMatrix.postRotate(rotationDegrees);
-        return Bitmap.createBitmap(
-                scaledBitmap, 0, 0, modelImageSize, modelImageSize, rotationMatrix, false);
-    }
-
-    /**
-     * Crop image into square format
-     *
-     * @param source image to be cropped
-     * @return cropped image
-     */
-    private static Bitmap padToSquare(Bitmap source, int[] cropLocations) {
-        // Crop the image to center
-        source = Bitmap.createBitmap(source, cropLocations[0], cropLocations[1], cropLocations[2]-cropLocations[0], cropLocations[3]-cropLocations[1]);
-        int width = source.getWidth();
-        int height = source.getHeight();
-        // Make it square
-        int paddingX = width < height ? (height - width) / 2 : 0;
-        int paddingY = height < width ? (width - height) / 2 : 0;
-        Bitmap paddedBitmap = Bitmap.createBitmap(
-                (width + 2 * paddingX), (height + 2 * paddingY), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(paddedBitmap);
-        canvas.drawARGB(0xFF, 0xFF, 0xFF, 0xFF);
-        canvas.drawBitmap(source, paddingX, paddingY, null);
-        return paddedBitmap;
-    }
-
-    /**
-     * Get the display rotation
-     *
-     * @param display android display
-     * @return rotation value
-     */
-    private static Integer getDisplaySurfaceRotation(Display display) {
-        if (display == null) {
-            return null;
-        }
-
-        switch (display.getRotation()) {
-            case Surface.ROTATION_0:
-                return 0;
-            case Surface.ROTATION_90:
-                return 90;
-            case Surface.ROTATION_180:
-                return 180;
-            case Surface.ROTATION_270:
-                return 270;
-            default:
-                return null;
-        }
-    }
 
     /**
      * expand the cardview and show all object info at the top of the fragment
@@ -403,15 +272,14 @@ public class CameraFragment extends Fragment {
      * Initialize model with open positions and map them to objects in DB
      */
     public void loadNewModel() {
-        List<String> positionList = Arrays.asList("1", "2", "3", "4");
-        this.viewModel.getPositions().addAll(positionList);
+        this.viewModel.getPositions().addAll(positionsList);
         if(modelID == null) {
             // Create new model in Dialog
             DialogFactory.getDialog(DialogType.ADD_MODEL).createDialog(context);
         }
         else {
             mapObjectsFromDB();
-            transferLearningModel = new TransferLearningModelWrapper(getActivity(), positionList, modelID);
+            transferLearningModel = new TransferLearningModelWrapper(getActivity(), positionsList, modelID);
         }
     }
 
@@ -567,7 +435,7 @@ public class CameraFragment extends Fragment {
      */
     private void startCamera() {
         // Check if display is in portrait or landscape mode
-        viewFinderRotation = getDisplaySurfaceRotation(viewFinder.getDisplay());
+        viewFinderRotation = ImageUtils.getDisplaySurfaceRotation(viewFinder.getDisplay());
         if (viewFinderRotation == null) {
             viewFinderRotation = 0;
         }
@@ -595,13 +463,13 @@ public class CameraFragment extends Fragment {
 
             viewFinder.setSurfaceTexture(previewOutput.getSurfaceTexture());
 
-            Integer rotation = getDisplaySurfaceRotation(viewFinder.getDisplay());
+            Integer rotation = ImageUtils.getDisplaySurfaceRotation(viewFinder.getDisplay());
             updateTransform(rotation, previewOutput.getTextureSize(), viewFinderDimens);
         });
         viewFinder.addOnLayoutChangeListener((
                 view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             Size newViewFinderDimens = new Size(right - left, bottom - top);
-            Integer rotation = getDisplaySurfaceRotation(viewFinder.getDisplay());
+            Integer rotation = ImageUtils.getDisplaySurfaceRotation(viewFinder.getDisplay());
             updateTransform(rotation, bufferDimens, newViewFinderDimens);
         });
         HandlerThread inferenceThread = new HandlerThread("InferenceThread");
@@ -723,6 +591,28 @@ public class CameraFragment extends Fragment {
     }
 
     /**
+     * Function that identifies the corners of a square in the center of the display
+     *
+     * @param width of Bitmap
+     * @param height of Bitmap
+     * @param ratio crop-factor
+     *
+     * @return the four positions
+     */
+    public int[] identifyFocusBoxCorners(int width, int height, double ratio) {
+        int[] locations = new int[4];
+        // You can only square the smaller side. Otherwise there would occur an OutOfBoundsException
+        int size = (int) ((Math.min(width, height)) * ratio);
+        Point center = new Point(width/2, height/2);
+        locations[0] = center.x - (size/2); // left
+        locations[1] = center.y - (size/2); // top
+        locations[2] = center.x + (size/2); // right
+        locations[3] = center.y + (size/2); // bottom
+
+        return locations;
+    }
+
+    /**
      * Chooses the first open position of the model
      *
      * @return An open Position that the object can set
@@ -776,36 +666,6 @@ public class CameraFragment extends Fragment {
         return viewModel;
     }
 
-    /**
-     * For debug purposes print the open positions and model positions of objects
-     */
-    private void printModelMapping() {
-        Log.d(TAG, "(model mapping) printModelMapping: open pos:" + viewModel.getPositions().toString());
-        Cursor data = this.databaseHelper.getAllObjects();
-        while(data.moveToNext()){
-            String name = data.getString(1);
-            String modelPos = data.getString(6);
-            Log.d(TAG, "(model mapping) printModelMapping: name: " + name + " pos: " + modelPos);
-        }
-    }
-
-    /**
-     * For debug purposes print object information
-     */
-    private void printObjectFromDB(Cursor data) {
-        Log.d(TAG, "updateView printObjectFromDB: <<< OBJECT INFO BEGIN >>>");
-        while(data.moveToNext()) {
-            Log.d(TAG, "updateView printObjectFromDB: id: " + data.getString(0));
-            Log.d(TAG, "updateView printObjectFromDB: name: " + data.getString(1));
-            Log.d(TAG, "updateView printObjectFromDB: type: " + data.getString(2));
-            Log.d(TAG, "updateView printObjectFromDB: additional: " + data.getString(3));
-            Log.d(TAG, "updateView printObjectFromDB: timestamp: " + data.getString(4));
-            Log.d(TAG, "updateView printObjectFromDB: blob: " + (data.getBlob(5) != null));
-            Log.d(TAG, "updateView printObjectFromDB: modelpos: " + data.getString(6));
-        }
-        Log.d(TAG, "updateView printObjectFromDB: <<< OBJECT INFO END >>>");
-    }
-
     public void setFocusBoxRatio(double focusBoxRatio) {
         this.focusBoxRatio = focusBoxRatio;
     }
@@ -814,25 +674,12 @@ public class CameraFragment extends Fragment {
         this.modelID = id;
     }
 
-    /**
-     * Function that identifies the corners of a square in the center of the display
-     *
-     * @param width of Bitmap
-     * @param height of Bitmap
-     * @param ratio crop-factor
-     *
-     * @return the four positions
-     */
-    public int[] identifyFocusBoxCorners(int width, int height, double ratio) {
-        int[] locations = new int[4];
-        // You can only square the smaller side. Otherwise there would occur an OutOfBoundsException
-        int size = (int) ((Math.min(width, height)) * ratio);
-        Point center = new Point(width/2, height/2);
-        locations[0] = center.x - (size/2); // left
-        locations[1] = center.y - (size/2); // top
-        locations[2] = center.x + (size/2); // right
-        locations[3] = center.y + (size/2); // bottom
-
-        return locations;
+    public void setPositionsList(int maxObjects) {
+        ArrayList<String> positionsList = new ArrayList<>();
+        for(int i = 1; i < maxObjects+1; i++) {
+            String pos= i+"";
+            positionsList.add(pos);
+        }
+        this.positionsList = positionsList;
     }
 }

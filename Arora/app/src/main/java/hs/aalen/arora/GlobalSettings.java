@@ -26,4 +26,7 @@ public interface GlobalSettings {
     void setCurrentModel(String id);
     String getCurrentModel();
 
+    void setMaxObjects(int max);
+    int getMaxObjects();
+
 }

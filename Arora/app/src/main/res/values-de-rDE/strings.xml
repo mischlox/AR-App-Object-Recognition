@@ -7,8 +7,8 @@
     <string name="previous">Vorherige</string>
     <string name="actions">Aktionen</string>
     <string name="recognize_objects">Objekterkennung</string>
-    <string name="object_overview">Objektübersicht</string>
-    <string name="model_overview">Statistiken</string>
+    <string name="object_overview">Objekte</string>
+    <string name="model_overview">Models</string>
     <string name="settings">Einstellungen</string>
     <string name="help">Hilfe</string>
     <string name="delete_all_objects">Lösche alle Objekte</string>

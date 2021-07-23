@@ -23,6 +23,8 @@ import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 import hs.aalen.arora.dialogues.DialogFactory;
 import hs.aalen.arora.dialogues.DialogType;
 
@@ -54,6 +56,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
 
     private GlobalSettings settings;
 
+    // Checks if SharedPreferences were changed and delegates calls to its fragments
     SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -83,12 +86,15 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
             }
             else if(key.equals("currentModel")) {
                 cameraFragment.setModelID(settings.getCurrentModel());
-                if(selectedFragment == cameraFragment) {
+                if(cameraFragment.isAdded()) {
                     cameraFragment.loadNewModel();
                 }
-                else if(selectedFragment == modelOverviewFragment) {
+                else if(modelOverviewFragment.isAdded()) {
                     modelOverviewFragment.populateView();
                 }
+            }
+            else if(key.equals("maxObjects")) {
+                cameraFragment.setPositionsList(settings.getMaxObjects());
             }
         }
     };
@@ -102,8 +108,10 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         prefsHelper.getPrefs().registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
         setContentView(R.layout.activity_camera);
 
+        // Configure cameraFragment on startup
         cameraFragment.setFocusBoxRatio(settings.getFocusBoxRatio());
         cameraFragment.setModelID(settings.getCurrentModel());
+        cameraFragment.setPositionsList(settings.getMaxObjects());
 
         // Bind navigation views
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -120,15 +128,15 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void onClick(View v) {
                 // If not in Camera Fragment, go into it
-                if (selectedFragment != cameraFragment) {
+                if (cameraFragment.isAdded()) {
+                    // Start inference/training dialog from here
+                    createDialog();
+                } else {
                     buttonCamera.setImageResource(R.drawable.ic_add);
                     selectedFragment = cameraFragment;
                     setTitle(navigationView.getMenu().findItem(R.id.nav_camera).getTitle());
                     syncNavBars(R.id.nav_camera, R.id.nav_bottom_placeholder);
                     getSupportFragmentManager().beginTransaction().replace(R.id.navbar_container, selectedFragment).commit();
-                } else {
-                    // Start inference/training dialog from here
-                    createDialog();
                 }
             }
         });
