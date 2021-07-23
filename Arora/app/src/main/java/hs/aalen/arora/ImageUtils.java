@@ -28,7 +28,8 @@ import java.nio.ByteBuffer;
 
 /** Utility class for manipulating images.
  *
- * Copy-pasted from TFLite object detection example.
+ * The functions are taken from TFLite object detection example
+ * and sometimes slightly adjusted for this application
  */
 public class ImageUtils {
 

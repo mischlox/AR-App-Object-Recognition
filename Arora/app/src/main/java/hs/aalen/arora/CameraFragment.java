@@ -444,8 +444,7 @@ public class CameraFragment extends Fragment {
         viewFinder.getDisplay().getRealMetrics(metrics);
 
         // Workaround: display metrics will return width and height of display WITH action bar at the top
-        // Therefore I had to subtract the height of Pixels
-        // TODO find a way to do this without hardcoding it
+        // Therefore the height of pixels had to be subtracted
         Rational screenAspectRatio = new Rational(metrics.widthPixels, metrics.heightPixels - 385);
 
         PreviewConfig config = new PreviewConfig.Builder()

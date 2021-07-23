@@ -17,6 +17,11 @@ public class SharedPrefsHelper implements GlobalSettings {
         this.context = context;
         prefs = context.getSharedPreferences("prefs", MODE_PRIVATE);
     }
+
+    public SharedPreferences getPrefs() {
+        return prefs;
+    }
+
     @Override
     public int getAmountSamples() {
         return prefs.getInt(context.getString(R.string.key_seekbar), 50);
@@ -63,10 +68,6 @@ public class SharedPrefsHelper implements GlobalSettings {
     @Override
     public boolean getAddSamplesTrigger() {
         return prefs.getBoolean("addSamplesState", false);
-    }
-
-    public SharedPreferences getPrefs() {
-        return prefs;
     }
 
     @Override
