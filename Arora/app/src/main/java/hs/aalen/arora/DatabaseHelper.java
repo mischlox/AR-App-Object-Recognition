@@ -178,11 +178,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @return All data from table
      */
-    public Cursor getAllObjectsByModelID(String id) {
+    public Cursor getAllObjectsByModelID(String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
-                + " WHERE " + OBJECT_COL7 + " = " + id;
-        return db.rawQuery(query, null);
+                + " WHERE " + OBJECT_COL7 + "=?";
+        return db.rawQuery(query, new String[]{modelID});
     }
 
 
@@ -197,18 +197,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, null);
     }
 
-    public Cursor getObjectByID(String id) {
+    public Cursor getObjectByID(String objectID) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
-                + " WHERE " + OBJECT_COL0 + " = " + id;
-        return db.rawQuery(query, null);
+                + " WHERE " + OBJECT_COL0 + "=?";
+        return db.rawQuery(query, new String[]{objectID});
     }
 
-    public String getModelNameByID(String id) {
+    public String getModelNameByID(String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT "  + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME
-                + " WHERE " + MODEL_COL0 + " = " + id;
-        Cursor cursor = db.rawQuery(query, null);
+                + " WHERE " + MODEL_COL0 + "=?";
+        Cursor cursor = db.rawQuery(query, new String[]{modelID});
 
         if(cursor.moveToFirst()) {
             String modelName = cursor.getString(0);
@@ -218,33 +218,56 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public Cursor getObjectNamesByModelID(String id) {
+    public Cursor getObjectNamesByModelID(String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT " + OBJECT_COL1 + " FROM " + OBJECT_TABLE_NAME
-                + " WHERE " + OBJECT_COL7 + " = " + id;
-        return db.rawQuery(query, null);
+                + " WHERE " + OBJECT_COL7 + "=?";
+        return db.rawQuery(query, new String[]{modelID});
     }
 
     public Cursor getObjectByModelPos(String pos) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
-                + " WHERE " + OBJECT_COL6 + " = " + pos;
-        return db.rawQuery(query, null);
+                + " WHERE " + OBJECT_COL6 + "=?";
+        return db.rawQuery(query, new String[]{pos});
     }
 
-    public Cursor getObjectByModelPosAndModelID(String pos, String ID ) {
+    public Cursor getObjectByModelPosAndModelID(String modelPos, String modelID ) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
-                + " WHERE " + OBJECT_COL6 + " = " + pos
-                + " AND " + OBJECT_COL7 + " = " + ID;
-        return db.rawQuery(query, null);
+                + " WHERE " + OBJECT_COL6 + "=? AND "+ OBJECT_COL7 + "=?";
+        return db.rawQuery(query, new String[]{modelPos, modelID});
     }
 
-    public boolean deletebyId(String id) {
+    public boolean deleteObjectById(String id) {
         Log.d(TAG, "deletebyId: Delete item with ID " + id);
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(OBJECT_TABLE_NAME, OBJECT_COL0+"=?", new String[]{id}) > 0;
     }
+
+    public boolean deleteObjectByModelPosAndModelID(String modelpos, String modelID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(OBJECT_TABLE_NAME, OBJECT_COL6 + "=? AND " + OBJECT_COL7 + "=?", new String[]{modelpos, modelID}) > 0;
+    }
+
+    public boolean deleteObjectByNameAndModelID(String name, String modelID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(OBJECT_TABLE_NAME, OBJECT_COL1+"=? AND "+ OBJECT_COL7 + "=?", new String[]{name, modelID}) > 0;
+    }
+
+    public String getObjectModelPosByNameAndModelID(String name, String modelID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String modelPos="";
+        String query = "SELECT " + OBJECT_COL6 +" FROM " + OBJECT_TABLE_NAME
+                + " WHERE " + OBJECT_COL1 + "=? AND " + OBJECT_COL7 + "=?";
+        Cursor cursor = db.rawQuery(query, new String[]{name, modelID});
+        if(cursor.moveToFirst()) {
+            modelPos = cursor.getString(0);
+        }
+        return modelPos;
+    }
+
+
 
     /**
      * Edit object by ID
@@ -290,7 +313,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
 
         if(cursor.moveToFirst()) {
-            int modelID = cursor.getInt(0);
+            String modelID = cursor.getString(0);
             String modelPath = getModelPathByID(modelID);
             result = Paths.get(modelPath);
         }
@@ -301,12 +324,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public String getModelPathByID(int id) {
+    public String getModelPathByID(String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
         String modelPath = null;
         String query = "SELECT " + MODEL_COL2 + " FROM " + MODEL_TABLE_NAME
-                + " WHERE " + MODEL_COL0 + " = " + id;
-        Cursor cursor = db.rawQuery(query, null);
+                + " WHERE " + MODEL_COL0 + "=?";
+        Cursor cursor = db.rawQuery(query, new String[]{modelID});
         if(cursor.moveToFirst()) {
             modelPath = cursor.getString(0);
         }
@@ -395,7 +418,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = null;
         String query = "SELECT " + MODEL_COL0 + " FROM " + MODEL_TABLE_NAME
-                + " WHERE " + MODEL_COL0 + "=?" + " AND " + MODEL_COL2 + " IS NOT NULL";
+                + " WHERE " + MODEL_COL0 + "=? AND " + MODEL_COL2 + " IS NOT NULL";
         cursor = db.rawQuery(query, new String[]{modelID});
         int count = cursor.getCount();
         cursor.close();
