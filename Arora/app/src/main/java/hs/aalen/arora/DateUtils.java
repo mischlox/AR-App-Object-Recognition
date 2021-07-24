@@ -5,6 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * Utility class for manipulating Date and Time formats
+ *
+ * @author Michael Schlosser
+ */
 public class DateUtils {
     /**
      * Parses the Timestamp from the DB into a better readable format
