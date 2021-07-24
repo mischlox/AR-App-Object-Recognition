@@ -37,6 +37,11 @@ public class AddModelDialog implements Dialog {
 
         addModelDialogBuilder.setView(addModelDialogView);
         addModelDialog = addModelDialogBuilder.create();
+        // Disable cancelButton because at least one model has to exist
+        if(!(databaseHelper.modelsExists())) {
+            addModelDialog.setCanceledOnTouchOutside(false);
+            cancelButton.setEnabled(false);
+        }
         addModelDialog.show();
 
         saveButton.setOnClickListener(new View.OnClickListener() {
