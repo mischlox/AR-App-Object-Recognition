@@ -126,7 +126,7 @@ public class TransferLearningModelWrapper {
 
     /**
      * Calls a method for loading a model
-     * @return true if successfull, false if IO Exception occured
+     * @return true if successful, false if IO Exception occured
      */
     public boolean loadModel(String id) {
         try {
