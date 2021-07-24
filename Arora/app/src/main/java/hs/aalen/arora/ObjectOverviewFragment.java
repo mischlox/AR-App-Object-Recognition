@@ -41,6 +41,7 @@ public class ObjectOverviewFragment extends ListFragment {
     private ArrayList<String> objectTypes = new ArrayList<>();
     private ArrayList<String> objectAdditionalDatas = new ArrayList<>();
     private ArrayList<String> objectCreationDates = new ArrayList<>();
+    private ArrayList<String> objectModelIds = new ArrayList<>();
     private ArrayList<byte[]> objectPreviewImages = new ArrayList<>();
 
     @Override
@@ -78,13 +79,15 @@ public class ObjectOverviewFragment extends ListFragment {
             objectAdditionalDatas.add(data.getString(3));
             objectCreationDates.add(DateUtils.parseDateTime(data.getString(4)));
             objectPreviewImages.add(data.getBlob(5));
+            objectModelIds.add(data.getString(7));
         }
         ListAdapter adapter = new ObjectOverviewAdapter(getActivity().getApplicationContext(),
                                                         objectNames,
                                                         objectTypes,
                                                         objectAdditionalDatas,
                                                         objectCreationDates,
-                                                        objectPreviewImages);
+                                                        objectPreviewImages,
+                                                        objectModelIds);
         objectListView.setAdapter(adapter);
         return !adapter.isEmpty();
     }
@@ -111,6 +114,7 @@ public class ObjectOverviewFragment extends ListFragment {
         ArrayList<String> additionalInfo;
         ArrayList<String> createdAt;
         ArrayList<byte[]> image;
+        ArrayList<String> modelID;
 
         // Edit Object Dialog items
         private AlertDialog.Builder editObjectDialogBuilder;
@@ -126,7 +130,8 @@ public class ObjectOverviewFragment extends ListFragment {
                               ArrayList<String> type,
                               ArrayList<String> additionalInfo,
                               ArrayList<String> createdAt,
-                              ArrayList<byte[]> previewImage) {
+                              ArrayList<byte[]> previewImage,
+                              ArrayList<String> modelID) {
             super(c, R.layout.object_item, R.id.list_object_name, title);
             this.context = c;
             this.title = title;
@@ -134,6 +139,7 @@ public class ObjectOverviewFragment extends ListFragment {
             this.additionalInfo = additionalInfo;
             this.createdAt = createdAt;
             this.image = previewImage;
+            this.modelID = modelID;
         }
 
         @Override
@@ -164,7 +170,10 @@ public class ObjectOverviewFragment extends ListFragment {
             TextView date = item.findViewById(R.id.list_object_date);
 
             previewImageView.setImageResource(R.drawable.method_draw_image_1_);
-            title.setText(this.title.get(position));
+            title.setText(String.format("%s (%s)",
+                                        this.title.get(position),
+                                        objectDatabaseHelper
+                                                .getModelNameByID(this.modelID.get(position))));
             type.setText(this.type.get(position));
             additionalInfo.setText(this.additionalInfo.get(position));
             date.setText(this.createdAt.get(position));

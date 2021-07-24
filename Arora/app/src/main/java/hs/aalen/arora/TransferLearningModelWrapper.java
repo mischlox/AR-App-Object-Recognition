@@ -84,7 +84,6 @@ public class TransferLearningModelWrapper {
                     Log.e(TAG, "TransferLearningModelWrapper: ",e.getCause());
                     GlobalSettings settings = new SharedPrefsHelper(context);
                     settings.switchIllegalStateTrigger();
-
                     e.printStackTrace();
                     return;
                 }
