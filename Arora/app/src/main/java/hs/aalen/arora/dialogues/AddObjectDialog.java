@@ -55,7 +55,6 @@ public class AddObjectDialog implements Dialog {
                 if(objectName.length() != 0) {
                     long success = addObject(objectName, objectType, objectAdditionalData, settings.getCurrentModel());
                     if(success != -1) {
-                        Toast.makeText(context, context.getString(R.string.dialog_inserted_successfully), Toast.LENGTH_SHORT).show();
                         // Save the name of the object to Global Configuration
                         settings.setCurrentModelPos(dialogObjectName.getText().toString());
                         settings.setCurrentObject(objectName);
