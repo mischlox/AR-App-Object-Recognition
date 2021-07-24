@@ -199,12 +199,6 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                 syncNavBars(R.id.nav_help, R.id.nav_bottom_help);
                 selectedFragment = helpFragment;
                 break;
-            case R.id.nav_dark_mode:
-                Toast.makeText(this, "To be implemented: Toggle Dark Mode", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.nav_delete:
-                Toast.makeText(this, "To be implemented: Delete all Objects", Toast.LENGTH_SHORT).show();
-                break;
         }
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

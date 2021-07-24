@@ -9,13 +9,13 @@
                 android:icon="@drawable/ic_eye"
                 android:title="@string/recognize_objects"/>
             <item
-                android:id="@+id/nav_object_overview"
-                android:icon="@drawable/ic_library"
-                android:title="@string/object_overview" />
-            <item
                 android:id="@+id/nav_model_overview"
                 android:icon="@drawable/ic_model_overview"
                 android:title="@string/model_overview" />
+            <item
+                android:id="@+id/nav_object_overview"
+                android:icon="@drawable/ic_library"
+                android:title="@string/object_overview" />
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_gear_wheel"
@@ -25,17 +25,5 @@
                 android:icon="@drawable/ic_help"
                 android:title="@string/help" />
         </group>
-    </item>
-    <item android:title="@string/actions">
-        <menu>
-            <item
-                android:id="@+id/nav_delete"
-                android:icon="@drawable/ic_delete"
-                android:title="@string/delete_all_objects" />
-            <item
-                android:id="@+id/nav_dark_mode"
-                android:icon="@drawable/ic_darkmode"
-                android:title="@string/enable_nightmode" />
-        </menu>
     </item>
 </menu>
