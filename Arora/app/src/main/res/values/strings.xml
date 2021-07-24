@@ -90,4 +90,7 @@
     <string name="add_model_dialog_title">Add New Model</string>
     <string name="dialog_hint_model_name">Model Name</string>
     <string name="dialog_save">Save</string>
+    <string name="add_a_model_that_will_learn_your_objects">Add a model that will learn your objects</string>
+    <string name="please_give_model_name">Please give your model a name!</string>
+    <string name="please_do_not_change_tabs">Please do not change tabs while training!</string>
 </resources>

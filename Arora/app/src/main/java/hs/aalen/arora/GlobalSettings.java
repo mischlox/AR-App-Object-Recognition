@@ -20,11 +20,17 @@ public interface GlobalSettings {
     void switchAddSamplesTrigger();
     boolean getAddSamplesTrigger();
 
-    void setCurrentClassName(String newName);
-    String getCurrentClassName();
+    void switchIllegalStateTrigger();
+    boolean getIllegalStateTrigger();
+
+    void setCurrentModelPos(String newName);
+    String getCurrentModelPos();
 
     void setCurrentModel(String id);
     String getCurrentModel();
+
+    void setCurrentObject(String name);
+    String getCurrentObject();
 
     void setMaxObjects(int max);
     int getMaxObjects();

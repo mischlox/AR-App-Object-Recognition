@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import hs.aalen.arora.DatabaseHelper;
 import hs.aalen.arora.GlobalSettings;
@@ -42,10 +43,16 @@ public class AddModelDialog implements Dialog {
             @Override
             public void onClick(View v) {
                 String modelName = dialogModelName.getText().toString();
-                databaseHelper.insertModel(modelName);
-                settings.setCurrentModel(databaseHelper.getModelIdByName(modelName));
-                dialogModelName.setText("");
-                addModelDialog.dismiss();
+                if(modelName.isEmpty()) {
+                    Toast.makeText(context, context.getString(R.string.please_give_model_name), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    // Insert a model to DB and set it up for Transfer Learning
+                    databaseHelper.insertModel(modelName);
+                    settings.setCurrentModel(databaseHelper.getModelIdByName(modelName));
+                    dialogModelName.setText("");
+                    addModelDialog.dismiss();
+                }
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {

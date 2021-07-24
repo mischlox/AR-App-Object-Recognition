@@ -23,8 +23,6 @@ import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-
 import hs.aalen.arora.dialogues.DialogFactory;
 import hs.aalen.arora.dialogues.DialogType;
 
@@ -81,8 +79,15 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                     settings.switchAddSamplesTrigger();
                 }
             }
+            else if(key.equals("illegalStateTrigger")) {
+                if (settings.getIllegalStateTrigger()) {
+                        cameraFragment.removeObjectFromModel(settings.getCurrentObject(),
+                                                             settings.getCurrentModel(),
+                                                             true);
+                }
+            }
             else if(key.equals("currentClass")) {
-                className = settings.getCurrentClassName();
+                className = settings.getCurrentModelPos();
             }
             else if(key.equals("currentModel")) {
                 cameraFragment.setModelID(settings.getCurrentModel());
@@ -164,15 +169,6 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-        // set Training Status to paused when going to different fragment
-        if (item.getItemId() != R.id.nav_camera && selectedFragment == cameraFragment) {
-            try {
-                Log.d(TAG, "onNavigationItemSelected: set Training State to paused");
-                cameraFragment.getViewModel().setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
         switch (item.getItemId()) {
             case R.id.nav_camera:
                 buttonCamera.setImageResource(R.drawable.ic_add);

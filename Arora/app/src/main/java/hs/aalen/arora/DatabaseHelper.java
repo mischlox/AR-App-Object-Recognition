@@ -40,13 +40,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String OBJECT_COL6 = "model_pos";
     private static final String OBJECT_COL7 = "model_id";
 
-    // Table that logs the last used model
-    private static final String MODEL_LOG_TABLE_NAME = "model_log_table";
-    private static final String MODEL_LOG_COL0 = "model_log_ID";
-    private static final String MODEL_LOG_COL1 = "model_ID";
-    private static final String MODEL_LOG_COL2 = "model_log_timestamp";
-
-
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
@@ -63,7 +56,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + table;
         Cursor data = db.rawQuery(query, null);
         int count = data.getCount();
-        Log.d(TAG, "tableExists: backup: count of " + table + ": " + count);
         data.close();
         return count > 0;
     }
@@ -86,23 +78,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + OBJECT_COL7 + " INTEGER NOT NULL, "
                 + " FOREIGN KEY("+OBJECT_COL7+") REFERENCES "+ MODEL_TABLE_NAME+"("+MODEL_COL0+"))";
 
-        String createModelLogTable = "CREATE TABLE " + MODEL_LOG_TABLE_NAME + " ("
-                + MODEL_LOG_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + MODEL_LOG_COL1 + " INTEGER NOT NULL, "
-                + MODEL_LOG_COL2 + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
-                + " FOREIGN KEY("+MODEL_LOG_COL1+") REFERENCES "+ MODEL_TABLE_NAME+"("+MODEL_COL0+"))";
-
         db.execSQL(createObjectTable);
         db.execSQL(createModelTable);
-        db.execSQL(createModelLogTable);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + MODEL_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + OBJECT_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + MODEL_LOG_TABLE_NAME);
-
         onCreate(db);
     }
 
@@ -115,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @return true if successful, false otherwise
      */
-    public boolean insertObject(String objectName,
+    public long insertObject(String objectName,
                                 String objectType,
                                 String objectAdditionalData,
                                 String modelID) {
@@ -130,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long success = db.insert(OBJECT_TABLE_NAME, null, contentValues);
 
-        return success != -1;
+        return success;
     }
 
     public void updateImageBlob(String objectID, Bitmap bitmap) {
@@ -197,11 +180,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, null);
     }
 
-    public Cursor getObjectByID(String objectID) {
+    public Cursor getObjectByRowID(String rowid) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
-                + " WHERE " + OBJECT_COL0 + "=?";
-        return db.rawQuery(query, new String[]{objectID});
+                + " WHERE rowid=?";
+        return db.rawQuery(query, new String[]{rowid});
     }
 
     public String getModelNameByID(String modelID) {
@@ -299,31 +282,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return success != -1;
     }
 
-    /**
-     * Searches for the model Path with the newest Timestamp
-     *
-     * @return Path of model
-     */
-    public Path getLatestModelPath() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Path result = null;
-        // Get model ID by latest Timestamp
-        String query = "SELECT " + MODEL_LOG_COL1 + " FROM " + MODEL_LOG_TABLE_NAME
-                + " ORDER BY " + MODEL_LOG_COL2 + " DESC LIMIT 1";
-        Cursor cursor = db.rawQuery(query, null);
-
-        if(cursor.moveToFirst()) {
-            String modelID = cursor.getString(0);
-            String modelPath = getModelPathByID(modelID);
-            result = Paths.get(modelPath);
-        }
-        cursor.close();
-        if(result == null) {
-            Log.d(TAG, "getLatestModelPath: backup1: model Path is null!");
-        }
-        return result;
-    }
-
     public String getModelPathByID(String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
         String modelPath = null;
@@ -364,9 +322,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else {
             success = db.insert(MODEL_TABLE_NAME, null, contentValues);
         }
-        if(success != -1) {
-            logModel((int)success);
-        }
         return success != -1;
     }
 
@@ -392,17 +347,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return success != -1;
     }
 
-    /**
-     * Inserts a new log with the current model and current date and time
-     */
-    private void logModel(int modelID) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MODEL_LOG_COL1, modelID);
-
-        db.insert(MODEL_LOG_TABLE_NAME, null, contentValues);
-    }
-
     public boolean modelWithNameExists(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = null;
@@ -416,7 +360,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean modelHasPath(String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = null;
+        Cursor cursor;
         String query = "SELECT " + MODEL_COL0 + " FROM " + MODEL_TABLE_NAME
                 + " WHERE " + MODEL_COL0 + "=? AND " + MODEL_COL2 + " IS NOT NULL";
         cursor = db.rawQuery(query, new String[]{modelID});

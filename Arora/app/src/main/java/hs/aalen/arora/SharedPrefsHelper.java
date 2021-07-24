@@ -71,7 +71,20 @@ public class SharedPrefsHelper implements GlobalSettings {
     }
 
     @Override
-    public void setCurrentClassName(String newName) {
+    public void switchIllegalStateTrigger() {
+        SharedPreferences.Editor editor = prefs.edit();
+        String prefKey = "illegalStateTrigger";
+        editor.putBoolean(prefKey, !prefs.getBoolean(prefKey, false));
+        editor.apply();
+    }
+
+    @Override
+    public boolean getIllegalStateTrigger() {
+        return prefs.getBoolean("illegalStateTrigger", false);
+    }
+
+    @Override
+    public void setCurrentModelPos(String newName) {
         SharedPreferences.Editor editor = prefs.edit();
         String prefKey = "currentClass";
         editor.putString(prefKey, newName);
@@ -79,7 +92,7 @@ public class SharedPrefsHelper implements GlobalSettings {
     }
 
     @Override
-    public String getCurrentClassName() {
+    public String getCurrentModelPos() {
         return prefs.getString("currentClass", "somethings wrong here");
     }
 
@@ -93,6 +106,18 @@ public class SharedPrefsHelper implements GlobalSettings {
     @Override
     public String getCurrentModel() {
         return prefs.getString("currentModel", null);
+    }
+
+    @Override
+    public void setCurrentObject(String name) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("currentObject", name);
+        editor.apply();
+    }
+
+    @Override
+    public String getCurrentObject() {
+        return prefs.getString("currentObject", "");
     }
 
     @Override

@@ -52,10 +52,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
-                String param_table = dbHelper.tableToString("model_log_table");
                 String model_table = dbHelper.tableToString("model_table");
                 String object_table = dbHelper.tableToString("object_table");
-                Log.d(TAG, "TABLE INFO:\n" +  param_table + model_table + object_table);
+                Log.d(TAG, "TABLE INFO:\n" + model_table + object_table);
             }
         });
     }

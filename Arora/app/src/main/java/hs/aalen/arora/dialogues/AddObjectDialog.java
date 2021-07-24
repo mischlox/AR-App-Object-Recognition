@@ -53,11 +53,12 @@ public class AddObjectDialog implements Dialog {
                 String objectAdditionalData = dialogObjectAdditionalData.getText().toString();
 
                 if(objectName.length() != 0) {
-                    boolean success = addObject(objectName, objectType, objectAdditionalData, settings.getCurrentModel());
-                    if(success) {
+                    long success = addObject(objectName, objectType, objectAdditionalData, settings.getCurrentModel());
+                    if(success != -1) {
                         Toast.makeText(context, context.getString(R.string.dialog_inserted_successfully), Toast.LENGTH_SHORT).show();
                         // Save the name of the object to Global Configuration
-                        settings.setCurrentClassName(dialogObjectName.getText().toString());
+                        settings.setCurrentModelPos(dialogObjectName.getText().toString());
+                        settings.setCurrentObject(objectName);
                         // Reset text
                         dialogObjectName.setText("");
                         dialogObjectType.setText("");
@@ -88,9 +89,10 @@ public class AddObjectDialog implements Dialog {
      * @param objectName Name of object
      * @param objectType Type of object
      * @param objectAdditionalData Additional data of object
-     * @return true if successful, false otherwise
+     * @return id of inserted object
      */
-    private boolean addObject(String objectName, String objectType, String objectAdditionalData, String modelID) {
+    private long addObject(String objectName, String objectType, String objectAdditionalData, String modelID) {
+        settings.setCurrentObject(objectName);
         return databaseHelper.insertObject(objectName, objectType, objectAdditionalData, modelID);
     }
 }

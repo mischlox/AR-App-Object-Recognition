@@ -16,6 +16,7 @@ package hs.aalen.arora;
 
 import android.content.Context;
 import android.os.ConditionVariable;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -63,13 +64,12 @@ public class TransferLearningModelWrapper {
         this.context = context;
         this.modelID = modelID;
         databaseHelper = new DatabaseHelper(context);
-
         model = new TransferLearningModel(
                 new AssetModelLoader(context, "model"),
                 classes);
         Log.d(TAG, "TransferLearningModelWrapper: backup: create model");
 
-        if(databaseHelper.modelHasPath(modelID)) {
+        if (databaseHelper.modelHasPath(modelID)) {
             loadModel(modelID);
         }
 
@@ -78,10 +78,15 @@ public class TransferLearningModelWrapper {
                 shouldTrain.block();
                 try {
                     model.train(1, lossConsumer).get();
-                } catch (ExecutionException e) {
+                } catch (ExecutionException | InterruptedException e){
                     throw new RuntimeException("Exception occurred during model training", e.getCause());
-                } catch (InterruptedException e) {
-                    Log.e(TAG, "TransferLearningModelWrapper: Thread was interruped! trying to restart", e.getCause());
+                } catch (IllegalStateException e) {
+                    Log.e(TAG, "TransferLearningModelWrapper: ",e.getCause());
+                    GlobalSettings settings = new SharedPrefsHelper(context);
+                    settings.switchIllegalStateTrigger();
+
+                    e.printStackTrace();
+                    return;
                 }
             }
         }).start();
@@ -167,18 +172,6 @@ public class TransferLearningModelWrapper {
     }
 
     /**
-     * Loads the latest model
-     *
-     * @throws IOException
-     */
-    private void readParametersFromFile() throws IOException {
-        Log.d(TAG, "readParametersFromFile: backup: file");
-        Path path = databaseHelper.getLatestModelPath();
-        Log.d(TAG, "readParametersFromFile: backup1: latest path is: " + path.toString());
-        model.loadParameters(FileChannel.open(path, StandardOpenOption.READ));
-    }
-
-    /**
      * Loads a model by id that is saved in DB
      * (Should only call when shared prefs changed)
      *
@@ -187,7 +180,7 @@ public class TransferLearningModelWrapper {
      */
     private void readParametersFromFile(String id) throws IOException {
         Log.d(TAG, "readParametersFromFile: backup: file");
-        Path path = Paths.get(databaseHelper.getModelPathByID(Integer.parseInt(id)));
+        Path path = Paths.get(databaseHelper.getModelPathByID(id));
         Log.d(TAG, "readParametersFromFile: backup1: latest path is: " + path.toString());
         model.loadParameters(FileChannel.open(path, StandardOpenOption.READ));
     }

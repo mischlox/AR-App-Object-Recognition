@@ -61,4 +61,7 @@
     <string name="dialog_hint_model_name">Name des Models</string>
     <string name="dialog_save">Speichern</string>
     <string name="obj_view_no_saved_for_model">Noch keine Objekte für das derzeitige Model!</string>
+    <string name="add_a_model_that_will_learn_your_objects">Füge ein Model hinzu, welches deine Objekte lernt</string>
+    <string name="please_give_model_name">Bitte gebe dem Model einen Namen!</string>
+    <string name="please_do_not_change_tabs">Bitte wechsle nicht den Tab während des Trainings!</string>
 </resources>

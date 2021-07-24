@@ -151,7 +151,7 @@ public class ObjectOverviewFragment extends ListFragment {
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(objectDatabaseHelper.deletebyId(objectIds.get(position))) {
+                    if(objectDatabaseHelper.deleteObjectById(objectIds.get(position))) {
                         deleteItem(position);
                         notifyDataSetChanged();
                     }
