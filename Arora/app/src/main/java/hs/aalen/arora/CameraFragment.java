@@ -42,9 +42,15 @@ import org.jetbrains.annotations.NotNull;
 import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
@@ -246,7 +252,9 @@ public class CameraFragment extends Fragment {
                 } else if (item == additionalObjectInfoValues) {
                     item.setText(data.getString(3));
                 } else if (item == timestampObjectInfoValues) {
-                    item.setText(data.getString(4));
+                    String dateString = data.getString(4);
+                    item.setText(DateUtils.parseDateTime(dateString));
+
                 }
             }
         }

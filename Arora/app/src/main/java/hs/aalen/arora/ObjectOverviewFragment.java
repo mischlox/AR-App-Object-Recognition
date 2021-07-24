@@ -76,7 +76,7 @@ public class ObjectOverviewFragment extends ListFragment {
             objectNames.add(data.getString(1));
             objectTypes.add(data.getString(2));
             objectAdditionalDatas.add(data.getString(3));
-            objectCreationDates.add(data.getString(4));
+            objectCreationDates.add(DateUtils.parseDateTime(data.getString(4)));
             objectPreviewImages.add(data.getBlob(5));
         }
         ListAdapter adapter = new ObjectOverviewAdapter(getActivity().getApplicationContext(),
