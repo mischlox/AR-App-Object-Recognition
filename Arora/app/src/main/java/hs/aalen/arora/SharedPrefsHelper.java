@@ -48,7 +48,7 @@ public class SharedPrefsHelper implements GlobalSettings {
     @Override
     public void setHelpShowing(boolean show) {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean("showHelp", show);
+        editor.putBoolean(context.getString(R.string.key_show_help), show);
         editor.apply();
     }
 
@@ -60,80 +60,80 @@ public class SharedPrefsHelper implements GlobalSettings {
     @Override
     public void switchAddSamplesTrigger() {
         SharedPreferences.Editor editor = prefs.edit();
-        String prefKey = "addSamplesState";
+        String prefKey = context.getString(R.string.key_add_samples_state);
         editor.putBoolean(prefKey, !prefs.getBoolean(prefKey, false));
         editor.apply();
     }
 
     @Override
     public boolean getAddSamplesTrigger() {
-        return prefs.getBoolean("addSamplesState", false);
+        return prefs.getBoolean(context.getString(R.string.key_add_samples_state), false);
     }
 
     @Override
     public void switchIllegalStateTrigger() {
         SharedPreferences.Editor editor = prefs.edit();
-        String prefKey = "illegalStateTrigger";
+        String prefKey = context.getString(R.string.key_switch_illegal_state_trigger);
         editor.putBoolean(prefKey, !prefs.getBoolean(prefKey, false));
         editor.apply();
     }
 
     @Override
     public boolean getIllegalStateTrigger() {
-        return prefs.getBoolean("illegalStateTrigger", false);
+        return prefs.getBoolean(context.getString(R.string.key_switch_illegal_state_trigger), false);
     }
 
     @Override
     public void setCurrentModelPos(String newName) {
         SharedPreferences.Editor editor = prefs.edit();
-        String prefKey = "currentClass";
+        String prefKey = context.getString(R.string.key_current_model_pos);
         editor.putString(prefKey, newName);
         editor.apply();
     }
 
     @Override
     public String getCurrentModelPos() {
-        return prefs.getString("currentClass", "somethings wrong here");
+        return prefs.getString(context.getString(R.string.key_current_model_pos), "somethings wrong here");
     }
 
     @Override
     public void setCurrentModel(String id) {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("currentModel", id);
+        editor.putString(context.getString(R.string.key_current_model), id);
         editor.apply();
     }
 
     @Override
     public String getCurrentModel() {
-        return prefs.getString("currentModel", null);
+        return prefs.getString(context.getString(R.string.key_current_model), null);
     }
 
     @Override
     public void setCurrentObject(String name) {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("currentObject", name);
+        editor.putString(context.getString(R.string.key_current_object), name);
         editor.apply();
     }
 
     @Override
     public String getCurrentObject() {
-        return prefs.getString("currentObject", "");
+        return prefs.getString(context.getString(R.string.key_current_object), "");
     }
 
     @Override
     public void setMaxObjects(int max) {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("maxObjects", max);
+        editor.putInt(context.getString(R.string.key_max_objects), max);
         editor.apply();
     }
 
     @Override
     public int getMaxObjects() {
-        return prefs.getInt("maxObjects", 4);
+        return prefs.getInt(context.getString(R.string.key_max_objects), 4);
     }
 
     @Override
     public int getCountDown() {
-        return prefs.getInt("key_countdown", 5);
+        return prefs.getInt(context.getString(R.string.key_countdown), 5);
     }
 }

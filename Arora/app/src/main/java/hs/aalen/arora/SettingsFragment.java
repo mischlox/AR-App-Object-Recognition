@@ -61,7 +61,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         amountSamplesPreference = findPreference(getString(R.string.key_seekbar));
-        countDownPreference = findPreference("key_countdown");
+        countDownPreference = findPreference(getString(R.string.key_countdown));
         nightModePreference = findPreference(getString(R.string.key_nightmode));
         resolutionPreference = findPreference(getString(R.string.key_resolution));
         resetAppPreference = findPreference(getString(R.string.key_reset));
@@ -101,7 +101,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             return true;
         }
         else if(countDownPreference.getKey().equals(preference.getKey())) {
-            editor.putInt("key_countdown", (int)newValue);
+            editor.putInt(getString(R.string.key_countdown), (int)newValue);
             editor.apply();
             return true;
         }

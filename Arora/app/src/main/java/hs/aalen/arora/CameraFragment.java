@@ -278,9 +278,11 @@ public class CameraFragment extends Fragment {
             addSampleRequests.clear();
             Toast.makeText(context, R.string.please_do_not_change_tabs, Toast.LENGTH_SHORT).show();
         }
+        if(transferLearningModel != null ) {
+            transferLearningModel.close();
+            transferLearningModel = null;
+        }
         viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
-        transferLearningModel.close();
-        transferLearningModel = null;
     }
 
     /**

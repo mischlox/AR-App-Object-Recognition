@@ -69,13 +69,21 @@
     <string name="settings_training">Training Configuration</string>
     <string name="settings_num_samples">Training Samples</string>
     <string name="settings_hint_num_samples">Amount of samples that are feeded to the model when adding a new object</string>
-    <string name="key_seekbar" translatable="false">seekbar</string>
-    <string name="key_nightmode" translatable="false">key_nightmode</string>
     <string name="training_state_pause_play" translatable="false">training state pause play</string>
     <string name="toast_restart_app">Please restart the app so that the changes can be applied</string>
     <string name="help_text">Tilt the device a little during training so that the object can be viewed from multiple perspectives in order to improve the recognition rate</string>
 
+    <string name="key_seekbar" translatable="false">seekbar</string>
+    <string name="key_nightmode" translatable="false">key_nightmode</string>
     <string name="key_resolution" translatable="false">key_resolution</string>
+    <string name="key_add_samples_state" translatable="false">key_add_samples_state</string>
+    <string name="key_switch_illegal_state_trigger" translatable="false">key_switch_illegal_state_trigger</string>
+    <string name="key_current_model_pos" translatable="false">key_current_pos</string>
+    <string name="key_current_model" translatable="false">key_current_model</string>
+    <string name="key_current_object" translatable="false">key_current_object</string>
+    <string name="key_max_objects" translatable="false">key_max_objects</string>
+    <string name="key_countdown" translatable="false">key_countdown</string>
+
     <string name="settings_resolution">Training Data Resolution</string>
     <string name="settings_resolution_hint">Resolution of the sample images that are added to model training</string>
     <string name="settings_resolution_small">Small</string>
@@ -107,6 +115,8 @@
     <string name="countdown_summary">Count down this period of time before training starts</string>
     <string name="info_title">About ARORA</string>
     <string name="about_arora">About ARORA</string>
+    <string name="key_show_help" translatable="false">key_show_help</string>
+
     <string name="info_text" translatable="false">
         <![CDATA[
         <p>
