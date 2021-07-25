@@ -76,4 +76,5 @@
     <string name="object_exists">Ein Objekt mit diesem Namen existiert bereits. Bitte gebe einen anderen Namen an.</string>
     <string name="countdown_summary">Die angegebene Zeit wird heruntergezählt, bevor das Training beginnt</string>
     <string name="info_title">Über ARORA</string>
+    <string name="about_arora">Über ARORA</string>
 </resources>
