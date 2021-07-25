@@ -74,4 +74,5 @@
     <string name="error_occured">Ein Fehler ist aufgetreten! Bitte starte oder installiere die App neu, um unvorhersehbares Verhalten zu vermeiden.</string>
     <string name="model_exists">Ein Model mit diesem Namen existiert bereits. Bitte gebe einen anderen Namen an.</string>
     <string name="object_exists">Ein Objekt mit diesem Namen existiert bereits. Bitte gebe einen anderen Namen an.</string>
+    <string name="countdown_summary">Die angegebene Zeit wird heruntergezählt, bevor das Training beginnt</string>
 </resources>

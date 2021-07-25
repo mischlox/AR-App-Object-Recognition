@@ -35,4 +35,6 @@ public interface GlobalSettings {
     void setMaxObjects(int max);
     int getMaxObjects();
 
+    int getCountDown();
+
 }

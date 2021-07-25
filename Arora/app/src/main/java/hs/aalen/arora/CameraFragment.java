@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.transition.AutoTransition;
@@ -109,6 +110,9 @@ public class CameraFragment extends Fragment {
     private ArrayList<String> positionsList;
 
     private AddSamplesThread addSamplesThread;
+
+    private TextView countDownTextView;
+    private int countdown;
 
     /**
      * Analyzer is responsible for processing camera input
@@ -378,6 +382,7 @@ public class CameraFragment extends Fragment {
     public void onViewCreated(@NonNull @org.jetbrains.annotations.NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Initialize CardView and including view when the view is created
+        countDownTextView = getActivity().findViewById(R.id.countdown);
         initCardView();
         // define focusbox
         FocusBoxImage focusBox = getActivity().findViewById(R.id.focus_box);
@@ -671,20 +676,43 @@ public class CameraFragment extends Fragment {
         this.context = context;
     }
 
+    public void setCountDown(int countDown) {
+        this.countdown = countDown;
+    }
+
     /**
      * Background Thread to add Sample Requests
      */
     class AddSamplesThread extends Thread {
         int numSamples;
         String modelPosition;
+        CountDownTimer countDownThread;
 
         AddSamplesThread(String modelPosition, int numSamples) {
             this.modelPosition = modelPosition;
             this.numSamples = numSamples;
+
+            countDownThread = new CountDownTimer((countdown*1000), 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    String count = (millisUntilFinished/1000) + "";
+                    countDownTextView.setText(count);
+                }
+
+                @Override
+                public void onFinish() {
+                    countDownTextView.setText("");
+                    addSamples();
+                }
+            };
         }
 
         @Override
         public void run() {
+            countDownThread.start();
+        }
+
+        public void addSamples() {
             viewModel.setCaptureMode(true);
             Log.d(TAG, "addSamples: Capture Mode is enabled!");
             for (int i = 0; i < numSamples; i++) {

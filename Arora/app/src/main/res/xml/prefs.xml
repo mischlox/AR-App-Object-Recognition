@@ -13,6 +13,15 @@
             app:showSeekBarValue="true"
             android:icon="@drawable/ic_num_samples"/>
         <SeekBarPreference
+            android:key="key_countdown"
+            android:title="Training Countdown"
+            android:summary="@string/countdown_summary"
+            android:defaultValue="5"
+            app:min="1"
+            android:max="20"
+            android:icon="@drawable/ic_countdown"
+            app:showSeekBarValue="true"/>
+        <SeekBarPreference
             android:key="@string/key_resolution"
             android:title="@string/settings_resolution"
             android:summary="@string/settings_resolution_hint"
@@ -20,6 +29,7 @@
             app:min="0"
             android:max="2"
             android:icon="@drawable/ic_resolution"/>
+
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/settings_misc">

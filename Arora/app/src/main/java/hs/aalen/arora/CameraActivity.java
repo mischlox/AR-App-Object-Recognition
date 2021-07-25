@@ -103,6 +103,9 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
             else if(key.equals("maxObjects")) {
                 cameraFragment.setPositionsList(settings.getMaxObjects());
             }
+            else if(key.equals("key_countdown")) {
+                cameraFragment.setCountDown(settings.getCountDown());
+            }
         }
     };
 
@@ -119,6 +122,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         cameraFragment.setFocusBoxRatio(settings.getFocusBoxRatio());
         cameraFragment.setModelID(settings.getCurrentModel());
         cameraFragment.setPositionsList(settings.getMaxObjects());
+        cameraFragment.setCountDown(settings.getCountDown());
 
         // Bind navigation views
         Toolbar toolbar = findViewById(R.id.toolbar);

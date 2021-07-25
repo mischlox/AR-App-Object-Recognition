@@ -104,5 +104,5 @@
     <string name="error_occured">An error occurred! Please restart the app to avoid arbitrary behaviour.</string>
     <string name="model_exists">A model with this name already exists. Please specify another name</string>
     <string name="object_exists">An object with this name already exists. Please specify another name</string>
-
+    <string name="countdown_summary">Count down this period of time before training starts</string>
 </resources>

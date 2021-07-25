@@ -34,6 +34,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     SharedPreferences prefs;
     private Preference resetAppPreference;
     private SeekBarPreference amountSamplesPreference;
+    private SeekBarPreference countDownPreference;
     private SwitchPreference nightModePreference;
     private SeekBarPreference resolutionPreference;
     private static final HashMap<Integer, String> resolutionMap= new HashMap<>();
@@ -47,6 +48,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         findPreference(getString(R.string.key_nightmode)).setOnPreferenceChangeListener(this);
         findPreference(getString(R.string.key_resolution)).setOnPreferenceChangeListener(this);
         findPreference(getString(R.string.key_reset)).setOnPreferenceChangeListener(this);
+        findPreference("key_countdown").setOnPreferenceChangeListener(this);
 
         prefs = getContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
@@ -56,21 +58,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
-        Log.d(TAG, "onOptionsItemSelected: settings:");
-        switch (item.getItemId()){
-            
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         amountSamplesPreference = findPreference(getString(R.string.key_seekbar));
+        countDownPreference = findPreference("key_countdown");
         nightModePreference = findPreference(getString(R.string.key_nightmode));
         resolutionPreference = findPreference(getString(R.string.key_resolution));
         resetAppPreference = findPreference(getString(R.string.key_reset));
+
+        assert resetAppPreference != null;
         resetAppPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -79,6 +75,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             }
         });
         amountSamplesPreference.setUpdatesContinuously(true);
+        countDownPreference.setUpdatesContinuously(true);
         resolutionPreference.setUpdatesContinuously(true);
     }
 
@@ -100,7 +97,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             editor.apply();
             resolutionPreference.setSummary(getString(R.string.settings_resolution_hint) + "\n" +
                     getString(R.string.settings_resolution_current) + " " +
-                    resolutionMap.get(newValue));
+                    resolutionMap.get((int)newValue));
+            return true;
+        }
+        else if(countDownPreference.getKey().equals(preference.getKey())) {
+            editor.putInt("key_countdown", (int)newValue);
+            editor.apply();
             return true;
         }
         return false;

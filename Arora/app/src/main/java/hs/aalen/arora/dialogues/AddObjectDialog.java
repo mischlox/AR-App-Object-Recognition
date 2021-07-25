@@ -68,7 +68,6 @@ public class AddObjectDialog implements Dialog {
                         // Trigger adding Samples in Camera Fragment and therefore start training
                         settings.switchAddSamplesTrigger();
                         addObjectDialog.dismiss();
-                        // TODO Start Timer
                     }
                     else {
                         Toast.makeText(context, R.string.object_exists, Toast.LENGTH_SHORT).show();

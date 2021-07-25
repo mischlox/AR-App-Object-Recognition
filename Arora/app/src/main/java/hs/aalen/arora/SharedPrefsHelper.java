@@ -131,4 +131,9 @@ public class SharedPrefsHelper implements GlobalSettings {
     public int getMaxObjects() {
         return prefs.getInt("maxObjects", 4);
     }
+
+    @Override
+    public int getCountDown() {
+        return prefs.getInt("key_countdown", 5);
+    }
 }
