@@ -135,6 +135,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         buttonCamera = findViewById(R.id.nav_bottom_camera_button);
+        buttonCamera.setImageResource(R.drawable.ic_eye);
         buttonCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
