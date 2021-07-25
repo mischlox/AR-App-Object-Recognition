@@ -69,4 +69,7 @@
     <string name="reset_are_you_sure">Bist du sicher, dass du alle Models und Objekte löschen möchtest?</string>
     <string name="reset_not_recoverable">(Nach dem Zurücksetzen sind die Daten nicht wiederherstellbar)</string>
     <string name="dialog_delete">Zurücksetzen</string>
+    <string name="model_is_full">Model ist voll! Bitte erstelle ein neues Model, um weitere Objekte hinzufügen zu können.</string>
+    <string name="success_edit_object">Objekt wurde erfolgreich bearbeitet!</string>
+    <string name="error_occured">Ein Fehler ist aufgetreten! Bitte starte oder installiere die App neu, um unvorhersehbares Verhalten zu vermeiden.</string>
 </resources>

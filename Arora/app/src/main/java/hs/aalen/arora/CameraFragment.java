@@ -611,7 +611,7 @@ public class CameraFragment extends Fragment {
         Log.d(TAG, "addSamples: current class: " + objectName);
         String openPos = getOpenModelPosition();
         if(openPos.equals("")) {
-            Toast.makeText(context, "Model is full!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.model_is_full, Toast.LENGTH_SHORT).show();
             removeObjectFromModel(currentObjectName, modelID, false);
             return;
         }
@@ -621,7 +621,7 @@ public class CameraFragment extends Fragment {
             addSamplesThread.start();
         }
         else {
-            Toast.makeText(context, "An error occured!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.error_occured, Toast.LENGTH_SHORT).show();
         }
     }
 

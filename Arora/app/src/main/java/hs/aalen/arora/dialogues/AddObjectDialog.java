@@ -72,7 +72,7 @@ public class AddObjectDialog implements Dialog {
                     }
                 }
                 else {
-                    Toast.makeText(context, context.getString(R.string.dialog_please_set_name), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.dialog_please_set_name, Toast.LENGTH_LONG).show();
                 }
             }
         });

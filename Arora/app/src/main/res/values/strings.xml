@@ -99,4 +99,7 @@
     <string name="reset_are_you_sure">Are you sure you want to delete all models and objects?</string>
     <string name="reset_not_recoverable">(After reset your data can not be recovered)</string>
     <string name="dialog_delete">Reset</string>
+    <string name="model_is_full">Model is full! Please create a new model to add further objects.</string>
+    <string name="success_edit_object">Successfully edited object!</string>
+    <string name="error_occured">An error occured! Please restart the app to avoid arbitrary behaviour.</string>
 </resources>

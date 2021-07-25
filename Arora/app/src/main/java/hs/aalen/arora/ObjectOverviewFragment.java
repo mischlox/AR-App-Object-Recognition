@@ -248,7 +248,7 @@ public class ObjectOverviewFragment extends ListFragment {
 
                     if(objectDatabaseHelper.editObject(objectIds.get(position), name, type, additional)) {
                         editItem(position, name, type, additional);
-                        Toast.makeText(context, "Successfully edited Object!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.success_edit_object, Toast.LENGTH_SHORT).show();
                         notifyDataSetChanged();
                         editObjectDialog.dismiss();
                     }
