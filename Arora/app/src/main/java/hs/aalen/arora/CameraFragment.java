@@ -167,7 +167,7 @@ public class CameraFragment extends Fragment {
                     TransferLearningModel.Prediction[] predictions = null;
                     try {
                         predictions = transferLearningModel.predict(rgbImage);
-                    } catch (NullPointerException e) {
+                    } catch (NullPointerException | IllegalStateException e) {
                         // do nothing
                     }
                     if (predictions == null) {
