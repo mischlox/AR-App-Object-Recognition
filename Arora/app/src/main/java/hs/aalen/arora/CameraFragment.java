@@ -42,21 +42,17 @@ import org.jetbrains.annotations.NotNull;
 import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 
 import hs.aalen.arora.dialogues.DialogFactory;
 import hs.aalen.arora.dialogues.DialogType;
+import hs.aalen.arora.utils.DateUtils;
+import hs.aalen.arora.utils.ImageUtils;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -70,7 +66,6 @@ import static android.view.View.VISIBLE;
  * @author Michael Schlosser
  */
 public class CameraFragment extends Fragment {
-    static final Object sync = new Object();
     private Context context;
     private static final String TAG = CameraFragment.class.getSimpleName();
     // Front or back camera
@@ -148,7 +143,7 @@ public class CameraFragment extends Fragment {
                         transferLearningModel.addSample(rgbImage, sampleClass).get();
                     } catch (ExecutionException | NullPointerException | IllegalStateException e) {
                         removeObjectFromModel(currentObjectName, modelID, true);
-                        Toast.makeText(context, R.string.please_do_not_change_tabs, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.please_do_not_change_tabs, Toast.LENGTH_LONG).show();
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -222,8 +217,6 @@ public class CameraFragment extends Fragment {
      */
     private void setVisibilityAll(int visibility) {
         for (TextView item : expandableViewList) {
-            Log.d(TAG, "showMore: setVisibilityAll: for " + item.getText());
-
             item.setVisibility(visibility);
         }
     }
@@ -271,11 +264,19 @@ public class CameraFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
         if(addSampleRequests.size() != 0) {
             addSampleRequests.clear();
             Toast.makeText(context, R.string.please_do_not_change_tabs, Toast.LENGTH_SHORT).show();
         }
         viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
+        transferLearningModel.close();
+        transferLearningModel = null;
     }
 
     /**
@@ -313,10 +314,26 @@ public class CameraFragment extends Fragment {
     }
 
     /**
+     * Deletes an object if there went something wrong during adding (e.g. missing model pos)
+     * because they cannot be mapped otherwise
+     */
+    public void removeCorruptObjects() {
+        Cursor data = this.databaseHelper.getAllObjects();
+        while(data.moveToNext()) {
+            String modelPos = data.getString(6);
+            String modelID = data.getString(7);
+            if(modelPos == null || modelID == null) {
+                databaseHelper.deleteObjectById(data.getString(0));
+            }
+        }
+    }
+
+    /**
      * Compares saved model positions of saved objects with open positions in current model
      */
     private void mapObjectsFromDB() {
         if(databaseHelper.objectsExist()) {
+            removeCorruptObjects();
             Cursor data = this.databaseHelper.getAllObjectsByModelID(modelID);
             while (data.moveToNext()) {
                 try {
@@ -361,37 +378,11 @@ public class CameraFragment extends Fragment {
     public void onViewCreated(@NonNull @org.jetbrains.annotations.NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Initialize CardView and including view when the view is created
-        objectName = getActivity().findViewById(R.id.object_name);
-        objectConfidence = getActivity().findViewById(R.id.object_confidence);
-        objectDataCardView = getActivity().findViewById(R.id.object_metadata_cardview);
-        typeObjectInfoColumns = getActivity().findViewById(R.id.type_object_info_columns);
-        typeObjectInfoValues = getActivity().findViewById(R.id.type_object_info_values);
-        additionalObjectInfoColumns = getActivity().findViewById(R.id.additional_object_info_columns);
-        additionalObjectInfoValues = getActivity().findViewById(R.id.additional_object_info_values);
-        timestampObjectInfoColumns = getActivity().findViewById(R.id.timestamp_object_info_columns);
-        timestampObjectInfoValues = getActivity().findViewById(R.id.timestamp_object_info_values);
-        objectPreviewImage = getActivity().findViewById(R.id.object_info_preview_image);
-        expandCollapseButton = getActivity().findViewById(R.id.expand_collapse_button);
+        initCardView();
         // define focusbox
         FocusBoxImage focusBox = getActivity().findViewById(R.id.focus_box);
         focusBox.setFocusBoxLocation(identifyFocusBoxCorners(this.getResources().getDisplayMetrics().widthPixels,
                 this.getResources().getDisplayMetrics().heightPixels, focusBoxRatio));
-
-        List<TextView> itemsCardView = Arrays.asList(typeObjectInfoColumns, typeObjectInfoValues,
-                additionalObjectInfoColumns, additionalObjectInfoValues,
-                timestampObjectInfoColumns, timestampObjectInfoValues);
-        expandableViewList.addAll(itemsCardView);
-
-        expandCollapseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showMore();
-            }
-        });
-
-        trainingProgressBar = getActivity().findViewById(R.id.progressbar_training);
-        trainingProgressBarLabel = getActivity().findViewById(R.id.progressbar_training_text);
-        trainingProgressBarTextView = getActivity().findViewById(R.id.progressbar_textview);
 
         // Enable/Disable training
         viewModel
@@ -441,9 +432,10 @@ public class CameraFragment extends Fragment {
                     float confidencePercent = confidence * 100;
                     DecimalFormat df = new DecimalFormat("##.#");
                     if(databaseHelper.objectsExist())
-                    objectConfidence.setText(df.format(confidencePercent) + " %");
+                        objectConfidence.setText(String.format("%s %%", df.format(confidencePercent)));
                     if(!s.isEmpty()) populateAllViewItems(s);
                 } catch (NullPointerException e) {
+                    // Do nothing
                 }
             }
         };
@@ -452,11 +444,35 @@ public class CameraFragment extends Fragment {
         viewFinder.post(this::startCamera);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        transferLearningModel.close();
-        transferLearningModel = null;
+    private void initCardView() {
+        objectName = getActivity().findViewById(R.id.object_name);
+        objectConfidence = getActivity().findViewById(R.id.object_confidence);
+        objectDataCardView = getActivity().findViewById(R.id.object_metadata_cardview);
+        typeObjectInfoColumns = getActivity().findViewById(R.id.type_object_info_columns);
+        typeObjectInfoValues = getActivity().findViewById(R.id.type_object_info_values);
+        additionalObjectInfoColumns = getActivity().findViewById(R.id.additional_object_info_columns);
+        additionalObjectInfoValues = getActivity().findViewById(R.id.additional_object_info_values);
+        timestampObjectInfoColumns = getActivity().findViewById(R.id.timestamp_object_info_columns);
+        timestampObjectInfoValues = getActivity().findViewById(R.id.timestamp_object_info_values);
+        objectPreviewImage = getActivity().findViewById(R.id.object_info_preview_image);
+        expandCollapseButton = getActivity().findViewById(R.id.expand_collapse_button);
+
+        trainingProgressBar = getActivity().findViewById(R.id.progressbar_training);
+        trainingProgressBarLabel = getActivity().findViewById(R.id.progressbar_training_text);
+        trainingProgressBarTextView = getActivity().findViewById(R.id.progressbar_textview);
+
+        List<TextView> itemsCardView = Arrays.asList(typeObjectInfoColumns, typeObjectInfoValues,
+                additionalObjectInfoColumns, additionalObjectInfoValues,
+                timestampObjectInfoColumns, timestampObjectInfoValues);
+        expandableViewList.addAll(itemsCardView);
+
+        expandCollapseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMore();
+            }
+        });
+
     }
 
     /**
@@ -581,16 +597,6 @@ public class CameraFragment extends Fragment {
     public void onResume() {
         mapObjectsFromDB();
         super.onResume();
-    }
-
-    @Override
-    public void onDestroyView() {
-        Log.d(TAG, "onDestroyView: this");
-        super.onDestroyView();
-    }
-    
-    public ConcurrentLinkedQueue<String> getAddSampleRequests() {
-        return addSampleRequests;
     }
 
     /**

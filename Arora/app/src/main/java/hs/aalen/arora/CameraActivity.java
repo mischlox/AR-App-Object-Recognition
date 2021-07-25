@@ -84,6 +84,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                         cameraFragment.removeObjectFromModel(settings.getCurrentObject(),
                                                              settings.getCurrentModel(),
                                                              true);
+                        settings.switchIllegalStateTrigger();
                     Toast.makeText(CameraActivity.this, R.string.please_do_not_change_tabs, Toast.LENGTH_SHORT).show();
                 }
             }
