@@ -83,7 +83,7 @@ public class ObjectOverviewFragment extends ListFragment {
             objectPreviewImages.add(data.getBlob(5));
             objectModelIds.add(data.getString(7));
         }
-        ListAdapter adapter = new ObjectOverviewAdapter(getActivity().getApplicationContext(),
+        ListAdapter adapter = new ObjectOverviewAdapter(getContext(),
                                                         objectNames,
                                                         objectTypes,
                                                         objectAdditionalDatas,
@@ -146,7 +146,7 @@ public class ObjectOverviewFragment extends ListFragment {
 
         @Override
         public View getView(int position, @Nullable View convertView, ViewGroup parent) {
-            LayoutInflater layoutInflater = (LayoutInflater)getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View item = layoutInflater.inflate(R.layout.object_item, parent, false);
             ImageButton editButton = item.findViewById(R.id.list_edit_button);
             editButton.setOnClickListener(new View.OnClickListener() {

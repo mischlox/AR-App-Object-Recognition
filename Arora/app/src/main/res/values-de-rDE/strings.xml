@@ -72,4 +72,6 @@
     <string name="model_is_full">Model ist voll! Bitte erstelle ein neues Model, um weitere Objekte hinzufügen zu können.</string>
     <string name="success_edit_object">Objekt wurde erfolgreich bearbeitet!</string>
     <string name="error_occured">Ein Fehler ist aufgetreten! Bitte starte oder installiere die App neu, um unvorhersehbares Verhalten zu vermeiden.</string>
+    <string name="model_exists">Ein Model mit diesem Namen existiert bereits. Bitte gebe einen anderen Namen an.</string>
+    <string name="object_exists">Ein Objekt mit diesem Namen existiert bereits. Bitte gebe einen anderen Namen an.</string>
 </resources>

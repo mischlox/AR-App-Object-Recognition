@@ -70,6 +70,9 @@ public class AddObjectDialog implements Dialog {
                         addObjectDialog.dismiss();
                         // TODO Start Timer
                     }
+                    else {
+                        Toast.makeText(context, R.string.object_exists, Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else {
                     Toast.makeText(context, R.string.dialog_please_set_name, Toast.LENGTH_LONG).show();

@@ -92,7 +92,7 @@ public class ModelOverviewFragment extends ListFragment {
         while (data.moveToNext()) {
             modelNames.add(data.getString(1));
         }
-        ListAdapter adapter = new ModelOverviewAdapter(getActivity().getApplicationContext(), modelNames);
+        ListAdapter adapter = new ModelOverviewAdapter(getActivity(), modelNames);
         modelListView.setAdapter(adapter);
         return !adapter.isEmpty();
     }
@@ -125,7 +125,6 @@ public class ModelOverviewFragment extends ListFragment {
         @Override
         public View getView(int position, @Nullable View convertView, ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) getActivity()
-                    .getApplicationContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View item = layoutInflater.inflate(R.layout.model_item, parent, false);
 
@@ -237,7 +236,7 @@ public class ModelOverviewFragment extends ListFragment {
             while (data.moveToNext()) {
                 listItems.add(data.getString(0));
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                     android.R.layout.simple_list_item_1,
                     listItems);
             objectsListView.setAdapter(adapter);

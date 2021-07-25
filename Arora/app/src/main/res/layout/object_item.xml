@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:padding="16dp"
+    style="@style/Theme.Arora.NoActionBar">
     <ImageView
         android:elevation="50dp"
         android:layout_width="120dp"
@@ -41,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="date"
+            android:text=""
             android:textSize="12sp"
             android:textStyle="bold" />
         <TextView

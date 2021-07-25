@@ -63,13 +63,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String createModelTable = "CREATE TABLE " + MODEL_TABLE_NAME + " ("
                 + MODEL_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + MODEL_COL1 + " TEXT NOT NULL, "
+                + MODEL_COL1 + " TEXT UNIQUE NOT NULL, "
                 + MODEL_COL2 + " TEXT) ";
 
 
         String createObjectTable = "CREATE TABLE " + OBJECT_TABLE_NAME + " ("
                 + OBJECT_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + OBJECT_COL1 + " TEXT, "
+                + OBJECT_COL1 + " TEXT UNIQUE NOT NULL, "
                 + OBJECT_COL2 + " TEXT, "
                 + OBJECT_COL3 + " TEXT, "
                 + OBJECT_COL4 + " DATETIME DEFAULT CURRENT_TIMESTAMP, "

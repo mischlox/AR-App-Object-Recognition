@@ -101,5 +101,8 @@
     <string name="dialog_delete">Reset</string>
     <string name="model_is_full">Model is full! Please create a new model to add further objects.</string>
     <string name="success_edit_object">Successfully edited object!</string>
-    <string name="error_occured">An error occured! Please restart the app to avoid arbitrary behaviour.</string>
+    <string name="error_occured">An error occurred! Please restart the app to avoid arbitrary behaviour.</string>
+    <string name="model_exists">A model with this name already exists. Please specify another name</string>
+    <string name="object_exists">An object with this name already exists. Please specify another name</string>
+
 </resources>

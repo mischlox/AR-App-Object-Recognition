@@ -53,10 +53,14 @@ public class AddModelDialog implements Dialog {
                 }
                 else {
                     // Insert a model to DB and set it up for Transfer Learning
-                    databaseHelper.insertModel(modelName);
-                    settings.setCurrentModel(databaseHelper.getModelIdByName(modelName));
-                    dialogModelName.setText("");
-                    addModelDialog.dismiss();
+                    if(databaseHelper.insertModel(modelName)){
+                        settings.setCurrentModel(databaseHelper.getModelIdByName(modelName));
+                        dialogModelName.setText("");
+                        addModelDialog.dismiss();
+                    }
+                    else {
+                        Toast.makeText(context, R.string.model_exists, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
