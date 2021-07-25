@@ -4,5 +4,6 @@ public enum DialogType {
     ADD_OBJ,
     ADD_MODEL,
     HELP,
-    RESET
+    RESET,
+    INFO
 }

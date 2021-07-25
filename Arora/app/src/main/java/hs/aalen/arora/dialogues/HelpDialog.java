@@ -35,10 +35,12 @@ public class HelpDialog implements Dialog{
     public void createDialog(Context context) {
         this.context = context;
         this.settings = new SharedPrefsHelper(context);
-        // Help Dialog items
+
         AlertDialog.Builder helpDialogBuilder = new AlertDialog.Builder(context);
 
-        final View helpDialogView = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.help_popup, null);
+        final View helpDialogView = ((LayoutInflater)context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                .inflate(R.layout.help_popup, null);
         FloatingActionButton backwardButton = helpDialogView.findViewById(R.id.help_backward_button);
         FloatingActionButton forwardButton = helpDialogView.findViewById(R.id.help_forward_button);
         Button trainingButton = helpDialogView.findViewById(R.id.help_training_button);

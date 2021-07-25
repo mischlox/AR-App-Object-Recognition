@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import hs.aalen.arora.dialogues.DialogFactory;
+import hs.aalen.arora.dialogues.DialogType;
+
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 /**
@@ -51,10 +54,11 @@ public class MainActivity extends AppCompatActivity {
         experimentalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
-                String model_table = dbHelper.tableToString("model_table");
-                String object_table = dbHelper.tableToString("object_table");
-                Log.d(TAG, "TABLE INFO:\n" + model_table + object_table);
+//                DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
+//                String model_table = dbHelper.tableToString("model_table");
+//                String object_table = dbHelper.tableToString("object_table");
+//                Log.d(TAG, "TABLE INFO:\n" + model_table + object_table);
+                DialogFactory.getDialog(DialogType.INFO).createDialog(MainActivity.this);
             }
         });
     }
