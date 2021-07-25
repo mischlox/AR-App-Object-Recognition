@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
+import hs.aalen.arora.dialogues.DialogFactory;
+import hs.aalen.arora.dialogues.DialogType;
+
 /**
  * Global settings for the application
  *
@@ -28,6 +32,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     private static final String TAG = SettingsFragment.class.getSimpleName();
 
     SharedPreferences prefs;
+    private Preference resetAppPreference;
     private SeekBarPreference amountSamplesPreference;
     private SwitchPreference nightModePreference;
     private SeekBarPreference resolutionPreference;
@@ -36,10 +41,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         PreferenceManager.setDefaultValues(getContext(), R.xml.prefs, true);
+
         addPreferencesFromResource(R.xml.prefs);
         findPreference(getString(R.string.key_seekbar)).setOnPreferenceChangeListener(this);
         findPreference(getString(R.string.key_nightmode)).setOnPreferenceChangeListener(this);
         findPreference(getString(R.string.key_resolution)).setOnPreferenceChangeListener(this);
+        findPreference(getString(R.string.key_reset)).setOnPreferenceChangeListener(this);
+
         prefs = getContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
         resolutionMap.put(0, getString(R.string.settings_resolution_small));
@@ -62,7 +70,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         amountSamplesPreference = findPreference(getString(R.string.key_seekbar));
         nightModePreference = findPreference(getString(R.string.key_nightmode));
         resolutionPreference = findPreference(getString(R.string.key_resolution));
-
+        resetAppPreference = findPreference(getString(R.string.key_reset));
+        resetAppPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                DialogFactory.getDialog(DialogType.RESET).createDialog(getContext());
+                return true;
+            }
+        });
         amountSamplesPreference.setUpdatesContinuously(true);
         resolutionPreference.setUpdatesContinuously(true);
     }

@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-package hs.aalen.arora;
+package hs.aalen.arora.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -25,6 +25,8 @@ import android.view.Surface;
 import androidx.camera.core.ImageProxy;
 
 import java.nio.ByteBuffer;
+
+import hs.aalen.arora.TransferLearningModelWrapper;
 
 /** Utility class for manipulating images.
  *

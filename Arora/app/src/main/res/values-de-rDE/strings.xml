@@ -12,7 +12,6 @@
     <string name="settings">Einstellungen</string>
     <string name="help">Hilfe</string>
     <string name="delete_all_objects">Lösche alle Objekte</string>
-    <string name="enable_nightmode">Wechsle in Nachtmodus</string>
     <string name="object_name">Objekt</string>
     <string name="preview_image">Vorschaubild</string>
     <string name="nightmode">Nachtmodus</string>
@@ -63,5 +62,11 @@
     <string name="obj_view_no_saved_for_model">Noch keine Objekte für das derzeitige Model!</string>
     <string name="add_a_model_that_will_learn_your_objects">Füge ein Model hinzu, welches deine Objekte lernt</string>
     <string name="please_give_model_name">Bitte gebe dem Model einen Namen!</string>
-    <string name="please_do_not_change_tabs">Bitte wechsle nicht den Tab während des Trainings!</string>
+    <string name="please_do_not_change_tabs">Bitte wechsle nicht den Tab während des Trainings! Das Objekt wird nicht gespeichert.</string>
+    <string name="settings_reset_application">Zurücksetzen</string>
+    <string name="settings_reset_application_summary">Entferne alle Models und Objekte</string>
+    <string name="settings_misc">Sonstiges</string>
+    <string name="reset_are_you_sure">Bist du sicher, dass du alle Models und Objekte löschen möchtest?</string>
+    <string name="reset_not_recoverable">(Nach dem Zurücksetzen sind die Daten nicht wiederherstellbar)</string>
+    <string name="dialog_delete">Zurücksetzen</string>
 </resources>

@@ -33,7 +33,7 @@ public class AddModelDialog implements Dialog {
         final View addModelDialogView = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.add_model_dialog_popup,null);
         dialogModelName = addModelDialogView.findViewById(R.id.add_dialog_model_name);
         Button saveButton = addModelDialogView.findViewById(R.id.add_model_dialog_save);
-        Button cancelButton = addModelDialogView.findViewById(R.id.add_model_dialog_cancel);
+        Button cancelButton = addModelDialogView.findViewById(R.id.reset_app_cancel);
 
         addModelDialogBuilder.setView(addModelDialogView);
         addModelDialog = addModelDialogBuilder.create();

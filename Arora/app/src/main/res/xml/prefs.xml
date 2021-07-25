@@ -10,21 +10,29 @@
             android:defaultValue="50"
             app:min="25"
             android:max="125"
-            app:showSeekBarValue="true" />
+            app:showSeekBarValue="true"
+            android:icon="@drawable/ic_num_samples"/>
         <SeekBarPreference
             android:key="@string/key_resolution"
             android:title="@string/settings_resolution"
             android:summary="@string/settings_resolution_hint"
             android:defaultValue="2"
             app:min="0"
-            android:max="2"/>
+            android:max="2"
+            android:icon="@drawable/ic_resolution"/>
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="@string/enable_nightmode">
+        android:title="@string/settings_misc">
         <SwitchPreference
             android:key="@string/key_nightmode"
             android:title="@string/nightmode"
             android:summaryOn="@string/nightmode_enabled"
-            android:summaryOff="@string/nightmode_disabled"/>
+            android:summaryOff="@string/nightmode_disabled"
+            android:icon="@drawable/ic_darkmode"/>
     </PreferenceCategory>
+        <Preference
+            android:key="@string/key_reset"
+            android:title="Reset Application"
+            android:summary="Delete all models and objects from the application"
+            android:icon="@drawable/ic_delete"/>
 </PreferenceScreen>

@@ -6,6 +6,7 @@ public class DialogFactory {
         if(dialogType == DialogType.HELP) return new HelpDialog();
         if(dialogType == DialogType.ADD_OBJ) return new AddObjectDialog();
         if(dialogType == DialogType.ADD_MODEL) return new AddModelDialog();
+        if(dialogType == DialogType.RESET) return new ResetAppDialog();
         return null;
     }
 }

@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import hs.aalen.arora.utils.DateUtils;
+
 /**
  * Class that contains a list of all saved Objects in the SQLite Database
  *

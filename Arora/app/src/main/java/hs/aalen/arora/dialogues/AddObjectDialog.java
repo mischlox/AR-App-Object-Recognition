@@ -33,7 +33,10 @@ public class AddObjectDialog implements Dialog {
         settings = new SharedPrefsHelper(context);
         // Add Object Dialog items
         AlertDialog.Builder addObjectDialogBuilder = new AlertDialog.Builder(context);
-        final View addObjectDialogView = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.add_object_dialog_popup, null);
+        final View addObjectDialogView = ((LayoutInflater)context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                .inflate(R.layout.add_object_dialog_popup, null);
+
         dialogObjectName = addObjectDialogView.findViewById(R.id.add_dialog_object_name);
         dialogObjectType = addObjectDialogView.findViewById(R.id.add_dialog_object_type);
         dialogObjectAdditionalData = addObjectDialogView.findViewById(R.id.add_dialog_object_additional_data);

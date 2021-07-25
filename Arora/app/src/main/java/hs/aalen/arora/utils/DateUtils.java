@@ -1,4 +1,4 @@
-package hs.aalen.arora;
+package hs.aalen.arora.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

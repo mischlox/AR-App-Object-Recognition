@@ -16,9 +16,7 @@ package hs.aalen.arora;
 
 import android.content.Context;
 import android.os.ConditionVariable;
-import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.tensorflow.lite.examples.transfer.api.AssetModelLoader;
 import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
@@ -34,9 +32,6 @@ import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
-import hs.aalen.arora.dialogues.DialogFactory;
-import hs.aalen.arora.dialogues.DialogType;
 
 /**
  * App-layer wrapper for TransferLearningModel.
@@ -81,9 +76,9 @@ public class TransferLearningModelWrapper {
                 } catch (ExecutionException | InterruptedException e){
                     throw new RuntimeException("Exception occurred during model training", e.getCause());
                 } catch (IllegalStateException e) {
-                    Log.e(TAG, "TransferLearningModelWrapper: ",e.getCause());
-                    GlobalSettings settings = new SharedPrefsHelper(context);
-                    settings.switchIllegalStateTrigger();
+//                    Log.e(TAG, "TransferLearningModelWrapper: ",e.getCause());
+//                    GlobalSettings settings = new SharedPrefsHelper(context);
+//                    settings.switchIllegalStateTrigger();
                     e.printStackTrace();
                     return;
                 }
