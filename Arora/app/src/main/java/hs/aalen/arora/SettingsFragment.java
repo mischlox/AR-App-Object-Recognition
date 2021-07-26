@@ -39,8 +39,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        Log.d("a", "onCreatePreferences: TEST AMK");
         PreferenceManager.setDefaultValues(requireContext(), R.xml.prefs, true);
+        addPreferencesFromResource(R.xml.prefs);
+
         amountSamplesPreference = findPreference(getString(R.string.key_seekbar));
         countDownPreference = findPreference("key_countdown");
         nightModePreference = findPreference(getString(R.string.key_nightmode));
@@ -48,7 +49,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         resetAppPreference = findPreference(getString(R.string.key_reset));
         confidencePreference = findPreference("key_confidence");
 
-        addPreferencesFromResource(R.xml.prefs);
         amountSamplesPreference.setOnPreferenceChangeListener(this);
         nightModePreference.setOnPreferenceChangeListener(this);
         resolutionPreference.setOnPreferenceChangeListener(this);
@@ -67,8 +67,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        Log.d("a", "onViewCreated: TEST AMK");
-
         super.onViewCreated(view, savedInstanceState);
 
         assert resetAppPreference != null;

@@ -145,7 +145,7 @@ public class ObjectOverviewFragment extends ListFragment {
             LayoutInflater layoutInflater = (LayoutInflater) requireActivity()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            if (item == null) item = layoutInflater.inflate(R.layout.object_item, parent, false);
+            item = layoutInflater.inflate(R.layout.object_item, parent, false);
             ImageButton editButton = item.findViewById(R.id.list_edit_button);
             editButton.setOnClickListener(v -> createEditObjectDialog(position));
             ImageButton deleteButton = item.findViewById(R.id.list_delete_button);

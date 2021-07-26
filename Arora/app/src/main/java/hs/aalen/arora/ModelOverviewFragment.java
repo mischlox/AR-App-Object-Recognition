@@ -115,7 +115,7 @@ public class ModelOverviewFragment extends ListFragment {
         public View getView(int position, @Nullable View convertView, ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) requireActivity()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            if (item == null) item = layoutInflater.inflate(R.layout.model_item, parent, false);
+            item = layoutInflater.inflate(R.layout.model_item, parent, false);
 
             numObjectsInModelProgressBar = item.findViewById(R.id.list_model_progressbar);
             numObjectsInModelTextView = item.findViewById(R.id.list_model_progress_text);
