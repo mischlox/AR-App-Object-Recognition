@@ -23,8 +23,8 @@
     <string name="dialog_start_training">Training</string>
     <string name="dialog_cancel">Abbrechen</string>
     <string name="dialog_hint_object_name">Objektname</string>
-    <string name="dialog_hint_object_type">Objekttyp</string>
-    <string name="dialog_hint_object_additional_data">Zusätzliche Daten</string>
+    <string name="dialog_hint_object_type">Objekttyp (optional)</string>
+    <string name="dialog_hint_object_additional_data">Zusätzliche Daten (optional)</string>
     <string name="add_new_object">Neues Objekt</string>
     <string name="edit">Bearbeiten</string>
     <string name="delete">Löschen</string>
@@ -40,10 +40,10 @@
     <string name="usage">So geht\'s</string>
     <string name="do_not_show_again">Nicht mehr anzeigen</string>
     <string name="help_text">Neige das Gerät ein wenig während des Trainings, damit das Objekt von mehreren Perspektiven aufgenommen werden kann, um die Wiedererkennungsrate zu verbessern</string>
-    <string name="help_text_tilt_camera">Bewege das Handy ein wenig während des Trainings</string>
+    <string name="help_text_tilt_camera">Bewege das Handy langsam während des Trainings um Eindrücke aus mehreren Perspektiven zu trainieren</string>
     <string name="help_text_havefun">Viel Spaß!</string>
     <string name="help_text_add_info">Gebe den Namen des Objektes ein und optional weitere Daten</string>
-    <string name="help_text_pause_training">Das Training kann mit dem Button in der oberen rechten Ecke pausiert werden</string>
+    <string name="help_text_counter_training">Nach Ablaufen des Countdowns werden Eindrücke über das Objekt gesammelt. Du kannst mit dem Wiedererkennen fortfahren, sobald der Trainingsladekreis in der rechten oberen Ecke nicht mehr sichtbar ist</string>
     <string name="settings_resolution">Auflösung Trainingsdaten</string>
     <string name="settings_resolution_hint">Auflösung der Trainingsbilder, die in das Model gegeben werden.</string>
     <string name="settings_resolution_small">Klein</string>
@@ -77,4 +77,9 @@
     <string name="countdown_summary">Die angegebene Zeit wird heruntergezählt, bevor das Training beginnt</string>
     <string name="info_title">Über ARORA</string>
     <string name="about_arora">Über ARORA</string>
+    <string name="reset_app">Zurücksetzen</string>
+    <string name="reset_app_summary">Lösche alle gespeicherten Models und Objekte</string>
+    <string name="dialog_delete_obj_title">Objekt löschen</string>
+    <string name="delete_obj_are_you_sure">Bist du sicher, dass du dieses Objekt löschen möchtest?</string>
+    <string name="dialog_delete_obj">Löschen</string>
 </resources>

@@ -41,8 +41,8 @@
     <string name="dialog_start_training">Training</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_hint_object_name">Object Name</string>
-    <string name="dialog_hint_object_type">Object Type</string>
-    <string name="dialog_hint_object_additional_data">Additional Data</string>
+    <string name="dialog_hint_object_type">Object Type (optional)</string>
+    <string name="dialog_hint_object_additional_data">Additional Data (optional)</string>
     <string name="add_new_object">Add Object</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
@@ -55,8 +55,7 @@
     <string name="usage">How it works</string>
     <string name="do_not_show_again">Do not show again</string>
     <string name="help_text_add_info">Enter the name of the object and if you want to additional information</string>
-    <string name="help_text_tilt_camera">Move your phone a little bit while training</string>
-    <string name="help_text_pause_training">You can pause the training with the button in the upper right corner</string>
+    <string name="help_text_tilt_camera">Move your phone slowly during the training in order to train impressions from several perspectives</string>
     <string name="help_text_havefun">Have Fun!</string>
     <string name="back" translatable="false">back</string>
     <string name="forward" translatable="false">forward</string>
@@ -143,4 +142,10 @@
 </p>
 
     ]]></string>
+    <string name="help_text_counter_training">After the countdown has expired, impressions of the object are collected. You can continue with the recognition as soon as the training loading circle is no longer visible in the upper right corner</string>
+    <string name="reset_app">Reset Application</string>
+    <string name="reset_app_summary">Delete all models and objects from the application</string>
+    <string name="dialog_delete_obj_title">Delete Object</string>
+    <string name="delete_obj_are_you_sure">Are you sure you want to delete this object?</string>
+    <string name="dialog_delete_obj">Delete</string>
 </resources>
