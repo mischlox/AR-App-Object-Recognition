@@ -123,7 +123,7 @@ public class SharedPrefsHelper implements GlobalSettings {
 
     @Override
     public int getMaxObjects() {
-        return prefs.getInt("maxObjects", 4);
+        return prefs.getInt("maxObjects", 10);
     }
 
     @Override
