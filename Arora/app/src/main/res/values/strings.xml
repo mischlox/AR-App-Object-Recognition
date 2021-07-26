@@ -149,4 +149,8 @@
     <string name="delete_obj_are_you_sure">Are you sure you want to delete this object?</string>
     <string name="dialog_delete_obj">Delete</string>
     <string name="success_delete_all">Successfully reset app to default</string>
+    <string name="confidence_summary">A threshold from which recognition confidence an object should be marked as correctly recognized</string>
+    <string name="confidence_title">Confidence Threshold in %</string>
+    <string name="detecting_progress">Detecting…</string>
+    <string name="training_progress">Training…</string>
 </resources>

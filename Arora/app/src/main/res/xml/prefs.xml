@@ -13,6 +13,15 @@
             app:showSeekBarValue="true"
             android:icon="@drawable/ic_num_samples"/>
         <SeekBarPreference
+            android:key="key_confidence"
+            android:title="@string/confidence_title"
+            android:summary="@string/confidence_summary"
+            app:min="50"
+            android:max="100"
+            android:defaultValue="75"
+            app:showSeekBarValue="true"
+            android:icon="@drawable/ic_conf_thres"/>
+        <SeekBarPreference
             android:key="key_countdown"
             android:title="Training Countdown"
             android:summary="@string/countdown_summary"

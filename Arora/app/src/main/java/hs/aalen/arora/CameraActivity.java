@@ -67,6 +67,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                     } else {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     }
+                    recreate();
                 } else if (key.equals(getString(R.string.key_seekbar))) {
                     amountSamples = settings.getAmountSamples();
                 } else if (key.equals("addSamplesState")) {
@@ -96,7 +97,10 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                     cameraFragment.setPositionsList(settings.getMaxObjects());
                 } else if (key.equals("key_countdown")) {
                     cameraFragment.setCountDown(settings.getCountDown());
+                } else if (key.equals("key_confidence")) {
+                    cameraFragment.setConfidenceThres(settings.getConfidenceThres());
                 }
+
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 recreate();
@@ -119,6 +123,8 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         cameraFragment.setModelID(settings.getCurrentModel());
         cameraFragment.setPositionsList(settings.getMaxObjects());
         cameraFragment.setCountDown(settings.getCountDown());
+        cameraFragment.setConfidenceThres(settings.getConfidenceThres());
+        cameraFragment.setPositionsList(settings.getMaxObjects());
 
         // Bind navigation views
         Toolbar toolbar = findViewById(R.id.toolbar);

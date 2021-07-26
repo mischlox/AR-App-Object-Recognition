@@ -37,6 +37,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     private SeekBarPreference countDownPreference;
     private SwitchPreference nightModePreference;
     private SeekBarPreference resolutionPreference;
+    private SeekBarPreference confidencePreference;
     private static final HashMap<Integer, String> resolutionMap= new HashMap<>();
 
     @Override
@@ -49,6 +50,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         findPreference(getString(R.string.key_resolution)).setOnPreferenceChangeListener(this);
         findPreference(getString(R.string.key_reset)).setOnPreferenceChangeListener(this);
         findPreference("key_countdown").setOnPreferenceChangeListener(this);
+        findPreference("key_confidence").setOnPreferenceChangeListener(this);
 
         prefs = getContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
@@ -65,6 +67,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         nightModePreference = findPreference(getString(R.string.key_nightmode));
         resolutionPreference = findPreference(getString(R.string.key_resolution));
         resetAppPreference = findPreference(getString(R.string.key_reset));
+        confidencePreference = findPreference("key_confidence");
 
         assert resetAppPreference != null;
         resetAppPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -77,6 +80,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         amountSamplesPreference.setUpdatesContinuously(true);
         countDownPreference.setUpdatesContinuously(true);
         resolutionPreference.setUpdatesContinuously(true);
+        confidencePreference.setUpdatesContinuously(true);
     }
 
     @Override
@@ -84,6 +88,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         SharedPreferences.Editor editor = prefs.edit();
         if(amountSamplesPreference.getKey().equals(preference.getKey())) {
             editor.putInt(getString(R.string.key_seekbar), (int)newValue);
+            editor.apply();
+            return true;
+        }
+        else if(confidencePreference.getKey().equals(preference.getKey())) {
+            editor.putInt("key_confidence", (int) newValue);
             editor.apply();
             return true;
         }

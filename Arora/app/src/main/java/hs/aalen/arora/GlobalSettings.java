@@ -37,5 +37,7 @@ public interface GlobalSettings {
 
     int getCountDown();
 
+    int getConfidenceThres();
+
     void clearConfiguration();
 }

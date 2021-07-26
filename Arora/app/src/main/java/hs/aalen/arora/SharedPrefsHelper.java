@@ -138,6 +138,11 @@ public class SharedPrefsHelper implements GlobalSettings {
     }
 
     @Override
+    public int getConfidenceThres() {
+        return prefs.getInt("key_confidence", 50);
+    }
+
+    @Override
     public void clearConfiguration() {
         prefs.edit().clear().apply();
     }

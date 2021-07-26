@@ -46,6 +46,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
@@ -71,8 +72,7 @@ public class CameraFragment extends Fragment {
     private static final String TAG = CameraFragment.class.getSimpleName();
     // Front or back camera
     private static final CameraX.LensFacing LENS_FACING = CameraX.LensFacing.BACK;
-    // Amount of classes
-    private static final int NUM_TFL_CLASSES = 4;
+
     /**
      * Class that is trained will be saved to this queue
      */
@@ -81,11 +81,8 @@ public class CameraFragment extends Fragment {
     // Expandable Object Data CardView
     private TextView objectName;
     private TextView objectConfidence;
-    private TextView typeObjectInfoColumns;
     private TextView typeObjectInfoValues;
-    private TextView additionalObjectInfoColumns;
     private TextView additionalObjectInfoValues;
-    private TextView timestampObjectInfoColumns;
     private TextView timestampObjectInfoValues;
     private ImageView objectPreviewImage;
     // Put all items to this list for simpler use
@@ -109,10 +106,11 @@ public class CameraFragment extends Fragment {
     private double focusBoxRatio;
     private ArrayList<String> positionsList;
 
-    private AddSamplesThread addSamplesThread;
-
     private TextView countDownTextView;
     private int countdown;
+
+    private int confidenceThres;
+
 
     /**
      * Analyzer is responsible for processing camera input
@@ -360,15 +358,18 @@ public class CameraFragment extends Fragment {
     private void setProgressCircle(int progress) {
         Log.d(TAG, "addSamples setProgressCircle Max: " + trainingProgressBar.getMax() + " progress: " + progress);
         if (progress == 0) {
-            trainingProgressBarLabel.setVisibility(GONE);
+            trainingProgressBarLabel.setText(R.string.detecting_progress);
             trainingProgressBarTextView.setVisibility(GONE);
+            trainingProgressBar.setIndeterminate(true);
         } else {
-            trainingProgressBarLabel.setVisibility(VISIBLE);
+            trainingProgressBarLabel.setText(R.string.training_progress);
             trainingProgressBarTextView.setVisibility(VISIBLE);
+            trainingProgressBar.setIndeterminate(false);
         }
         trainingProgressBar.setProgress(progress);
         int relativeProgress = (int) (((float) progress / (float) trainingProgressBar.getMax()) * 100);
-        trainingProgressBarTextView.setText(relativeProgress + "%");
+        String relativeProgressStr = relativeProgress + "%";
+        trainingProgressBarTextView.setText(relativeProgressStr);
     }
 
     @Nullable
@@ -382,10 +383,10 @@ public class CameraFragment extends Fragment {
     public void onViewCreated(@NonNull @org.jetbrains.annotations.NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Initialize CardView and including view when the view is created
-        countDownTextView = getActivity().findViewById(R.id.countdown);
+        countDownTextView = requireActivity().findViewById(R.id.countdown);
         initCardView();
         // define focusbox
-        FocusBoxImage focusBox = getActivity().findViewById(R.id.focus_box);
+        FocusBoxImage focusBox = requireActivity().findViewById(R.id.focus_box);
         focusBox.setFocusBoxLocation(identifyFocusBoxCorners(this.getResources().getDisplayMetrics().widthPixels,
                 this.getResources().getDisplayMetrics().heightPixels, focusBoxRatio));
 
@@ -417,66 +418,75 @@ public class CameraFragment extends Fragment {
                 .observe(
                         getViewLifecycleOwner(),
                         numSamples -> {
-                            trainingProgressBar.setMax(viewModel.getNumSamplesMax().getValue());
-                            int progress;
+                            Integer trainingProgressMax = viewModel.getNumSamplesMax().getValue();
+                            if(trainingProgressMax != null)
+                                trainingProgressBar.setMax(trainingProgressMax);
+                            int progress = 0;
                             try {
-                                this.numSamplesPerClass = numSamples.get(addSampleRequests.peek());
-                                progress = viewModel.getNumSamplesCurrent().getValue().get(addSampleRequests.peek());
-                            } catch (NullPointerException e) {
-                                progress = 0;
+                                Integer wrappedNumSamples = numSamples.get(addSampleRequests.peek());
+                                if(wrappedNumSamples != null)
+                                    this.numSamplesPerClass = wrappedNumSamples;
+                                Map<String, Integer> mapNumSamplesWrapped = viewModel.getNumSamplesCurrent().getValue();
+                                if(mapNumSamplesWrapped != null) {
+                                    Integer wrappedNumSamplesCurrent = mapNumSamplesWrapped.get(addSampleRequests.peek());
+                                    if (wrappedNumSamplesCurrent != null)
+                                        progress = wrappedNumSamplesCurrent;
+                                }
+                            } catch (NullPointerException e) { // Do nothing
                             }
                             setProgressCircle(progress);
                         }
                 );
         // For showing object information
-        final Observer<String> firstChoiceObserver = new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                try {
-                    float confidence = viewModel.getConfidence().getValue().get(s);
-                    float confidencePercent = confidence * 100;
-                    DecimalFormat df = new DecimalFormat("##.#");
-                    if(databaseHelper.objectsExist())
-                        objectConfidence.setText(String.format("%s %%", df.format(confidencePercent)));
-                    if(!s.isEmpty()) populateAllViewItems(s);
-                } catch (NullPointerException e) {
-                    // Do nothing
+        final Observer<String> firstChoiceObserver = s -> {
+            try {
+                Map<String, Float> wrappedConfidenceMap = viewModel.getConfidence().getValue();
+                float confidence = 0;
+                if(wrappedConfidenceMap != null) {
+                    Float wrappedConfidence = wrappedConfidenceMap.get(s);
+                    if(wrappedConfidence != null) {
+                        confidence = wrappedConfidence;
+                    }
                 }
+                float confidencePercent = confidence * 100;
+                DecimalFormat df = new DecimalFormat("##.#");
+                if(confidencePercent > confidenceThres) {
+                    if (databaseHelper.objectsExist())
+                        objectConfidence.setText(String.format("%s %%", df.format(confidencePercent)));
+                    if (!s.isEmpty()) populateAllViewItems(s);
+                }
+            } catch (NullPointerException e) {
+                // Do nothing
             }
         };
         viewModel.getFirstChoice().observe(getViewLifecycleOwner(), firstChoiceObserver);
-        viewFinder = getActivity().findViewById(R.id.view_finder);
+        viewFinder = requireActivity().findViewById(R.id.view_finder);
         viewFinder.post(this::startCamera);
     }
 
     private void initCardView() {
-        objectName = getActivity().findViewById(R.id.object_name);
-        objectConfidence = getActivity().findViewById(R.id.object_confidence);
-        objectDataCardView = getActivity().findViewById(R.id.object_metadata_cardview);
-        typeObjectInfoColumns = getActivity().findViewById(R.id.type_object_info_columns);
-        typeObjectInfoValues = getActivity().findViewById(R.id.type_object_info_values);
-        additionalObjectInfoColumns = getActivity().findViewById(R.id.additional_object_info_columns);
-        additionalObjectInfoValues = getActivity().findViewById(R.id.additional_object_info_values);
-        timestampObjectInfoColumns = getActivity().findViewById(R.id.timestamp_object_info_columns);
-        timestampObjectInfoValues = getActivity().findViewById(R.id.timestamp_object_info_values);
-        objectPreviewImage = getActivity().findViewById(R.id.object_info_preview_image);
-        expandCollapseButton = getActivity().findViewById(R.id.expand_collapse_button);
+        objectName = requireActivity().findViewById(R.id.object_name);
+        objectConfidence = requireActivity().findViewById(R.id.object_confidence);
+        objectDataCardView = requireActivity().findViewById(R.id.object_metadata_cardview);
+        TextView typeObjectInfoColumns = requireActivity().findViewById(R.id.type_object_info_columns);
+        typeObjectInfoValues = requireActivity().findViewById(R.id.type_object_info_values);
+        TextView additionalObjectInfoColumns = requireActivity().findViewById(R.id.additional_object_info_columns);
+        additionalObjectInfoValues = requireActivity().findViewById(R.id.additional_object_info_values);
+        TextView timestampObjectInfoColumns = requireActivity().findViewById(R.id.timestamp_object_info_columns);
+        timestampObjectInfoValues = requireActivity().findViewById(R.id.timestamp_object_info_values);
+        objectPreviewImage = requireActivity().findViewById(R.id.object_info_preview_image);
+        expandCollapseButton = requireActivity().findViewById(R.id.expand_collapse_button);
 
-        trainingProgressBar = getActivity().findViewById(R.id.progressbar_training);
-        trainingProgressBarLabel = getActivity().findViewById(R.id.progressbar_training_text);
-        trainingProgressBarTextView = getActivity().findViewById(R.id.progressbar_textview);
+        trainingProgressBar = requireActivity().findViewById(R.id.progressbar_training);
+        trainingProgressBarLabel = requireActivity().findViewById(R.id.progressbar_training_text);
+        trainingProgressBarTextView = requireActivity().findViewById(R.id.progressbar_textview);
 
         List<TextView> itemsCardView = Arrays.asList(typeObjectInfoColumns, typeObjectInfoValues,
                 additionalObjectInfoColumns, additionalObjectInfoValues,
                 timestampObjectInfoColumns, timestampObjectInfoValues);
         expandableViewList.addAll(itemsCardView);
 
-        expandCollapseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showMore();
-            }
-        });
+        expandCollapseButton.setOnClickListener(v -> showMore());
 
     }
 
@@ -622,7 +632,7 @@ public class CameraFragment extends Fragment {
         }
         // Add the model position finally to the object in the DB
         if(databaseHelper.updateModelPos(objectName, openPos)) {
-            addSamplesThread = new AddSamplesThread(openPos, amount);
+            AddSamplesThread addSamplesThread = new AddSamplesThread(openPos, amount);
             addSamplesThread.start();
         }
         else {
@@ -680,6 +690,10 @@ public class CameraFragment extends Fragment {
         this.countdown = countDown;
     }
 
+    public void setConfidenceThres(int confidenceThres) {
+        this.confidenceThres = confidenceThres;
+    }
+
     /**
      * Background Thread to add Sample Requests
      */
@@ -723,10 +737,6 @@ public class CameraFragment extends Fragment {
             viewModel.setCaptureMode(false);
             Log.d(TAG, "addSamples: Capture Mode is disabled!");
         }
-    }
-
-    public CameraFragmentViewModel getViewModel() {
-        return viewModel;
     }
 
     public void setFocusBoxRatio(double focusBoxRatio) {
