@@ -2,30 +2,23 @@ package hs.aalen.arora;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.media.Image;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import hs.aalen.arora.dialogues.AddModelDialog;
 import hs.aalen.arora.dialogues.DialogFactory;
 import hs.aalen.arora.dialogues.DialogType;
 
@@ -51,7 +43,6 @@ public class ModelOverviewFragment extends ListFragment {
     private ListView modelListView;
     private FloatingActionButton addModelButton;
     private ArrayList<String> modelNames = new ArrayList<>();
-    private ArrayList<String> modelIDs = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -91,7 +82,6 @@ public class ModelOverviewFragment extends ListFragment {
         Cursor data = modelDatabaseHelper.getAllModels();
 
         while (data.moveToNext()) {
-            modelIDs.add(data.getString(0));
             modelNames.add(data.getString(1));
         }
         ListAdapter adapter = new ModelOverviewAdapter(getActivity(), modelNames);
@@ -121,7 +111,7 @@ public class ModelOverviewFragment extends ListFragment {
             super(c, R.layout.model_item, R.id.list_model_name, name);
             this.context = c;
             this.modelName = name;
-            this.selectedPosition = modelIDs.indexOf(settings.getCurrentModel());
+            this.selectedPosition = Integer.parseInt(settings.getCurrentModel()) - 1;
         }
 
         @Override
@@ -143,8 +133,8 @@ public class ModelOverviewFragment extends ListFragment {
                 @Override
                 public void onClick(View v) {
                     selectedPosition = (Integer) v.getTag();
-                    String newModelID = modelIDs.get(selectedPosition);
-                    settings.setCurrentModel(newModelID);
+                    int newModelID = selectedPosition + 1;
+                    settings.setCurrentModel(newModelID + "");
                     Log.d(TAG, "onClick: test model selection: current model: "
                             + settings.getCurrentModel());
                     notifyDataSetChanged();
@@ -154,7 +144,7 @@ public class ModelOverviewFragment extends ListFragment {
             objectsOfModelButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showObjectsOfModelDialog(modelIDs.get(position));
+                    showObjectsOfModelDialog(position+1);
                 }
             });
 
@@ -163,11 +153,10 @@ public class ModelOverviewFragment extends ListFragment {
 
         public void updateProgressBar(int position) {
             int maxObjects = settings.getMaxObjects();
-            int numCurrentObjects = modelDatabaseHelper.getAllObjectsByModelID((modelIDs.get(position))).getCount();
+            int numCurrentObjects = modelDatabaseHelper.getAllObjectsByModelID((position+1)+"").getCount();
             numObjectsInModelProgressBar.setMax(maxObjects);
             numObjectsInModelProgressBar.setProgress(numCurrentObjects);
-            String numObjectInModels = numCurrentObjects+" / "+ maxObjects;
-            numObjectsInModelTextView.setText(numObjectInModels);
+            numObjectsInModelTextView.setText(numCurrentObjects+" / "+ maxObjects);
             setColor(numCurrentObjects, maxObjects);
         }
 
@@ -196,9 +185,9 @@ public class ModelOverviewFragment extends ListFragment {
         /**
          * Dialog that contains a list with all objects that are saved to the selected model
          *
-         * @param modelID selected model
+         * @param position selected model
          */
-        private void showObjectsOfModelDialog(String modelID) {
+        private void showObjectsOfModelDialog(int position) {
             // Show all objects dialog items
             AlertDialog.Builder showObjectsDialogBuilder = new AlertDialog.Builder(getActivity());
             final View showObjectsDialogView = getLayoutInflater()
@@ -217,7 +206,7 @@ public class ModelOverviewFragment extends ListFragment {
             showObjectDialog = showObjectsDialogBuilder.create();
 
             TextView noObjectsText = showObjectsDialogView.findViewById(R.id.list_model_no_objects);
-            if(populateShowObjectsDialogView(modelID)) {
+            if(populateShowObjectsDialogView(position)) {
                 noObjectsText.setVisibility(View.INVISIBLE);
             }
             else {
@@ -229,13 +218,13 @@ public class ModelOverviewFragment extends ListFragment {
         /**
          * Helper method for populating the object list above
          *
-         * @param modelID of selected model in object overview list
+         * @param position position of selected model in object overview list
          *
          * @return true if there are any objects to be populated, false otherwise
          */
-        private boolean populateShowObjectsDialogView(String modelID) {
+        private boolean populateShowObjectsDialogView(int position) {
             listItems.clear();
-            Cursor data = modelDatabaseHelper.getObjectNamesByModelID(modelID);
+            Cursor data = modelDatabaseHelper.getObjectNamesByModelID(position + "");
             while (data.moveToNext()) {
                 listItems.add(data.getString(0));
             }
