@@ -162,6 +162,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @return All data from table
      */
     public Cursor getAllObjectsByModelID(String modelID) {
+        if(modelID == null) modelID="";
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
                 + " WHERE " + OBJECT_COL7 + "=?";
@@ -348,6 +349,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean modelWithNameExists(String name) {
+        if(name == null) name = "";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = null;
         String query = "SELECT " + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME
@@ -476,5 +478,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + OBJECT_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + MODEL_TABLE_NAME);
+        onCreate(db);
     }
 }

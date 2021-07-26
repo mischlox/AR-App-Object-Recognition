@@ -58,53 +58,48 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if(key.equals(getString(R.string.key_resolution))) {
-                cameraFragment.setFocusBoxRatio(settings.getFocusBoxRatio());
-            }
-            else if(key.equals(getString(R.string.key_nightmode))) {
-                if(settings.getNightMode()) {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                }
-                else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                }
-            }
-            else if(key.equals(getString(R.string.key_seekbar))) {
-                amountSamples = settings.getAmountSamples();
-            }
-            else if(key.equals("addSamplesState")) {
-                if(settings.getAddSamplesTrigger()) {
-                    Log.d(TAG, "onSharedPreferenceChanged: backup Start training");
-                    cameraFragment.addSamples(className, amountSamples);
-                    settings.switchAddSamplesTrigger();
-                }
-            }
-            else if(key.equals("illegalStateTrigger")) {
-                if (settings.getIllegalStateTrigger()) {
+            try {
+                if (key.equals(getString(R.string.key_resolution))) {
+                    cameraFragment.setFocusBoxRatio(settings.getFocusBoxRatio());
+                } else if (key.equals(getString(R.string.key_nightmode))) {
+                    if (settings.getNightMode()) {
+                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    }
+                } else if (key.equals(getString(R.string.key_seekbar))) {
+                    amountSamples = settings.getAmountSamples();
+                } else if (key.equals("addSamplesState")) {
+                    if (settings.getAddSamplesTrigger()) {
+                        Log.d(TAG, "onSharedPreferenceChanged: backup Start training");
+                        cameraFragment.addSamples(className, amountSamples);
+                        settings.switchAddSamplesTrigger();
+                    }
+                } else if (key.equals("illegalStateTrigger")) {
+                    if (settings.getIllegalStateTrigger()) {
                         cameraFragment.removeObjectFromModel(settings.getCurrentObject(),
-                                                             settings.getCurrentModel(),
-                                                             true);
+                                settings.getCurrentModel(),
+                                true);
                         settings.switchIllegalStateTrigger();
-                    Toast.makeText(CameraActivity.this, R.string.please_do_not_change_tabs, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CameraActivity.this, R.string.please_do_not_change_tabs, Toast.LENGTH_SHORT).show();
+                    }
+                } else if (key.equals("currentClass")) {
+                    className = settings.getCurrentModelPos();
+                } else if (key.equals("currentModel")) {
+                    cameraFragment.setModelID(settings.getCurrentModel());
+                    if (cameraFragment.isAdded()) {
+                        cameraFragment.loadNewModel();
+                    } else if (modelOverviewFragment.isAdded()) {
+                        modelOverviewFragment.populateView();
+                    }
+                } else if (key.equals("maxObjects")) {
+                    cameraFragment.setPositionsList(settings.getMaxObjects());
+                } else if (key.equals("key_countdown")) {
+                    cameraFragment.setCountDown(settings.getCountDown());
                 }
-            }
-            else if(key.equals("currentClass")) {
-                className = settings.getCurrentModelPos();
-            }
-            else if(key.equals("currentModel")) {
-                cameraFragment.setModelID(settings.getCurrentModel());
-                if(cameraFragment.isAdded()) {
-                    cameraFragment.loadNewModel();
-                }
-                else if(modelOverviewFragment.isAdded()) {
-                    modelOverviewFragment.populateView();
-                }
-            }
-            else if(key.equals("maxObjects")) {
-                cameraFragment.setPositionsList(settings.getMaxObjects());
-            }
-            else if(key.equals("key_countdown")) {
-                cameraFragment.setCountDown(settings.getCountDown());
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                recreate();
             }
         }
     };

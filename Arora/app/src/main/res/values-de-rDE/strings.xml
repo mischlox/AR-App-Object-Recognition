@@ -82,4 +82,5 @@
     <string name="dialog_delete_obj_title">Objekt löschen</string>
     <string name="delete_obj_are_you_sure">Bist du sicher, dass du dieses Objekt löschen möchtest?</string>
     <string name="dialog_delete_obj">Löschen</string>
+    <string name="success_delete_all">Die App wurde erfolgreich zurückgesetzt</string>
 </resources>

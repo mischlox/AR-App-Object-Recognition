@@ -92,7 +92,7 @@
     <string name="add_a_model_that_will_learn_your_objects">Add a model that will learn your objects</string>
     <string name="please_give_model_name">Please give your model a name!</string>
     <string name="please_do_not_change_tabs">Please do not change tabs while training! Object will not be saved.</string>
-    <string name="settings_reset_application">Reset</string>
+    <string name="settings_reset_application">Reset to default</string>
     <string name="settings_reset_application_summary">Delete all models and objects</string>
     <string name="key_reset" translatable="false">key_reset</string>
     <string name="reset_are_you_sure">Are you sure you want to delete all models and objects?</string>
@@ -148,4 +148,5 @@
     <string name="dialog_delete_obj_title">Delete Object</string>
     <string name="delete_obj_are_you_sure">Are you sure you want to delete this object?</string>
     <string name="dialog_delete_obj">Delete</string>
+    <string name="success_delete_all">Successfully reset app to default</string>
 </resources>

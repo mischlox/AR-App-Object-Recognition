@@ -37,4 +37,5 @@ public interface GlobalSettings {
 
     int getCountDown();
 
+    void clearConfiguration();
 }

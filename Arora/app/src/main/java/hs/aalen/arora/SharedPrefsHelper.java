@@ -136,4 +136,9 @@ public class SharedPrefsHelper implements GlobalSettings {
     public int getCountDown() {
         return prefs.getInt("key_countdown", 5);
     }
+
+    @Override
+    public void clearConfiguration() {
+        prefs.edit().clear().apply();
+    }
 }
