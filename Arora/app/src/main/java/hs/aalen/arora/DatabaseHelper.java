@@ -37,6 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String OBJECT_COL5 = "object_image";
     private static final String OBJECT_COL6 = "model_pos";
     private static final String OBJECT_COL7 = "model_id";
+    private static final String OBJECT_COL8 = "object_amount_samples";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -103,7 +104,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME;
         return db.rawQuery(query, null);
-    }    @Override
+    }
+
+    @Override
     public void onCreate(SQLiteDatabase db) {
         String createModelTable = "CREATE TABLE " + MODEL_TABLE_NAME + " ("
                 + MODEL_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -120,6 +123,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + OBJECT_COL5 + " BLOB, "
                 + OBJECT_COL6 + " TEXT, "
                 + OBJECT_COL7 + " INTEGER NOT NULL, "
+                + OBJECT_COL8 + " INTEGER, "
                 + " FOREIGN KEY(" + OBJECT_COL7 + ") REFERENCES " + MODEL_TABLE_NAME + "(" + MODEL_COL0 + "))";
 
         db.execSQL(createObjectTable);
@@ -355,6 +359,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor data = selectModel(modelName);
         if (data.moveToFirst()) return data.getString(0);
         else return "";
+    }
+
+    /**
+     * Add to total number of samples
+     * @param objectName name of object
+     * @param amount of samples to be added to the total
+     */
+    public void addSamplesToObject(String objectName, int amount) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        int updatedAmount = getAmountSamplesByObjectID(objectName) + amount;
+        contentValues.put(OBJECT_COL8, updatedAmount);
+        db.update(OBJECT_TABLE_NAME, contentValues, OBJECT_COL1 + "=?", new String[]{objectName});
+    }
+
+    public int getAmountSamplesByObjectID(String objectName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int amountSamples = 0;
+        String query = "SELECT " + OBJECT_COL8 + " FROM " + OBJECT_TABLE_NAME
+                + " WHERE " + OBJECT_COL0 + "=?";
+        Cursor cursor = db.rawQuery(query, new String[]{objectName});
+        if (cursor.moveToFirst()) {
+            amountSamples = cursor.getInt(0);
+        }
+        cursor.close();
+        return amountSamples;
     }
 
     /**

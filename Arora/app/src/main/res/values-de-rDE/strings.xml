@@ -87,4 +87,5 @@
     <string name="confidence_title">Konfidenzschwelle in %</string>
     <string name="detecting_progress">Erkennen ...</string>
     <string name="training_progress">Training ...</string>
+    <string name="num_samples">Trainingsdaten</string>
 </resources>

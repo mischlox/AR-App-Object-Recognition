@@ -193,6 +193,7 @@ public class CameraFragment extends Fragment {
         }
         // Add the model position finally to the object in the DB
         if (databaseHelper.updateModelPos(objectName, openPos)) {
+            databaseHelper.addSamplesToObject(objectName, amount);
             AddSamplesThread addSamplesThread = new AddSamplesThread(openPos, amount);
             addSamplesThread.start();
         } else {

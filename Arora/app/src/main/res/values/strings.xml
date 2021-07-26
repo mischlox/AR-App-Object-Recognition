@@ -67,6 +67,7 @@
     <!-- Settings -->
     <string name="settings_training">Training Configuration</string>
     <string name="settings_num_samples">Training Samples</string>
+    <string name="num_samples">Samples</string>
     <string name="settings_hint_num_samples">Amount of samples that are feeded to the model when adding a new object</string>
     <string name="key_seekbar" translatable="false">seekbar</string>
     <string name="key_nightmode" translatable="false">key_nightmode</string>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.ListFragment;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import hs.aalen.arora.utils.DateUtils;
@@ -42,6 +45,7 @@ public class ObjectOverviewFragment extends ListFragment {
     private final ArrayList<String> objectCreationDates = new ArrayList<>();
     private final ArrayList<String> objectModelIds = new ArrayList<>();
     private final ArrayList<byte[]> objectPreviewImages = new ArrayList<>();
+    private final ArrayList<Integer> objectNumSamples = new ArrayList<>();
     private DatabaseHelper objectDatabaseHelper;
     private ListView objectListView;
 
@@ -81,6 +85,7 @@ public class ObjectOverviewFragment extends ListFragment {
             objectCreationDates.add(DateUtils.parseDateTime(data.getString(4)));
             objectPreviewImages.add(data.getBlob(5));
             objectModelIds.add(data.getString(7));
+            objectNumSamples.add(data.getInt(8));
         }
         ListAdapter adapter = new ObjectOverviewAdapter(getContext(),
                 objectNames,
@@ -88,7 +93,8 @@ public class ObjectOverviewFragment extends ListFragment {
                 objectAdditionalData,
                 objectCreationDates,
                 objectPreviewImages,
-                objectModelIds);
+                objectModelIds,
+                objectNumSamples);
         objectListView.setAdapter(adapter);
         return !adapter.isEmpty();
     }
@@ -101,6 +107,10 @@ public class ObjectOverviewFragment extends ListFragment {
         objectNames.clear();
         objectTypes.clear();
         objectAdditionalData.clear();
+        objectCreationDates.clear();
+        objectPreviewImages.clear();
+        objectModelIds.clear();
+        objectNumSamples.clear();
     }
 
     /**
@@ -116,6 +126,7 @@ public class ObjectOverviewFragment extends ListFragment {
         ArrayList<String> createdAt;
         ArrayList<byte[]> image;
         ArrayList<String> modelID;
+        ArrayList<Integer> numSamples;
         View item;
         private AlertDialog editObjectDialog;
         private AlertDialog areYouSureDialog;
@@ -129,7 +140,8 @@ public class ObjectOverviewFragment extends ListFragment {
                               ArrayList<String> additionalInfo,
                               ArrayList<String> createdAt,
                               ArrayList<byte[]> previewImage,
-                              ArrayList<String> modelID) {
+                              ArrayList<String> modelID,
+                              ArrayList<Integer> numSamples) {
             super(c, R.layout.object_item, R.id.list_object_name, title);
             this.context = c;
             this.title = title;
@@ -138,23 +150,38 @@ public class ObjectOverviewFragment extends ListFragment {
             this.createdAt = createdAt;
             this.image = previewImage;
             this.modelID = modelID;
+            this.numSamples = numSamples;
         }
 
         @Override
         public View getView(int position, @Nullable View convertView, ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) requireActivity()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            GlobalSettings settings = new SharedPrefsHelper(context);
 
             item = layoutInflater.inflate(R.layout.object_item, parent, false);
+
             ImageButton editButton = item.findViewById(R.id.list_edit_button);
             editButton.setOnClickListener(v -> createEditObjectDialog(position));
+
             ImageButton deleteButton = item.findViewById(R.id.list_delete_button);
             deleteButton.setOnClickListener(v -> createAreYouSureDeleteDialog(position));
+
             ImageView previewImageView = item.findViewById(R.id.list_image_preview);
+            // Mark objects that are in the selected model
+            if(modelID.get(position).equals(settings.getCurrentModel())) {
+                previewImageView.setBackgroundColor(ContextCompat.getColor(context, R.color.blue_arora));
+            }
+            else {
+                previewImageView.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+            }
             TextView title = item.findViewById(R.id.list_object_name);
             TextView type = item.findViewById(R.id.list_object_type);
             TextView additionalInfo = item.findViewById(R.id.list_object_additional_data);
             TextView date = item.findViewById(R.id.list_object_date);
+
+            TextView numSamplesTextView = item.findViewById(R.id.list_object_num_samples);
+            numSamplesTextView.setText(String.format("%s %s", numSamples.get(position), getString(R.string.num_samples)));
 
             previewImageView.setImageResource(R.drawable.method_draw_image_1_);
             title.setText(String.format("%s (%s)",
