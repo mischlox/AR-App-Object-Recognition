@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -41,7 +42,7 @@ public class ObjectOverviewFragment extends ListFragment {
     private ArrayList<String> objectIds = new ArrayList<>();
     private ArrayList<String> objectNames = new ArrayList<>();
     private ArrayList<String> objectTypes = new ArrayList<>();
-    private ArrayList<String> objectAdditionalDatas = new ArrayList<>();
+    private ArrayList<String> objectAdditionalData = new ArrayList<>();
     private ArrayList<String> objectCreationDates = new ArrayList<>();
     private ArrayList<String> objectModelIds = new ArrayList<>();
     private ArrayList<byte[]> objectPreviewImages = new ArrayList<>();
@@ -78,7 +79,7 @@ public class ObjectOverviewFragment extends ListFragment {
             objectIds.add(data.getString(0));
             objectNames.add(data.getString(1));
             objectTypes.add(data.getString(2));
-            objectAdditionalDatas.add(data.getString(3));
+            objectAdditionalData.add(data.getString(3));
             objectCreationDates.add(DateUtils.parseDateTime(data.getString(4)));
             objectPreviewImages.add(data.getBlob(5));
             objectModelIds.add(data.getString(7));
@@ -86,7 +87,7 @@ public class ObjectOverviewFragment extends ListFragment {
         ListAdapter adapter = new ObjectOverviewAdapter(getContext(),
                                                         objectNames,
                                                         objectTypes,
-                                                        objectAdditionalDatas,
+                objectAdditionalData,
                                                         objectCreationDates,
                                                         objectPreviewImages,
                                                         objectModelIds);
@@ -101,7 +102,7 @@ public class ObjectOverviewFragment extends ListFragment {
         objectIds.clear();
         objectNames.clear();
         objectTypes.clear();
-        objectAdditionalDatas.clear();
+        objectAdditionalData.clear();
     }
 
     /**
@@ -109,7 +110,7 @@ public class ObjectOverviewFragment extends ListFragment {
      *
      * @author Michael Schlosser
      */
-    class ObjectOverviewAdapter extends ArrayAdapter<String> {
+    public class ObjectOverviewAdapter extends ArrayAdapter<String> {
         Context context;
         ArrayList<String> title;
         ArrayList<String> type;
@@ -118,9 +119,8 @@ public class ObjectOverviewFragment extends ListFragment {
         ArrayList<byte[]> image;
         ArrayList<String> modelID;
 
-        // Edit Object Dialog items
-        private AlertDialog.Builder editObjectDialogBuilder;
         private AlertDialog editObjectDialog;
+        private AlertDialog areYouSureDialog;
         private EditText dialogObjectName;
         private EditText dialogObjectType;
         private EditText dialogObjectAdditionalData;
@@ -159,10 +159,7 @@ public class ObjectOverviewFragment extends ListFragment {
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(objectDatabaseHelper.deleteObjectById(objectIds.get(position))) {
-                        deleteItem(position);
-                        notifyDataSetChanged();
-                    }
+                    createAreYouSureDeleteDialog(position);
                 }
             });
             ImageView previewImageView = item.findViewById(R.id.list_image_preview);
@@ -198,7 +195,10 @@ public class ObjectOverviewFragment extends ListFragment {
             objectIds.remove(position);
             objectNames.remove(position);
             objectTypes.remove(position);
-            objectAdditionalDatas.remove(position);
+            objectAdditionalData.remove(position);
+            objectCreationDates.remove(position);
+            objectModelIds.remove(position);
+            objectPreviewImages.remove(position);
         }
 
         /**
@@ -212,7 +212,7 @@ public class ObjectOverviewFragment extends ListFragment {
         private void editItem(int position, String name, String type, String additional) {
             objectNames.set(position, name);
             objectTypes.set(position, type);
-            objectAdditionalDatas.set(position, additional);
+            objectAdditionalData.set(position, additional);
         }
 
         /**
@@ -221,7 +221,8 @@ public class ObjectOverviewFragment extends ListFragment {
          * @param position needed to recognize clicked item and show binded information
          */
         private void createEditObjectDialog(int position) {
-            editObjectDialogBuilder = new AlertDialog.Builder(getActivity());
+            // Edit Object Dialog items
+            AlertDialog.Builder editObjectDialogBuilder = new AlertDialog.Builder(getActivity());
             final View editObjectDialogView = getLayoutInflater().inflate(R.layout.edit_object_dialog_popup, null);
             dialogObjectName = editObjectDialogView.findViewById(R.id.edit_dialog_object_name);
             dialogObjectName.setText(objectNames.get(position));
@@ -230,7 +231,7 @@ public class ObjectOverviewFragment extends ListFragment {
             dialogObjectType.setText(objectTypes.get(position));
 
             dialogObjectAdditionalData = editObjectDialogView.findViewById(R.id.edit_dialog_object_additional_data);
-            dialogObjectAdditionalData.setText(objectAdditionalDatas.get(position));
+            dialogObjectAdditionalData.setText(objectAdditionalData.get(position));
 
             confirmButton = editObjectDialogView.findViewById(R.id.edit_dialog_confirm);
             cancelButton = editObjectDialogView.findViewById(R.id.edit_dialog_cancel);
@@ -261,8 +262,33 @@ public class ObjectOverviewFragment extends ListFragment {
                     editObjectDialog.dismiss();
                 }
             });
+        }
+        public void createAreYouSureDeleteDialog(int position) {
+            AlertDialog.Builder areYouSureDialogBuilder = new AlertDialog.Builder(context);
+            final View areYouSureDialogView = getLayoutInflater().inflate(R.layout.are_you_sure_delete_popup, null);
 
+            areYouSureDialogBuilder.setView(areYouSureDialogView);
+            areYouSureDialog = areYouSureDialogBuilder.create();
+            areYouSureDialog.show();
+
+            Button deleteButton = areYouSureDialogView.findViewById(R.id.dialog_delete_obj_button);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(objectDatabaseHelper.deleteObjectById(objectIds.get(position))) {
+                        deleteItem(position);
+                        notifyDataSetChanged();
+                        areYouSureDialog.dismiss();
+                    }
+                }
+            });
+            Button cancelButton = areYouSureDialogView.findViewById(R.id.dialog_delete_obj_cancel);
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    areYouSureDialog.dismiss();
+                }
+            });
         }
     }
-
 }
