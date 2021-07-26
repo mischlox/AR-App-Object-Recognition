@@ -119,6 +119,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         setContentView(R.layout.activity_camera);
 
         // Configure cameraFragment on startup
+        amountSamples = settings.getAmountSamples();
         cameraFragment.setFocusBoxRatio(settings.getFocusBoxRatio());
         cameraFragment.setModelID(settings.getCurrentModel());
         cameraFragment.setPositionsList(settings.getMaxObjects());
