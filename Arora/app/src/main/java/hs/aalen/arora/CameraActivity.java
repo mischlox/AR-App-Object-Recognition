@@ -166,11 +166,37 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     }
 
     /**
+     * Checks if Show Help is enabled in the Shared Preferences
+     * Skips the showing of the Help Dialog if disabled and starts the Add Object Dialog directly
+     */
+    public void createDialog() {
+        boolean showHelp = settings.getHelpShowing();
+
+        if (showHelp) {
+            DialogFactory.getDialog(DialogType.HELP).createDialog(this);
+        } else {
+            DialogFactory.getDialog(DialogType.ADD_OBJ).createDialog(this);
+        }
+    }
+
+    /**
+     * Helper function that selects bottom navigation icon when side navigation icon is clicked
+     * and vice versa
+     *
+     * @param sideNavID   ID of side navigation icon
+     * @param bottomNavID ID of bottom navigation icon
+     */
+    private void syncNavBars(int sideNavID, int bottomNavID) {
+        navigationView.setCheckedItem(sideNavID);
+        bottomNavigationView.getMenu().findItem(bottomNavID).setChecked(true);
+    }
+
+    /**
      * Overridden method for bottom and side navigation in one
      * Changes fragment on a click and syncs both navigation bars
      *
-     * @param   item item of the menu
-     * @return  true if successful
+     * @param item item of the menu
+     * @return true if successful
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
@@ -179,23 +205,19 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
             buttonCamera.setImageResource(R.drawable.ic_add);
             syncNavBars(R.id.nav_camera, R.id.nav_bottom_placeholder);
             selectedFragment = cameraFragment;
-        }
-        else if (itemId == R.id.nav_object_overview || itemId == R.id.nav_bottom_object_overview) {
+        } else if (itemId == R.id.nav_object_overview || itemId == R.id.nav_bottom_object_overview) {
             buttonCamera.setImageResource(R.drawable.ic_eye);
             syncNavBars(R.id.nav_object_overview, R.id.nav_bottom_object_overview);
             selectedFragment = objectOverviewFragment;
-        }
-        else if (itemId == R.id.nav_settings || itemId == R.id.nav_bottom_settings) {
+        } else if (itemId == R.id.nav_settings || itemId == R.id.nav_bottom_settings) {
             buttonCamera.setImageResource(R.drawable.ic_eye);
             syncNavBars(R.id.nav_settings, R.id.nav_bottom_settings);
             selectedFragment = settingsFragment;
-        }
-        else if (itemId == R.id.nav_model_overview || itemId == R.id.nav_bottom_model_overview) {
+        } else if (itemId == R.id.nav_model_overview || itemId == R.id.nav_bottom_model_overview) {
             buttonCamera.setImageResource(R.drawable.ic_eye);
             syncNavBars(R.id.nav_model_overview, R.id.nav_bottom_model_overview);
             selectedFragment = modelOverviewFragment;
-        }
-        else if (itemId == R.id.nav_help || itemId == R.id.nav_bottom_help) {
+        } else if (itemId == R.id.nav_help || itemId == R.id.nav_bottom_help) {
             buttonCamera.setImageResource(R.drawable.ic_eye);
             syncNavBars(R.id.nav_help, R.id.nav_bottom_help);
             selectedFragment = helpFragment;
@@ -212,39 +234,12 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         return true;
     }
 
-    /**
-     * Helper function that selects bottom navigation icon when side navigation icon is clicked
-     * and vice versa
-     *
-     * @param sideNavID   ID of side navigation icon
-     * @param bottomNavID ID of bottom navigation icon
-     */
-    private void syncNavBars(int sideNavID, int bottomNavID) {
-        navigationView.setCheckedItem(sideNavID);
-        bottomNavigationView.getMenu().findItem(bottomNavID).setChecked(true);
-    }
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-        }
-    }
-
-    /**
-     * Checks if Show Help is enabled in the Shared Preferences
-     * Skips the showing of the Help Dialog if disabled and starts the Add Object Dialog directly
-     */
-    public void createDialog() {
-        boolean showHelp = settings.getHelpShowing();
-
-        if(showHelp) {
-            DialogFactory.getDialog(DialogType.HELP).createDialog(this);
-        }
-        else {
-            DialogFactory.getDialog(DialogType.ADD_OBJ).createDialog(this);
         }
     }
 }

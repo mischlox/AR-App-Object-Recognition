@@ -33,7 +33,7 @@ public class AddObjectDialog implements Dialog {
         settings = new SharedPrefsHelper(context);
         // Add Object Dialog items
         AlertDialog.Builder addObjectDialogBuilder = new AlertDialog.Builder(context);
-        final View addObjectDialogView = ((LayoutInflater)context
+        final View addObjectDialogView = ((LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.add_object_dialog_popup, null);
 
@@ -53,9 +53,9 @@ public class AddObjectDialog implements Dialog {
             String objectType = dialogObjectType.getText().toString();
             String objectAdditionalData = dialogObjectAdditionalData.getText().toString();
 
-            if(objectName.length() != 0) {
+            if (objectName.length() != 0) {
                 long success = addObject(objectName, objectType, objectAdditionalData, settings.getCurrentModel());
-                if(success != -1) {
+                if (success != -1) {
                     // Save the name of the object to Global Configuration
                     settings.setCurrentModelPos(dialogObjectName.getText().toString());
                     settings.setCurrentObject(objectName);
@@ -66,12 +66,10 @@ public class AddObjectDialog implements Dialog {
                     // Trigger adding Samples in Camera Fragment and therefore start training
                     settings.switchAddSamplesTrigger();
                     addObjectDialog.dismiss();
-                }
-                else {
+                } else {
                     Toast.makeText(context, R.string.object_exists, Toast.LENGTH_SHORT).show();
                 }
-            }
-            else {
+            } else {
                 Toast.makeText(context, R.string.dialog_please_set_name, Toast.LENGTH_LONG).show();
             }
         });
@@ -82,8 +80,8 @@ public class AddObjectDialog implements Dialog {
     /**
      * Add a new object to Database
      *
-     * @param objectName Name of object
-     * @param objectType Type of object
+     * @param objectName           Name of object
+     * @param objectType           Type of object
      * @param objectAdditionalData Additional data of object
      * @return id of inserted object
      */

@@ -35,9 +35,6 @@ import hs.aalen.arora.utils.DateUtils;
  */
 public class ObjectOverviewFragment extends ListFragment {
 
-    private DatabaseHelper objectDatabaseHelper;
-    private ListView objectListView;
-
     private final ArrayList<String> objectIds = new ArrayList<>();
     private final ArrayList<String> objectNames = new ArrayList<>();
     private final ArrayList<String> objectTypes = new ArrayList<>();
@@ -45,6 +42,8 @@ public class ObjectOverviewFragment extends ListFragment {
     private final ArrayList<String> objectCreationDates = new ArrayList<>();
     private final ArrayList<String> objectModelIds = new ArrayList<>();
     private final ArrayList<byte[]> objectPreviewImages = new ArrayList<>();
+    private DatabaseHelper objectDatabaseHelper;
+    private ListView objectListView;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -59,7 +58,7 @@ public class ObjectOverviewFragment extends ListFragment {
         objectDatabaseHelper = new DatabaseHelper(getActivity());
         objectListView = view.findViewById(android.R.id.list);
         TextView noObjectsText = view.findViewById(R.id.no_objects_info_text);
-        if(populateView())
+        if (populateView())
             noObjectsText.setVisibility(View.INVISIBLE);
         else
             noObjectsText.setVisibility(View.VISIBLE);
@@ -74,7 +73,7 @@ public class ObjectOverviewFragment extends ListFragment {
     public boolean populateView() {
         clearArrayLists();
         Cursor data = objectDatabaseHelper.getAllObjects();
-        while(data.moveToNext()) {
+        while (data.moveToNext()) {
             objectIds.add(data.getString(0));
             objectNames.add(data.getString(1));
             objectTypes.add(data.getString(2));
@@ -84,12 +83,12 @@ public class ObjectOverviewFragment extends ListFragment {
             objectModelIds.add(data.getString(7));
         }
         ListAdapter adapter = new ObjectOverviewAdapter(getContext(),
-                                                        objectNames,
-                                                        objectTypes,
-                                                        objectAdditionalData,
-                                                        objectCreationDates,
-                                                        objectPreviewImages,
-                                                        objectModelIds);
+                objectNames,
+                objectTypes,
+                objectAdditionalData,
+                objectCreationDates,
+                objectPreviewImages,
+                objectModelIds);
         objectListView.setAdapter(adapter);
         return !adapter.isEmpty();
     }
@@ -117,14 +116,12 @@ public class ObjectOverviewFragment extends ListFragment {
         ArrayList<String> createdAt;
         ArrayList<byte[]> image;
         ArrayList<String> modelID;
-
+        View item;
         private AlertDialog editObjectDialog;
         private AlertDialog areYouSureDialog;
         private EditText dialogObjectName;
         private EditText dialogObjectType;
         private EditText dialogObjectAdditionalData;
-
-        View item;
 
         ObjectOverviewAdapter(Context c,
                               ArrayList<String> title,
@@ -145,10 +142,10 @@ public class ObjectOverviewFragment extends ListFragment {
 
         @Override
         public View getView(int position, @Nullable View convertView, ViewGroup parent) {
-            LayoutInflater layoutInflater = (LayoutInflater)requireActivity()
+            LayoutInflater layoutInflater = (LayoutInflater) requireActivity()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            if(item == null) item = layoutInflater.inflate(R.layout.object_item, parent, false);
+            if (item == null) item = layoutInflater.inflate(R.layout.object_item, parent, false);
             ImageButton editButton = item.findViewById(R.id.list_edit_button);
             editButton.setOnClickListener(v -> createEditObjectDialog(position));
             ImageButton deleteButton = item.findViewById(R.id.list_delete_button);
@@ -161,9 +158,9 @@ public class ObjectOverviewFragment extends ListFragment {
 
             previewImageView.setImageResource(R.drawable.method_draw_image_1_);
             title.setText(String.format("%s (%s)",
-                                        this.title.get(position),
-                                        objectDatabaseHelper
-                                                .getModelNameByID(this.modelID.get(position))));
+                    this.title.get(position),
+                    objectDatabaseHelper
+                            .getModelNameByID(this.modelID.get(position))));
             type.setText(this.type.get(position));
             additionalInfo.setText(this.additionalInfo.get(position));
             date.setText(this.createdAt.get(position));
@@ -175,35 +172,6 @@ public class ObjectOverviewFragment extends ListFragment {
                 e.printStackTrace();
             }
             return item;
-        }
-
-        /**
-         * Remove all Attributes from list item in GUI
-         *
-         * @param position position of list item
-         */
-        private void deleteItem(int position) {
-            objectIds.remove(position);
-            objectNames.remove(position);
-            objectTypes.remove(position);
-            objectAdditionalData.remove(position);
-            objectCreationDates.remove(position);
-            objectModelIds.remove(position);
-            objectPreviewImages.remove(position);
-        }
-
-        /**
-         * Edit all Attributes from list item in GUI
-         *
-         * @param position      Position of list item
-         * @param name          Name of list item
-         * @param type          Type of list item
-         * @param additional    Additional Information of list item
-         */
-        private void editItem(int position, String name, String type, String additional) {
-            objectNames.set(position, name);
-            objectTypes.set(position, type);
-            objectAdditionalData.set(position, additional);
         }
 
         /**
@@ -236,7 +204,7 @@ public class ObjectOverviewFragment extends ListFragment {
                 String type = dialogObjectType.getText().toString();
                 String additional = dialogObjectAdditionalData.getText().toString();
 
-                if(objectDatabaseHelper.editObject(objectIds.get(position), name, type, additional)) {
+                if (objectDatabaseHelper.editObject(objectIds.get(position), name, type, additional)) {
                     editItem(position, name, type, additional);
                     Toast.makeText(context, R.string.success_edit_object, Toast.LENGTH_SHORT).show();
                     notifyDataSetChanged();
@@ -246,6 +214,7 @@ public class ObjectOverviewFragment extends ListFragment {
 
             cancelButton.setOnClickListener(v -> editObjectDialog.dismiss());
         }
+
         public void createAreYouSureDeleteDialog(int position) {
             AlertDialog.Builder areYouSureDialogBuilder = new AlertDialog.Builder(context);
             final View areYouSureDialogView = getLayoutInflater().inflate(R.layout.are_you_sure_delete_popup, null);
@@ -256,7 +225,7 @@ public class ObjectOverviewFragment extends ListFragment {
 
             Button deleteButton = areYouSureDialogView.findViewById(R.id.dialog_delete_obj_button);
             deleteButton.setOnClickListener(v -> {
-                if(objectDatabaseHelper.deleteObjectById(objectIds.get(position))) {
+                if (objectDatabaseHelper.deleteObjectById(objectIds.get(position))) {
                     deleteItem(position);
                     notifyDataSetChanged();
                     areYouSureDialog.dismiss();
@@ -264,6 +233,35 @@ public class ObjectOverviewFragment extends ListFragment {
             });
             Button cancelButton = areYouSureDialogView.findViewById(R.id.dialog_delete_obj_cancel);
             cancelButton.setOnClickListener(v -> areYouSureDialog.dismiss());
+        }
+
+        /**
+         * Edit all Attributes from list item in GUI
+         *
+         * @param position   Position of list item
+         * @param name       Name of list item
+         * @param type       Type of list item
+         * @param additional Additional Information of list item
+         */
+        private void editItem(int position, String name, String type, String additional) {
+            objectNames.set(position, name);
+            objectTypes.set(position, type);
+            objectAdditionalData.set(position, additional);
+        }
+
+        /**
+         * Remove all Attributes from list item in GUI
+         *
+         * @param position position of list item
+         */
+        private void deleteItem(int position) {
+            objectIds.remove(position);
+            objectNames.remove(position);
+            objectTypes.remove(position);
+            objectAdditionalData.remove(position);
+            objectCreationDates.remove(position);
+            objectModelIds.remove(position);
+            objectPreviewImages.remove(position);
         }
     }
 }

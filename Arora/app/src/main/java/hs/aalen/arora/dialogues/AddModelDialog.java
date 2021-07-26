@@ -30,7 +30,7 @@ public class AddModelDialog implements Dialog {
         settings = new SharedPrefsHelper(context);
         // Add Model dialog items
         AlertDialog.Builder addModelDialogBuilder = new AlertDialog.Builder(context);
-        final View addModelDialogView = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.add_model_dialog_popup,null);
+        final View addModelDialogView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.add_model_dialog_popup, null);
         dialogModelName = addModelDialogView.findViewById(R.id.add_dialog_model_name);
         Button saveButton = addModelDialogView.findViewById(R.id.add_model_dialog_save);
         Button cancelButton = addModelDialogView.findViewById(R.id.reset_app_cancel);
@@ -38,7 +38,7 @@ public class AddModelDialog implements Dialog {
         addModelDialogBuilder.setView(addModelDialogView);
         addModelDialog = addModelDialogBuilder.create();
         // Disable cancelButton because at least one model has to exist
-        if(!(databaseHelper.modelsExists())) {
+        if (!(databaseHelper.modelsExists())) {
             addModelDialog.setCanceledOnTouchOutside(false);
             cancelButton.setEnabled(false);
         }
@@ -46,17 +46,15 @@ public class AddModelDialog implements Dialog {
 
         saveButton.setOnClickListener(v -> {
             String modelName = dialogModelName.getText().toString();
-            if(modelName.isEmpty()) {
+            if (modelName.isEmpty()) {
                 Toast.makeText(context, context.getString(R.string.please_give_model_name), Toast.LENGTH_SHORT).show();
-            }
-            else {
+            } else {
                 // Insert a model to DB and set it up for Transfer Learning
-                if(databaseHelper.insertModel(modelName)){
+                if (databaseHelper.insertModel(modelName)) {
                     settings.setCurrentModel(databaseHelper.getModelIdByName(modelName));
                     dialogModelName.setText("");
                     addModelDialog.dismiss();
-                }
-                else {
+                } else {
                     Toast.makeText(context, R.string.model_exists, Toast.LENGTH_SHORT).show();
                 }
             }

@@ -32,10 +32,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // set night mode
-        if(getSharedPreferences("prefs", MODE_PRIVATE).getBoolean(getString(R.string.key_nightmode), false)) {
+        if (getSharedPreferences("prefs", MODE_PRIVATE).getBoolean(getString(R.string.key_nightmode), false)) {
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-        }
-        else {
+        } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             int isGranted = ContextCompat.checkSelfPermission(this.getApplicationContext(), permission);
             if (isGranted != PackageManager.PERMISSION_GRANTED) areGranted = false;
         }
-        if(!areGranted){
+        if (!areGranted) {
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
         }
     }

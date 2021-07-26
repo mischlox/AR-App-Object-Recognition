@@ -14,13 +14,13 @@ import java.io.ByteArrayOutputStream;
 import java.nio.file.Path;
 
 /**
- *  Class that handles object Database queries
- *  to add and modify object meta data and model parameters
+ * Class that handles object Database queries
+ * to add and modify object meta data and model parameters
  *
  * @author Michael Schlosser
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String TAG =DatabaseHelper.class.getSimpleName();
+    private static final String TAG = DatabaseHelper.class.getSimpleName();
     private static final String DATABASE_NAME = "arora_db";
 
     private static final String MODEL_TABLE_NAME = "model_table";
@@ -43,63 +43,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Check if there are elements in table
-     *
-     * @param table table to check
-     *
-     * @return true if elements in table exists, false otherwise
-     */
-    private boolean tableExists(String table) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + table;
-        Cursor data = db.rawQuery(query, null);
-        int count = data.getCount();
-        data.close();
-        return count > 0;
-    }
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String createModelTable = "CREATE TABLE " + MODEL_TABLE_NAME + " ("
-                + MODEL_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + MODEL_COL1 + " TEXT UNIQUE NOT NULL, "
-                + MODEL_COL2 + " TEXT) ";
-
-
-        String createObjectTable = "CREATE TABLE " + OBJECT_TABLE_NAME + " ("
-                + OBJECT_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + OBJECT_COL1 + " TEXT UNIQUE NOT NULL, "
-                + OBJECT_COL2 + " TEXT, "
-                + OBJECT_COL3 + " TEXT, "
-                + OBJECT_COL4 + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
-                + OBJECT_COL5 + " BLOB, "
-                + OBJECT_COL6 + " TEXT, "
-                + OBJECT_COL7 + " INTEGER NOT NULL, "
-                + " FOREIGN KEY("+OBJECT_COL7+") REFERENCES "+ MODEL_TABLE_NAME+"("+MODEL_COL0+"))";
-
-        db.execSQL(createObjectTable);
-        db.execSQL(createModelTable);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + MODEL_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + OBJECT_TABLE_NAME);
-        onCreate(db);
-    }
-
-    /**
      * Insert object to DB
      *
-     * @param objectName            name of object
-     * @param objectType            type of object
-     * @param objectAdditionalData  additional data to object
-     *
+     * @param objectName           name of object
+     * @param objectType           type of object
+     * @param objectAdditionalData additional data to object
      * @return true if successful, false otherwise
      */
     public long insertObject(String objectName,
-                                String objectType,
-                                String objectAdditionalData,
-                                String modelID) {
+                             String objectType,
+                             String objectAdditionalData,
+                             String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(OBJECT_COL1, objectName);
@@ -122,7 +76,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(OBJECT_COL5, image);
         db.update(OBJECT_TABLE_NAME,
                 contentValues,
-                OBJECT_COL1+"=?",
+                OBJECT_COL1 + "=?",
                 new String[]{objectID});
 
     }
@@ -134,12 +88,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long success = db.update(OBJECT_TABLE_NAME,
                 contentValues,
-                OBJECT_COL1+"=?",
+                OBJECT_COL1 + "=?",
                 new String[]{objectName});
 
         return success != -1;
     }
-
 
     /**
      * Returns all data from Object Table
@@ -150,6 +103,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME;
         return db.rawQuery(query, null);
+    }    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String createModelTable = "CREATE TABLE " + MODEL_TABLE_NAME + " ("
+                + MODEL_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + MODEL_COL1 + " TEXT UNIQUE NOT NULL, "
+                + MODEL_COL2 + " TEXT) ";
+
+
+        String createObjectTable = "CREATE TABLE " + OBJECT_TABLE_NAME + " ("
+                + OBJECT_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + OBJECT_COL1 + " TEXT UNIQUE NOT NULL, "
+                + OBJECT_COL2 + " TEXT, "
+                + OBJECT_COL3 + " TEXT, "
+                + OBJECT_COL4 + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
+                + OBJECT_COL5 + " BLOB, "
+                + OBJECT_COL6 + " TEXT, "
+                + OBJECT_COL7 + " INTEGER NOT NULL, "
+                + " FOREIGN KEY(" + OBJECT_COL7 + ") REFERENCES " + MODEL_TABLE_NAME + "(" + MODEL_COL0 + "))";
+
+        db.execSQL(createObjectTable);
+        db.execSQL(createModelTable);
     }
 
     /**
@@ -158,13 +132,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @return All data from table
      */
     public Cursor getAllObjectsByModelID(String modelID) {
-        if(modelID == null) modelID="";
+        if (modelID == null) modelID = "";
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
                 + " WHERE " + OBJECT_COL7 + "=?";
         return db.rawQuery(query, new String[]{modelID});
     }
-
 
     /**
      * Return all data from model table
@@ -179,16 +152,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String getModelNameByID(String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT "  + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME
+        String query = "SELECT " + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME
                 + " WHERE " + MODEL_COL0 + "=?";
         Cursor cursor = db.rawQuery(query, new String[]{modelID});
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             String modelName = cursor.getString(0);
             cursor.close();
             return modelName;
         }
         return null;
+    }    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + MODEL_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + OBJECT_TABLE_NAME);
+        onCreate(db);
     }
 
     public Cursor getObjectNamesByModelID(String modelID) {
@@ -198,17 +176,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, new String[]{modelID});
     }
 
-    public Cursor getObjectByModelPosAndModelID(String modelPos, String modelID ) {
+    public Cursor getObjectByModelPosAndModelID(String modelPos, String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
-                + " WHERE " + OBJECT_COL6 + "=? AND "+ OBJECT_COL7 + "=?";
+                + " WHERE " + OBJECT_COL6 + "=? AND " + OBJECT_COL7 + "=?";
         return db.rawQuery(query, new String[]{modelPos, modelID});
     }
 
     public boolean deleteObjectById(String id) {
         Log.d(TAG, "deletebyId: Delete item with ID " + id);
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(OBJECT_TABLE_NAME, OBJECT_COL0+"=?", new String[]{id}) > 0;
+        return db.delete(OBJECT_TABLE_NAME, OBJECT_COL0 + "=?", new String[]{id}) > 0;
     }
 
     public void deleteObjectByNameAndModelID(String name, String modelID) {
@@ -218,11 +196,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String getObjectModelPosByNameAndModelID(String name, String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String modelPos="";
-        String query = "SELECT " + OBJECT_COL6 +" FROM " + OBJECT_TABLE_NAME
+        String modelPos = "";
+        String query = "SELECT " + OBJECT_COL6 + " FROM " + OBJECT_TABLE_NAME
                 + " WHERE " + OBJECT_COL1 + "=? AND " + OBJECT_COL7 + "=?";
         Cursor cursor = db.rawQuery(query, new String[]{name, modelID});
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             modelPos = cursor.getString(0);
         }
         cursor.close();
@@ -232,11 +210,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Edit object by ID
      *
-     * @param id                    ID of Object
-     * @param objectName            Name of Object
-     * @param objectType            Type of Object
-     * @param objectAdditionalData  Additional Data of Object
-     *
+     * @param id                   ID of Object
+     * @param objectName           Name of Object
+     * @param objectType           Type of Object
+     * @param objectAdditionalData Additional Data of Object
      * @return True if successful, false otherwise
      */
     public boolean editObject(String id,
@@ -253,7 +230,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long success = db.update(OBJECT_TABLE_NAME,
                 contentValues,
-                OBJECT_COL0+"=?",
+                OBJECT_COL0 + "=?",
                 new String[]{id});
 
         return success != -1;
@@ -265,10 +242,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT " + MODEL_COL2 + " FROM " + MODEL_TABLE_NAME
                 + " WHERE " + MODEL_COL0 + "=?";
         Cursor cursor = db.rawQuery(query, new String[]{modelID});
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             modelPath = cursor.getString(0);
         }
-        if(modelPath == null) {
+        if (modelPath == null) {
             Log.d(TAG, "getModelPathByID: backup1:  model is null!");
         }
         cursor.close();
@@ -280,7 +257,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @param name name of the model
      * @param path path of the model parameters binary file
-     *
      * @return true if successful, false otherwise
      */
     public boolean insertOrUpdateModel(String name, Path path) {
@@ -290,16 +266,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(MODEL_COL1, name);
         contentValues.put(MODEL_COL2, path.toString());
         long success;
-        if(modelWithNameExists(name)) {
+        if (modelWithNameExists(name)) {
             success = db.update(MODEL_TABLE_NAME,
                     contentValues,
-                    MODEL_COL1+"=?",
+                    MODEL_COL1 + "=?",
                     new String[]{name});
-        }
-        else {
+        } else {
             success = db.insert(MODEL_TABLE_NAME, null, contentValues);
         }
         return success != -1;
+    }
+
+    public boolean modelWithNameExists(String name) {
+        if (name == null) name = "";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor;
+        String query = "SELECT " + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME
+                + " WHERE " + MODEL_COL1 + "=?";
+        cursor = db.rawQuery(query, new String[]{name});
+        int count = cursor.getCount();
+        cursor.close();
+        return count > 0;
     }
 
     /**
@@ -315,25 +302,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(MODEL_COL1, name);
         long success;
-        if(modelWithNameExists(name)) {
+        if (modelWithNameExists(name)) {
             success = -1;
-        }
-        else {
+        } else {
             success = db.insert(MODEL_TABLE_NAME, null, contentValues);
         }
         return success != -1;
-    }
-
-    public boolean modelWithNameExists(String name) {
-        if(name == null) name = "";
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor;
-        String query = "SELECT " + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME
-                + " WHERE " + MODEL_COL1 + "=?";
-        cursor = db.rawQuery(query, new String[]{name});
-        int count = cursor.getCount();
-        cursor.close();
-        return count > 0;
     }
 
     public boolean modelHasPath(String modelID) {
@@ -357,18 +331,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Query for getting model parameters by name
+     * Check if there are elements in table
      *
-     * @param modelName name of model
-     * @return Cursor with queried model ids
+     * @param table table to check
+     * @return true if elements in table exists, false otherwise
      */
-    private Cursor selectModel(String modelName) {
+    private boolean tableExists(String table) {
         SQLiteDatabase db = this.getWritableDatabase();
-
-        if(modelName.equals("")) modelName = "test";
-        String query = "SELECT " + MODEL_COL0 + " FROM " + MODEL_TABLE_NAME
-                + " WHERE " + MODEL_COL1 + " = " + "'"+modelName+"'";
-        return db.rawQuery(query, null);
+        String query = "SELECT * FROM " + table;
+        Cursor data = db.rawQuery(query, null);
+        int count = data.getCount();
+        data.close();
+        return count > 0;
     }
 
     /**
@@ -379,35 +353,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public String getModelIdByName(String modelName) {
         Cursor data = selectModel(modelName);
-        if(data.moveToFirst()) return data.getString(0);
+        if (data.moveToFirst()) return data.getString(0);
         else return "";
+    }
+
+    /**
+     * Query for getting model parameters by name
+     *
+     * @param modelName name of model
+     * @return Cursor with queried model ids
+     */
+    private Cursor selectModel(String modelName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        if (modelName.equals("")) modelName = "test";
+        String query = "SELECT " + MODEL_COL0 + " FROM " + MODEL_TABLE_NAME
+                + " WHERE " + MODEL_COL1 + " = " + "'" + modelName + "'";
+        return db.rawQuery(query, null);
     }
 
     @SuppressWarnings("unused")
     public String tableToString(String tableName) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Log.d("","tableToString called");
+        Log.d("", "tableToString called");
         String tableString = String.format("Table %s:\n", tableName);
-        Cursor allRows  = db.rawQuery("SELECT * FROM " + tableName, null);
+        Cursor allRows = db.rawQuery("SELECT * FROM " + tableName, null);
         tableString += cursorToString(allRows);
         return tableString;
     }
 
-
-    public String cursorToString(Cursor cursor){
+    public String cursorToString(Cursor cursor) {
         StringBuilder cursorString = new StringBuilder();
-        if (cursor.moveToFirst() ){
+        if (cursor.moveToFirst()) {
             String[] columnNames = cursor.getColumnNames();
-            for (String name: columnNames)
+            for (String name : columnNames)
                 cursorString.append(String.format("%s ][ ", name));
             cursorString.append("\n");
             do {
-                for (String name: columnNames) {
-                    if(name.equals("object_image") || name.equals("parameters")) {
+                for (String name : columnNames) {
+                    if (name.equals("object_image") || name.equals("parameters")) {
                         cursorString.append(String.format("%s ][ ",
                                 (cursor.getBlob(cursor.getColumnIndex(name)) != null)));
-                    }
-                    else {
+                    } else {
                         cursorString.append(String.format("%s ][ ",
                                 cursor.getString(cursor.getColumnIndex(name))));
                     }
@@ -417,6 +404,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return cursorString.toString();
     }
+
     /**
      * Check if there are objects in DB
      *
@@ -435,4 +423,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + MODEL_TABLE_NAME);
         onCreate(db);
     }
+
+
+
+
+
+
 }

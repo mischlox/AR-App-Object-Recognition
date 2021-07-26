@@ -13,6 +13,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class SharedPrefsHelper implements GlobalSettings {
     Context context;
     SharedPreferences prefs;
+
     public SharedPrefsHelper(Context context) {
         this.context = context;
         prefs = context.getSharedPreferences("prefs", MODE_PRIVATE);
@@ -46,15 +47,15 @@ public class SharedPrefsHelper implements GlobalSettings {
     }
 
     @Override
+    public boolean getHelpShowing() {
+        return prefs.getBoolean("showHelp", true);
+    }
+
+    @Override
     public void setHelpShowing(boolean show) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean("showHelp", show);
         editor.apply();
-    }
-
-    @Override
-    public boolean getHelpShowing() {
-        return prefs.getBoolean("showHelp", true);
     }
 
     @Override
@@ -84,6 +85,11 @@ public class SharedPrefsHelper implements GlobalSettings {
     }
 
     @Override
+    public String getCurrentModelPos() {
+        return prefs.getString("currentClass", "somethings wrong here");
+    }
+
+    @Override
     public void setCurrentModelPos(String newName) {
         SharedPreferences.Editor editor = prefs.edit();
         String prefKey = "currentClass";
@@ -92,8 +98,8 @@ public class SharedPrefsHelper implements GlobalSettings {
     }
 
     @Override
-    public String getCurrentModelPos() {
-        return prefs.getString("currentClass", "somethings wrong here");
+    public String getCurrentModel() {
+        return prefs.getString("currentModel", null);
     }
 
     @Override
@@ -104,8 +110,8 @@ public class SharedPrefsHelper implements GlobalSettings {
     }
 
     @Override
-    public String getCurrentModel() {
-        return prefs.getString("currentModel", null);
+    public String getCurrentObject() {
+        return prefs.getString("currentObject", "");
     }
 
     @Override
@@ -113,11 +119,6 @@ public class SharedPrefsHelper implements GlobalSettings {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("currentObject", name);
         editor.apply();
-    }
-
-    @Override
-    public String getCurrentObject() {
-        return prefs.getString("currentObject", "");
     }
 
     @Override

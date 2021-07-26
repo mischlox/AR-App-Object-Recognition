@@ -16,7 +16,7 @@ import java.util.TreeMap;
 /**
  * View Model of {@link CameraFragment}
  * To keep Data out of Controller and to persist state when configuration changes happen
- *
+ * <p>
  * Parts of this code are taken from:
  * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/
  *
@@ -24,15 +24,6 @@ import java.util.TreeMap;
  */
 public class CameraFragmentViewModel extends ViewModel {
     private static final String TAG = "CameraFragmentViewModel";
-    /**
-     * Current state of training.
-     */
-    public enum TrainingState {
-        NOT_STARTED,
-        STARTED,
-        PAUSED
-    }
-
     private final MutableLiveData<Boolean> captureMode = new MutableLiveData<>(false);
     private final MutableLiveData<Map<String, Float>> confidence = new MutableLiveData<>(new TreeMap<>());
     private final MutableLiveData<Map<String, Integer>> numSamplesCurrent = new MutableLiveData<>(new TreeMap<>());
@@ -41,9 +32,7 @@ public class CameraFragmentViewModel extends ViewModel {
     private final MutableLiveData<TrainingState> trainingState = new MutableLiveData<>(TrainingState.NOT_STARTED);
     private final MutableLiveData<Float> lastLoss = new MutableLiveData<>();
     private final MutableLiveData<Boolean> inferenceSnackbarWasDisplayed = new MutableLiveData<>(false);
-
     private final ArrayList<String> positions = new ArrayList<>();
-
     private LiveData<String> firstChoice;
 
     public void setCaptureMode(boolean newValue) {
@@ -79,8 +68,8 @@ public class CameraFragmentViewModel extends ViewModel {
         assert map != null;
         if (map.containsKey(className)) {
             Integer boxedCurrentNumber = map.get(className);
-            if(boxedCurrentNumber != null)
-            currentNumber = boxedCurrentNumber;
+            if (boxedCurrentNumber != null)
+                currentNumber = boxedCurrentNumber;
         }
         map.put(className, currentNumber + 1);
         increaseNumSamplesCurrent(className);
@@ -93,18 +82,16 @@ public class CameraFragmentViewModel extends ViewModel {
         assert map != null;
         if (map.containsKey(className)) {
             Integer boxedCurrentNumber = map.get(className);
-            if(boxedCurrentNumber != null)
+            if (boxedCurrentNumber != null)
                 currentNumber = boxedCurrentNumber;
             Integer boxedNumSamplesMax = numSamplesMax.getValue();
-            if(boxedNumSamplesMax != null) {
+            if (boxedNumSamplesMax != null) {
                 if (currentNumber > boxedNumSamplesMax) currentNumber = 0;
             }
         }
         map.put(className, currentNumber + 1);
         numSamplesCurrent.postValue(map);
     }
-
-
 
     /**
      * Confidence values for each class from inference.
@@ -120,13 +107,14 @@ public class CameraFragmentViewModel extends ViewModel {
         confidence.postValue(map);
     }
 
-    /** Whether model training is not yet started, already started, or temporarily paused. */
+    /**
+     * Whether model training is not yet started, already started, or temporarily paused.
+     */
     public LiveData<TrainingState> getTrainingState() {
         return trainingState;
     }
 
-    public void setTrainingState(TrainingState newValue)
-    {
+    public void setTrainingState(TrainingState newValue) {
         trainingState.postValue(newValue);
         Log.d(TAG, "addSamples: Set Training State to " + newValue.toString());
     }
@@ -151,12 +139,12 @@ public class CameraFragmentViewModel extends ViewModel {
                 if (map.isEmpty()) {
                     return null;
                 }
-            try {
-                return mapEntriesDecreasingValue(map).get(0).getKey();
-            } catch (ConcurrentModificationException | NullPointerException e) {
-                Log.e(TAG, "mapEntriesDecreasingValue: " + e.toString());
-                return "";
-            }
+                try {
+                    return mapEntriesDecreasingValue(map).get(0).getKey();
+                } catch (ConcurrentModificationException | NullPointerException e) {
+                    Log.e(TAG, "mapEntriesDecreasingValue: " + e.toString());
+                    return "";
+                }
             });
         }
         return firstChoice;
@@ -167,7 +155,18 @@ public class CameraFragmentViewModel extends ViewModel {
         try {
             entryList = new ArrayList<>(map.entrySet());
             entryList.sort((e1, e2) -> -Float.compare(e1.getValue(), e2.getValue()));
-        }catch (NullPointerException | ConcurrentModificationException e){e.printStackTrace();}
+        } catch (NullPointerException | ConcurrentModificationException e) {
+            e.printStackTrace();
+        }
         return entryList;
+    }
+
+    /**
+     * Current state of training.
+     */
+    public enum TrainingState {
+        NOT_STARTED,
+        STARTED,
+        PAUSED
     }
 }

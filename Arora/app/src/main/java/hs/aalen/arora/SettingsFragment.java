@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
@@ -12,7 +13,9 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SeekBarPreference;
 import androidx.preference.SwitchPreference;
+
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 
 import hs.aalen.arora.dialogues.DialogFactory;
@@ -23,8 +26,9 @@ import hs.aalen.arora.dialogues.DialogType;
  *
  * @author Michael Schlosser
  */
-public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener{
+public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
+    private static final HashMap<Integer, String> resolutionMap = new HashMap<>();
     SharedPreferences prefs;
     private SeekBarPreference amountSamplesPreference;
     private SeekBarPreference countDownPreference;
@@ -32,7 +36,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     private SeekBarPreference resolutionPreference;
     private SeekBarPreference confidencePreference;
     private Preference resetAppPreference;
-    private static final HashMap<Integer, String> resolutionMap= new HashMap<>();
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -82,31 +85,27 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         SharedPreferences.Editor editor = prefs.edit();
-        if(amountSamplesPreference.getKey().equals(preference.getKey())) {
-            editor.putInt(getString(R.string.key_seekbar), (int)newValue);
+        if (amountSamplesPreference.getKey().equals(preference.getKey())) {
+            editor.putInt(getString(R.string.key_seekbar), (int) newValue);
             editor.apply();
             return true;
-        }
-        else if(confidencePreference.getKey().equals(preference.getKey())) {
+        } else if (confidencePreference.getKey().equals(preference.getKey())) {
             editor.putInt("key_confidence", (int) newValue);
             editor.apply();
             return true;
-        }
-        else if(nightModePreference.getKey().equals(preference.getKey())) {
-            editor.putBoolean(getString(R.string.key_nightmode), (boolean)newValue);
+        } else if (nightModePreference.getKey().equals(preference.getKey())) {
+            editor.putBoolean(getString(R.string.key_nightmode), (boolean) newValue);
             editor.apply();
             return true;
-        }
-        else if(resolutionPreference.getKey().equals(preference.getKey())) {
-            editor.putInt(getString(R.string.key_resolution), (int)newValue);
+        } else if (resolutionPreference.getKey().equals(preference.getKey())) {
+            editor.putInt(getString(R.string.key_resolution), (int) newValue);
             editor.apply();
             resolutionPreference.setSummary(getString(R.string.settings_resolution_hint) + "\n" +
                     getString(R.string.settings_resolution_current) + " " +
-                    resolutionMap.get((int)newValue));
+                    resolutionMap.get((int) newValue));
             return true;
-        }
-        else if(countDownPreference.getKey().equals(preference.getKey())) {
-            editor.putInt("key_countdown", (int)newValue);
+        } else if (countDownPreference.getKey().equals(preference.getKey())) {
+            editor.putInt("key_countdown", (int) newValue);
             editor.apply();
             return true;
         }

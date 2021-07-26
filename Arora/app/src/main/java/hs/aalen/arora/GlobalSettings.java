@@ -11,26 +11,34 @@ public interface GlobalSettings {
     double LARGE = 1;
 
     int getAmountSamples();
+
     boolean getNightMode();
+
     double getFocusBoxRatio();
 
-    void setHelpShowing(boolean show);
     boolean getHelpShowing();
 
+    void setHelpShowing(boolean show);
+
     void switchAddSamplesTrigger();
+
     boolean getAddSamplesTrigger();
 
     void switchIllegalStateTrigger();
+
     boolean getIllegalStateTrigger();
 
-    void setCurrentModelPos(String newName);
     String getCurrentModelPos();
 
-    void setCurrentModel(String id);
+    void setCurrentModelPos(String newName);
+
     String getCurrentModel();
 
-    void setCurrentObject(String name);
+    void setCurrentModel(String id);
+
     String getCurrentObject();
+
+    void setCurrentObject(String name);
 
     int getMaxObjects();
 

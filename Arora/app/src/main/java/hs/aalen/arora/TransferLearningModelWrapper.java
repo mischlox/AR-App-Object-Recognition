@@ -38,7 +38,7 @@ import java.util.concurrent.Future;
  *
  * <p>This wrapper allows to run training continuously, using start/stop API, in contrast to
  * run-once API of TransferLearningModel.
- *
+ * <p>
  * This code is based on:
  * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/
  */
@@ -49,11 +49,11 @@ public class TransferLearningModelWrapper {
     private final TransferLearningModel model;
 
     private final ConditionVariable shouldTrain = new ConditionVariable();
-    private volatile TransferLearningModel.LossConsumer lossConsumer;
     private final DatabaseHelper databaseHelper;
     private final Context context;
     Path parametersFilePath;
     String modelID;
+    private volatile TransferLearningModel.LossConsumer lossConsumer;
 
     TransferLearningModelWrapper(Context context, Collection<String> classes, String modelID) {
         this.context = context;
@@ -73,7 +73,7 @@ public class TransferLearningModelWrapper {
                 shouldTrain.block();
                 try {
                     model.train(1, lossConsumer).get();
-                } catch (ExecutionException | InterruptedException e){
+                } catch (ExecutionException | InterruptedException e) {
                     throw new RuntimeException("Exception occurred during model training", e.getCause());
                 } catch (IllegalStateException e) {
 //                    Log.e(TAG, "TransferLearningModelWrapper: ",e.getCause());
@@ -84,6 +84,31 @@ public class TransferLearningModelWrapper {
                 }
             }
         }).start();
+    }
+
+    /**
+     * Calls a method for loading a model
+     */
+    public void loadModel(String id) {
+        try {
+            readParametersFromFile(id);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Loads a model by id that is saved in DB
+     * (Should only call when shared prefs changed)
+     *
+     * @param id of model
+     * @throws IOException when reading the file gets interrupted an Exception will be thrown
+     */
+    private void readParametersFromFile(String id) throws IOException {
+        Log.d(TAG, "readParametersFromFile: backup: file");
+        Path path = Paths.get(databaseHelper.getModelPathByID(id));
+        Log.d(TAG, "readParametersFromFile: backup1: latest path is: " + path.toString());
+        model.loadParameters(FileChannel.open(path, StandardOpenOption.READ));
     }
 
     // This method is thread-safe.
@@ -115,22 +140,27 @@ public class TransferLearningModelWrapper {
     }
 
     /**
-     * Calls a method for loading a model
+     * Stores model parameters,
+     * frees all model resources and shuts down all background threads.
      */
-    public void loadModel(String id) {
-        try {
-            readParametersFromFile(id);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void close() {
+        boolean success = saveModel();
+
+        if (success) {
+            Log.d(TAG, "close: backup: successfully saved parameters!");
+        } else {
+            Log.d(TAG, "close: backup: could not save parameters!");
         }
+        model.close();
     }
 
     /**
      * Calls a method for saving the model
+     *
      * @return true if model got successfully saved, false otherwise
      */
-    private boolean saveModel()  {
-        try{
+    private boolean saveModel() {
+        try {
             writeParametersToFile();
         } catch (IOException e) {
             e.printStackTrace();
@@ -139,7 +169,7 @@ public class TransferLearningModelWrapper {
         return true;
     }
 
-    private void writeParametersToFile() throws IOException{
+    private void writeParametersToFile() throws IOException {
         String filename = generateFileName();
         parametersFilePath = Paths.get(context.getFilesDir().toString() + File.separator + filename);
         Log.d(TAG, "writeParametersToFile: backup1: filepath is " + parametersFilePath.toString());
@@ -155,34 +185,6 @@ public class TransferLearningModelWrapper {
      * @return generated random file name
      */
     private String generateFileName() {
-        return "model-parameters" +"-" + UUID.randomUUID() + ".bin";
-    }
-
-    /**
-     * Loads a model by id that is saved in DB
-     * (Should only call when shared prefs changed)
-     *
-     * @param id of model
-     * @throws IOException when reading the file gets interrupted an Exception will be thrown
-     */
-    private void readParametersFromFile(String id) throws IOException {
-        Log.d(TAG, "readParametersFromFile: backup: file");
-        Path path = Paths.get(databaseHelper.getModelPathByID(id));
-        Log.d(TAG, "readParametersFromFile: backup1: latest path is: " + path.toString());
-        model.loadParameters(FileChannel.open(path, StandardOpenOption.READ));
-    }
-
-    /** Stores model parameters,
-     *  frees all model resources and shuts down all background threads. */
-    public void close() {
-        boolean success = saveModel();
-
-        if(success) {
-            Log.d(TAG, "close: backup: successfully saved parameters!");
-        }
-        else {
-            Log.d(TAG, "close: backup: could not save parameters!");
-        }
-        model.close();
+        return "model-parameters" + "-" + UUID.randomUUID() + ".bin";
     }
 }

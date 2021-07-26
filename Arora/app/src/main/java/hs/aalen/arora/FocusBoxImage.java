@@ -15,23 +15,32 @@ import android.util.AttributeSet;
  * @author Michael Schlosser
  */
 public class FocusBoxImage extends androidx.appcompat.widget.AppCompatImageView {
-    private int[] focusBoxLocation;
     private final Paint paintRect;
     private final PorterDuffXfermode porterDuffXfermode;
-    public FocusBoxImage(Context context) {this(context,null);}
-    public FocusBoxImage(Context context, AttributeSet attributeSet) {this(context,attributeSet,0);}
+    private int[] focusBoxLocation;
+
+    public FocusBoxImage(Context context) {
+        this(context, null);
+    }
+
+    public FocusBoxImage(Context context, AttributeSet attributeSet) {
+        this(context, attributeSet, 0);
+    }
+
     public FocusBoxImage(Context context, AttributeSet attributeSet, int defStyleAttr) {
-        super(context,attributeSet, defStyleAttr);
+        super(context, attributeSet, defStyleAttr);
         this.paintRect = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.porterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
         initView();
     }
 
     //Set the translucent background color
-    private void initView(){setBackgroundColor(Color.parseColor("#7f000000"));}
+    private void initView() {
+        setBackgroundColor(Color.parseColor("#7f000000"));
+    }
 
-    public void setFocusBoxLocation(int[] location){
-        this.focusBoxLocation=location;
+    public void setFocusBoxLocation(int[] location) {
+        this.focusBoxLocation = location;
         invalidate();
     }
 

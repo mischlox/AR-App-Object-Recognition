@@ -68,16 +68,17 @@ import static android.view.View.VISIBLE;
  * @author Michael Schlosser
  */
 public class CameraFragment extends Fragment {
-    private Context context;
     private static final String TAG = CameraFragment.class.getSimpleName();
     // Front or back camera
     private static final CameraX.LensFacing LENS_FACING = CameraX.LensFacing.BACK;
-
     /**
      * Class that is trained will be saved to this queue
      */
     private final ConcurrentLinkedQueue<String> addSampleRequests = new ConcurrentLinkedQueue<>();
+    // Put all items to this list for simpler use
+    private final ArrayList<TextView> expandableViewList = new ArrayList<>();
     int numSamplesPerClass;
+    private Context context;
     // Expandable Object Data CardView
     private TextView objectName;
     private TextView objectConfidence;
@@ -85,8 +86,6 @@ public class CameraFragment extends Fragment {
     private TextView additionalObjectInfoValues;
     private TextView timestampObjectInfoValues;
     private ImageView objectPreviewImage;
-    // Put all items to this list for simpler use
-    private final ArrayList<TextView> expandableViewList = new ArrayList<>();
     private FloatingActionButton expandCollapseButton;
     private CardView objectDataCardView;
     private ProgressBar trainingProgressBar;
@@ -104,14 +103,6 @@ public class CameraFragment extends Fragment {
 
     private String modelID;
     private double focusBoxRatio;
-    private ArrayList<String> positionsList;
-
-    private TextView countDownTextView;
-    private int countdown;
-
-    private int confidenceThres;
-
-
     /**
      * Analyzer is responsible for processing camera input
      * (including inference and send training samples to transfer learning model)
@@ -123,7 +114,9 @@ public class CameraFragment extends Fragment {
                 Bitmap rgbBitmap;
                 try {
                     rgbBitmap = ImageUtils.yuvCameraImageToBitmap(imageProxy);
-                } catch (NullPointerException | IllegalStateException e) {return;}
+                } catch (NullPointerException | IllegalStateException e) {
+                    return;
+                }
 
                 float[] rgbImage = ImageUtils.prepareCameraImage(rgbBitmap, rotationDegrees, identifyFocusBoxCorners(rgbBitmap.getWidth(), rgbBitmap.getHeight(), focusBoxRatio));
                 // Get the head of queue
@@ -131,14 +124,14 @@ public class CameraFragment extends Fragment {
 
                 // Training Mode
                 if (sampleClass != null) {
-                    if(preview == null) {
+                    if (preview == null) {
                         preview = ImageUtils.scaleAndRotateBitmap(rgbBitmap,
-                                                       rotationDegrees,
-                                                       TransferLearningModelWrapper.IMAGE_SIZE,
-                                                       identifyFocusBoxCorners(rgbBitmap.getWidth(),
-                                                                               rgbBitmap.getHeight(),
-                                                                               focusBoxRatio)
-                                                       );
+                                rotationDegrees,
+                                TransferLearningModelWrapper.IMAGE_SIZE,
+                                identifyFocusBoxCorners(rgbBitmap.getWidth(),
+                                        rgbBitmap.getHeight(),
+                                        focusBoxRatio)
+                        );
                         databaseHelper.updateImageBlob(currentObjectName, preview);
                     }
                     try {
@@ -177,82 +170,76 @@ public class CameraFragment extends Fragment {
                     Log.d(TAG, "addSamples: inference: object is: " + viewModel.getFirstChoice().getValue());
                 }
             };
+    private ArrayList<String> positionsList;
+    private TextView countDownTextView;
+    private int countdown;
+    private int confidenceThres;
 
     /**
-     * expand the cardview and show all object info at the top of the fragment
-     * when clicking the expand/collapse button
+     * Add specific amount of Training Data to queue
+     * Also maps an open model position to the object
+     *
+     * @param objectName position of object to train
+     * @param amount     amount of input samples for training
      */
-    private void showMore() {
-        if (viewIsVisible()) {
-            TransitionManager.beginDelayedTransition(objectDataCardView, new AutoTransition());
-            setVisibilityAll(GONE);
-            objectPreviewImage.setVisibility(GONE);
-            expandCollapseButton.setImageResource(R.drawable.ic_expand);
+    public void addSamples(String objectName, int amount) {
+        currentObjectName = objectName;
+        Log.d(TAG, "addSamples: current class: " + objectName);
+        String openPos = getOpenModelPosition();
+        if (openPos.equals("")) {
+            Toast.makeText(context, R.string.model_is_full, Toast.LENGTH_SHORT).show();
+            removeObjectFromModel(currentObjectName, modelID, false);
+            return;
+        }
+        // Add the model position finally to the object in the DB
+        if (databaseHelper.updateModelPos(objectName, openPos)) {
+            AddSamplesThread addSamplesThread = new AddSamplesThread(openPos, amount);
+            addSamplesThread.start();
         } else {
-            TransitionManager.beginDelayedTransition(objectDataCardView, new AutoTransition());
-            setVisibilityAll(VISIBLE);
-            objectPreviewImage.setVisibility(VISIBLE);
-            expandCollapseButton.setImageResource(R.drawable.ic_collapse);
+            Toast.makeText(context, R.string.error_occured, Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
-     * Helper function for showMore that checks if items are visible or not
+     * Chooses the first open position of the model
      *
-     * @return true if view is visible, false otherwise
+     * @return An open Position that the object can set
      */
-    private boolean viewIsVisible() {
-        for (TextView item : expandableViewList) {
-            if (item.getVisibility() == VISIBLE) {
-                Log.d(TAG, "showMore: viewIsVisible: " + item.getVisibility());
-                return true;
-            }
+    private String getOpenModelPosition() {
+        String openPosition = "";
+        if (viewModel.getPositions().isEmpty()) {
+            Log.w(TAG, "getOpenModelPosition: No Model Position open!");
+        } else {
+            // Set the position of the model to the first open position and remove it afterwards
+            openPosition = viewModel.getPositions().get(0);
+            viewModel.getPositions().remove(0);
         }
-        return false;
+        return openPosition;
     }
 
     /**
-     * Helper function for showMore
-     * that makes textViews un-/visible
+     * Remove the object from the Database and adds an open position back to the model
+     * (Used for rollback)
      *
-     * @param visibility either GONE oder VISIBLE
+     * @param objectName  name of the object in the model
+     * @param modelID     ID of the currently selected model
+     * @param hasPosition flag to check if a model position has to be freed up
      */
-    private void setVisibilityAll(int visibility) {
-        for (TextView item : expandableViewList) {
-            item.setVisibility(visibility);
+    public void removeObjectFromModel(String objectName, String modelID, boolean hasPosition) {
+        databaseHelper.deleteObjectByNameAndModelID(objectName, modelID);
+        // Add the model position back to the Position-ArrayList
+        if (hasPosition) {
+            String posOfObject = databaseHelper.getObjectModelPosByNameAndModelID(objectName, modelID);
+            if (!(viewModel.getPositions().contains(posOfObject))) {
+                viewModel.getPositions().add(posOfObject);
+            }
         }
     }
 
-    /**
-     * Populates all item from expandable cardview with data from DB
-     *
-     * @param pos primary key of data
-     */
-    private void populateAllViewItems(String pos) {
-        Cursor data = this.databaseHelper.getObjectByModelPosAndModelID(pos, modelID);
-        if (data.moveToFirst()) {
-            // Object name
-            objectName.setText(data.getString(1));
-            // Preview image
-            if(data.getBlob(5) != null) {
-                byte[] image = data.getBlob(5);
-                objectPreviewImage.setImageBitmap(
-                        BitmapFactory.decodeByteArray(image, 0, image.length));
-            }
-
-            // expandable view
-            for (TextView item : expandableViewList) {
-                if (item == typeObjectInfoValues) {
-                    item.setText(data.getString(2));
-                } else if (item == additionalObjectInfoValues) {
-                    item.setText(data.getString(3));
-                } else if (item == timestampObjectInfoValues) {
-                    String dateString = data.getString(4);
-                    item.setText(DateUtils.parseDateTime(dateString));
-
-                }
-            }
-        }
+    @Override
+    public void onAttach(@NonNull @NotNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     @Override
@@ -263,70 +250,17 @@ public class CameraFragment extends Fragment {
         loadNewModel();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if(addSampleRequests.size() != 0) {
-            addSampleRequests.clear();
-            Toast.makeText(context, R.string.please_do_not_change_tabs, Toast.LENGTH_SHORT).show();
-        }
-        viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
-        transferLearningModel.close();
-        transferLearningModel = null;
-    }
-
     /**
      * Initialize model with open positions and map them to objects in DB
      */
     public void loadNewModel() {
         this.viewModel.getPositions().addAll(positionsList);
-        if(modelID == null) {
+        if (modelID == null) {
             // Create new model in Dialog
             DialogFactory.getDialog(DialogType.ADD_MODEL).createDialog(context);
-        }
-        else {
+        } else {
             mapObjectsFromDB();
             transferLearningModel = new TransferLearningModelWrapper(getActivity(), positionsList, modelID);
-        }
-    }
-
-    /**
-     * Remove the object from the Database and adds an open position back to the model
-     * (Used for rollback)
-     *
-     * @param objectName name of the object in the model
-     * @param modelID ID of the currently selected model
-     * @param hasPosition flag to check if a model position has to be freed up
-     */
-    public void removeObjectFromModel(String objectName, String modelID, boolean hasPosition) {
-        databaseHelper.deleteObjectByNameAndModelID(objectName, modelID);
-        // Add the model position back to the Position-ArrayList
-        if(hasPosition) {
-            String posOfObject = databaseHelper.getObjectModelPosByNameAndModelID(objectName,modelID);
-            if(!(viewModel.getPositions().contains(posOfObject))) {
-                viewModel.getPositions().add(posOfObject);
-            }
-        }
-    }
-
-    /**
-     * Deletes an object if there went something wrong during adding (e.g. missing model pos)
-     * because they cannot be mapped otherwise
-     */
-    public void removeCorruptObjects() {
-        Cursor data = this.databaseHelper.getAllObjects();
-        while(data.moveToNext()) {
-            String modelPos = data.getString(6);
-            String modelID = data.getString(7);
-            if(modelPos == null || modelID == null) {
-                databaseHelper.deleteObjectById(data.getString(0));
-            }
         }
     }
 
@@ -334,7 +268,7 @@ public class CameraFragment extends Fragment {
      * Compares saved model positions of saved objects with open positions in current model
      */
     private void mapObjectsFromDB() {
-        if(databaseHelper.objectsExist()) {
+        if (databaseHelper.objectsExist()) {
             removeCorruptObjects();
             Cursor data = this.databaseHelper.getAllObjectsByModelID(modelID);
             while (data.moveToNext()) {
@@ -353,23 +287,18 @@ public class CameraFragment extends Fragment {
     }
 
     /**
-     * Helper function to set percentual amount of progress in progress bar
+     * Deletes an object if there went something wrong during adding (e.g. missing model pos)
+     * because they cannot be mapped otherwise
      */
-    private void setProgressCircle(int progress) {
-        Log.d(TAG, "addSamples setProgressCircle Max: " + trainingProgressBar.getMax() + " progress: " + progress);
-        if (progress == 0) {
-            trainingProgressBarLabel.setText(R.string.detecting_progress);
-            trainingProgressBarTextView.setVisibility(GONE);
-            trainingProgressBar.setIndeterminate(true);
-        } else {
-            trainingProgressBarLabel.setText(R.string.training_progress);
-            trainingProgressBarTextView.setVisibility(VISIBLE);
-            trainingProgressBar.setIndeterminate(false);
+    public void removeCorruptObjects() {
+        Cursor data = this.databaseHelper.getAllObjects();
+        while (data.moveToNext()) {
+            String modelPos = data.getString(6);
+            String modelID = data.getString(7);
+            if (modelPos == null || modelID == null) {
+                databaseHelper.deleteObjectById(data.getString(0));
+            }
         }
-        trainingProgressBar.setProgress(progress);
-        int relativeProgress = (int) (((float) progress / (float) trainingProgressBar.getMax()) * 100);
-        String relativeProgressStr = relativeProgress + "%";
-        trainingProgressBarTextView.setText(relativeProgressStr);
     }
 
     @Nullable
@@ -419,15 +348,15 @@ public class CameraFragment extends Fragment {
                         getViewLifecycleOwner(),
                         numSamples -> {
                             Integer trainingProgressMax = viewModel.getNumSamplesMax().getValue();
-                            if(trainingProgressMax != null)
+                            if (trainingProgressMax != null)
                                 trainingProgressBar.setMax(trainingProgressMax);
                             int progress = 0;
                             try {
                                 Integer wrappedNumSamples = numSamples.get(addSampleRequests.peek());
-                                if(wrappedNumSamples != null)
+                                if (wrappedNumSamples != null)
                                     this.numSamplesPerClass = wrappedNumSamples;
                                 Map<String, Integer> mapNumSamplesWrapped = viewModel.getNumSamplesCurrent().getValue();
-                                if(mapNumSamplesWrapped != null) {
+                                if (mapNumSamplesWrapped != null) {
                                     Integer wrappedNumSamplesCurrent = mapNumSamplesWrapped.get(addSampleRequests.peek());
                                     if (wrappedNumSamplesCurrent != null)
                                         progress = wrappedNumSamplesCurrent;
@@ -442,15 +371,15 @@ public class CameraFragment extends Fragment {
             try {
                 Map<String, Float> wrappedConfidenceMap = viewModel.getConfidence().getValue();
                 float confidence = 0;
-                if(wrappedConfidenceMap != null) {
+                if (wrappedConfidenceMap != null) {
                     Float wrappedConfidence = wrappedConfidenceMap.get(s);
-                    if(wrappedConfidence != null) {
+                    if (wrappedConfidence != null) {
                         confidence = wrappedConfidence;
                     }
                 }
                 float confidencePercent = confidence * 100;
                 DecimalFormat df = new DecimalFormat("##.#");
-                if(confidencePercent > confidenceThres) {
+                if (confidencePercent > confidenceThres) {
                     if (databaseHelper.objectsExist())
                         objectConfidence.setText(String.format("%s %%", df.format(confidencePercent)));
                     if (!s.isEmpty()) populateAllViewItems(s);
@@ -488,6 +417,79 @@ public class CameraFragment extends Fragment {
 
         expandCollapseButton.setOnClickListener(v -> showMore());
 
+    }
+
+    /**
+     * Function that identifies the corners of a square in the center of the display
+     *
+     * @param width  of Bitmap
+     * @param height of Bitmap
+     * @param ratio  crop-factor
+     * @return the four positions
+     */
+    public int[] identifyFocusBoxCorners(int width, int height, double ratio) {
+        int[] locations = new int[4];
+        // You can only square the smaller side. Otherwise there would occur an OutOfBoundsException
+        int size = (int) ((Math.min(width, height)) * ratio);
+        Point center = new Point(width / 2, height / 2);
+        locations[0] = center.x - (size / 2); // left
+        locations[1] = center.y - (size / 2); // top
+        locations[2] = center.x + (size / 2); // right
+        locations[3] = center.y + (size / 2); // bottom
+
+        return locations;
+    }
+
+    /**
+     * Helper function to set percentual amount of progress in progress bar
+     */
+    private void setProgressCircle(int progress) {
+        Log.d(TAG, "addSamples setProgressCircle Max: " + trainingProgressBar.getMax() + " progress: " + progress);
+        if (progress == 0) {
+            trainingProgressBarLabel.setText(R.string.detecting_progress);
+            trainingProgressBarTextView.setVisibility(GONE);
+            trainingProgressBar.setIndeterminate(true);
+        } else {
+            trainingProgressBarLabel.setText(R.string.training_progress);
+            trainingProgressBarTextView.setVisibility(VISIBLE);
+            trainingProgressBar.setIndeterminate(false);
+        }
+        trainingProgressBar.setProgress(progress);
+        int relativeProgress = (int) (((float) progress / (float) trainingProgressBar.getMax()) * 100);
+        String relativeProgressStr = relativeProgress + "%";
+        trainingProgressBarTextView.setText(relativeProgressStr);
+    }
+
+    /**
+     * Populates all item from expandable cardview with data from DB
+     *
+     * @param pos primary key of data
+     */
+    private void populateAllViewItems(String pos) {
+        Cursor data = this.databaseHelper.getObjectByModelPosAndModelID(pos, modelID);
+        if (data.moveToFirst()) {
+            // Object name
+            objectName.setText(data.getString(1));
+            // Preview image
+            if (data.getBlob(5) != null) {
+                byte[] image = data.getBlob(5);
+                objectPreviewImage.setImageBitmap(
+                        BitmapFactory.decodeByteArray(image, 0, image.length));
+            }
+
+            // expandable view
+            for (TextView item : expandableViewList) {
+                if (item == typeObjectInfoValues) {
+                    item.setText(data.getString(2));
+                } else if (item == additionalObjectInfoValues) {
+                    item.setText(data.getString(3));
+                } else if (item == timestampObjectInfoValues) {
+                    String dateString = data.getString(4);
+                    item.setText(DateUtils.parseDateTime(dateString));
+
+                }
+            }
+        }
     }
 
     /**
@@ -543,6 +545,24 @@ public class CameraFragment extends Fragment {
         ImageAnalysis imageAnalysis = new ImageAnalysis(analysisConfig);
         imageAnalysis.setAnalyzer(inferenceAnalyzer);
         CameraX.bindToLifecycle(this, preview, imageAnalysis);
+    }
+
+    /**
+     * expand the cardview and show all object info at the top of the fragment
+     * when clicking the expand/collapse button
+     */
+    private void showMore() {
+        if (viewIsVisible()) {
+            TransitionManager.beginDelayedTransition(objectDataCardView, new AutoTransition());
+            setVisibilityAll(GONE);
+            objectPreviewImage.setVisibility(GONE);
+            expandCollapseButton.setImageResource(R.drawable.ic_expand);
+        } else {
+            TransitionManager.beginDelayedTransition(objectDataCardView, new AutoTransition());
+            setVisibilityAll(VISIBLE);
+            objectPreviewImage.setVisibility(VISIBLE);
+            expandCollapseButton.setImageResource(R.drawable.ic_collapse);
+        }
     }
 
     /**
@@ -608,82 +628,50 @@ public class CameraFragment extends Fragment {
         viewFinder.setTransform(matrix);
     }
 
+    /**
+     * Helper function for showMore that checks if items are visible or not
+     *
+     * @return true if view is visible, false otherwise
+     */
+    private boolean viewIsVisible() {
+        for (TextView item : expandableViewList) {
+            if (item.getVisibility() == VISIBLE) {
+                Log.d(TAG, "showMore: viewIsVisible: " + item.getVisibility());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Helper function for showMore
+     * that makes textViews un-/visible
+     *
+     * @param visibility either GONE oder VISIBLE
+     */
+    private void setVisibilityAll(int visibility) {
+        for (TextView item : expandableViewList) {
+            item.setVisibility(visibility);
+        }
+    }
+
     @Override
     public void onResume() {
         mapObjectsFromDB();
         super.onResume();
     }
 
-    /**
-     * Add specific amount of Training Data to queue
-     * Also maps an open model position to the object
-     *
-     * @param objectName position of object to train
-     * @param amount    amount of input samples for training
-     */
-    public void addSamples(String objectName, int amount) {
-        currentObjectName = objectName;
-        Log.d(TAG, "addSamples: current class: " + objectName);
-        String openPos = getOpenModelPosition();
-        if(openPos.equals("")) {
-            Toast.makeText(context, R.string.model_is_full, Toast.LENGTH_SHORT).show();
-            removeObjectFromModel(currentObjectName, modelID, false);
-            return;
-        }
-        // Add the model position finally to the object in the DB
-        if(databaseHelper.updateModelPos(objectName, openPos)) {
-            AddSamplesThread addSamplesThread = new AddSamplesThread(openPos, amount);
-            addSamplesThread.start();
-        }
-        else {
-            Toast.makeText(context, R.string.error_occured, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * Function that identifies the corners of a square in the center of the display
-     *
-     * @param width of Bitmap
-     * @param height of Bitmap
-     * @param ratio crop-factor
-     *
-     * @return the four positions
-     */
-    public int[] identifyFocusBoxCorners(int width, int height, double ratio) {
-        int[] locations = new int[4];
-        // You can only square the smaller side. Otherwise there would occur an OutOfBoundsException
-        int size = (int) ((Math.min(width, height)) * ratio);
-        Point center = new Point(width/2, height/2);
-        locations[0] = center.x - (size/2); // left
-        locations[1] = center.y - (size/2); // top
-        locations[2] = center.x + (size/2); // right
-        locations[3] = center.y + (size/2); // bottom
-
-        return locations;
-    }
-
-    /**
-     * Chooses the first open position of the model
-     *
-     * @return An open Position that the object can set
-     */
-    private String getOpenModelPosition() {
-        String openPosition = "";
-        if(viewModel.getPositions().isEmpty()) {
-            Log.w(TAG, "getOpenModelPosition: No Model Position open!");
-        }
-        else {
-            // Set the position of the model to the first open position and remove it afterwards
-            openPosition = viewModel.getPositions().get(0);
-            viewModel.getPositions().remove(0);
-        }
-        return openPosition;
-    }
-
     @Override
-    public void onAttach(@NonNull @NotNull Context context) {
-        super.onAttach(context);
-        this.context = context;
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (addSampleRequests.size() != 0) {
+            addSampleRequests.clear();
+            Toast.makeText(context, R.string.please_do_not_change_tabs, Toast.LENGTH_SHORT).show();
+        }
+        viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
+        transferLearningModel.close();
+        transferLearningModel = null;
     }
 
     public void setCountDown(int countDown) {
@@ -692,6 +680,23 @@ public class CameraFragment extends Fragment {
 
     public void setConfidenceThres(int confidenceThres) {
         this.confidenceThres = confidenceThres;
+    }
+
+    public void setFocusBoxRatio(double focusBoxRatio) {
+        this.focusBoxRatio = focusBoxRatio;
+    }
+
+    public void setModelID(String id) {
+        this.modelID = id;
+    }
+
+    public void setPositionsList(int maxObjects) {
+        ArrayList<String> positionsList = new ArrayList<>();
+        for (int i = 1; i < maxObjects + 1; i++) {
+            String pos = i + "";
+            positionsList.add(pos);
+        }
+        this.positionsList = positionsList;
     }
 
     /**
@@ -706,10 +711,10 @@ public class CameraFragment extends Fragment {
             this.modelPosition = modelPosition;
             this.numSamples = numSamples;
 
-            countDownThread = new CountDownTimer((countdown*1000), 1000) {
+            countDownThread = new CountDownTimer((countdown * 1000), 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    String count = (millisUntilFinished/1000) + "";
+                    String count = (millisUntilFinished / 1000) + "";
                     countDownTextView.setText(count);
                 }
 
@@ -719,11 +724,6 @@ public class CameraFragment extends Fragment {
                     addSamples();
                 }
             };
-        }
-
-        @Override
-        public void run() {
-            countDownThread.start();
         }
 
         public void addSamples() {
@@ -737,22 +737,10 @@ public class CameraFragment extends Fragment {
             viewModel.setCaptureMode(false);
             Log.d(TAG, "addSamples: Capture Mode is disabled!");
         }
-    }
 
-    public void setFocusBoxRatio(double focusBoxRatio) {
-        this.focusBoxRatio = focusBoxRatio;
-    }
-
-    public void setModelID(String id) {
-        this.modelID = id;
-    }
-
-    public void setPositionsList(int maxObjects) {
-        ArrayList<String> positionsList = new ArrayList<>();
-        for(int i = 1; i < maxObjects+1; i++) {
-            String pos= i+"";
-            positionsList.add(pos);
+        @Override
+        public void run() {
+            countDownThread.start();
         }
-        this.positionsList = positionsList;
     }
 }

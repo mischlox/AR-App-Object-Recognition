@@ -25,17 +25,16 @@ public class ResetAppDialog implements Dialog {
         databaseHelper = new DatabaseHelper(context);
         settings = new SharedPrefsHelper(context);
         AlertDialog.Builder resetAppDialogBuilder = new AlertDialog.Builder(context);
-        final View resetAppDialogView = ((LayoutInflater)context
+        final View resetAppDialogView = ((LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.reset_app_dialog_popup, null);
 
         Button resetButton = resetAppDialogView.findViewById(R.id.reset_app_delete);
         resetButton.setOnClickListener(v -> {
-            if(deleteAllData()) {
+            if (deleteAllData()) {
                 Toast.makeText(context, R.string.success_delete_all, Toast.LENGTH_SHORT).show();
                 resetAppDialog.dismiss();
-            }
-            else {
+            } else {
                 Toast.makeText(context, R.string.error_occured, Toast.LENGTH_SHORT).show();
             }
 
@@ -68,6 +67,6 @@ public class ResetAppDialog implements Dialog {
             }
             databaseHelper.deleteAll();
         }
-    return success != -1;
+        return success != -1;
     }
 }

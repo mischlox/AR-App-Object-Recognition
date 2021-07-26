@@ -23,13 +23,14 @@ import hs.aalen.arora.SharedPrefsHelper;
 /**
  * Dialog that gives instructions for the usage of this app
  */
-public class HelpDialog implements Dialog{
+public class HelpDialog implements Dialog {
     private AlertDialog helpDialog;
     private TextView helpTextView;
     private ProgressBar helpProgress;
     private TextView helpProgressText;
     private Context context;
     private GlobalSettings settings;
+
     @Override
     public void createDialog(Context context) {
         this.context = context;
@@ -37,7 +38,7 @@ public class HelpDialog implements Dialog{
 
         AlertDialog.Builder helpDialogBuilder = new AlertDialog.Builder(context);
 
-        final View helpDialogView = ((LayoutInflater)context
+        final View helpDialogView = ((LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.help_popup, null);
         FloatingActionButton backwardButton = helpDialogView.findViewById(R.id.help_backward_button);
@@ -54,9 +55,9 @@ public class HelpDialog implements Dialog{
 
         // Linked list to browse through text views
         LinkedList<Pair<Integer, String>> textList = new LinkedList<>();
-        textList.add(Pair.create(2,context.getString(R.string.help_text_tilt_camera)));
-        textList.add(Pair.create(3,context.getString(R.string.help_text_counter_training)));
-        textList.add(Pair.create(4,context.getString(R.string.help_text_havefun)));
+        textList.add(Pair.create(2, context.getString(R.string.help_text_tilt_camera)));
+        textList.add(Pair.create(3, context.getString(R.string.help_text_counter_training)));
+        textList.add(Pair.create(4, context.getString(R.string.help_text_havefun)));
 
         notShowAgainCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> settings.setHelpShowing(!isChecked));
         // Next slide
