@@ -124,6 +124,8 @@ public class ObjectOverviewFragment extends ListFragment {
         private EditText dialogObjectType;
         private EditText dialogObjectAdditionalData;
 
+        View item;
+
         ObjectOverviewAdapter(Context c,
                               ArrayList<String> title,
                               ArrayList<String> type,
@@ -143,8 +145,10 @@ public class ObjectOverviewFragment extends ListFragment {
 
         @Override
         public View getView(int position, @Nullable View convertView, ViewGroup parent) {
-            LayoutInflater layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View item = layoutInflater.inflate(R.layout.object_item, parent, false);
+            LayoutInflater layoutInflater = (LayoutInflater)requireActivity()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            if(item == null) item = layoutInflater.inflate(R.layout.object_item, parent, false);
             ImageButton editButton = item.findViewById(R.id.list_edit_button);
             editButton.setOnClickListener(v -> createEditObjectDialog(position));
             ImageButton deleteButton = item.findViewById(R.id.list_delete_button);

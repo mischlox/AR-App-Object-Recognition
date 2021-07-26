@@ -3,6 +3,7 @@ package hs.aalen.arora;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,19 +31,29 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     private SwitchPreference nightModePreference;
     private SeekBarPreference resolutionPreference;
     private SeekBarPreference confidencePreference;
+    private Preference resetAppPreference;
     private static final HashMap<Integer, String> resolutionMap= new HashMap<>();
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        Log.d("a", "onCreatePreferences: TEST AMK");
         PreferenceManager.setDefaultValues(requireContext(), R.xml.prefs, true);
+        amountSamplesPreference = findPreference(getString(R.string.key_seekbar));
+        countDownPreference = findPreference("key_countdown");
+        nightModePreference = findPreference(getString(R.string.key_nightmode));
+        resolutionPreference = findPreference(getString(R.string.key_resolution));
+        resetAppPreference = findPreference(getString(R.string.key_reset));
+        confidencePreference = findPreference("key_confidence");
 
         addPreferencesFromResource(R.xml.prefs);
-        findPreference(getString(R.string.key_seekbar)).setOnPreferenceChangeListener(this);
-        findPreference(getString(R.string.key_nightmode)).setOnPreferenceChangeListener(this);
-        findPreference(getString(R.string.key_resolution)).setOnPreferenceChangeListener(this);
-        findPreference(getString(R.string.key_reset)).setOnPreferenceChangeListener(this);
-        findPreference("key_countdown").setOnPreferenceChangeListener(this);
-        findPreference("key_confidence").setOnPreferenceChangeListener(this);
+        amountSamplesPreference.setOnPreferenceChangeListener(this);
+        nightModePreference.setOnPreferenceChangeListener(this);
+        resolutionPreference.setOnPreferenceChangeListener(this);
+        countDownPreference.setOnPreferenceChangeListener(this);
+        confidencePreference.setOnPreferenceChangeListener(this);
+
+        assert resetAppPreference != null;
+        resetAppPreference.setOnPreferenceChangeListener(this);
 
         prefs = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
@@ -53,13 +64,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        Log.d("a", "onViewCreated: TEST AMK");
+
         super.onViewCreated(view, savedInstanceState);
-        amountSamplesPreference = findPreference(getString(R.string.key_seekbar));
-        countDownPreference = findPreference("key_countdown");
-        nightModePreference = findPreference(getString(R.string.key_nightmode));
-        resolutionPreference = findPreference(getString(R.string.key_resolution));
-        Preference resetAppPreference = findPreference(getString(R.string.key_reset));
-        confidencePreference = findPreference("key_confidence");
 
         assert resetAppPreference != null;
         resetAppPreference.setOnPreferenceClickListener(preference -> {

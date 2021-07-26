@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 /**
  * Mask for the image preview
@@ -15,7 +14,7 @@ import android.widget.ImageView;
  *
  * @author Michael Schlosser
  */
-public class FocusBoxImage extends ImageView {
+public class FocusBoxImage extends androidx.appcompat.widget.AppCompatImageView {
     private int[] focusBoxLocation;
     private final Paint paintRect;
     private final PorterDuffXfermode porterDuffXfermode;

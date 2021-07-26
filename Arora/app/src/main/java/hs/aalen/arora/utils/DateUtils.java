@@ -24,6 +24,7 @@ public class DateUtils {
         try {
             newDate = formatDB.parse(dateTimeDB);
             SimpleDateFormat formatRet = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
+            assert newDate != null;
             ret = formatRet.format(newDate);
         } catch (ParseException | NullPointerException e) {
             e.printStackTrace();
