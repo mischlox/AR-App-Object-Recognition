@@ -42,7 +42,10 @@
     </PreferenceCategory>
         <Preference
             android:key="@string/key_reset"
-            android:title="Reset Application"
-            android:summary="Delete all models and objects from the application"
+            android:title="@string/reset_app"
+            android:summary="@string/reset_app_summary"
             android:icon="@drawable/ic_delete"/>
+<!--    Add more prefs as a workaround to make it possible to scroll further down-->
+        <Preference android:selectable="false"></Preference>
+        <Preference android:selectable="false"></Preference>
 </PreferenceScreen>
