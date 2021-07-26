@@ -34,18 +34,17 @@ import hs.aalen.arora.utils.DateUtils;
  * @author Michael Schlosser
  */
 public class ObjectOverviewFragment extends ListFragment {
-    private static final String TAG = ObjectOverviewFragment.class.getSimpleName();
 
     private DatabaseHelper objectDatabaseHelper;
     private ListView objectListView;
 
-    private ArrayList<String> objectIds = new ArrayList<>();
-    private ArrayList<String> objectNames = new ArrayList<>();
-    private ArrayList<String> objectTypes = new ArrayList<>();
-    private ArrayList<String> objectAdditionalData = new ArrayList<>();
-    private ArrayList<String> objectCreationDates = new ArrayList<>();
-    private ArrayList<String> objectModelIds = new ArrayList<>();
-    private ArrayList<byte[]> objectPreviewImages = new ArrayList<>();
+    private final ArrayList<String> objectIds = new ArrayList<>();
+    private final ArrayList<String> objectNames = new ArrayList<>();
+    private final ArrayList<String> objectTypes = new ArrayList<>();
+    private final ArrayList<String> objectAdditionalData = new ArrayList<>();
+    private final ArrayList<String> objectCreationDates = new ArrayList<>();
+    private final ArrayList<String> objectModelIds = new ArrayList<>();
+    private final ArrayList<byte[]> objectPreviewImages = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -87,7 +86,7 @@ public class ObjectOverviewFragment extends ListFragment {
         ListAdapter adapter = new ObjectOverviewAdapter(getContext(),
                                                         objectNames,
                                                         objectTypes,
-                objectAdditionalData,
+                                                        objectAdditionalData,
                                                         objectCreationDates,
                                                         objectPreviewImages,
                                                         objectModelIds);
@@ -124,8 +123,6 @@ public class ObjectOverviewFragment extends ListFragment {
         private EditText dialogObjectName;
         private EditText dialogObjectType;
         private EditText dialogObjectAdditionalData;
-        private ImageButton confirmButton;
-        private ImageButton cancelButton;
 
         ObjectOverviewAdapter(Context c,
                               ArrayList<String> title,
@@ -149,19 +146,9 @@ public class ObjectOverviewFragment extends ListFragment {
             LayoutInflater layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View item = layoutInflater.inflate(R.layout.object_item, parent, false);
             ImageButton editButton = item.findViewById(R.id.list_edit_button);
-            editButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    createEditObjectDialog(position);
-                }
-            });
+            editButton.setOnClickListener(v -> createEditObjectDialog(position));
             ImageButton deleteButton = item.findViewById(R.id.list_delete_button);
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    createAreYouSureDeleteDialog(position);
-                }
-            });
+            deleteButton.setOnClickListener(v -> createAreYouSureDeleteDialog(position));
             ImageView previewImageView = item.findViewById(R.id.list_image_preview);
             TextView title = item.findViewById(R.id.list_object_name);
             TextView type = item.findViewById(R.id.list_object_type);
@@ -233,35 +220,27 @@ public class ObjectOverviewFragment extends ListFragment {
             dialogObjectAdditionalData = editObjectDialogView.findViewById(R.id.edit_dialog_object_additional_data);
             dialogObjectAdditionalData.setText(objectAdditionalData.get(position));
 
-            confirmButton = editObjectDialogView.findViewById(R.id.edit_dialog_confirm);
-            cancelButton = editObjectDialogView.findViewById(R.id.edit_dialog_cancel);
+            ImageButton confirmButton = editObjectDialogView.findViewById(R.id.edit_dialog_confirm);
+            ImageButton cancelButton = editObjectDialogView.findViewById(R.id.edit_dialog_cancel);
 
             editObjectDialogBuilder.setView(editObjectDialogView);
             editObjectDialog = editObjectDialogBuilder.create();
             editObjectDialog.show();
 
-            confirmButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String name = dialogObjectName.getText().toString();
-                    String type = dialogObjectType.getText().toString();
-                    String additional = dialogObjectAdditionalData.getText().toString();
+            confirmButton.setOnClickListener(v -> {
+                String name = dialogObjectName.getText().toString();
+                String type = dialogObjectType.getText().toString();
+                String additional = dialogObjectAdditionalData.getText().toString();
 
-                    if(objectDatabaseHelper.editObject(objectIds.get(position), name, type, additional)) {
-                        editItem(position, name, type, additional);
-                        Toast.makeText(context, R.string.success_edit_object, Toast.LENGTH_SHORT).show();
-                        notifyDataSetChanged();
-                        editObjectDialog.dismiss();
-                    }
-                }
-            });
-
-            cancelButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                if(objectDatabaseHelper.editObject(objectIds.get(position), name, type, additional)) {
+                    editItem(position, name, type, additional);
+                    Toast.makeText(context, R.string.success_edit_object, Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
                     editObjectDialog.dismiss();
                 }
             });
+
+            cancelButton.setOnClickListener(v -> editObjectDialog.dismiss());
         }
         public void createAreYouSureDeleteDialog(int position) {
             AlertDialog.Builder areYouSureDialogBuilder = new AlertDialog.Builder(context);
@@ -272,23 +251,15 @@ public class ObjectOverviewFragment extends ListFragment {
             areYouSureDialog.show();
 
             Button deleteButton = areYouSureDialogView.findViewById(R.id.dialog_delete_obj_button);
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(objectDatabaseHelper.deleteObjectById(objectIds.get(position))) {
-                        deleteItem(position);
-                        notifyDataSetChanged();
-                        areYouSureDialog.dismiss();
-                    }
-                }
-            });
-            Button cancelButton = areYouSureDialogView.findViewById(R.id.dialog_delete_obj_cancel);
-            cancelButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            deleteButton.setOnClickListener(v -> {
+                if(objectDatabaseHelper.deleteObjectById(objectIds.get(position))) {
+                    deleteItem(position);
+                    notifyDataSetChanged();
                     areYouSureDialog.dismiss();
                 }
             });
+            Button cancelButton = areYouSureDialogView.findViewById(R.id.dialog_delete_obj_cancel);
+            cancelButton.setOnClickListener(v -> areYouSureDialog.dismiss());
         }
     }
 }

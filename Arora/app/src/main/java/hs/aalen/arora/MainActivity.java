@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,23 +42,15 @@ public class MainActivity extends AppCompatActivity {
         verifyPermissions();
 
         Button startButton = findViewById(R.id.startButton);
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, CameraActivity.class));
-            }
-        });
+        startButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, CameraActivity.class)));
 
         Button experimentalButton = findViewById(R.id.experimentalButton);
-        experimentalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        experimentalButton.setOnClickListener(v -> {
 //                DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
 //                String model_table = dbHelper.tableToString("model_table");
 //                String object_table = dbHelper.tableToString("object_table");
 //                Log.d(TAG, "TABLE INFO:\n" + model_table + object_table);
-                DialogFactory.getDialog(DialogType.INFO).createDialog(MainActivity.this);
-            }
+            DialogFactory.getDialog(DialogType.INFO).createDialog(MainActivity.this);
         });
     }
 

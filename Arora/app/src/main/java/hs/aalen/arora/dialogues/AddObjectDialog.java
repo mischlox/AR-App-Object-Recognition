@@ -47,44 +47,36 @@ public class AddObjectDialog implements Dialog {
         addObjectDialog = addObjectDialogBuilder.create();
         addObjectDialog.show();
 
-        startTrainingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Save typed in values by user to DB
-                String objectName = dialogObjectName.getText().toString();
-                String objectType = dialogObjectType.getText().toString();
-                String objectAdditionalData = dialogObjectAdditionalData.getText().toString();
+        startTrainingButton.setOnClickListener(v -> {
+            // Save typed in values by user to DB
+            String objectName = dialogObjectName.getText().toString();
+            String objectType = dialogObjectType.getText().toString();
+            String objectAdditionalData = dialogObjectAdditionalData.getText().toString();
 
-                if(objectName.length() != 0) {
-                    long success = addObject(objectName, objectType, objectAdditionalData, settings.getCurrentModel());
-                    if(success != -1) {
-                        // Save the name of the object to Global Configuration
-                        settings.setCurrentModelPos(dialogObjectName.getText().toString());
-                        settings.setCurrentObject(objectName);
-                        // Reset text
-                        dialogObjectName.setText("");
-                        dialogObjectType.setText("");
-                        dialogObjectAdditionalData.setText("");
-                        // Trigger adding Samples in Camera Fragment and therefore start training
-                        settings.switchAddSamplesTrigger();
-                        addObjectDialog.dismiss();
-                    }
-                    else {
-                        Toast.makeText(context, R.string.object_exists, Toast.LENGTH_SHORT).show();
-                    }
+            if(objectName.length() != 0) {
+                long success = addObject(objectName, objectType, objectAdditionalData, settings.getCurrentModel());
+                if(success != -1) {
+                    // Save the name of the object to Global Configuration
+                    settings.setCurrentModelPos(dialogObjectName.getText().toString());
+                    settings.setCurrentObject(objectName);
+                    // Reset text
+                    dialogObjectName.setText("");
+                    dialogObjectType.setText("");
+                    dialogObjectAdditionalData.setText("");
+                    // Trigger adding Samples in Camera Fragment and therefore start training
+                    settings.switchAddSamplesTrigger();
+                    addObjectDialog.dismiss();
                 }
                 else {
-                    Toast.makeText(context, R.string.dialog_please_set_name, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.object_exists, Toast.LENGTH_SHORT).show();
                 }
+            }
+            else {
+                Toast.makeText(context, R.string.dialog_please_set_name, Toast.LENGTH_LONG).show();
             }
         });
 
-        cancelDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addObjectDialog.dismiss();
-            }
-        });
+        cancelDialogButton.setOnClickListener(v -> addObjectDialog.dismiss());
     }
 
     /**

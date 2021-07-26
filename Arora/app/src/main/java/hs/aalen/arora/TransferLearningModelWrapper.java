@@ -51,7 +51,7 @@ public class TransferLearningModelWrapper {
     private final ConditionVariable shouldTrain = new ConditionVariable();
     private volatile TransferLearningModel.LossConsumer lossConsumer;
     private final DatabaseHelper databaseHelper;
-    private Context context;
+    private final Context context;
     Path parametersFilePath;
     String modelID;
 
@@ -96,10 +96,6 @@ public class TransferLearningModelWrapper {
         return model.predict(image);
     }
 
-    public int getTrainBatchSize() {
-        return model.getTrainBatchSize();
-    }
-
     /**
      * Start training the model continuously until {@link #disableTraining() disableTraining} is
      * called.
@@ -120,21 +116,18 @@ public class TransferLearningModelWrapper {
 
     /**
      * Calls a method for loading a model
-     * @return true if successful, false if IO Exception occured
      */
-    public boolean loadModel(String id) {
+    public void loadModel(String id) {
         try {
             readParametersFromFile(id);
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     /**
      * Calls a method for saving the model
-     * @return
+     * @return true if model got successfully saved, false otherwise
      */
     private boolean saveModel()  {
         try{
@@ -147,7 +140,7 @@ public class TransferLearningModelWrapper {
     }
 
     private void writeParametersToFile() throws IOException{
-        String filename = generateFileName("model-parameters",".bin");
+        String filename = generateFileName();
         parametersFilePath = Paths.get(context.getFilesDir().toString() + File.separator + filename);
         Log.d(TAG, "writeParametersToFile: backup1: filepath is " + parametersFilePath.toString());
         parametersFilePath = Files.createFile(parametersFilePath);
@@ -161,8 +154,8 @@ public class TransferLearningModelWrapper {
      *
      * @return generated random file name
      */
-    private String generateFileName(String prefix, String suffix) {
-        return prefix+"-" + UUID.randomUUID() + suffix;
+    private String generateFileName() {
+        return "model-parameters" +"-" + UUID.randomUUID() + ".bin";
     }
 
     /**
@@ -170,7 +163,7 @@ public class TransferLearningModelWrapper {
      * (Should only call when shared prefs changed)
      *
      * @param id of model
-     * @throws IOException
+     * @throws IOException when reading the file gets interrupted an Exception will be thrown
      */
     private void readParametersFromFile(String id) throws IOException {
         Log.d(TAG, "readParametersFromFile: backup: file");

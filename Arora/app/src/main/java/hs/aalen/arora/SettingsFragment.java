@@ -3,11 +3,7 @@ package hs.aalen.arora;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
@@ -15,9 +11,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SeekBarPreference;
 import androidx.preference.SwitchPreference;
-
 import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 
 import hs.aalen.arora.dialogues.DialogFactory;
@@ -29,10 +23,8 @@ import hs.aalen.arora.dialogues.DialogType;
  * @author Michael Schlosser
  */
 public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener{
-    private static final String TAG = SettingsFragment.class.getSimpleName();
 
     SharedPreferences prefs;
-    private Preference resetAppPreference;
     private SeekBarPreference amountSamplesPreference;
     private SeekBarPreference countDownPreference;
     private SwitchPreference nightModePreference;
@@ -42,7 +34,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        PreferenceManager.setDefaultValues(getContext(), R.xml.prefs, true);
+        PreferenceManager.setDefaultValues(requireContext(), R.xml.prefs, true);
 
         addPreferencesFromResource(R.xml.prefs);
         findPreference(getString(R.string.key_seekbar)).setOnPreferenceChangeListener(this);
@@ -52,7 +44,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         findPreference("key_countdown").setOnPreferenceChangeListener(this);
         findPreference("key_confidence").setOnPreferenceChangeListener(this);
 
-        prefs = getContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        prefs = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
         resolutionMap.put(0, getString(R.string.settings_resolution_small));
         resolutionMap.put(1, getString(R.string.settings_resolution_medium));
@@ -66,16 +58,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         countDownPreference = findPreference("key_countdown");
         nightModePreference = findPreference(getString(R.string.key_nightmode));
         resolutionPreference = findPreference(getString(R.string.key_resolution));
-        resetAppPreference = findPreference(getString(R.string.key_reset));
+        Preference resetAppPreference = findPreference(getString(R.string.key_reset));
         confidencePreference = findPreference("key_confidence");
 
         assert resetAppPreference != null;
-        resetAppPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                DialogFactory.getDialog(DialogType.RESET).createDialog(getContext());
-                return true;
-            }
+        resetAppPreference.setOnPreferenceClickListener(preference -> {
+            DialogFactory.getDialog(DialogType.RESET).createDialog(getContext());
+            return true;
         });
         amountSamplesPreference.setUpdatesContinuously(true);
         countDownPreference.setUpdatesContinuously(true);

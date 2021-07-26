@@ -3,15 +3,10 @@ package hs.aalen.arora;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.PathEffect;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.RectF;
-import android.media.Image;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.ImageView;
 
 /**
@@ -21,13 +16,15 @@ import android.widget.ImageView;
  * @author Michael Schlosser
  */
 public class FocusBoxImage extends ImageView {
-    private final Context context;
     private int[] focusBoxLocation;
+    private final Paint paintRect;
+    private final PorterDuffXfermode porterDuffXfermode;
     public FocusBoxImage(Context context) {this(context,null);}
     public FocusBoxImage(Context context, AttributeSet attributeSet) {this(context,attributeSet,0);}
     public FocusBoxImage(Context context, AttributeSet attributeSet, int defStyleAttr) {
         super(context,attributeSet, defStyleAttr);
-        this.context = context;
+        this.paintRect = new Paint(Paint.ANTI_ALIAS_FLAG);
+        this.porterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
         initView();
     }
 
@@ -44,10 +41,8 @@ public class FocusBoxImage extends ImageView {
         super.onDraw(canvas);
         setLayerType(LAYER_TYPE_SOFTWARE, null);
         //Draw a rectangular frame
-        Paint paintrect=new Paint(Paint.ANTI_ALIAS_FLAG);
-        PorterDuffXfermode porterDuffXfermode=new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
-        paintrect.setXfermode(porterDuffXfermode);
-        paintrect.setAntiAlias(true);
-        canvas.drawRect(focusBoxLocation[0], focusBoxLocation[1], focusBoxLocation[2], focusBoxLocation[3], paintrect);
+        paintRect.setXfermode(porterDuffXfermode);
+        paintRect.setAntiAlias(true);
+        canvas.drawRect(focusBoxLocation[0], focusBoxLocation[1], focusBoxLocation[2], focusBoxLocation[3], paintRect);
     }
 }

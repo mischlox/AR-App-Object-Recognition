@@ -44,31 +44,23 @@ public class AddModelDialog implements Dialog {
         }
         addModelDialog.show();
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String modelName = dialogModelName.getText().toString();
-                if(modelName.isEmpty()) {
-                    Toast.makeText(context, context.getString(R.string.please_give_model_name), Toast.LENGTH_SHORT).show();
+        saveButton.setOnClickListener(v -> {
+            String modelName = dialogModelName.getText().toString();
+            if(modelName.isEmpty()) {
+                Toast.makeText(context, context.getString(R.string.please_give_model_name), Toast.LENGTH_SHORT).show();
+            }
+            else {
+                // Insert a model to DB and set it up for Transfer Learning
+                if(databaseHelper.insertModel(modelName)){
+                    settings.setCurrentModel(databaseHelper.getModelIdByName(modelName));
+                    dialogModelName.setText("");
+                    addModelDialog.dismiss();
                 }
                 else {
-                    // Insert a model to DB and set it up for Transfer Learning
-                    if(databaseHelper.insertModel(modelName)){
-                        settings.setCurrentModel(databaseHelper.getModelIdByName(modelName));
-                        dialogModelName.setText("");
-                        addModelDialog.dismiss();
-                    }
-                    else {
-                        Toast.makeText(context, R.string.model_exists, Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(context, R.string.model_exists, Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addModelDialog.dismiss();
-            }
-        });
+        cancelButton.setOnClickListener(v -> addModelDialog.dismiss());
     }
 }

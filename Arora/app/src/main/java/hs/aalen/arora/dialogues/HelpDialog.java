@@ -9,7 +9,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -59,55 +58,43 @@ public class HelpDialog implements Dialog{
         textList.add(Pair.create(3,context.getString(R.string.help_text_counter_training)));
         textList.add(Pair.create(4,context.getString(R.string.help_text_havefun)));
 
-        notShowAgainCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                settings.setHelpShowing(!isChecked);
-            }
-        });
+        notShowAgainCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> settings.setHelpShowing(!isChecked));
         // Next slide
-        forwardButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startTextAnimation(helpTextView, R.anim.anim_fade_out);
+        forwardButton.setOnClickListener(v -> {
+            startTextAnimation(helpTextView, R.anim.anim_fade_out);
 
-                String currentText = helpTextView.getText().toString();
-                int currentProgress = helpProgress.getProgress();
-                Pair<Integer, String> nextItem = textList.removeFirst();
+            String currentText = helpTextView.getText().toString();
+            int currentProgress = helpProgress.getProgress();
+            Pair<Integer, String> nextItem = textList.removeFirst();
 
-                helpProgress.setProgress(nextItem.first);
-                startTextAnimation(helpTextView, R.anim.anim_fade_in);
-                helpTextView.setText(nextItem.second, TextView.BufferType.SPANNABLE);
-                helpProgressText.setText(nextItem.first.toString() + " / " + helpProgress.getMax());
+            helpProgress.setProgress(nextItem.first);
+            startTextAnimation(helpTextView, R.anim.anim_fade_in);
+            helpTextView.setText(nextItem.second, TextView.BufferType.SPANNABLE);
+            String progressText = nextItem.first.toString() + " / " + helpProgress.getMax();
+            helpProgressText.setText(progressText);
 
-                textList.addLast(Pair.create(currentProgress, currentText));
-            }
+            textList.addLast(Pair.create(currentProgress, currentText));
         });
         // Previous slide
-        backwardButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startTextAnimation(helpTextView, R.anim.anim_fade_out);
+        backwardButton.setOnClickListener(v -> {
+            startTextAnimation(helpTextView, R.anim.anim_fade_out);
 
-                String currentText = helpTextView.getText().toString();
-                int currentProgress = helpProgress.getProgress();
-                Pair<Integer, String> nextItem = textList.removeLast();
+            String currentText = helpTextView.getText().toString();
+            int currentProgress = helpProgress.getProgress();
+            Pair<Integer, String> nextItem = textList.removeLast();
 
-                helpProgress.setProgress(nextItem.first);
-                startTextAnimation(helpTextView, R.anim.anim_fade_in);
-                helpTextView.setText(nextItem.second, TextView.BufferType.SPANNABLE);
-                helpProgressText.setText(nextItem.first.toString() + " / " + helpProgress.getMax());
+            helpProgress.setProgress(nextItem.first);
+            startTextAnimation(helpTextView, R.anim.anim_fade_in);
+            helpTextView.setText(nextItem.second, TextView.BufferType.SPANNABLE);
+            String progressText = nextItem.first.toString() + " / " + helpProgress.getMax();
+            helpProgressText.setText(progressText);
 
-                textList.addFirst(Pair.create(currentProgress, currentText));
-            }
+            textList.addFirst(Pair.create(currentProgress, currentText));
         });
         // Go to Add object dialog
-        trainingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                helpDialog.dismiss();
-                new AddObjectDialog().createDialog(context);
-            }
+        trainingButton.setOnClickListener(v -> {
+            helpDialog.dismiss();
+            new AddObjectDialog().createDialog(context);
         });
     }
 

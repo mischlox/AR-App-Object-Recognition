@@ -12,18 +12,16 @@ import hs.aalen.arora.R;
 
 public class InfoDialog implements Dialog {
     private AlertDialog infoDialog;
-    private Context context;
 
     @Override
     public void createDialog(Context context) {
-        this.context = context;
         AlertDialog.Builder infoDialogBuilder = new AlertDialog.Builder(context);
         final View infoDialogView = ((LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.info_dialog_popup, null);
 
         TextView infoText = infoDialogView.findViewById(R.id.info_text);
-        infoText.setText(Html.fromHtml(context.getString(R.string.info_text)));
+        infoText.setText(Html.fromHtml(context.getString(R.string.info_text), Html.FROM_HTML_MODE_LEGACY));
         infoText.setMovementMethod(LinkMovementMethod.getInstance());
         Button okButton = infoDialogView.findViewById(R.id.button_info);
 
@@ -31,11 +29,6 @@ public class InfoDialog implements Dialog {
         infoDialog = infoDialogBuilder.create();
         infoDialog.show();
 
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                infoDialog.dismiss();
-            }
-        });
+        okButton.setOnClickListener(v -> infoDialog.dismiss());
     }
 }

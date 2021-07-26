@@ -121,13 +121,6 @@ public class SharedPrefsHelper implements GlobalSettings {
     }
 
     @Override
-    public void setMaxObjects(int max) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("maxObjects", max);
-        editor.apply();
-    }
-
-    @Override
     public int getMaxObjects() {
         return prefs.getInt("maxObjects", 4);
     }

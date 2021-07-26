@@ -11,9 +11,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  *  Class that handles object Database queries
@@ -111,9 +109,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Log.d(TAG, "addData: Adding " + objectName + "to " + OBJECT_TABLE_NAME);
 
-        long success = db.insert(OBJECT_TABLE_NAME, null, contentValues);
-
-        return success;
+        return db.insert(OBJECT_TABLE_NAME, null, contentValues);
     }
 
     public void updateImageBlob(String objectID, Bitmap bitmap) {
@@ -181,13 +177,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, null);
     }
 
-    public Cursor getObjectByRowID(String rowid) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + OBJECT_TABLE_NAME
-                + " WHERE rowid=?";
-        return db.rawQuery(query, new String[]{rowid});
-    }
-
     public String getModelNameByID(String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT "  + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME
@@ -209,13 +198,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, new String[]{modelID});
     }
 
-    public Cursor getObjectByModelPos(String pos) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + OBJECT_TABLE_NAME
-                + " WHERE " + OBJECT_COL6 + "=?";
-        return db.rawQuery(query, new String[]{pos});
-    }
-
     public Cursor getObjectByModelPosAndModelID(String modelPos, String modelID ) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
@@ -229,14 +211,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.delete(OBJECT_TABLE_NAME, OBJECT_COL0+"=?", new String[]{id}) > 0;
     }
 
-    public boolean deleteObjectByModelPosAndModelID(String modelpos, String modelID) {
+    public void deleteObjectByNameAndModelID(String name, String modelID) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(OBJECT_TABLE_NAME, OBJECT_COL6 + "=? AND " + OBJECT_COL7 + "=?", new String[]{modelpos, modelID}) > 0;
-    }
-
-    public boolean deleteObjectByNameAndModelID(String name, String modelID) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(OBJECT_TABLE_NAME, OBJECT_COL1+"=? AND "+ OBJECT_COL7 + "=?", new String[]{name, modelID}) > 0;
+        db.delete(OBJECT_TABLE_NAME, OBJECT_COL1 + "=? AND " + OBJECT_COL7 + "=?", new String[]{name, modelID});
     }
 
     public String getObjectModelPosByNameAndModelID(String name, String modelID) {
@@ -248,10 +225,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(cursor.moveToFirst()) {
             modelPos = cursor.getString(0);
         }
+        cursor.close();
         return modelPos;
     }
-
-
 
     /**
      * Edit object by ID
@@ -351,7 +327,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean modelWithNameExists(String name) {
         if(name == null) name = "";
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = null;
+        Cursor cursor;
         String query = "SELECT " + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME
                 + " WHERE " + MODEL_COL1 + "=?";
         cursor = db.rawQuery(query, new String[]{name});
@@ -396,26 +372,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Converts ByteBuffer to Byte Array
-     *
-     * @param byteBuffer buffer that will be converted
-     * @return converted byte array
-     */
-    private byte[] convertByteBuffer(ByteBuffer byteBuffer) {
-        return byteBuffer.array();
-    }
-
-    /**
-     * Converts Byte Array to ByteBuffer
-     *
-     * @param bytes byte array that will be converted
-     * @return converted ByteBuffer
-     */
-    private ByteBuffer convertBytes(byte[] bytes) {
-        return ByteBuffer.wrap(bytes);
-    }
-
-    /**
      * Get model ID by model name
      *
      * @param modelName name of model
@@ -427,6 +383,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else return "";
     }
 
+    @SuppressWarnings("unused")
     public String tableToString(String tableName) {
         SQLiteDatabase db = this.getWritableDatabase();
         Log.d("","tableToString called");
@@ -471,8 +428,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Drop all tables
-     *
-     * @return
      */
     public void deleteAll() {
         SQLiteDatabase db = this.getWritableDatabase();

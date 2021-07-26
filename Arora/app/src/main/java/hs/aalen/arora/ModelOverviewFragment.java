@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.ListFragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -41,8 +42,7 @@ public class ModelOverviewFragment extends ListFragment {
     private DatabaseHelper modelDatabaseHelper;
     private GlobalSettings settings;
     private ListView modelListView;
-    private FloatingActionButton addModelButton;
-    private ArrayList<String> modelNames = new ArrayList<>();
+    private final ArrayList<String> modelNames = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -55,14 +55,11 @@ public class ModelOverviewFragment extends ListFragment {
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_model_overview, container, false);
         modelDatabaseHelper = new DatabaseHelper(getActivity());
-        settings = new SharedPrefsHelper(getContext());
-        addModelButton = view.findViewById(R.id.list_model_add_model_button);
-        addModelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFactory.getDialog(DialogType.ADD_MODEL).createDialog(getContext());
-            }
-        });
+        settings = new SharedPrefsHelper(requireContext());
+        FloatingActionButton addModelButton = view.findViewById(R.id.list_model_add_model_button);
+
+        addModelButton.setOnClickListener(v -> DialogFactory.getDialog(DialogType.ADD_MODEL).createDialog(getContext()));
+
         modelListView = view.findViewById(android.R.id.list);
         TextView noModelsText = view.findViewById(R.id.no_models_info_text);
         if (populateView())
@@ -97,10 +94,9 @@ public class ModelOverviewFragment extends ListFragment {
     class ModelOverviewAdapter extends ArrayAdapter<String> {
         Context context;
         ArrayList<String> modelName;
-        int selectedPosition = 0;
+        int selectedPosition;
 
         private AlertDialog showObjectDialog;
-        private Button cancelButton;
         private ListView objectsListView;
         private ArrayList<String> listItems;
 
@@ -129,24 +125,16 @@ public class ModelOverviewFragment extends ListFragment {
             RadioButton modelSelectorButton = item.findViewById(R.id.list_model_radiobutton);
             modelSelectorButton.setChecked(position == selectedPosition);
             modelSelectorButton.setTag(position);
-            modelSelectorButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    selectedPosition = (Integer) v.getTag();
-                    int newModelID = selectedPosition + 1;
-                    settings.setCurrentModel(newModelID + "");
-                    Log.d(TAG, "onClick: test model selection: current model: "
-                            + settings.getCurrentModel());
-                    notifyDataSetChanged();
-                }
+            modelSelectorButton.setOnClickListener(v -> {
+                selectedPosition = (Integer) v.getTag();
+                int newModelID = selectedPosition + 1;
+                settings.setCurrentModel(newModelID + "");
+                Log.d(TAG, "onClick: test model selection: current model: "
+                        + settings.getCurrentModel());
+                notifyDataSetChanged();
             });
             ImageButton objectsOfModelButton = item.findViewById(R.id.list_model_objects_button);
-            objectsOfModelButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showObjectsOfModelDialog(position+1);
-                }
-            });
+            objectsOfModelButton.setOnClickListener(v -> showObjectsOfModelDialog(position+1));
 
             return item;
         }
@@ -156,7 +144,8 @@ public class ModelOverviewFragment extends ListFragment {
             int numCurrentObjects = modelDatabaseHelper.getAllObjectsByModelID((position+1)+"").getCount();
             numObjectsInModelProgressBar.setMax(maxObjects);
             numObjectsInModelProgressBar.setProgress(numCurrentObjects);
-            numObjectsInModelTextView.setText(numCurrentObjects+" / "+ maxObjects);
+            String numObjectsInModelText = numCurrentObjects+" / " + maxObjects;
+            numObjectsInModelTextView.setText(numObjectsInModelText);
             setColor(numCurrentObjects, maxObjects);
         }
 
@@ -172,13 +161,13 @@ public class ModelOverviewFragment extends ListFragment {
 
             float fullRatio = ((float) numCurrentObjects / (float)maxObjects);
             if(fullRatio >= THRES_RED) {
-                numObjectsInModelTextView.setTextColor(getResources().getColor(R.color.red));
+                numObjectsInModelTextView.setTextColor(ContextCompat.getColor(context, R.color.red));
             }
             else if(fullRatio < THRES_RED && fullRatio >= THRES_YELLOW) {
-                numObjectsInModelTextView.setTextColor(getResources().getColor(R.color.yellow));
+                numObjectsInModelTextView.setTextColor(ContextCompat.getColor(context, R.color.yellow));
             }
             else {
-                numObjectsInModelTextView.setTextColor(getResources().getColor(R.color.green));
+                numObjectsInModelTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
             }
         }
 
@@ -195,13 +184,8 @@ public class ModelOverviewFragment extends ListFragment {
 
             listItems = new ArrayList<>();
             objectsListView = showObjectsDialogView.findViewById(R.id.list_model_objects_list);
-            cancelButton = showObjectsDialogView.findViewById(R.id.list_model_cancel_button);
-            cancelButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showObjectDialog.dismiss();
-                }
-            });
+            Button cancelButton = showObjectsDialogView.findViewById(R.id.list_model_cancel_button);
+            cancelButton.setOnClickListener(v -> showObjectDialog.dismiss());
             showObjectsDialogBuilder.setView(showObjectsDialogView);
             showObjectDialog = showObjectsDialogBuilder.create();
 
@@ -228,7 +212,7 @@ public class ModelOverviewFragment extends ListFragment {
             while (data.moveToNext()) {
                 listItems.add(data.getString(0));
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_list_item_1,
                     listItems);
             objectsListView.setAdapter(adapter);

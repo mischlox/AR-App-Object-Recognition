@@ -32,7 +32,6 @@ public interface GlobalSettings {
     void setCurrentObject(String name);
     String getCurrentObject();
 
-    void setMaxObjects(int max);
     int getMaxObjects();
 
     int getCountDown();

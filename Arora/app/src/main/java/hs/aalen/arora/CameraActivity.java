@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -138,20 +137,17 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
 
         buttonCamera = findViewById(R.id.nav_bottom_camera_button);
         buttonCamera.setImageResource(R.drawable.ic_eye);
-        buttonCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // If not in Camera Fragment, go into it
-                if (cameraFragment.isAdded()) {
-                    // Start inference/training dialog from here
-                    createDialog();
-                } else {
-                    buttonCamera.setImageResource(R.drawable.ic_add);
-                    selectedFragment = cameraFragment;
-                    setTitle(navigationView.getMenu().findItem(R.id.nav_camera).getTitle());
-                    syncNavBars(R.id.nav_camera, R.id.nav_bottom_placeholder);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.navbar_container, selectedFragment).commit();
-                }
+        buttonCamera.setOnClickListener(v -> {
+            // If not in Camera Fragment, go into it
+            if (cameraFragment.isAdded()) {
+                // Start inference/training dialog from here
+                createDialog();
+            } else {
+                buttonCamera.setImageResource(R.drawable.ic_add);
+                selectedFragment = cameraFragment;
+                setTitle(navigationView.getMenu().findItem(R.id.nav_camera).getTitle());
+                syncNavBars(R.id.nav_camera, R.id.nav_bottom_placeholder);
+                getSupportFragmentManager().beginTransaction().replace(R.id.navbar_container, selectedFragment).commit();
             }
         });
         drawer = findViewById(R.id.drawer_layout);
@@ -178,36 +174,31 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_camera:
-                buttonCamera.setImageResource(R.drawable.ic_add);
-                syncNavBars(R.id.nav_camera, R.id.nav_bottom_placeholder);
-                selectedFragment = cameraFragment;
-                break;
-            case R.id.nav_object_overview:
-            case R.id.nav_bottom_object_overview:
-                buttonCamera.setImageResource(R.drawable.ic_eye);
-                syncNavBars(R.id.nav_object_overview, R.id.nav_bottom_object_overview);
-                selectedFragment = objectOverviewFragment;
-                break;
-            case R.id.nav_settings:
-            case R.id.nav_bottom_settings:
-                buttonCamera.setImageResource(R.drawable.ic_eye);
-                syncNavBars(R.id.nav_settings, R.id.nav_bottom_settings);
-                selectedFragment = settingsFragment;
-                break;
-            case R.id.nav_model_overview:
-            case R.id.nav_bottom_model_overview:
-                buttonCamera.setImageResource(R.drawable.ic_eye);
-                syncNavBars(R.id.nav_model_overview, R.id.nav_bottom_model_overview);
-                selectedFragment = modelOverviewFragment;
-                break;
-            case R.id.nav_help:
-            case R.id.nav_bottom_help:
-                buttonCamera.setImageResource(R.drawable.ic_eye);
-                syncNavBars(R.id.nav_help, R.id.nav_bottom_help);
-                selectedFragment = helpFragment;
-                break;
+        int itemId = item.getItemId();
+        if (itemId == R.id.nav_camera) {
+            buttonCamera.setImageResource(R.drawable.ic_add);
+            syncNavBars(R.id.nav_camera, R.id.nav_bottom_placeholder);
+            selectedFragment = cameraFragment;
+        }
+        else if (itemId == R.id.nav_object_overview || itemId == R.id.nav_bottom_object_overview) {
+            buttonCamera.setImageResource(R.drawable.ic_eye);
+            syncNavBars(R.id.nav_object_overview, R.id.nav_bottom_object_overview);
+            selectedFragment = objectOverviewFragment;
+        }
+        else if (itemId == R.id.nav_settings || itemId == R.id.nav_bottom_settings) {
+            buttonCamera.setImageResource(R.drawable.ic_eye);
+            syncNavBars(R.id.nav_settings, R.id.nav_bottom_settings);
+            selectedFragment = settingsFragment;
+        }
+        else if (itemId == R.id.nav_model_overview || itemId == R.id.nav_bottom_model_overview) {
+            buttonCamera.setImageResource(R.drawable.ic_eye);
+            syncNavBars(R.id.nav_model_overview, R.id.nav_bottom_model_overview);
+            selectedFragment = modelOverviewFragment;
+        }
+        else if (itemId == R.id.nav_help || itemId == R.id.nav_bottom_help) {
+            buttonCamera.setImageResource(R.drawable.ic_eye);
+            syncNavBars(R.id.nav_help, R.id.nav_bottom_help);
+            selectedFragment = helpFragment;
         }
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
