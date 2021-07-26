@@ -56,7 +56,7 @@ public class HelpDialog implements Dialog{
         // Linked list to browse through text views
         LinkedList<Pair<Integer, String>> textList = new LinkedList<>();
         textList.add(Pair.create(2,context.getString(R.string.help_text_tilt_camera)));
-        textList.add(Pair.create(3,context.getString(R.string.help_text_pause_training)));
+        textList.add(Pair.create(3,context.getString(R.string.help_text_counter_training)));
         textList.add(Pair.create(4,context.getString(R.string.help_text_havefun)));
 
         notShowAgainCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
