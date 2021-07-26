@@ -154,4 +154,6 @@
     <string name="confidence_title">Confidence Threshold in %</string>
     <string name="detecting_progress">Detecting…</string>
     <string name="training_progress">Training…</string>
+    <string name="add_samples_sum_text">If you are not satisfied with the recognition results, it is possible to add further samples. Keep in mind that after retraining with more samples the recognition quality of other objects can be affected because of unbalanced sample amount in the model</string>
+    <string name="add_further_samples">Add Further Samples</string>
 </resources>

@@ -88,4 +88,6 @@
     <string name="detecting_progress">Erkennen ...</string>
     <string name="training_progress">Training ...</string>
     <string name="num_samples">Trainingsdaten</string>
+    <string name="add_samples_sum_text">Falls du mit den Wiedererkennungsergebnissen nicht zufrieden bist, ist es möglich weitere Eindrücke vom Objekt zu trainieren. Beachte jedoch, dass nach dem Einlernen von neuen Eindrücken die Erkennungsqualität anderer Objekte negativ beeinflusst werden kann, aufgrund von einer unausgeglichenen Anzahl von trainierten Daten.</string>
+    <string name="add_further_samples">Weitere Eindrücke lernen</string>
 </resources>

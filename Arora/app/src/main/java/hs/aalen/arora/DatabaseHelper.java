@@ -256,6 +256,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return modelPath;
     }
 
+    public String getObjectModelPosByName(String objectName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + OBJECT_COL6 + " FROM " + OBJECT_TABLE_NAME
+                + " WHERE " + OBJECT_COL1 + "=?";
+        Cursor cursor = db.rawQuery(query, new String[]{objectName});
+        String pos = null;
+        if(cursor.moveToFirst()) {
+            pos = cursor.getString(0);
+        }
+        return pos;
+    }
+
     /**
      * Inserts a model to DB. If it already exists the record gets updated with a new path
      *
@@ -379,7 +391,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         int amountSamples = 0;
         String query = "SELECT " + OBJECT_COL8 + " FROM " + OBJECT_TABLE_NAME
-                + " WHERE " + OBJECT_COL0 + "=?";
+                + " WHERE " + OBJECT_COL1 + "=?";
         Cursor cursor = db.rawQuery(query, new String[]{objectName});
         if (cursor.moveToFirst()) {
             amountSamples = cursor.getInt(0);

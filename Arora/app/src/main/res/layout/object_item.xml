@@ -21,13 +21,16 @@
         android:id="@+id/list_object_num_samples"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""/>
+        android:text=""
+        android:layout_gravity="center_horizontal"/>
 
         <ImageButton
+            android:id="@+id/list_object_add_samples"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add"
-            android:backgroundTint="@color/blue_arora"/>
+            android:backgroundTint="@color/blue_arora"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

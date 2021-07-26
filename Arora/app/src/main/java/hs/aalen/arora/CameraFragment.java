@@ -185,7 +185,10 @@ public class CameraFragment extends Fragment {
     public void addSamples(String objectName, int amount) {
         currentObjectName = objectName;
         Log.d(TAG, "addSamples: current class: " + objectName);
-        String openPos = getOpenModelPosition();
+        String openPos = databaseHelper.getObjectModelPosByName(objectName);
+        if(openPos == null) {
+            openPos = getOpenModelPosition();
+        }
         if (openPos.equals("")) {
             Toast.makeText(context, R.string.model_is_full, Toast.LENGTH_SHORT).show();
             removeObjectFromModel(currentObjectName, modelID, false);

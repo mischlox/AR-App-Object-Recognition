@@ -47,6 +47,7 @@ public class ObjectOverviewFragment extends ListFragment {
     private final ArrayList<byte[]> objectPreviewImages = new ArrayList<>();
     private final ArrayList<Integer> objectNumSamples = new ArrayList<>();
     private DatabaseHelper objectDatabaseHelper;
+    private GlobalSettings settings;
     private ListView objectListView;
 
     @Override
@@ -60,6 +61,7 @@ public class ObjectOverviewFragment extends ListFragment {
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_object_overview, container, false);
         objectDatabaseHelper = new DatabaseHelper(getActivity());
+        settings = new SharedPrefsHelper(requireActivity());
         objectListView = view.findViewById(android.R.id.list);
         TextView noObjectsText = view.findViewById(R.id.no_objects_info_text);
         if (populateView())
@@ -130,6 +132,8 @@ public class ObjectOverviewFragment extends ListFragment {
         View item;
         private AlertDialog editObjectDialog;
         private AlertDialog areYouSureDialog;
+        private AlertDialog addSamplesDialog;
+
         private EditText dialogObjectName;
         private EditText dialogObjectType;
         private EditText dialogObjectAdditionalData;
@@ -166,6 +170,9 @@ public class ObjectOverviewFragment extends ListFragment {
 
             ImageButton deleteButton = item.findViewById(R.id.list_delete_button);
             deleteButton.setOnClickListener(v -> createAreYouSureDeleteDialog(position));
+
+            ImageButton addSamplesButton = item.findViewById(R.id.list_object_add_samples);
+            addSamplesButton.setOnClickListener(v -> createAddSamplesDialog(position));
 
             ImageView previewImageView = item.findViewById(R.id.list_image_preview);
             // Mark objects that are in the selected model
@@ -260,6 +267,27 @@ public class ObjectOverviewFragment extends ListFragment {
             });
             Button cancelButton = areYouSureDialogView.findViewById(R.id.dialog_delete_obj_cancel);
             cancelButton.setOnClickListener(v -> areYouSureDialog.dismiss());
+        }
+
+        public void createAddSamplesDialog(int position) {
+            AlertDialog.Builder addSamplesDialogBuilder = new AlertDialog.Builder(context);
+            final View addSamplesDialogView = getLayoutInflater().inflate(R.layout.add_further_samples_dialog_popup, null);
+
+            addSamplesDialogBuilder.setView(addSamplesDialogView);
+            addSamplesDialog = addSamplesDialogBuilder.create();
+            addSamplesDialog.show();
+
+            Button addSamplesButton = addSamplesDialogView.findViewById(R.id.dialog_add_samples_button);
+            addSamplesButton.setOnClickListener(v -> {
+                String objectName = objectNames.get(position);
+                settings.setCurrentModelPos(objectName);
+                objectDatabaseHelper.addSamplesToObject(objectName, settings.getAmountSamples());
+                settings.switchAddSamplesTrigger();
+                addSamplesDialog.dismiss();
+            });
+
+            Button cancelButton = addSamplesDialogView.findViewById(R.id.dialog_add_samples_cancel);
+            cancelButton.setOnClickListener(v -> addSamplesDialog.dismiss());
         }
 
         /**

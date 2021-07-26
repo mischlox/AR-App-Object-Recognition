@@ -71,7 +71,15 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                     amountSamples = settings.getAmountSamples();
                 } else if (key.equals("addSamplesState")) {
                     if (settings.getAddSamplesTrigger()) {
+                        // This can only happen if adding further samples from Object Overview
+                        if(!cameraFragment.isAdded()) {
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.navbar_container, cameraFragment)
+                                    .commit();
+                        }
                         Log.d(TAG, "onSharedPreferenceChanged: backup Start training");
+                        if(className == null) className = settings.getCurrentModelPos();
                         cameraFragment.addSamples(className, amountSamples);
                         settings.switchAddSamplesTrigger();
                     }
@@ -147,7 +155,10 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                 selectedFragment = cameraFragment;
                 setTitle(navigationView.getMenu().findItem(R.id.nav_camera).getTitle());
                 syncNavBars(R.id.nav_camera, R.id.nav_bottom_placeholder);
-                getSupportFragmentManager().beginTransaction().replace(R.id.navbar_container, selectedFragment).commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.navbar_container, selectedFragment)
+                        .commit();
             }
         });
         drawer = findViewById(R.id.drawer_layout);
@@ -159,7 +170,10 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         toggle.syncState();
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.navbar_container, cameraFragment).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.navbar_container, cameraFragment)
+                    .commit();
             navigationView.setCheckedItem(R.id.nav_camera);
             bottomNavigationView.setSelectedItemId(R.id.nav_bottom_placeholder);
         }
