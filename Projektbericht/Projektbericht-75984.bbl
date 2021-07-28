@@ -19,6 +19,105 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global}
+    \entry{forgetting}{article}{}
+      \name{author}{14}{}{%
+        {{hash=5172437525948e3a9c13ee82c976ea69}{%
+           family={Kirkpatrick},
+           familyi={K\bibinitperiod},
+           given={James},
+           giveni={J\bibinitperiod}}}%
+        {{hash=7045b009b04d57bd2e19b5dfa0864d4f}{%
+           family={Pascanu},
+           familyi={P\bibinitperiod},
+           given={Razvan},
+           giveni={R\bibinitperiod}}}%
+        {{hash=d4fe8a888824c1acfd5345200ddc5f9b}{%
+           family={Rabinowitz},
+           familyi={R\bibinitperiod},
+           given={Neil},
+           giveni={N\bibinitperiod}}}%
+        {{hash=1cbd91f7404b2298b46bb46c47c08251}{%
+           family={Veness},
+           familyi={V\bibinitperiod},
+           given={Joel},
+           giveni={J\bibinitperiod}}}%
+        {{hash=d422b1bf74c0632ee012bc51e397622d}{%
+           family={Desjardins},
+           familyi={D\bibinitperiod},
+           given={Guillaume},
+           giveni={G\bibinitperiod}}}%
+        {{hash=677dfee41a39b5ac7e138f5ce14467e9}{%
+           family={Rusu},
+           familyi={R\bibinitperiod},
+           given={Andrei\bibnamedelima A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=c1c70b7540cc1fe75f0c4d4ad90996cf}{%
+           family={Milan},
+           familyi={M\bibinitperiod},
+           given={Kieran},
+           giveni={K\bibinitperiod}}}%
+        {{hash=d1c6b8444cb95e400ca38d5ae5c5afd3}{%
+           family={Quan},
+           familyi={Q\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=44574cf2790d8c3428206a582c947779}{%
+           family={Ramalho},
+           familyi={R\bibinitperiod},
+           given={Tiago},
+           giveni={T\bibinitperiod}}}%
+        {{hash=9cf69750e8869c8dd5d2b7662b90b4f1}{%
+           family={Grabska-Barwinska},
+           familyi={G\bibinithyphendelim B\bibinitperiod},
+           given={Agnieszka},
+           giveni={A\bibinitperiod}}}%
+        {{hash=b160026950ebb1e2286dfb40c15482f5}{%
+           family={Hassabis},
+           familyi={H\bibinitperiod},
+           given={Demis},
+           giveni={D\bibinitperiod}}}%
+        {{hash=326600b0ad340d8e0cd5df377b62e046}{%
+           family={Clopath},
+           familyi={C\bibinitperiod},
+           given={Claudia},
+           giveni={C\bibinitperiod}}}%
+        {{hash=a425c81c03d315597e3f92690763e24d}{%
+           family={Kumaran},
+           familyi={K\bibinitperiod},
+           given={Dharshan},
+           giveni={D\bibinitperiod}}}%
+        {{hash=dc7c14ebfc2b431292d1ff4ded63d5e7}{%
+           family={Hadsell},
+           familyi={H\bibinitperiod},
+           given={Raia},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{fc5e0b8fe992805285a4d8fe325e2e0c}
+      \strng{fullhash}{235a0ff6adde954ad0d382794cfe1e9e}
+      \strng{bibnamehash}{fc5e0b8fe992805285a4d8fe325e2e0c}
+      \strng{authorbibnamehash}{fc5e0b8fe992805285a4d8fe325e2e0c}
+      \strng{authornamehash}{fc5e0b8fe992805285a4d8fe325e2e0c}
+      \strng{authorfullhash}{235a0ff6adde954ad0d382794cfe1e9e}
+      \field{sortinit}{K}
+      \field{sortinithash}{d3edc18d54b9438a72c24c925bfb38f4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The ability to learn tasks in a sequential fashion is crucial to the development of artificial intelligence. Neural networks are not, in general, capable of this and it has been widely thought that catastrophic forgetting is an inevitable feature of connectionist models. We show that it is possible to overcome this limitation and train networks that can maintain expertise on tasks which they have not experienced for a long time. Our approach remembers old tasks by selectively slowing down learning on the weights important for those tasks. We demonstrate our approach is scalable and effective by solving a set of classification tasks based on the MNIST hand written digit dataset and by learning several Atari 2600 games sequentially.}
+      \field{day}{2}
+      \field{eprintclass}{cs.LG}
+      \field{eprinttype}{arXiv}
+      \field{month}{12}
+      \field{title}{Overcoming catastrophic forgetting in neural networks}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \verb{eprint}
+      \verb 1612.00796v2
+      \endverb
+      \verb{file}
+      \verb online:http\://arxiv.org/pdf/1612.00796v2:PDF
+      \endverb
+      \keyw{cs.LG,cs.AI,stat.ML}
+    \endentry
     \entry{Pellegrini2019}{article}{}
       \name{author}{4}{}{%
         {{hash=039a5850759acf381701bfab65da480c}{%
@@ -97,6 +196,40 @@
       \endverb
       \verb{url}
       \verb https://towardsdatascience.com/a-comprehensive-hands-on-guide-to-transfer-learning-with-real-world-applications-in-deep-learning-212bf3b2f27a
+      \endverb
+    \endentry
+    \entry{Senchanka2019}{online}{}
+      \name{author}{1}{}{%
+        {{hash=8510fac9f5501e7e182d40d6c36da86d}{%
+           family={Senchanka},
+           familyi={S\bibinitperiod},
+           given={Pavel},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{8510fac9f5501e7e182d40d6c36da86d}
+      \strng{fullhash}{8510fac9f5501e7e182d40d6c36da86d}
+      \strng{bibnamehash}{8510fac9f5501e7e182d40d6c36da86d}
+      \strng{authorbibnamehash}{8510fac9f5501e7e182d40d6c36da86d}
+      \strng{authornamehash}{8510fac9f5501e7e182d40d6c36da86d}
+      \strng{authorfullhash}{8510fac9f5501e7e182d40d6c36da86d}
+      \field{sortinit}{S}
+      \field{sortinithash}{c319cff79d99c853d775f88277d4e45f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{12}
+      \field{month}{12}
+      \field{title}{Example on-device model personalization with TensorFlow Lite}
+      \field{urlday}{12}
+      \field{urlmonth}{5}
+      \field{urlyear}{2021}
+      \field{year}{2019}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://blog.tensorflow.org/2019/12/example-on-device-model-personalization.html
+      \endverb
+      \verb{url}
+      \verb https://blog.tensorflow.org/2019/12/example-on-device-model-personalization.html
       \endverb
     \endentry
   \enddatalist

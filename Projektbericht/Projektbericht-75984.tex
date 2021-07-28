@@ -130,16 +130,29 @@ und die zu ihrer Lösung entwickelten Konzepte zu beschreiben.
 \label{cha:grundlagen}
 Zur Lösung der Problemstellung sind verschiedene Grundlagengebiete zu beherr-
 schen, die zum einen bereits im Rahmen des Informatikstudiums verinnerlicht werden konnten und zum anderen Gebiete und Themen, die erst im Laufe der Recherche und Implentierung der Projektarbeit erarbeitet worden sind.
-\subsection{Deep Neural Networks}
+\section{Deep Neural Networks}
 
 \section{Wiedererkennung von Objekten}
 \label{sec:basics:wiedererkennung}
 Das Einlernen und Wiedererkennen von Objekten ist im Bereich des Maschinelles Lernens noch heute eine Herausforderung für eingebettete beziehungsweise mobile Endgeräte, aufgrund der geringen Rechenleistung, die zur Verfügung steht. Es ist möglich diese Aufgabe mithilfe einer Cloudlösung auf einen externen leistungsstarken Server zu übertragen. Aufgrund von Nachteilen, wie beispielsweise Sicherheitsrisiken, die beim Übertragen von sensitiven Daten auftreten, wird im Rahmen dieser Arbeit eine Applikation programmiert, die den gegebenen Anwendungsfall mit der dem Endgerät zur Verfügung stehenden Hardware löst.\\
-Ein naiver Ansatz, um dieses Problem lösen zu können ist ein  \ac{cnn} bei Eingang neuer Trainingsdaten erneut zu trainieren mitsamt den bereits vorhandenen Daten. Ein derart riesiger Lernvorgang ist jedoch nicht praktikabel und könnte mehrere Stunden oder sogar Tage dauern. Wenn lediglich die neuen Daten für das Training verwendet werden, resultiert dies im bekannten Phänomen des \glqq Katastrophalen Vergessen\grqq. Dies bedeutet, dass alte bereits eingelernte Objekte nicht mehr erkannt werden können. Bessere Ansätze zur Behebung dieses Problems werden im Folgenden erklärt.
-
+Ein naiver Ansatz, um dieses Problem lösen zu können ist ein  \ac{cnn} bei Eingang neuer Trainingsdaten erneut zu trainieren mitsamt den bereits vorhandenen Daten. Ein derart riesiger Lernvorgang ist jedoch nicht praktikabel und könnte mehrere Stunden oder sogar Tage dauern. Wenn lediglich die neuen Daten für das Training verwendet werden, resultiert dies im bekannten Phänomen des \textit{Katastrophalen Vergessen} \cite{Senchanka2019}.
+\subsection{Katastrophales Vergessen}
+Neuronale Netze tendieren dazu beim Einlernen von aufeinanderfolgenden unterschiedlichen Aufgaben das bereits gelernte Wissen zu vergessen. Dieses Phänomen wird als Katatrophales Vergessen beziehungsweise als \textit{Katastrophale Inferenz} bezeichnet. Die Ursache hierfür ist, dass Gewichte von Neuronen, die für eine vorherige Aufgabe wichtig sind, überschrieben werden, um die neue eingelernte Aufgabe zu erfüllen \cite{forgetting}.
+Für den gegebenen Anwendungsfall bedeutet dies, dass alte bereits eingelernte Objekte nicht mehr erkannt werden können, wenn ein bereits trainierter Datensatz mit unbekannten Daten weitertrainiert wird. Lösungsansätze für dieses Problem werden im Folgenden erklärt.
 \subsection{Latent-Replay-Algorithmus}
 Im Rahmen dieser Thematik wurde für den gegebenen Anwendungsfall der Latent-Replay Algorithmus von Lorenzo Pellegrini et al. analysiert, jedoch aufgrund der hohen Komplexität und weniger Implementierungsbeispiele nicht für das Projekt verwendet. Um eine Vollständigkeit der Projektarbeit gewährleisten zu können wird dieser im Folgenden dennoch erläutert.\\
-\cite{Pellegrini2019}
+Das grundlegende Konzept beim Latent-Replay-Algorithmus bildet das sogenannte \textit{Replay} beziehungsweise \textit{Rehearsal}. Bereits trainierte Traininngsdaten werden hierfür in einem separaten Datenbank persistent gespeichert und bei Eingang neuer Trainingsdaten ebenfalls mitgelernt.
+Das Problem hierbei ist jedoch, dass die Trainingsdauer massiv zunimmt, da in jeder Trainingsepoche mehrere Trainingsiterationen durch das Neuronale Netz notwendig sind. Zudem ergibt sich aus dem Abspeichern von alten Trainingsdaten ein Speicherproblem auf eingebetteten Systemen.\\
+Der Latent-Replay-Algorithmus erweitert den Ansatz des Rehearsals, um eben diese Schwierigkeiten zu beheben. Hierfür werden nicht rohe Bilddaten abgespeichert sondern Aktivierungen von Neurononen innerhalb einer Schicht der Netzarchitektur. Beim einer Trainingsiteration werden dann neue Eingangsdaten durch Schichten des Netzen weitergeleitet, welche für das erkennen von generischen Merkmalen zuständig ist, wie beispielsweise Ecken und Kanten. Anschließend werden diese Daten in die Latent-Replay-Schicht, welche die Speicherung der alten Trainingsdaten übernimmt, weitergeleitet, wobei die Eingangsdaten nun mit den Aktivierungen der alten Trainingsdaten vermischt werden. Die Scihten die oberhalb des Latent-Replay angesetzt sind sind für die Erkennung von klassenspezifischen Merkmalen zuständig 
+\cite{Pellegrini2019}. In Abbildung \ref{fig:latent-replay} wird der eben erklärte Aufbau dargestellt.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[height=0.4\textheight]{images/latent-replay.png}
+  \caption{Architekturdiagramm des Latent Replay \cite{Pellegrini2019} }
+  \label{fig:latent-replay}
+\end{figure}
+
 \subsection{Transfer Learning}
 %Aufgaben die mit Maschinellem Lernen gelöst werden können, wie beispielsweise die Wiedererkennung von Objekten in Bildern, werden mithilfe von riesigen Datensätzen trainiert mit dem Ziel so generisch wie möglich zu sein
 Jedes menschliche Gehirn, ist dazu fähig Wissen, welches für eine Aufgabe benötigt wird, auf eine andere Aufgabe zu übertragen. So ist es beispielsweise mit geringem Aufwand möglich das Autofahren zu erlernen, wenn man bereits Motorrad fahren kann. Da es eine ähnliche Aufgabe ist, wird nicht versucht die neue Aufgabe von Grund auf neu zu lernen, sondern das Wissen, welches in der Vergangenheit erlernt werden konnte auf ein neuen ähnlichen Anwendungsfall zu transferieren.\\
@@ -226,6 +239,9 @@ wird ein Lösungskonzept erarbeitet.
 Bei Software-Projekten entspricht dieses Kapitel typischerweise der 
 Analyse \& Design-Phase des \ac{rup}. Typische Ergebnisse dieser Phase sind 
 Klassendiagramme etc.
+\section{Grundlegende Designentscheidungen}
+\subsection{Tensorflow Lite und Transfer Learning}
+\subsection{}
 \section{Grobentwurf}
 Hier kommen Komponenten UMLs rein, Software Architektur
 \section{Feinentwurf}
