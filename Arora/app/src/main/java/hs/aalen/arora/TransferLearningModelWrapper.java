@@ -15,6 +15,7 @@ limitations under the License.
 package hs.aalen.arora;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.ConditionVariable;
 import android.util.Log;
 
@@ -23,12 +24,15 @@ import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -54,6 +58,9 @@ public class TransferLearningModelWrapper {
     Path parametersFilePath;
     String modelID;
     private volatile TransferLearningModel.LossConsumer lossConsumer;
+
+    public HashMap<String,ArrayList<byte[]>> replayBuffer = new HashMap<>();
+    private int samplesInReplay;
 
     TransferLearningModelWrapper(Context context, Collection<String> classes, String modelID) {
         this.context = context;
@@ -116,6 +123,11 @@ public class TransferLearningModelWrapper {
         return model.addSample(image, className);
     }
 
+    // Adds new Training sample that was stored in the local DB
+    public Future<Void> addReplaySample(ByteBuffer bottleneck, String className) {
+        return model.addSample(bottleneck, className);
+    }
+
     // This method is thread-safe, but blocking.
     public TransferLearningModel.Prediction[] predict(float[] image) {
         return model.predict(image);
@@ -130,6 +142,21 @@ public class TransferLearningModelWrapper {
     public void enableTraining(TransferLearningModel.LossConsumer lossConsumer) {
         this.lossConsumer = lossConsumer;
         shouldTrain.open();
+        replay(null);
+    }
+
+    public void replay(String scenario) {
+        Cursor res = databaseHelper.getReplayBufferImages((scenario == null) ? "default" : scenario);
+        if (res.getCount() != 0) {
+            while (res.moveToNext()) {
+                String className = res.getString(1);
+                byte[] blobBytes = res.getBlob(2);
+                ByteBuffer bottleneck = ByteBuffer.wrap(blobBytes);
+                addReplaySample(bottleneck, className);
+            }
+        } else {
+            System.out.println("AEL: DEN DOYLEUEI");
+        }
     }
 
     /**
@@ -186,5 +213,27 @@ public class TransferLearningModelWrapper {
      */
     private String generateFileName() {
         return "model-parameters" + "-" + UUID.randomUUID() + ".bin";
+    }
+
+    /***
+     * Adds new samples to buffer - normal distribution between classes - fixed number
+     */
+    public void updateReplayBufferSmart(String scenario) {
+        databaseHelper.emptyReplayBuffer((scenario == null) ? "default" : scenario);
+        replayBuffer.clear();
+
+        Cursor res = databaseHelper.getTrainingSamples((scenario == null) ? "default" : scenario);
+        if (res.getCount() != 0) {
+            while (res.moveToNext()) {
+                String className = res.getString(1);
+                byte[] blobBytes = res.getBlob(2);
+                if (!replayBuffer.containsKey(className)) {
+                    replayBuffer.put(className, new ArrayList<>());
+                }
+                replayBuffer.get(className).add(blobBytes);
+            }
+        } else {
+            System.out.println("AEL: DEN DOYLEUEI RESTORED");
+        }
     }
 }

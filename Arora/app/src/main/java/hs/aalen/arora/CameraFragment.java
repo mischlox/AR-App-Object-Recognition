@@ -338,6 +338,7 @@ public class CameraFragment extends Fragment {
                                     transferLearningModel.disableTraining();
                                     Log.d(TAG, "addSamples: training disabled (pause)");
                                     setProgressCircle(0);
+                                    transferLearningModel.updateReplayBufferSmart(null);
                                     break;
                                 case NOT_STARTED:
                                     Log.d(TAG, "addSamples: training disabled (not started)");

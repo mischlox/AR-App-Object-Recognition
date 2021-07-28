@@ -39,9 +39,108 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String OBJECT_COL7 = "model_id";
     private static final String OBJECT_COL8 = "object_amount_samples";
 
+    public static final String REPLAY_BUFFER_TABLE_NAME = "replay_buffer_images";
+    public static final String REPLAY_BUFFER_COL0 = "buffer_id";
+    public static final String REPLAY_BUFFER_COL1 = "class";
+    public static final String REPLAY_BUFFER_COL2 = "sample_blob";
+    public static final String REPLAY_BUFFER_COL3 = "scenario_name";
+
+    public static final String TRAINING_SAMPLES_TABLE_NAME = "training_samples";
+    public static final String TRAINING_SAMPLES_COL0 = "sample_id";
+    public static final String TRAINING_SAMPLES_COL1 = "class";
+    public static final String TRAINING_SAMPLES_COL2 = "sample";
+    public static final String TRAINING_SAMPLES_COL3 = "scenario_name";
+    public static final String TRAINING_SAMPLES_COL4 = "sample_timestamp";
+    public static final String TRAINING_SAMPLES_COL5 = "scenario_name";
+
+
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String createModelTable = "CREATE TABLE " + MODEL_TABLE_NAME + " ("
+                + MODEL_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + MODEL_COL1 + " TEXT UNIQUE NOT NULL, "
+                + MODEL_COL2 + " TEXT) ";
+
+
+        String createObjectTable = "CREATE TABLE " + OBJECT_TABLE_NAME + " ("
+                + OBJECT_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + OBJECT_COL1 + " TEXT UNIQUE NOT NULL, "
+                + OBJECT_COL2 + " TEXT, "
+                + OBJECT_COL3 + " TEXT, "
+                + OBJECT_COL4 + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
+                + OBJECT_COL5 + " BLOB, "
+                + OBJECT_COL6 + " TEXT, "
+                + OBJECT_COL7 + " INTEGER NOT NULL, "
+                + OBJECT_COL8 + " INTEGER, "
+                + " FOREIGN KEY(" + OBJECT_COL7 + ") REFERENCES " + MODEL_TABLE_NAME + "(" + MODEL_COL0 + "))";
+
+        String createReplayBufferTable = "CREATE TABLE " + REPLAY_BUFFER_TABLE_NAME + " ( "
+                + REPLAY_BUFFER_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + REPLAY_BUFFER_COL1 +" TEXT NOT NULL, "
+                + REPLAY_BUFFER_COL2 +" BLOB NOT NULL, "
+                + REPLAY_BUFFER_COL3 +" TEXT NOT NULL)";
+
+        String createTrainingSamplesTable = "CREATE TABLE " + TRAINING_SAMPLES_TABLE_NAME + " ("
+                + TRAINING_SAMPLES_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + TRAINING_SAMPLES_COL1 +" TEXT NOT NULL, "
+                + TRAINING_SAMPLES_COL2 +" BLOB NOT NULL, "
+                + TRAINING_SAMPLES_COL3 +" TEXT NOT NULL, "
+                + TRAINING_SAMPLES_COL4 + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+
+        db.execSQL(createObjectTable);
+        db.execSQL(createModelTable);
+        db.execSQL(createReplayBufferTable);
+        db.execSQL(createTrainingSamplesTable);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + MODEL_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + OBJECT_TABLE_NAME);
+        onCreate(db);
+    }
+
+    public boolean insertReplaySample(byte[] sample, String sampleClass,String scenario)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(REPLAY_BUFFER_COL1, sampleClass);
+        contentValues.put(REPLAY_BUFFER_COL2,sample);
+        contentValues.put(REPLAY_BUFFER_COL3,scenario);
+        long result = db.insert(REPLAY_BUFFER_TABLE_NAME,null,contentValues);
+
+        // Insert success
+        return result != -1;
+    }
+
+    public Cursor getReplayBufferImages(String scenario)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM "+ REPLAY_BUFFER_TABLE_NAME +
+                " WHERE "+ REPLAY_BUFFER_COL3 +" = '"+scenario+"'";
+        return db.rawQuery(query,null);
+    }
+
+    public void emptyReplayBuffer(String scenario){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(REPLAY_BUFFER_TABLE_NAME,
+                REPLAY_BUFFER_COL3 + "=?", new String[]{scenario});
+    }
+
+    public Cursor getTrainingSamples(String scenario)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TRAINING_SAMPLES_TABLE_NAME +
+                " WHERE "+ TRAINING_SAMPLES_COL3 +" = '"+scenario+"'" +
+                " ORDER BY " + TRAINING_SAMPLES_COL4 + " ASC";
+        return db.rawQuery(query,null);
+    }
+
+
 
     /**
      * Insert object to DB
@@ -106,30 +205,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, null);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String createModelTable = "CREATE TABLE " + MODEL_TABLE_NAME + " ("
-                + MODEL_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + MODEL_COL1 + " TEXT UNIQUE NOT NULL, "
-                + MODEL_COL2 + " TEXT) ";
-
-
-        String createObjectTable = "CREATE TABLE " + OBJECT_TABLE_NAME + " ("
-                + OBJECT_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + OBJECT_COL1 + " TEXT UNIQUE NOT NULL, "
-                + OBJECT_COL2 + " TEXT, "
-                + OBJECT_COL3 + " TEXT, "
-                + OBJECT_COL4 + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
-                + OBJECT_COL5 + " BLOB, "
-                + OBJECT_COL6 + " TEXT, "
-                + OBJECT_COL7 + " INTEGER NOT NULL, "
-                + OBJECT_COL8 + " INTEGER, "
-                + " FOREIGN KEY(" + OBJECT_COL7 + ") REFERENCES " + MODEL_TABLE_NAME + "(" + MODEL_COL0 + "))";
-
-        db.execSQL(createObjectTable);
-        db.execSQL(createModelTable);
-    }
-
     /**
      * Returns all data from Object Table that are saved in a specific model
      *
@@ -166,11 +241,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return modelName;
         }
         return null;
-    }    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + MODEL_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + OBJECT_TABLE_NAME);
-        onCreate(db);
     }
 
     public Cursor getObjectNamesByModelID(String modelID) {
