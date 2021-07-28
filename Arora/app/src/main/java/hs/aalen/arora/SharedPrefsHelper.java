@@ -25,7 +25,7 @@ public class SharedPrefsHelper implements GlobalSettings {
 
     @Override
     public int getAmountSamples() {
-        return prefs.getInt(context.getString(R.string.key_seekbar), 50);
+        return prefs.getInt(context.getString(R.string.key_seekbar), 80);
     }
 
     @Override
@@ -140,4 +140,5 @@ public class SharedPrefsHelper implements GlobalSettings {
     public void clearConfiguration() {
         prefs.edit().clear().apply();
     }
+
 }

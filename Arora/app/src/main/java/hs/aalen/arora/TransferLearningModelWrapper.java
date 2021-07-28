@@ -32,7 +32,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -61,6 +63,8 @@ public class TransferLearningModelWrapper {
 
     public HashMap<String,ArrayList<byte[]>> replayBuffer = new HashMap<>();
     private int samplesInReplay;
+
+    private int trainingSamplesStored;
 
     TransferLearningModelWrapper(Context context, Collection<String> classes, String modelID) {
         this.context = context;
@@ -124,8 +128,8 @@ public class TransferLearningModelWrapper {
     }
 
     // Adds new Training sample that was stored in the local DB
-    public Future<Void> addReplaySample(ByteBuffer bottleneck, String className) {
-        return model.addSample(bottleneck, className);
+    public void addReplaySample(ByteBuffer bottleneck, String className) {
+        model.addSample(bottleneck, className);
     }
 
     // This method is thread-safe, but blocking.
@@ -142,20 +146,18 @@ public class TransferLearningModelWrapper {
     public void enableTraining(TransferLearningModel.LossConsumer lossConsumer) {
         this.lossConsumer = lossConsumer;
         shouldTrain.open();
-        replay(null);
+        replay();
     }
 
-    public void replay(String scenario) {
-        Cursor res = databaseHelper.getReplayBufferImages((scenario == null) ? "default" : scenario);
-        if (res.getCount() != 0) {
-            while (res.moveToNext()) {
-                String className = res.getString(1);
-                byte[] blobBytes = res.getBlob(2);
+    public void replay() {
+        Cursor cursor = databaseHelper.getReplayBufferImages();
+        if (cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                String className = cursor.getString(1);
+                byte[] blobBytes = cursor.getBlob(2);
                 ByteBuffer bottleneck = ByteBuffer.wrap(blobBytes);
                 addReplaySample(bottleneck, className);
             }
-        } else {
-            System.out.println("AEL: DEN DOYLEUEI");
         }
     }
 
@@ -218,11 +220,11 @@ public class TransferLearningModelWrapper {
     /***
      * Adds new samples to buffer - normal distribution between classes - fixed number
      */
-    public void updateReplayBufferSmart(String scenario) {
-        databaseHelper.emptyReplayBuffer((scenario == null) ? "default" : scenario);
+    public void updateReplayBufferSmart() {
+        databaseHelper.emptyReplayBuffer();
         replayBuffer.clear();
 
-        Cursor res = databaseHelper.getTrainingSamples((scenario == null) ? "default" : scenario);
+        Cursor res = databaseHelper.getTrainingSamples();
         if (res.getCount() != 0) {
             while (res.moveToNext()) {
                 String className = res.getString(1);
@@ -232,8 +234,33 @@ public class TransferLearningModelWrapper {
                 }
                 replayBuffer.get(className).add(blobBytes);
             }
-        } else {
-            System.out.println("AEL: DEN DOYLEUEI RESTORED");
+        }
+        int replaySamplesAdded = 0;
+        for (Map.Entry<String, ArrayList<byte[]>> entry : replayBuffer.entrySet()) {
+            String className = entry.getKey();
+            ArrayList<byte[]> classSamples = entry.getValue();
+            Collections.shuffle(classSamples); // Adds randomness to the replay sample selection
+            for (byte[] sample : classSamples) {
+                databaseHelper.insertReplaySample(sample, className);
+                replaySamplesAdded++;
+                if (replaySamplesAdded % 10 == 0)
+                    break;
+            }
+        }
+    }
+
+    public void storeTrainingSample() {
+        if (model.trainingSamples.size() == 1){
+            trainingSamplesStored = 0;
+        }
+        int startingPoint = trainingSamplesStored;
+        for (int i = startingPoint; i < model.trainingSamples.size(); i++) {
+            ByteBuffer bottleneck = model.trainingSamples.get(i).bottleneck;
+            String className = model.trainingSamples.get(i).className;
+            byte[] b = new byte[bottleneck.remaining()];
+            bottleneck.get(b);
+            databaseHelper.insertTrainingSample(b, className);
+            trainingSamplesStored++;
         }
     }
 }

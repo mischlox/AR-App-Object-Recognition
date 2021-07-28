@@ -48,7 +48,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     private Fragment selectedFragment = cameraFragment;
 
     // Further configuration
-    private int amountSamples = 50;
+    private int amountSamples = 80;
     private String className;
 
     private GlobalSettings settings;

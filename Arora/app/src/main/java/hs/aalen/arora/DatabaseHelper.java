@@ -43,15 +43,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String REPLAY_BUFFER_COL0 = "buffer_id";
     public static final String REPLAY_BUFFER_COL1 = "class";
     public static final String REPLAY_BUFFER_COL2 = "sample_blob";
-    public static final String REPLAY_BUFFER_COL3 = "scenario_name";
 
     public static final String TRAINING_SAMPLES_TABLE_NAME = "training_samples";
     public static final String TRAINING_SAMPLES_COL0 = "sample_id";
     public static final String TRAINING_SAMPLES_COL1 = "class";
     public static final String TRAINING_SAMPLES_COL2 = "sample";
-    public static final String TRAINING_SAMPLES_COL3 = "scenario_name";
-    public static final String TRAINING_SAMPLES_COL4 = "sample_timestamp";
-    public static final String TRAINING_SAMPLES_COL5 = "scenario_name";
+    public static final String TRAINING_SAMPLES_COL3 = "sample_timestamp";
 
 
     public DatabaseHelper(@Nullable Context context) {
@@ -81,15 +78,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createReplayBufferTable = "CREATE TABLE " + REPLAY_BUFFER_TABLE_NAME + " ( "
                 + REPLAY_BUFFER_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + REPLAY_BUFFER_COL1 +" TEXT NOT NULL, "
-                + REPLAY_BUFFER_COL2 +" BLOB NOT NULL, "
-                + REPLAY_BUFFER_COL3 +" TEXT NOT NULL)";
+                + REPLAY_BUFFER_COL2 +" BLOB NOT NULL)";
 
         String createTrainingSamplesTable = "CREATE TABLE " + TRAINING_SAMPLES_TABLE_NAME + " ("
                 + TRAINING_SAMPLES_COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + TRAINING_SAMPLES_COL1 +" TEXT NOT NULL, "
                 + TRAINING_SAMPLES_COL2 +" BLOB NOT NULL, "
-                + TRAINING_SAMPLES_COL3 +" TEXT NOT NULL, "
-                + TRAINING_SAMPLES_COL4 + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+                + TRAINING_SAMPLES_COL3 + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
 
         db.execSQL(createObjectTable);
         db.execSQL(createModelTable);
@@ -104,40 +99,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertReplaySample(byte[] sample, String sampleClass,String scenario)
+    public boolean insertReplaySample(byte[] sample, String sampleClass)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(REPLAY_BUFFER_COL1, sampleClass);
         contentValues.put(REPLAY_BUFFER_COL2,sample);
-        contentValues.put(REPLAY_BUFFER_COL3,scenario);
         long result = db.insert(REPLAY_BUFFER_TABLE_NAME,null,contentValues);
 
         // Insert success
         return result != -1;
     }
 
-    public Cursor getReplayBufferImages(String scenario)
+    public Cursor getReplayBufferImages()
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM "+ REPLAY_BUFFER_TABLE_NAME +
-                " WHERE "+ REPLAY_BUFFER_COL3 +" = '"+scenario+"'";
+        String query = "SELECT * FROM "+ REPLAY_BUFFER_TABLE_NAME;
         return db.rawQuery(query,null);
     }
 
-    public void emptyReplayBuffer(String scenario){
+    public void emptyReplayBuffer(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(REPLAY_BUFFER_TABLE_NAME,
-                REPLAY_BUFFER_COL3 + "=?", new String[]{scenario});
+                null, null);
     }
 
-    public Cursor getTrainingSamples(String scenario)
+    public Cursor getTrainingSamples()
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + TRAINING_SAMPLES_TABLE_NAME +
-                " WHERE "+ TRAINING_SAMPLES_COL3 +" = '"+scenario+"'" +
-                " ORDER BY " + TRAINING_SAMPLES_COL4 + " ASC";
+        String query = "SELECT * FROM " + TRAINING_SAMPLES_TABLE_NAME
+                + " ORDER BY " + TRAINING_SAMPLES_COL3 + " ASC";
         return db.rawQuery(query,null);
+    }
+
+    public boolean insertTrainingSample(byte[] sample, String sampleClass) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TRAINING_SAMPLES_COL1, sampleClass);
+        contentValues.put(TRAINING_SAMPLES_COL2,sample);
+        long result = db.insert(TRAINING_SAMPLES_TABLE_NAME,null,contentValues);
+
+        // Insert success
+        return result != -1;
     }
 
 

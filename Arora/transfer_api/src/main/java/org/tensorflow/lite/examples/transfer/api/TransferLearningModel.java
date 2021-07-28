@@ -228,7 +228,6 @@ public final class TransferLearningModel implements Closeable {
       if (Thread.interrupted()) {
         return null;
       }
-      // TODO USE THIS LINE OF CODE TO IMPLEMENT REPLAY (OR THIS ENTIRE FUNCTION)
       ByteBuffer bottleneck = bottleneckModel.generateBottleneck(imageBuffer, null);
 
       trainingLock.lockInterruptibly();

@@ -7,7 +7,7 @@
             android:key="@string/key_seekbar"
             android:title="@string/settings_num_samples"
             android:summary="@string/settings_hint_num_samples"
-            android:defaultValue="50"
+            android:defaultValue="80"
             app:min="25"
             android:max="125"
             app:showSeekBarValue="true"

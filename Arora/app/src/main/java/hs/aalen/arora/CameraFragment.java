@@ -136,6 +136,7 @@ public class CameraFragment extends Fragment {
                     }
                     try {
                         transferLearningModel.addSample(rgbImage, sampleClass).get();
+                        transferLearningModel.storeTrainingSample();
                     } catch (ExecutionException | NullPointerException | IllegalStateException e) {
                         removeObjectFromModel(currentObjectName, modelID, true);
                         Toast.makeText(context, R.string.please_do_not_change_tabs, Toast.LENGTH_LONG).show();
@@ -336,9 +337,9 @@ public class CameraFragment extends Fragment {
                                     break;
                                 case PAUSED:
                                     transferLearningModel.disableTraining();
+                                    transferLearningModel.updateReplayBufferSmart();
                                     Log.d(TAG, "addSamples: training disabled (pause)");
                                     setProgressCircle(0);
-                                    transferLearningModel.updateReplayBufferSmart(null);
                                     break;
                                 case NOT_STARTED:
                                     Log.d(TAG, "addSamples: training disabled (not started)");
@@ -667,14 +668,19 @@ public class CameraFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-
+        viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
+        transferLearningModel.updateReplayBufferSmart();
         if (addSampleRequests.size() != 0) {
             addSampleRequests.clear();
             Toast.makeText(context, R.string.please_do_not_change_tabs, Toast.LENGTH_SHORT).show();
         }
-        viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
         transferLearningModel.close();
         transferLearningModel = null;
     }
