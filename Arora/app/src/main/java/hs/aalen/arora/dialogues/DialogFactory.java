@@ -8,6 +8,7 @@ public class DialogFactory {
         if (dialogType == DialogType.ADD_MODEL) return new AddModelDialog();
         if (dialogType == DialogType.RESET) return new ResetAppDialog();
         if (dialogType == DialogType.INFO) return new InfoDialog();
+        if (dialogType == DialogType.REPLAY) return new ReplayDialog();
         return null;
     }
 }

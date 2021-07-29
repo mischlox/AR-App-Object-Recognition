@@ -90,4 +90,6 @@
     <string name="num_samples">Trainingsdaten</string>
     <string name="add_samples_sum_text">Falls du mit den Wiedererkennungsergebnissen nicht zufrieden bist, ist es möglich weitere Eindrücke vom Objekt zu trainieren. Beachte jedoch, dass nach dem Einlernen von neuen Eindrücken die Erkennungsqualität anderer Objekte negativ beeinflusst werden kann, aufgrund von einer unausgeglichenen Anzahl von trainierten Daten.</string>
     <string name="add_further_samples">Weitere Eindrücke lernen</string>
+    <string name="replay_title_string">Später Fortfahren?</string>
+    <string name="replay_sum_string">Wenn das Model einsatzbereit ist, kann es nun eingefroren werden.</string>
 </resources>

@@ -48,7 +48,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     private Fragment selectedFragment = cameraFragment;
 
     // Further configuration
-    private int amountSamples = 80;
+    private int amountSamples = 50;
     private String className;
 
     private GlobalSettings settings;
@@ -81,20 +81,26 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                         Log.d(TAG, "onSharedPreferenceChanged: backup Start training");
                         if(className == null) className = settings.getCurrentModelPos();
                         cameraFragment.addSamples(className, amountSamples);
+                        cameraFragment.setNewObjectAdded(true);
                         settings.switchAddSamplesTrigger();
                     }
                 } else if (key.equals("illegalStateTrigger")) {
                     if (settings.getIllegalStateTrigger()) {
-                        cameraFragment.removeObjectFromModel(settings.getCurrentObject(),
-                                settings.getCurrentModel(),
+                        cameraFragment.removeObjectFromModel(settings.getCurrentObjectName(),
+                                settings.getCurrentModelID(),
                                 true);
                         settings.switchIllegalStateTrigger();
                         Toast.makeText(CameraActivity.this, R.string.please_do_not_change_tabs, Toast.LENGTH_SHORT).show();
                     }
+                } else if(key.equals("updateReplayTrigger")) {
+                    if(settings.getUpdateReplayTrigger()) {
+                        cameraFragment.updateReplayBuffer();
+                        settings.switchUpdateReplayTrigger();
+                    }
                 } else if (key.equals("currentClass")) {
                     className = settings.getCurrentModelPos();
                 } else if (key.equals("currentModel")) {
-                    cameraFragment.setModelID(settings.getCurrentModel());
+                    cameraFragment.setModelID(settings.getCurrentModelID());
                     if (cameraFragment.isAdded()) {
                         cameraFragment.loadNewModel();
                     } else if (modelOverviewFragment.isAdded()) {
@@ -105,7 +111,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                 } else if (key.equals("key_countdown")) {
                     cameraFragment.setCountDown(settings.getCountDown());
                 } else if (key.equals("key_confidence")) {
-                    cameraFragment.setConfidenceThres(settings.getConfidenceThres());
+                    cameraFragment.setConfidenceThres(settings.getConfidenceThreshold());
                 }
 
             } catch (NullPointerException e) {
@@ -127,10 +133,10 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         // Configure cameraFragment on startup
         amountSamples = settings.getAmountSamples();
         cameraFragment.setFocusBoxRatio(settings.getFocusBoxRatio());
-        cameraFragment.setModelID(settings.getCurrentModel());
+        cameraFragment.setModelID(settings.getCurrentModelID());
         cameraFragment.setPositionsList(settings.getMaxObjects());
         cameraFragment.setCountDown(settings.getCountDown());
-        cameraFragment.setConfidenceThres(settings.getConfidenceThres());
+        cameraFragment.setConfidenceThres(settings.getConfidenceThreshold());
         cameraFragment.setPositionsList(settings.getMaxObjects());
 
         // Bind navigation views
@@ -214,6 +220,11 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+        if(cameraFragment.isAdded() && item.getItemId() != R.id.nav_camera && cameraFragment.hasNewObjectAdded()) {
+            DialogFactory.getDialog(DialogType.REPLAY).createDialog(this);
+            cameraFragment.setNewObjectAdded(false);
+            return false;
+        }
         int itemId = item.getItemId();
         if (itemId == R.id.nav_camera) {
             buttonCamera.setImageResource(R.drawable.ic_add);

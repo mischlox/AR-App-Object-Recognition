@@ -11,11 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -108,7 +110,7 @@ public class ModelOverviewFragment extends ListFragment {
             super(c, R.layout.model_item, R.id.list_model_name, name);
             this.context = c;
             this.modelName = name;
-            this.selectedPosition = Integer.parseInt(settings.getCurrentModel()) - 1;
+            this.selectedPosition = Integer.parseInt(settings.getCurrentModelID()) - 1;
         }
 
         @Override
@@ -121,6 +123,10 @@ public class ModelOverviewFragment extends ListFragment {
             numObjectsInModelTextView = item.findViewById(R.id.list_model_progress_text);
             updateProgressBar(position);
             TextView modelNameTextView = item.findViewById(R.id.list_model_name);
+
+            ImageView infoButton = item.findViewById(R.id.list_model_is_frozen);
+            infoButton.setOnClickListener(v -> Toast.makeText(context, R.string.model_was_frozen_info, Toast.LENGTH_LONG).show());
+
             modelNameTextView.setText(this.modelName.get(position));
 
             RadioButton modelSelectorButton = item.findViewById(R.id.list_model_radiobutton);
@@ -129,11 +135,20 @@ public class ModelOverviewFragment extends ListFragment {
             modelSelectorButton.setOnClickListener(v -> {
                 selectedPosition = (Integer) v.getTag();
                 int newModelID = selectedPosition + 1;
-                settings.setCurrentModel(newModelID + "");
+                settings.setCurrentModelID(newModelID + "");
                 Log.d(TAG, "onClick: test model selection: current model: "
-                        + settings.getCurrentModel());
+                        + settings.getCurrentModelID());
+                Log.d(TAG, "onClick: test model selection: current model: "
+                        + settings.getCurrentModelID() + " selected position: " +  selectedPosition + " new Model ID: " + newModelID + " position: " + position);
                 notifyDataSetChanged();
             });
+            if(position == selectedPosition && modelDatabaseHelper.modelIsFrozen(settings.getCurrentModelID())) {
+                infoButton.setVisibility(View.VISIBLE);
+            } else {
+                infoButton.setVisibility(View.INVISIBLE);
+
+            }
+
             ImageButton objectsOfModelButton = item.findViewById(R.id.list_model_objects_button);
             objectsOfModelButton.setOnClickListener(v -> showObjectsOfModelDialog(position + 1));
 

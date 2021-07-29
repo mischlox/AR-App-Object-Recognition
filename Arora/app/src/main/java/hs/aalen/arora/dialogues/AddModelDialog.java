@@ -51,7 +51,7 @@ public class AddModelDialog implements Dialog {
             } else {
                 // Insert a model to DB and set it up for Transfer Learning
                 if (databaseHelper.insertModel(modelName)) {
-                    settings.setCurrentModel(databaseHelper.getModelIdByName(modelName));
+                    settings.setCurrentModelID(databaseHelper.getModelIdByName(modelName));
                     dialogModelName.setText("");
                     addModelDialog.dismiss();
                 } else {

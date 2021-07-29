@@ -17,7 +17,9 @@ package hs.aalen.arora;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.ConditionVariable;
+import android.os.Trace;
 import android.util.Log;
+import android.util.TimingLogger;
 
 import org.tensorflow.lite.examples.transfer.api.AssetModelLoader;
 import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
@@ -150,7 +152,7 @@ public class TransferLearningModelWrapper {
     }
 
     public void replay() {
-        Cursor cursor = databaseHelper.getReplayBufferImages();
+        Cursor cursor = databaseHelper.getReplayBufferImages(modelID);
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
                 String className = cursor.getString(1);
@@ -221,10 +223,10 @@ public class TransferLearningModelWrapper {
      * Adds new samples to buffer - normal distribution between classes - fixed number
      */
     public void updateReplayBufferSmart() {
-        databaseHelper.emptyReplayBuffer();
+        databaseHelper.emptyReplayBuffer(modelID);
         replayBuffer.clear();
 
-        Cursor res = databaseHelper.getTrainingSamples();
+        Cursor res = databaseHelper.getTrainingSamples(modelID);
         if (res.getCount() != 0) {
             while (res.moveToNext()) {
                 String className = res.getString(1);
@@ -236,17 +238,19 @@ public class TransferLearningModelWrapper {
             }
         }
         int replaySamplesAdded = 0;
+        HashMap<String, byte[]> activationsMap = new HashMap<>();
         for (Map.Entry<String, ArrayList<byte[]>> entry : replayBuffer.entrySet()) {
             String className = entry.getKey();
             ArrayList<byte[]> classSamples = entry.getValue();
             Collections.shuffle(classSamples); // Adds randomness to the replay sample selection
             for (byte[] sample : classSamples) {
-                databaseHelper.insertReplaySample(sample, className);
+                activationsMap.put(className, sample);
                 replaySamplesAdded++;
-                if (replaySamplesAdded % 10 == 0)
-                    break;
+                if (replaySamplesAdded % 10 == 0) break;
             }
         }
+        Log.d(TAG, "updateReplayBufferSmart: UPDATE REPLAY");
+        databaseHelper.insertReplaySampleBatch(activationsMap, modelID);
     }
 
     public void storeTrainingSample() {
@@ -254,13 +258,16 @@ public class TransferLearningModelWrapper {
             trainingSamplesStored = 0;
         }
         int startingPoint = trainingSamplesStored;
+        HashMap<String, byte[]> activationsMap = new HashMap<>();
+
         for (int i = startingPoint; i < model.trainingSamples.size(); i++) {
             ByteBuffer bottleneck = model.trainingSamples.get(i).bottleneck;
-            String className = model.trainingSamples.get(i).className;
-            byte[] b = new byte[bottleneck.remaining()];
-            bottleneck.get(b);
-            databaseHelper.insertTrainingSample(b, className);
+            String modelPosition = model.trainingSamples.get(i).className;
+            byte[] activation = new byte[bottleneck.remaining()];
+            bottleneck.get(activation);
+            activationsMap.put(modelPosition, activation);
             trainingSamplesStored++;
         }
+        databaseHelper.insertTrainingSampleBatch(activationsMap, modelID);
     }
 }
