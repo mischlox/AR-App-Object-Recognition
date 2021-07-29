@@ -85,6 +85,19 @@ public class SharedPrefsHelper implements GlobalSettings {
     }
 
     @Override
+    public void switchUpdateReplayTrigger() {
+        SharedPreferences.Editor editor = prefs.edit();
+        String prefKey = "updateReplayTrigger";
+        editor.putBoolean(prefKey, !prefs.getBoolean(prefKey, false));
+        editor.apply();
+    }
+
+    @Override
+    public boolean getUpdateReplayTrigger() {
+        return prefs.getBoolean("updateReplayTrigger", false);
+    }
+
+    @Override
     public String getCurrentModelPos() {
         return prefs.getString("currentClass", "somethings wrong here");
     }
@@ -98,24 +111,24 @@ public class SharedPrefsHelper implements GlobalSettings {
     }
 
     @Override
-    public String getCurrentModel() {
+    public String getCurrentModelID() {
         return prefs.getString("currentModel", null);
     }
 
     @Override
-    public void setCurrentModel(String id) {
+    public void setCurrentModelID(String id) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("currentModel", id);
         editor.apply();
     }
 
     @Override
-    public String getCurrentObject() {
+    public String getCurrentObjectName() {
         return prefs.getString("currentObject", "");
     }
 
     @Override
-    public void setCurrentObject(String name) {
+    public void setCurrentObjectName(String name) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("currentObject", name);
         editor.apply();
@@ -132,7 +145,7 @@ public class SharedPrefsHelper implements GlobalSettings {
     }
 
     @Override
-    public int getConfidenceThres() {
+    public int getConfidenceThreshold() {
         return prefs.getInt("key_confidence", 50);
     }
 
@@ -140,4 +153,5 @@ public class SharedPrefsHelper implements GlobalSettings {
     public void clearConfiguration() {
         prefs.edit().clear().apply();
     }
+
 }

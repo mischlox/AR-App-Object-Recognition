@@ -39,7 +39,7 @@
             <TextView
                 android:id="@+id/object_name"
                 android:layout_width="wrap_content"
-                android:maxWidth="170dp"
+                android:maxLength="30"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:fontFamily="sans-serif-black"
@@ -194,7 +194,37 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:text=""
         android:shadowColor="@color/black"
+        android:shadowRadius="10"
         android:textColor="@color/blue_arora"
         android:textSize="40pt"
         android:translationZ="100dp"/>
+    <ProgressBar
+        android:id="@+id/wait_for_replay_spinner"
+        android:layout_width="40pt"
+        android:layout_height="40pt"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="invisible"
+        android:translationZ="100dp"/>
+
+    <TextView
+        android:id="@+id/wait_for_replay_spinner_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/please_wait_replay"
+        android:textAlignment="center"
+        android:shadowColor="@color/black"
+        android:shadowRadius="10"
+        android:textColor="@color/white"
+        android:textSize="10pt"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/wait_for_replay_spinner"
+        android:translationZ="100dp"
+        android:visibility="invisible"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

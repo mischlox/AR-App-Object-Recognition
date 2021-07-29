@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import androidx.fragment.app.ListFragment;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import hs.aalen.arora.utils.DateUtils;
@@ -176,7 +174,7 @@ public class ObjectOverviewFragment extends ListFragment {
 
             ImageView previewImageView = item.findViewById(R.id.list_image_preview);
             // Mark objects that are in the selected model
-            if(modelID.get(position).equals(settings.getCurrentModel())) {
+            if(modelID.get(position).equals(settings.getCurrentModelID())) {
                 previewImageView.setBackgroundColor(ContextCompat.getColor(context, R.color.blue_arora));
             }
             else {

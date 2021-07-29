@@ -156,4 +156,13 @@
     <string name="training_progress">Training…</string>
     <string name="add_samples_sum_text">If you are not satisfied with the recognition results, it is possible to add further samples. Keep in mind that after retraining with more samples the recognition quality of other objects can be affected because of unbalanced sample amount in the model</string>
     <string name="add_further_samples">Add Further Samples</string>
+    <string name="replay_sum_string">If this model is ready to deploy you can freeze it now. The advantage in freezing a model is, that specific time consuming routines do not have to be run anymore for this model. You can still add further objects to this model, but it is possible that objects that were saved in previous training sessions are overwritten and the detections could be arbitrary. </string>
+    <string name="replay_title_string">Continue later?</string>
+    <string name="freeze_model">Freeze Model</string>
+    <string name="continue_later">Continue Later</string>
+    <string name="model_was_frozen_successfully">Model was frozen successfully!</string>
+    <string name="model_was_frozen_info">The model is already frozen. Adding further objects can cause overwriting of already learned objects!</string>
+    <string name="succesfully_configured_replay">Successfully configured model for further
+        samples adding! You can now continue using the application.</string>
+    <string name="please_wait_replay">Loading. Please wait ...</string>
 </resources>

@@ -54,11 +54,11 @@ public class AddObjectDialog implements Dialog {
             String objectAdditionalData = dialogObjectAdditionalData.getText().toString();
 
             if (objectName.length() != 0) {
-                long success = addObject(objectName, objectType, objectAdditionalData, settings.getCurrentModel());
+                long success = addObject(objectName, objectType, objectAdditionalData, settings.getCurrentModelID());
                 if (success != -1) {
                     // Save the name of the object to Global Configuration
                     settings.setCurrentModelPos(dialogObjectName.getText().toString());
-                    settings.setCurrentObject(objectName);
+                    settings.setCurrentObjectName(objectName);
                     // Reset text
                     dialogObjectName.setText("");
                     dialogObjectType.setText("");
@@ -86,7 +86,7 @@ public class AddObjectDialog implements Dialog {
      * @return id of inserted object
      */
     private long addObject(String objectName, String objectType, String objectAdditionalData, String modelID) {
-        settings.setCurrentObject(objectName);
+        settings.setCurrentObjectName(objectName);
         return databaseHelper.insertObject(objectName, objectType, objectAdditionalData, modelID);
     }
 }

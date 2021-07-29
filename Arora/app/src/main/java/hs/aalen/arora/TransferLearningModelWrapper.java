@@ -15,20 +15,28 @@ limitations under the License.
 package hs.aalen.arora;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.ConditionVariable;
+import android.os.Trace;
 import android.util.Log;
+import android.util.TimingLogger;
 
 import org.tensorflow.lite.examples.transfer.api.AssetModelLoader;
 import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -41,6 +49,9 @@ import java.util.concurrent.Future;
  * <p>
  * This code is based on:
  * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/
+ *
+ * Continual Learning Modifications concerning Latent-Replay are based on:
+ * https://gitlab.com/riselear/public/continual-learning-on-the-edge-with-tensorflow-lite/
  */
 public class TransferLearningModelWrapper {
     public static final String TAG = TransferLearningModel.class.getSimpleName();
@@ -54,6 +65,11 @@ public class TransferLearningModelWrapper {
     Path parametersFilePath;
     String modelID;
     private volatile TransferLearningModel.LossConsumer lossConsumer;
+
+    public HashMap<String,ArrayList<byte[]>> replayBuffer = new HashMap<>();
+    private int samplesInReplay;
+
+    private int trainingSamplesStored;
 
     TransferLearningModelWrapper(Context context, Collection<String> classes, String modelID) {
         this.context = context;
@@ -116,6 +132,11 @@ public class TransferLearningModelWrapper {
         return model.addSample(image, className);
     }
 
+    // Adds new Training sample that was stored in the local DB
+    public void addReplaySample(ByteBuffer bottleneck, String className) {
+        model.addSample(bottleneck, className);
+    }
+
     // This method is thread-safe, but blocking.
     public TransferLearningModel.Prediction[] predict(float[] image) {
         return model.predict(image);
@@ -130,6 +151,19 @@ public class TransferLearningModelWrapper {
     public void enableTraining(TransferLearningModel.LossConsumer lossConsumer) {
         this.lossConsumer = lossConsumer;
         shouldTrain.open();
+        replay();
+    }
+
+    public void replay() {
+        Cursor cursor = databaseHelper.getReplayBufferImages(modelID);
+        if (cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                String className = cursor.getString(1);
+                byte[] blobBytes = cursor.getBlob(2);
+                ByteBuffer bottleneck = ByteBuffer.wrap(blobBytes);
+                addReplaySample(bottleneck, className);
+            }
+        }
     }
 
     /**
@@ -186,5 +220,56 @@ public class TransferLearningModelWrapper {
      */
     private String generateFileName() {
         return "model-parameters" + "-" + UUID.randomUUID() + ".bin";
+    }
+
+    /***
+     * Adds new samples to buffer - normal distribution between classes - fixed number
+     */
+    public void updateReplayBufferSmart() {
+        databaseHelper.emptyReplayBuffer(modelID);
+        replayBuffer.clear();
+
+        Cursor res = databaseHelper.getTrainingSamples(modelID);
+        if (res.getCount() != 0) {
+            while (res.moveToNext()) {
+                String className = res.getString(1);
+                byte[] blobBytes = res.getBlob(2);
+                if (!replayBuffer.containsKey(className)) {
+                    replayBuffer.put(className, new ArrayList<>());
+                }
+                replayBuffer.get(className).add(blobBytes);
+            }
+        }
+        int replaySamplesAdded = 0;
+        HashMap<String, byte[]> activationsMap = new HashMap<>();
+        for (Map.Entry<String, ArrayList<byte[]>> entry : replayBuffer.entrySet()) {
+            String className = entry.getKey();
+            ArrayList<byte[]> classSamples = entry.getValue();
+            Collections.shuffle(classSamples); // Adds randomness to the replay sample selection
+            for (byte[] sample : classSamples) {
+                activationsMap.put(className, sample);
+                replaySamplesAdded++;
+                if (replaySamplesAdded % 10 == 0) break;
+            }
+        }
+        databaseHelper.insertReplaySampleBatch(activationsMap, modelID);
+    }
+
+    public void storeTrainingSample() {
+        if (model.trainingSamples.size() == 1){
+            trainingSamplesStored = 0;
+        }
+        int startingPoint = trainingSamplesStored;
+        HashMap<String, byte[]> activationsMap = new HashMap<>();
+
+        for (int i = startingPoint; i < model.trainingSamples.size(); i++) {
+            ByteBuffer bottleneck = model.trainingSamples.get(i).bottleneck;
+            String modelPosition = model.trainingSamples.get(i).className;
+            byte[] activation = new byte[bottleneck.remaining()];
+            bottleneck.get(activation);
+            activationsMap.put(modelPosition, activation);
+            trainingSamplesStored++;
+        }
+        databaseHelper.insertTrainingSampleBatch(activationsMap, modelID);
     }
 }

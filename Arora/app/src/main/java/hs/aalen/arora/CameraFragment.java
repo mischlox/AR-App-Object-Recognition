@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.util.DisplayMetrics;
@@ -50,6 +51,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import hs.aalen.arora.dialogues.DialogFactory;
 import hs.aalen.arora.dialogues.DialogType;
@@ -97,12 +100,16 @@ public class CameraFragment extends Fragment {
     private DatabaseHelper databaseHelper;
     private Size viewFinderDimens = new Size(0, 0);
     private CameraFragmentViewModel viewModel;
+
     private TransferLearningModelWrapper transferLearningModel;
     private Bitmap preview = null;
     private String currentObjectName; // for mapping preview image correctly
 
     private String modelID;
     private double focusBoxRatio;
+
+    private boolean newObjectAdded;
+
     /**
      * Analyzer is responsible for processing camera input
      * (including inference and send training samples to transfer learning model)
@@ -136,6 +143,7 @@ public class CameraFragment extends Fragment {
                     }
                     try {
                         transferLearningModel.addSample(rgbImage, sampleClass).get();
+                        transferLearningModel.storeTrainingSample();
                     } catch (ExecutionException | NullPointerException | IllegalStateException e) {
                         removeObjectFromModel(currentObjectName, modelID, true);
                         Toast.makeText(context, R.string.please_do_not_change_tabs, Toast.LENGTH_LONG).show();
@@ -249,6 +257,7 @@ public class CameraFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        newObjectAdded = false;
         viewModel = new ViewModelProvider(this).get(CameraFragmentViewModel.class);
         databaseHelper = new DatabaseHelper(getActivity());
         loadNewModel();
@@ -322,6 +331,8 @@ public class CameraFragment extends Fragment {
         FocusBoxImage focusBox = requireActivity().findViewById(R.id.focus_box);
         focusBox.setFocusBoxLocation(identifyFocusBoxCorners(this.getResources().getDisplayMetrics().widthPixels,
                 this.getResources().getDisplayMetrics().heightPixels, focusBoxRatio));
+
+
 
         // Enable/Disable training
         viewModel
@@ -666,14 +677,19 @@ public class CameraFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
 
         if (addSampleRequests.size() != 0) {
             addSampleRequests.clear();
             Toast.makeText(context, R.string.please_do_not_change_tabs, Toast.LENGTH_SHORT).show();
         }
-        viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
         transferLearningModel.close();
         transferLearningModel = null;
     }
@@ -746,5 +762,36 @@ public class CameraFragment extends Fragment {
         public void run() {
             countDownThread.start();
         }
+    }
+
+    public boolean hasNewObjectAdded() {
+        return newObjectAdded;
+    }
+
+    public void setNewObjectAdded(boolean newObjectAdded) {
+        this.newObjectAdded = newObjectAdded;
+    }
+
+    public TransferLearningModelWrapper getTransferLearningModel() {
+        return transferLearningModel;
+    }
+
+    public void updateReplayBuffer() {
+        ProgressBar replaySpinner = requireActivity().findViewById(R.id.wait_for_replay_spinner);
+        TextView replayText = requireActivity().findViewById(R.id.wait_for_replay_spinner_text);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(()-> {
+            replaySpinner.setVisibility(VISIBLE);
+            replayText.setVisibility(VISIBLE);
+        });
+        executor.execute(() -> {
+            transferLearningModel.updateReplayBufferSmart();
+            handler.post(() -> {
+                replaySpinner.setVisibility(View.INVISIBLE);
+                replayText.setVisibility(View.INVISIBLE);
+                Toast.makeText(context, R.string.succesfully_configured_replay, Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 }

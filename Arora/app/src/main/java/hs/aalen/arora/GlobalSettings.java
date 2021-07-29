@@ -28,23 +28,27 @@ public interface GlobalSettings {
 
     boolean getIllegalStateTrigger();
 
+    void switchUpdateReplayTrigger();
+
+    boolean getUpdateReplayTrigger();
+
     String getCurrentModelPos();
 
     void setCurrentModelPos(String newName);
 
-    String getCurrentModel();
+    String getCurrentModelID();
 
-    void setCurrentModel(String id);
+    void setCurrentModelID(String id);
 
-    String getCurrentObject();
+    String getCurrentObjectName();
 
-    void setCurrentObject(String name);
+    void setCurrentObjectName(String name);
 
     int getMaxObjects();
 
     int getCountDown();
 
-    int getConfidenceThres();
+    int getConfidenceThreshold();
 
     void clearConfiguration();
 }
