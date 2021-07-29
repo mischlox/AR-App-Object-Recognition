@@ -85,11 +85,17 @@
     <string name="success_delete_all">Die App wurde erfolgreich zurückgesetzt</string>
     <string name="confidence_summary">Ein Schwellwert, welcher festlegt ab welcher Erkennungssicherheit ein Objekt als korrekt erkannt markiert wird</string>
     <string name="confidence_title">Konfidenzschwelle in %</string>
-    <string name="detecting_progress">Erkennen ...</string>
-    <string name="training_progress">Training ...</string>
+    <string name="detecting_progress">Erkennen …</string>
+    <string name="training_progress">Training …</string>
     <string name="num_samples">Trainingsdaten</string>
     <string name="add_samples_sum_text">Falls du mit den Wiedererkennungsergebnissen nicht zufrieden bist, ist es möglich weitere Eindrücke vom Objekt zu trainieren. Beachte jedoch, dass nach dem Einlernen von neuen Eindrücken die Erkennungsqualität anderer Objekte negativ beeinflusst werden kann, aufgrund von einer unausgeglichenen Anzahl von trainierten Daten.</string>
     <string name="add_further_samples">Weitere Eindrücke lernen</string>
     <string name="replay_title_string">Später Fortfahren?</string>
-    <string name="replay_sum_string">Wenn das Model einsatzbereit ist, kann es nun eingefroren werden.</string>
+    <string name="replay_sum_string">Wenn das Model einsatzbereit ist, kann es nun eingefroren werden. Der Vorteil beim Einfrieren eines Models ist, dass bestimmte zeitaufwendige Operationen nicht ständig bei einem Wechsel der Tabs ausgeführt werden müssen. Es ist weiterhin möglich Objekte zum Model hinzuzufügen, jedoch kann es dann sein, dass hinzugefügte Objekte von früheren Trainingssitzungen überschrieben werden.</string>
+    <string name="freeze_model">Model Einfrieren</string>
+    <string name="continue_later">Später Weitertrainieren</string>
+    <string name="model_was_frozen_successfully">Model wurde erfolgreich eingefroren!</string>
+    <string name="model_was_frozen_info">Das Model wurde bereits eingefroren. Das Einspeichern von weiteren Objekten kann das Überschreiben von bereits eingespeicherten Objekten hervorrufen</string>
+    <string name="please_wait_replay">Laden. Bitte warten …</string>
+    <string name="succesfully_configured_replay">Konfiguration für das Hinzufügen von weiteren Samples erfolgreich. Du kannst nun mit Nutzung der App fortfahren.</string>
 </resources>
