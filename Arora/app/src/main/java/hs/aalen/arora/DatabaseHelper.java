@@ -585,8 +585,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public void deleteAll() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + OBJECT_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + MODEL_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + OBJECT_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + REPLAY_BUFFER_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TRAINING_SAMPLES_TABLE_NAME);
         onCreate(db);
     }
 

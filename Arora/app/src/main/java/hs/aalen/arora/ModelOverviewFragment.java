@@ -110,7 +110,13 @@ public class ModelOverviewFragment extends ListFragment {
             super(c, R.layout.model_item, R.id.list_model_name, name);
             this.context = c;
             this.modelName = name;
-            this.selectedPosition = Integer.parseInt(settings.getCurrentModelID()) - 1;
+
+            if(settings.getCurrentModelID() != null) {
+                this.selectedPosition = Integer.parseInt(settings.getCurrentModelID()) - 1;
+            }
+            else {
+                this.selectedPosition = -1;
+            }
         }
 
         @Override
