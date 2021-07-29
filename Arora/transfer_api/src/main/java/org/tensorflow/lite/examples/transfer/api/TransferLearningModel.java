@@ -43,6 +43,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * Represents a "partially" trainable model that is based on some other,
  * base model.
+ *
+ * Modifications concerning Continual Learning and Latent Replay are based on:
+ * https://gitlab.com/riselear/public/continual-learning-on-the-edge-with-tensorflow-lite/
  */
 public final class TransferLearningModel implements Closeable {
 

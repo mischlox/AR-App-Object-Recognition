@@ -49,6 +49,9 @@ import java.util.concurrent.Future;
  * <p>
  * This code is based on:
  * https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/
+ *
+ * Continual Learning Modifications concerning Latent-Replay are based on:
+ * https://gitlab.com/riselear/public/continual-learning-on-the-edge-with-tensorflow-lite/
  */
 public class TransferLearningModelWrapper {
     public static final String TAG = TransferLearningModel.class.getSimpleName();
@@ -249,7 +252,6 @@ public class TransferLearningModelWrapper {
                 if (replaySamplesAdded % 10 == 0) break;
             }
         }
-        Log.d(TAG, "updateReplayBufferSmart: UPDATE REPLAY");
         databaseHelper.insertReplaySampleBatch(activationsMap, modelID);
     }
 
