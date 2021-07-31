@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 
 import hs.aalen.arora.dialogues.DialogFactory;
 import hs.aalen.arora.dialogues.DialogType;
+import hs.aalen.arora.persistence.GlobalSettings;
+import hs.aalen.arora.persistence.SharedPrefsHelper;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 

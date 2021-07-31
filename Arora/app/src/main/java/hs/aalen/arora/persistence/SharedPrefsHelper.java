@@ -1,7 +1,10 @@
-package hs.aalen.arora;
+package hs.aalen.arora.persistence;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import hs.aalen.arora.R;
+import hs.aalen.arora.persistence.GlobalSettings;
 
 import static android.content.Context.MODE_PRIVATE;
 

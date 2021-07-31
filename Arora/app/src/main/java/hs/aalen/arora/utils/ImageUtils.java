@@ -26,7 +26,7 @@ import androidx.camera.core.ImageProxy;
 
 import java.nio.ByteBuffer;
 
-import hs.aalen.arora.TransferLearningModelWrapper;
+import hs.aalen.arora.ContinualLearningModelWrapper;
 
 /**
  * Utility class for manipulating images.
@@ -138,7 +138,7 @@ public class ImageUtils {
      * @return the cropped and normalized image
      */
     public static float[] prepareCameraImage(Bitmap bitmap, int rotationDegrees, int[] cropLocations) {
-        int modelImageSize = TransferLearningModelWrapper.IMAGE_SIZE;
+        int modelImageSize = ContinualLearningModelWrapper.IMAGE_SIZE;
         Bitmap rotatedBitmap = scaleAndRotateBitmap(bitmap, rotationDegrees, modelImageSize, cropLocations);
 
         float[] normalizedRgb = new float[modelImageSize * modelImageSize * 3];

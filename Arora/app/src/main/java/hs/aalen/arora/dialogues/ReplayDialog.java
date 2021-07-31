@@ -7,10 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import hs.aalen.arora.DatabaseHelper;
-import hs.aalen.arora.GlobalSettings;
+import hs.aalen.arora.persistence.DatabaseHelper;
+import hs.aalen.arora.persistence.SQLiteHelper;
+import hs.aalen.arora.persistence.GlobalSettings;
 import hs.aalen.arora.R;
-import hs.aalen.arora.SharedPrefsHelper;
+import hs.aalen.arora.persistence.SharedPrefsHelper;
 
 public class ReplayDialog implements Dialog {
     private AlertDialog replayDialog;
@@ -19,7 +20,7 @@ public class ReplayDialog implements Dialog {
 
     @Override
     public void createDialog(Context context) {
-        databaseHelper = new DatabaseHelper(context);
+        databaseHelper = new SQLiteHelper(context);
         settings = new SharedPrefsHelper(context);
 
         AlertDialog.Builder replayDialogBuilder = new AlertDialog.Builder(context);

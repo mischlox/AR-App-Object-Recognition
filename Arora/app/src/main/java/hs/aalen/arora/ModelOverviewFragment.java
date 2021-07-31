@@ -32,6 +32,10 @@ import java.util.ArrayList;
 
 import hs.aalen.arora.dialogues.DialogFactory;
 import hs.aalen.arora.dialogues.DialogType;
+import hs.aalen.arora.persistence.DatabaseHelper;
+import hs.aalen.arora.persistence.GlobalSettings;
+import hs.aalen.arora.persistence.SQLiteHelper;
+import hs.aalen.arora.persistence.SharedPrefsHelper;
 
 /**
  * Fragment for changing the model
@@ -55,7 +59,7 @@ public class ModelOverviewFragment extends ListFragment {
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_model_overview, container, false);
-        modelDatabaseHelper = new DatabaseHelper(getActivity());
+        modelDatabaseHelper = new SQLiteHelper(getActivity());
         settings = new SharedPrefsHelper(requireContext());
         FloatingActionButton addModelButton = view.findViewById(R.id.list_model_add_model_button);
 

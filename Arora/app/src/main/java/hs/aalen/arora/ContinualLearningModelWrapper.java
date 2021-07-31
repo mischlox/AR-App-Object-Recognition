@@ -17,9 +17,7 @@ package hs.aalen.arora;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.ConditionVariable;
-import android.os.Trace;
 import android.util.Log;
-import android.util.TimingLogger;
 
 import org.tensorflow.lite.examples.transfer.api.AssetModelLoader;
 import org.tensorflow.lite.examples.transfer.api.TransferLearningModel;
@@ -41,6 +39,9 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import hs.aalen.arora.persistence.DatabaseHelper;
+import hs.aalen.arora.persistence.SQLiteHelper;
+
 /**
  * App-layer wrapper for TransferLearningModel.
  *
@@ -53,7 +54,7 @@ import java.util.concurrent.Future;
  * Continual Learning Modifications concerning Latent-Replay are based on:
  * https://gitlab.com/riselear/public/continual-learning-on-the-edge-with-tensorflow-lite/
  */
-public class TransferLearningModelWrapper {
+public class ContinualLearningModelWrapper {
     public static final String TAG = TransferLearningModel.class.getSimpleName();
     public static final int IMAGE_SIZE = 224;
 
@@ -67,18 +68,17 @@ public class TransferLearningModelWrapper {
     private volatile TransferLearningModel.LossConsumer lossConsumer;
 
     public HashMap<String,ArrayList<byte[]>> replayBuffer = new HashMap<>();
-    private int samplesInReplay;
 
     private int trainingSamplesStored;
 
-    TransferLearningModelWrapper(Context context, Collection<String> classes, String modelID) {
+    ContinualLearningModelWrapper(Context context, Collection<String> classes, String modelID) {
         this.context = context;
         this.modelID = modelID;
-        databaseHelper = new DatabaseHelper(context);
+        databaseHelper = new SQLiteHelper(context);
         model = new TransferLearningModel(
                 new AssetModelLoader(context, "model"),
                 classes);
-        Log.d(TAG, "TransferLearningModelWrapper: backup: create model");
+        Log.d(TAG, "ContinualLearningModelWrapper: backup: create model");
 
         if (databaseHelper.modelHasPath(modelID)) {
             loadModel(modelID);
@@ -92,9 +92,6 @@ public class TransferLearningModelWrapper {
                 } catch (ExecutionException | InterruptedException e) {
                     throw new RuntimeException("Exception occurred during model training", e.getCause());
                 } catch (IllegalStateException e) {
-//                    Log.e(TAG, "TransferLearningModelWrapper: ",e.getCause());
-//                    GlobalSettings settings = new SharedPrefsHelper(context);
-//                    settings.switchIllegalStateTrigger();
                     e.printStackTrace();
                     return;
                 }
@@ -155,7 +152,7 @@ public class TransferLearningModelWrapper {
     }
 
     public void replay() {
-        Cursor cursor = databaseHelper.getReplayBufferImages(modelID);
+        Cursor cursor = databaseHelper.getReplayBuffer(modelID);
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
                 String className = cursor.getString(1);

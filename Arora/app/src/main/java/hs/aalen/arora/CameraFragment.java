@@ -56,6 +56,8 @@ import java.util.concurrent.Executors;
 
 import hs.aalen.arora.dialogues.DialogFactory;
 import hs.aalen.arora.dialogues.DialogType;
+import hs.aalen.arora.persistence.DatabaseHelper;
+import hs.aalen.arora.persistence.SQLiteHelper;
 import hs.aalen.arora.utils.DateUtils;
 import hs.aalen.arora.utils.ImageUtils;
 
@@ -101,7 +103,7 @@ public class CameraFragment extends Fragment {
     private Size viewFinderDimens = new Size(0, 0);
     private CameraFragmentViewModel viewModel;
 
-    private TransferLearningModelWrapper transferLearningModel;
+    private ContinualLearningModelWrapper transferLearningModel;
     private Bitmap preview = null;
     private String currentObjectName; // for mapping preview image correctly
 
@@ -134,7 +136,7 @@ public class CameraFragment extends Fragment {
                     if (preview == null) {
                         preview = ImageUtils.scaleAndRotateBitmap(rgbBitmap,
                                 rotationDegrees,
-                                TransferLearningModelWrapper.IMAGE_SIZE,
+                                ContinualLearningModelWrapper.IMAGE_SIZE,
                                 identifyFocusBoxCorners(rgbBitmap.getWidth(),
                                         rgbBitmap.getHeight(),
                                         focusBoxRatio)
@@ -259,7 +261,7 @@ public class CameraFragment extends Fragment {
         super.onCreate(savedInstanceState);
         newObjectAdded = false;
         viewModel = new ViewModelProvider(this).get(CameraFragmentViewModel.class);
-        databaseHelper = new DatabaseHelper(getActivity());
+        databaseHelper = new SQLiteHelper(getActivity());
         loadNewModel();
     }
 
@@ -273,7 +275,7 @@ public class CameraFragment extends Fragment {
             DialogFactory.getDialog(DialogType.ADD_MODEL).createDialog(context);
         } else {
             mapObjectsFromDB();
-            transferLearningModel = new TransferLearningModelWrapper(getActivity(), positionsList, modelID);
+            transferLearningModel = new ContinualLearningModelWrapper(getActivity(), positionsList, modelID);
         }
     }
 
@@ -772,7 +774,7 @@ public class CameraFragment extends Fragment {
         this.newObjectAdded = newObjectAdded;
     }
 
-    public TransferLearningModelWrapper getTransferLearningModel() {
+    public ContinualLearningModelWrapper getTransferLearningModel() {
         return transferLearningModel;
     }
 

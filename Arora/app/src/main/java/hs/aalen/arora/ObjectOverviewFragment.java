@@ -27,6 +27,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import hs.aalen.arora.persistence.DatabaseHelper;
+import hs.aalen.arora.persistence.GlobalSettings;
+import hs.aalen.arora.persistence.SQLiteHelper;
+import hs.aalen.arora.persistence.SharedPrefsHelper;
 import hs.aalen.arora.utils.DateUtils;
 
 /**
@@ -58,7 +62,7 @@ public class ObjectOverviewFragment extends ListFragment {
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_object_overview, container, false);
-        objectDatabaseHelper = new DatabaseHelper(getActivity());
+        objectDatabaseHelper = new SQLiteHelper(getActivity());
         settings = new SharedPrefsHelper(requireActivity());
         objectListView = view.findViewById(android.R.id.list);
         TextView noObjectsText = view.findViewById(R.id.no_objects_info_text);

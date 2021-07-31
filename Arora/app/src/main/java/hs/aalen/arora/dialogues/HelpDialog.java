@@ -16,9 +16,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.LinkedList;
 
-import hs.aalen.arora.GlobalSettings;
+import hs.aalen.arora.persistence.GlobalSettings;
 import hs.aalen.arora.R;
-import hs.aalen.arora.SharedPrefsHelper;
+import hs.aalen.arora.persistence.SharedPrefsHelper;
 
 /**
  * Dialog that gives instructions for the usage of this app

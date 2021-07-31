@@ -8,10 +8,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import hs.aalen.arora.DatabaseHelper;
-import hs.aalen.arora.GlobalSettings;
+import hs.aalen.arora.persistence.DatabaseHelper;
+import hs.aalen.arora.persistence.SQLiteHelper;
+import hs.aalen.arora.persistence.GlobalSettings;
 import hs.aalen.arora.R;
-import hs.aalen.arora.SharedPrefsHelper;
+import hs.aalen.arora.persistence.SharedPrefsHelper;
 
 /**
  * Class that creates an Alert Dialog for creating a new Model
@@ -26,7 +27,7 @@ public class AddModelDialog implements Dialog {
 
     @Override
     public void createDialog(Context context) {
-        databaseHelper = new DatabaseHelper(context);
+        databaseHelper = new SQLiteHelper(context);
         settings = new SharedPrefsHelper(context);
         // Add Model dialog items
         AlertDialog.Builder addModelDialogBuilder = new AlertDialog.Builder(context);

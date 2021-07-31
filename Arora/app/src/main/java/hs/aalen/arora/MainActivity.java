@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button experimentalButton = findViewById(R.id.experimentalButton);
         experimentalButton.setOnClickListener(v -> {
-//                DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
+//                SQLiteHelper dbHelper = new SQLiteHelper(MainActivity.this);
 //                String model_table = dbHelper.tableToString("model_table");
 //                String object_table = dbHelper.tableToString("object_table");
 //                Log.d(TAG, "TABLE INFO:\n" + model_table + object_table);

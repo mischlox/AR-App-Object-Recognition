@@ -1,4 +1,4 @@
-package hs.aalen.arora;
+package hs.aalen.arora.persistence;
 
 /**
  * Interface for all needed methods for global configuration of the application
