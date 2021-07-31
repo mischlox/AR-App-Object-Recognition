@@ -166,13 +166,15 @@ Jedes menschliche Gehirn, ist dazu fähig Wissen, welches für eine Aufgabe ben�
 Im traditionellen Ansatz des Maschinellen Lernens wird ein Datensatz aufbereitet, welcher für eine bestimmte Aufgabe zugeschnitten ist.\\
 Die grundlegende Aufgabe, die in dieser Arbeit zu erfüllen ist, ist jedoch das Einlernen von neuen Trainingsdaten. Hierfür kann der Ansatz des sogenannten Transfer Learnings Anwendung finden.\\
 Beim Transfer Learning wird ein bereits trainiertes \ac{ml}-Modell verwendet. Das bereits errungene Wissen kann hierbei weiterverwendet werden, um mit einem kleineren Trainingsdatensatz eine neue ähnliche Aufgabe erfüllen zu können. Erkannte Merkmale wie Formen, Kanten und Ecken können demnach durch den Wissenstransfer mit einem Modell geteilt werden. Bei dieser Vorgehensweise werden die unteren Schichten, welche die nicht-klassenspezifischen Merkmale erkennen eingefroren. Dies bedeutet, dass die Gewichte der Neuronen unveränderbar sind. Die oberen Schichten sind weiterhin trainierbar. Durch Training eines Datensatzes, welcher den neu einzulernenden Daten ähnelt, werden lediglich die klassenspezifischen Merkmale trainiert \cite{Senchanka2019}. In Abbildung \ref{fig:tf-architecture} wird diese Architektur mit dem Traditionellen \ac{ml}-Ansatz verglichen.\\
-Wenn stets neue Klassen eingelernt werden sollen und diese Daten sich nicht innerhalb einer Trainingsstapels befinden, tritt jedoch das Phänomen des Katastrophalen Vergessens auf und früher eingelernte Objekte werden überschrieben \cite{cl-vs-tl}.\\
+Wenn stets neue Klassen eingelernt werden sollen und diese Daten sich nicht innerhalb einer Trainingsstapels befinden, tritt jedoch das Phänomen des Katastrophalen Vergessens auf und früher eingelernte Objekte werden überschrieben \cite{cl-vs-tl}.
+
 \begin{figure}[hptb]
 	\centering
 	\includegraphics[height=0.4\textheight]{images/traditional-vs-tflearning.png}
-	\caption{Vergleich des Aufbaus eines Transfer Learning Models im Gegensatz zum Traditionallen Maschinellen Lernens (Quelle: \cite{Sarkar2019}) }
+	\caption{Vergleich des Aufbaus eines Transfer Learning Models im Gegensatz zum traditionellen Maschinellen Lernen (Quelle: \cite{Sarkar2019}) }
 	\label{fig:tf-architecture}
 \end{figure}
+
 \subsection{Latent-Replay-Algorithmus}
 Das grundlegende Konzept beim Latent-Replay-Algorithmus bildet das sogenannte \textit{Replay} beziehungsweise \textit{Rehearsal}. Bereits trainierte Trainingsdaten werden hierfür in einem separaten Datenbank persistent gespeichert und bei Eingang neuer Trainingsdaten ebenfalls mitgelernt.
 Das Problem hierbei ist jedoch, dass die Trainingsdauer massiv zunimmt, da in jeder Trainingsepoche mehrere Trainingsiterationen durch das Neuronale Netz notwendig sind. Zudem ergibt sich aus dem Abspeichern von alten Trainingsdaten ein Speicherproblem auf eingebetteten Systemen.\\
@@ -204,19 +206,16 @@ Eine auf einem aktuellen Android-Betriebssystem lauffähige Applikation soll ent
 \subsection{Entwicklung einer graphischen Benutzeroberfläche}
 Es wird gefordert eine Graphische Benutzeroberfläche zur Verfügung zu stellen, mit welcher der Nutzer interagieren kann. Der Touchscreen des Smartphones sollte das Haupteingabegerät des Nutzers zur Steuerung der Applikation sein. -- \textit{Gewichtung:} Must-Have-Anforderung.
 \subsection{Einlernen von Objekten mithilfe einer Kamera}
-Es wird gefordert, dass ein Objekt mit der integrierten Smartphone-Kamera, bei guten Licht- und Kontrastverhältnissen eingelernt werden kann. Bei schlechten Licht- und Kontrastverhältnissen, die das Einlernen des Objekts erschweren oder gar technisch unmöglich machen, soll der Nutzer darauf hingewiesen werden, um mit dem Einlernen des Objektes fortfahren zu können. Bei erfolgreicher Abspeicherung der Daten, soll dem Nutzer dies mitgeteilt werden. Der Nutzer hat nun die Möglichkeit das eingelernte Objekt mit Daten zu versehen, wie beispielsweise einem Namen. Die Informationen über das nun eingelernte Objekt werden in einer Datenbank persistent abgespeichert, um sie wieder abrufen zu können. -- \textit{Gewichtung:} Must-Have-Anforderung.
+Es wird gefordert, dass ein Objekt mit der integrierten Smartphone-Kamera, bei guten Licht- und Kontrastverhältnissen eingelernt werden kann. Bei erfolgreicher Abspeicherung der Daten, soll dem Nutzer dies mitgeteilt werden. Der Nutzer hat nun die Möglichkeit das eingelernte Objekt mit Daten zu versehen, wie beispielsweise einem Namen. Die Informationen über das nun eingelernte Objekt werden in einer Datenbank persistent abgespeichert, um sie wieder abrufen zu können. -- \textit{Gewichtung:} Must-Have-Anforderung.
 
 \subsection{Wiedererkennung bereits eingelernter Objekte mithilfe einer Kamera}
-Ein bereits eingelerntes Objekt soll bei guten Licht- und Kontrastverhältnissen vom Softwaresystem in Echtzeit wiedererkannt werden. Bei schlechten Licht- und Kontrastverhältnissen soll der Nutzer auf diese Schwierigkeiten hingewiesen werden, um diese gegebenfalls zu beheben. -- \textit{Gewichtung:} Must-Have-Anforderung.
+Ein bereits eingelerntes Objekt soll bei guten Licht- und Kontrastverhältnissen vom Softwaresystem in Echtzeit wiedererkannt werden. -- \textit{Gewichtung:} Must-Have-Anforderung.
 
 \subsection{Markierung der wiedererkannten Objekte}
 Wenn ein Objekt von der Applikation erkannt wird, soll es beispielsweise durch das Einblenden des Namens des Objektes dem Nutzer mitgeteilt werden, dass das eingelernte Objekt wieder auf dem Display des Smartphones zu sehen ist. -- \textit{Gewichtung:} Should-Have-Anforderung.
 \subsection{Graphisches Overlay bei wiedererkannten Objekten}
-Die beim eingelernten Objekt gespeicherten Daten sollen als ein graphisches Overlay auf dem Bildschirm des Smartphones dargestellt werden, wenn das Objekt erneut erkannt worden ist. -- \textit{Gewichtung:} Could-Have-Anforderung.
-\subsection{Anbindung eines Datenbank-Servers}
-Um bereits eingelernte Objekte mit anderen Nutzern teilen zu können, wird gefordert einen Datenbank-Server an die Applikation anzubinden. Ein Nutzer hat nun die Möglichkeit die Verbindung zu einem Datenbank-Server herzustellen. Dies ermöglicht es eingelernten Objekte von anderen Nutzern lokal abzuspeichern und wiederzuerkennen. -- \textit{Gewichtung:} Nice-To-Have-Anforderung.
-\subsection{Nutzerprofil}
-Nutzer sollten sich mit einem Namen und einem Passwort anmelden können und dadurch ihre gespeicherten Daten einsehen können. Die Nutzerdaten werden auf einem Datenbank-Server persistent abgespeichert. Die Graphische Oberfläche des Software-Systems soll einen Anmeldebildschirm zur Verfügung stellen. Wenn der Nutzer einen Nutzername und ein Passwort eingibt und seine Eingabe bestätigt sollen diese mit der Datenbank abgeglichen werden. Wenn die Anmeldedaten gespeichert sind, wird der Nutzer angemeldet. In allen anderen Fällen wird eine entsprechende Fehlermeldung ausgegeben. -- \textit{Gewichtung:} Nice-To-Have-Anforderung.
+Die beim eingelernten Objekt gespeicherten Daten sollen als ein graphisches Overlay auf dem Bildschirm des Smartphones dargestellt werden, wenn das Objekt erneut erkannt worden ist. -- \textit{Gewichtung:} Must-Have-Anforderung.
+
 %
 \section{Nicht-funktionale Anforderungen}
 % Wie gut soll das System das leisten? 
@@ -226,7 +225,7 @@ Im Folgenden werden die Einschränkungen und Qualitätsmerkmale an die Entwicklu
 Die Kompatibilität und ein angemessenes Laufzeitverhalten auf einem aktuellen Android-basierten Smartphone wird gefordert, um eine benutzerfreundliche Applikation bereitstellen zu können. -- \textit{Gewichtung:} Must-Have-Anforderung.
 
 \subsection{Dauer und Umstände des Erlernens der Objekte}
-Ein Objekt soll in annehmbarer Zeit eingelernt werden. Bei schlechten Lichtverhältnissen oder anderen Umständen, die es der Technologie unmöglich macht ein Objekt einzulernen, soll der Nutzer darauf hingewiesen werden, die Lichtverhältnisse oder andere Umstände zu verbessern, um mit dem Anwenden der Applikation fortfahren zu können. -- \textit{Gewichtung:} Must-Have-Anforderung.
+Ein Objekt soll bei guten Lichtverhältnissen in annehmbarer Zeit eingelernt werden. -- \textit{Gewichtung:} Must-Have-Anforderung.
 
 \subsection{Benutzerfreundlichkeit}
 Die Graphische Benutzeroberfläche ist so intuitiv wie möglich zu gestalten, um die Bedienung des Systems ohne größeren Einarbeitungsaufwand erlernen zu können. -- \textit{Gewichtung:} Should-Have-Anforderung.
@@ -245,10 +244,22 @@ Bei Software-Projekten entspricht dieses Kapitel typischerweise der
 Analyse \& Design-Phase des \ac{rup}. Typische Ergebnisse dieser Phase sind 
 Klassendiagramme etc.
 \section{Grundlegende Designentscheidungen}
-\subsection{Tensorflow Lite und Transfer Learning}
-\subsection{}
+\subsection{Tensorflow Lite und Continual Learning}
+Anbindung durch Decorator Pattern. Continual Learning Wrapper Aggregation
+
+Shared Preferences und SQLite database werden durch Interface angebunden Dependency inversion principle, um auch andere Sachen benutzen zu können um testfähigkeit zu gewährleisten und loose coupling
+
 \section{Grobentwurf}
-Hier kommen Komponenten UMLs rein, Software Architektur
+\subsection{Anwendungsfälle}
+Die zu entwickelnde Applikation soll dem Hauptakteur \glqq User\grqq\ die in Abbildung \ref{fig:usecase-diagram} dargestellten Anwendungsfälle erfüllen können. Eine genaue Beschreibung wurde in Anhang \ref{appendix:use-cases} verlagert, um den Lesefluss nicht zu stören. 
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/usecase-diagram.png}
+	\caption{UML-Anwendungsfall-Diagramm}
+	\label{fig:usecase-diagram}
+\end{figure}
+
+
 \section{Feinentwurf}
 Feine UMLs über Klassen, Sequenzdiagramme, Algorithmen Flussdiagramme, Verarbeitungspipelines
 
@@ -284,18 +295,7 @@ int main() {
 
 Manchmal hilft auch eine kleine Tabelle:
 
-\begin{table}[htbp]
-\centering
-\begin{tabular}{|l|r|}
-\hline
-\textbf{Messwert a} & \textbf{Messwert b} \\ \hline
-9 & 5 \\ \hline
-1 & 4 \\ \hline
-1 & 3 \\ \hline
-\end{tabular}
-\caption{Überschrift der Tabelle}
-\label{tab:my-table}
-\end{table}
+
 
 Details siehe Tabelle~\ref{tab:my-table}.
 %---
@@ -359,7 +359,349 @@ Und hier etwas über deren Übertragbarkeit.
 \printbibliography[heading=bibintoc]
 
 %---
-\chapter{Anhang A}
+\chapter{Beschreibung der Anwendungsfälle}
+\label{appendix:use-cases}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Modell hinzufügen} \\ \hline
+		\textbf{Beschreibung} & Beliebig viele neue Modelle sollen hinzufügt werden können \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer betätigt den "+"-Button in der Modellübersicht oder startet die Applikation zum ersten Mal  \\ \hline
+		\textbf{Vorbedingung} & Der Nutzer befindete sich in der Modellübersicht oder hat bisher noch kein Modell hinzugefügt  \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Ein Modell zu welchem weitere Objekte hinzugefügt werden können, wurde gespeichert \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Das Modell wurde nicht gespeichert und der Nutzer wird darüber durch eine Fehlermeldung informiert \\ \hline
+		\textbf{Standardablauf} & 1. Dialogfenster öffnet sich \\ 
+		& 2. Nutzer gibt Namen für Modell ein\\
+		& 3. Neues Modell wird gespeichert und Nutzer wird darüber informiert\\ \hline
+		\textbf{Sonderfälle} & 2a. Ein Modell mit dem  Namen existiert bereits \\ & $\rightarrow$ Der Nutzer wird darüber mit einer Fehlermeldung informiert\\
+		& 3a. Das Modell konnte nicht gespeichert werden \\ & $\rightarrow$ Der Nutzer wird darüber mit einer Fehlermeldung informiert \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Modell hinzufügen}
+	\label{tab:use-case-add-model}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Modell wechseln} \\ \hline
+		\textbf{Beschreibung} & Das ausgewählte Modell soll gewechselt werden können mit einem anderen bestehenden Modell \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer befindet sich in der Modellübersicht und betätigt den Radiobutton, der sich links neben dem Modellnamen befindet  \\ \hline
+		\textbf{Vorbedingung} & Es sind bereits mehrere Modelle hinzugefügt worden \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Es wurde ein anderes Modell ausgewählt \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Das Modell wurde nicht gewechselt \\ \hline
+		\textbf{Standardablauf} & 1. Nutzer betätigt den Radiobutton neben dem Namen des Modells \\
+		& 2. Der Radiobutton wird als selektiert markiert und das Modell wurde gewechselt \\ \hline
+		\textbf{Sonderfälle} & 2a. Das Modell konnte nichte selektiert werden \\ & $\rightarrow$ Keine Sonderbehandlung dieses Falles notwendig \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Modell wechseln}
+	\label{tab:use-case-change-model}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Modell einfrieren} \\ \hline
+		\textbf{Beschreibung} & Das Modell soll eingefroren werden. Das bedeutet, dass der Latent-Replay Algorithmus bei Ende der Trainingssitzung nicht mehr ausgeführt wird. Diese Kontrolle dem Nutzer zu übergeben, bietet den Vorteil, dass der Nutzer nicht durch langes Warten bei Ende der Trainingssitzung aufgrund des rechenintensiven Latent-Replay Algorithmus überrascht wird und die Möglichkeit hat das Modell fertigzustellen und nicht weiter zu trainieren. \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer verlässt die Trainingssitzung durch Wechseln der App mithilfe der Navigationsleiste  \\ \hline
+		\textbf{Vorbedingung} & Nutzer hat in dieser Trainingssitzung ein neues Objekt hinzugefügt \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Das Modell wurde eingefroren \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Das Modell wurde nicht eingefroren und der Latent-Replay Algorithmus wurde ausgeführt, um das Phänomen des Katastrophalen Vergessens in der nächsten Trainingssitzung zu verhindern \\ \hline
+		\textbf{Standardablauf} & 1. Nutzer wechselt den Kameratab durch Betätigen eines Reiters in der Navigationsleiste \\
+		& 2. Dialogfenster öffnet sich, welches den Nutzer darüber informiert, dass er nun die Möglichkeit hat sein Modell einzufrieren und welche Folgen dies hat. \\
+		& 3. Nutzer betätigt den Button, der das Modell einfriert \\
+		& 4. Es wird kein aufwendiger Algorithmus bei Ende der Trainingssitzung durchgeführt \\ \hline
+		\textbf{Sonderfälle} & 3a. Nutzer betätigt den Button, der das Modell auf eine nächste Trainingssitzung vorbereitet \\
+		& 3b. Latent-Replay Algorithmus wird ausgeführt und der Nutzer wird durch einen Ladekreis dazu angehalten bis zum Ende der Ausführung mit der Fortsetzung der Nutzung der Applikation zu warten \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Modell einfrieren}
+	\label{tab:use-case-freeze-model}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Alle Modelle betrachten} \\ \hline
+		\textbf{Beschreibung} & Alle abgespeicherten Modelle sollen mitsamt wichtiger Informationen besichtigt werden können \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Das Modell soll eingefroren werden. Das bedeutet, dass der Latent-Replay Algorithmus bei Ende der Trainingssitzung nicht mehr ausgeführt wird.  \\ \hline
+		\textbf{Vorbedingung} & Es wurden bereits ein oder mehrere Modelle gespeichert \\ \hline	
+		\textbf{Nachbedingung/Ziel} &  Der Nutzer befindet sich in der Modellübersicht, in welcher die gespeicherten Modelle betrachtet werden können\\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Die Modellübersicht enthält einen Text welcher daraufhinweist, dass bisher noch kein Modell gespeichert wurde, um einen leeren Bildschirm zu vermeiden \\ \hline
+		\textbf{Standardablauf} & 1. Der Nutzer betätigt den Button in der Navigationsleiste der zur Modellübersicht führt \\
+		& 2. Der Nutzer befindet sich in der Modellübersicht, welche eine Listenansicht der gespeicherten Objekte anzeigt, mitsamt der Anzahl bereits gespeicherter Objekte \\ \hline
+		\textbf{Sonderfälle} & 2a. Es öffnet sich keine Listenansicht, da noch kein Modell abgespeichert wurde. \\ & $\rightarrow$ Der Nutzer wird über das Fehlen von Modellen durch einen Text in der Mitte des Bildschirms informiert \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Alle Modelle betrachten}
+	\label{tab:use-case-view-models}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Gespeicherte Objekte im Modell betrachten} \\ \hline
+		\textbf{Beschreibung} & Alle im Modell abgespeicherten Objekte sollen besichtigt werden können \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer betätigt den Button welcher sich rechts neben dem Modellnamen befindet  \\ \hline
+		\textbf{Vorbedingung} & Der Nutzer befindet sich in der Modellübersicht und ein Modell wurde bereits abgespeichert \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Ein Dialogfenster, welches zum Modell alle gespeicherten Objekte anzeigt wurde geöffnet \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Es wurden noch keine Objekte für das Modell abgespeichert und ein Hilfetext befindet sich im geöffneten Dialog \\ \hline
+		\textbf{Standardablauf} & 1. Nutzer betätigt den Button, welcher sich rechts neben dem Modell befindet, dessen Objekte betrachtet werden sollen \\
+		& 2. Ein Dialogfenster öffnet sich, welches eine Listenansicht aller zum Modell gespeicherten Objekte enthält \\ \hline
+		\textbf{Sonderfälle} & 2a. Es öffnet sich keine Listenansicht, da noch kein Objekt für das jeweilige Modell abgespeichert wurde \\ & $\rightarrow$ Der Nutzer wird über das Fehlen von Objekten durch einen Text in der Mitte des Dialogfensters informiert \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Gespeicherte Objekte im Modell anschauen}
+	\label{tab:use-case-view-saved-objects}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Objekt hinzufügen} \\ \hline
+		\textbf{Beschreibung} & Objekte sollen hinzugefügt werden können \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer betätigt den \glqq+\grqq-Button der sich in der Mitte der Navigationsleiste befindet  \\ \hline
+		\textbf{Vorbedingung} & Der Nutzer befindet sich in der Kamera-Ansicht und hat bereits ein Modell hinzugefügt \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Ein Objekt konnte erfolgreich zum derzeitig ausgewählten Modell hinzugefügt werden und kann wiedererkannt werden \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Das Objekt wurde nicht abgespeichert \\ \hline
+		\textbf{Standardablauf} & 1. Nutzer befindet sich in der Kamera-Ansicht und betätigt den \glqq+\grqq-Button in der Mitte der Navigationsleiste \\ 
+		& 2. Ein Dialogfenster öffnet sich, welches den Nutzer darüber informiert was nun zu tun ist. Er hat nun die Möglichkeit diese Meldung nicht mehr anzuzeigen durch das Klicken des Hakens neben dem Text \glqq Nicht mehr anzeigen\grqq \\
+		& 3. Nutzer betätigt den \glqq Fortfahren\grqq-Button \\
+		& 4. Ein Dialogfenster öffnet sich, welches den Nutzer dazu auffordert dem Objekt Informationen hinzuzufügen \\
+		& 5. Nutzer gibt korrekte Daten ein und startet Training durch das Betätigen des \glqq Training\grqq-Buttons\\ 
+		& 6. Das Dialogfenster schließt sich und ein Countdown beginnt, welcher das bevorstehende Einlesen ankündigt \\
+		& 7. Das Training wurde gestartet und der Nutzer wird darüber durch Ändern des Textes am rechten oberen Bildschirmran in \glqq Training\grqq\ und einem deterministischen Ladekreis im rechten oberen Bildschirmrand informiert \\
+		& 8. Das Training  wurde abgeschlossen und der Text am rechten oberen Bildschildrand ändert sich wieder zu \glqq Erkennen\grqq \\ \hline
+		\textbf{Sonderfälle} & 1a. Der Nutzer befindet sich in der Kamera-Ansicht \\ & $\rightarrow$ Die Ansicht wird durch Betätigen des Buttons zur Kamera-Ansicht gewechselt \\
+		& 5a. Der Name des Objekts ist bereits vergeben \\ & $\rightarrow$ Der Nutzer wird darüber informiert und das Training wird noch nicht gestartet \\ 
+		& 7a. Der Nutzer verlässt frühzeit die Kamera-Ansicht, obwohl das Training noch nicht abgeschlossen ist \\ & $\rightarrow$ Der Nutzer wird über diesen Fehler informiert. Das Training wird abgebrochen und das Objekt gelöscht \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Objekt hinzufügen}
+	\label{tab:use-case-add-object}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Objekte wiedererkennen} \\ \hline
+		\textbf{Beschreibung} & Bereits eingespeicherte Objekte sollen durch Nutzung der Kamera wiedererkannt werden, wenn sich das Objekt innerhalb der Fokusbox befindet \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer kann das wiederzuerkennende Objekt in der Kamera-Ansicht sehen, da die Kamera des Mobilgeräts auf dieses Objekt ausgerichtet ist  \\ \hline
+		\textbf{Vorbedingung} & Das Objekt wurde bereits eingespeichert und der Nutzer befindet sich in der Kamera-Ansicht \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Das Objekt wird korrekt erkannt und die Informationen über das Objekt werden am oberen Bildschirmrand angezeigt \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Das Objekt wurde nicht erkannt \\ \hline
+		\textbf{Standardablauf} & 1. Nutzer zeigt mit der Kamera auf das Objekt \\ 
+		& 2. Das Objekt wird erkannt und eingespeicherte Informationen über das Objekt werden für den Nutzer angezeigt\\ \hline
+		\textbf{Sonderfälle} & 2a. Das Objekt wurde nicht erkannt \\ & $\rightarrow$ Nutzer hat die Möglichkeit weitere Eindrücke über das Objekt zu sammeln, oder gewisse Einstellungen an der Applikation vorzunehmen, um das Problem selbstständig beheben zu können\\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Objekt wiedererkennen}
+	\label{tab:use-case-recognize-objects}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Objekt bearbeiten} \\ \hline
+		\textbf{Beschreibung} & Die Attribute, die für das Objekt gespeichert wurden, sollen geändert werden können \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer betätigt den \glqq Bearbeiten\grqq-Button in der Objektübersicht \\ \hline
+		\textbf{Vorbedingung} & Der Nutzer befindet sich in der Objektübersicht und es sind bereits Objekte eingspeichert \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Der Nutzer kann durch das Öffnen eines Dialogfensters die bereits gespeicherten Informationen eines Objektes abändern \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Es sind keine Objekte eingespeichert und der Nutzer hat dementsprechend keine Möglichkeit ein Objekt abzuändern \\ \hline
+		\textbf{Standardablauf} & 1. Der Nutzer betätigt den \glqq Bearbeiten\grqq-Button in der Objektübersicht \\
+		& 2. Ein Dialogfenster öffnet sich, welches den Nutzer dazu auffordert das Objekt zu bearbeiten \\
+		& 3. Der Nutzer bearbeitet die Informationen korrekt \\
+		& 4. Der Nutzer betätigt den \glqq Bestätigen\grqq -Button und kehrt zur Objektübersicht zurück \\ \hline
+		\textbf{Sonderfälle} & 3a. Der Nutzer gibt einen neuen Objektnamen ein, der bereits existiert \\ & $\rightarrow$ Nutzer wird darauf hingewiesen und die Änderungen werden nicht gespeichert \\
+		& 4a. Der Nutzer betätigt den Abbrechen Button \\ & $\rightarrow$ Die Änderungen werden nicht gespeichert \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Objekt bearbeiten}
+	\label{tab:use-case-edit-object}	
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Weitere Trainingsdaten für Objekt erfassen} \\ \hline
+		\textbf{Beschreibung} & Es sollen zu einem bestehenden Objekt weitere Trainingsdaten erfasst werden, um die Erkennungsgenauigkeit für das gewählte Objekt erhöhen zu können\\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer betätigt den \glqq + \grqq-Button der sich unterhalb des Vorschaubildes des Objekts in der Listenansicht befindet  \\ \hline
+		\textbf{Vorbedingung} & Es wurde bereits ein Objekt abgespeichert und der Nutzer befindet sich in der Objektübersicht\\ \hline	
+		\textbf{Nachbedingung/Ziel} & Es wurde eine neue Trainingssitzung gestartet und dem Objekt wurde weitere Trainingsdaten hinzugefügt \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Das Training wurde nicht gestarte\\ \hline
+		\textbf{Standardablauf} & 1. Nutzer betätigt den \glqq +\grqq-Button \\
+		& 2. Die Applikation wechselt in die Kamera-Ansicht und das Training wird nach Ablauf des Countdowns gestartet \\ \hline
+		\textbf{Sonderfälle} & 2a. Das Training konnte nicht gestartet werden \\ & $\rightarrow$ Der Nutzer wird darüber mit einer Fehlermeldung informiert \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Weitere Trainingsdaten für Objekt erfassen}
+	\label{tab:use-case-add-further-samples}	
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Objekt löschen} \\ \hline
+		\textbf{Beschreibung} & Ein Objekt soll gelöscht werden können, sodass dieses nicht mehr von der Applikation erkannt wird \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer betätigt den \glqq Löschen\grqq-Button   \\ \hline
+		\textbf{Vorbedingung} & Der Nutzer befindet sich in der Objektübersicht und hat bereits ein Objekt eingespeichert  \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Das zu löschende Objekt wurde erfolgreich entfernt \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Das zu löschende Objekt wurde nicht erfolgreich entfernt \\ \hline
+		\textbf{Standardablauf} & 1. Der Nutzer betätigt den \glqq Löschen\grqq-Button \\ 
+		& 2. Ein Dialogfenster öffnet sich, welches den Nutzer fragt, ob er sich sicher sei das Objekt zu löschen \\
+		& 3. Der Nutzer bestätigt seine Sicherheit durch Betätigen des Buttons und das Objekt wird gelöscht \\ \hline
+		\textbf{Sonderfälle} & 3a. Der Nutzer betätigt den \glqq Abbrechen\grqq-Button\\ & $\rightarrow$ Das Dialogfenster wird geschlossen und das Objekt wird nicht gelöscht \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Objekt löschen}
+	\label{tab:use-case-delete-object}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Alle Objekte betrachten} \\ \hline
+		\textbf{Beschreibung} & Alle eingespeicherten Objekte sollen mitsamt aller Attribute des Objektes betrachtet werden können \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer wechselt in die Objektübersicht  \\ \hline
+		\textbf{Vorbedingung} & Der Nutzer bereits Objekte eingespeichert \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Der Nutzer kann nun eine Listenansicht über alle abgespeicherten Objekte betrachten \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Es wurden noch keine Objekte abgespeichert. Dementsprechend wurde keine Listenansicht erzeugt \\ \hline
+		\textbf{Standardablauf} & 1. Nutzer wechselt durch Betätigen des jeweiligen Buttons in der Navigationsleiste in die Objektübersicht \\
+		& 2. Nutzer betrachtet eine Liste, welche alle Objekte mit den zugehörig abgespeicherten Daten beinhaltet \\ \hline
+		\textbf{Sonderfälle} & 2a. Es wurde noch kein Objekt abgespeichert \\ & $\rightarrow$ Es wird in der Mitte des Bildschirm ein Informationstext angezeigt, um eine komplett leere Ansicht zu vermeiden \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Alle Objekte betrachten}
+	\label{tab:use-case-view-objects}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Einstellen der Anzahl der hinzuzufügenden Daten pro Training} \\ \hline
+		\textbf{Beschreibung} & Die Anzahl der Trainingsdaten die pro Objekttraining erfasst werden, soll konfigurierbar sein, um Kontrolle über die Dauer und die Genauigkeit der Erkennung zu erhalten \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer betätigt den jeweiligen Schieberegler in den App-Einstellungen \\ \hline
+		\textbf{Vorbedingung} & Der Nutzer befindet sich in den App-Einstellungen \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Die Anzahl der hinzuzufügenden Daten pro Training wurde auf den neuen Wert angepasst \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Änderung konnte nicht vollzogen werden \\ \hline
+		\textbf{Standardablauf} & 1. Der Nutzer stellt den Schieberegler auf einen neuen Wert \\ 
+		& 2. Die Anzahl der Trainingsdaten pro Objekttraining wird angepasst \\ \hline
+		\textbf{Sonderfälle} & 2a. Anzahl der Trainingsdaten pro Objekttraining kann nicht angepasst werden \\ & $\rightarrow$ Der Nutzer wird darüber durch eine Fehlermeldung informiert \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Einstellen der Anzahl der hinzuzufügenden Daten pro Training}
+	\label{tab:use-case-set-samples}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Einstellen der Dauer des Countdowns vor dem Training} \\ \hline
+		\textbf{Beschreibung} & Der unmittelbar vor dem Training laufende Countdown, soll konfigurierbar sein, um unnötige Wartezeiten, oder notwendige Zeiten für die korrekte Ausrichtung der Kamera zu ermöglichen \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer betätigt den jeweiligen Schieberegler in den App-Einstellungen \\ \hline
+		\textbf{Vorbedingung} & Der Nutzer befindet sich in den App-Einstellungen \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Die Länge des Countdowns wurde auf den neuen Wert gesetzt \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Die Länge des Countdowns konnte nicht auf den neuen Wert gesetzt werden \\ \hline
+		\textbf{Standardablauf} & 1. Der Nutzer stellt den Schieberegler auf einen neuen Wert \\ 
+		& 2. Die Länge des Countdowns wird angepasst \\ \hline
+		\textbf{Sonderfälle} & 2a. Die Länge des Countdowns konnte nicht angepasst werden \\ & $\rightarrow$ Der Nutzer wird darüber durch eine Fehlermeldung informiert \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Einstellen der Dauer des Countdowns vor dem Training}
+	\label{tab:use-case-set-countdown}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Einstellen der Auflösung der hinzuzufügenden Trainingsdaten} \\ \hline
+		\textbf{Beschreibung} & Die Größe der Fokusbox im Kamerahauptbildschirm soll konfigurierbar sein, um nahe beziehungs Objekte in der Ferne zu erfassen, ohne zu viel Hintergrund einzufangen \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer betätigt den jeweiligen Schieberegler in den App-Einstellungen \\ \hline
+		\textbf{Vorbedingung} & Der Nutzer befindet sich in den App-Einstellungen \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Die Auflösung der hinzuzufügenden Trainingsdaten wird angepasst \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Die Auflösung der hinzuzufügenden Trainingsdaten konnte nicht angepasst werden \\ \hline
+		\textbf{Standardablauf} & 1. Der Nutzer stellt den Schieberegler auf einen neuen Wert \\
+		& 2. Die Auflösung der hinzuzufügenden Trainingsdaten wird angepasst \\ \hline
+		\textbf{Sonderfälle} & 2a. Die Auflösung der hinzuzufügenden Trainingsdaten konnte nicht angepasst werden \\ & $\rightarrow$ Der Nutzer wird darüber durch eine Fehlermeldung informiert \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Einstellen der Auflösung der hinzuzufügenden Trainingsdaten}
+	\label{tab:use-case-set-resolution}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Einstellen des Konfidenzschwellwerts bei Inferenz} \\ \hline
+		\textbf{Beschreibung} & Der Konfidenzschwellwert soll konfigurierbar sein. Dies bedeutet, dass ein Objekt erst im Overlay angezeigt wird, wenn das Modell mit einer bestimmen Erkennungssicherheit (Konfidenz) das Objekt richtig erkannt hat \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer betätigt den jeweiligen Schieberegler in den App-Einstellungen \\ \hline
+		\textbf{Vorbedingung} & Der Nutzer befindet sich in den App-Einstellungen \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Der Konfidenzschwellwert wurde auf den neuen Wert gesetzt \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Der Konfidenzschwellwert konnte nicht auf den neuen Wert gesetzt werden \\ \hline
+		\textbf{Standardablauf} & 1. Der Nutzer stellt den Schieberegler auf einen neuen Wert \\ 
+		& 2. Der Konfidenzschwellwert wird angepasst \\ \hline
+		\textbf{Sonderfälle} & 2a. Der Konfidenzschwellwert wird nicht angepasst \\ 
+		& $\rightarrow$ Der Nutzer wird darüber durch eine Fehlermeldung informiert \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Einstellen des Konfidenzschwellwerts bei Inferenz}
+	\label{tab:use-case-set-conf-thres}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Anwendungsfall} & \textbf{Applikation zurücksetzen} \\ \hline
+		\textbf{Beschreibung} & Alle persistent gespeicherten Daten sollen zurückgesetzt werden können, um eine Alternative zur Neuinstallation der Applikation zu schaffen\\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer betätigt das Feld in den App-Einstellungen, welches für das Zurücksetzen der Applikation zuständig ist \\ \hline
+		\textbf{Vorbedingung} & Der Nutzer befindet sich in den App-Einstellungen\\ \hline
+		\textbf{Nachbedingung/Ziel} & Alle Modelle, Objekte und sonstige Konfigurationen wurden auf Werkseinstellungen zurückgesetzt \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Das Zurücksetzen war nicht erfolgreich \\ \hline
+		\textbf{Standardablauf} & 1. Der Nutzer betätigt das Feld \\
+		& 2. Ein Dialogfenster erscheint, welches den Nutzer darauf hinweist, dass das Zurücksetzen der Applikation nicht rückgängig gemacht werden kann und dass alle eingespeicherten Daten gelöscht werden \\ 
+		& 3. Der Nutzer bestätigt das Zurücksetzen \\
+		& 4. Die Applikation wird zurückgesetzt und neu gestartet \\ \hline
+		\textbf{Sonderfälle} & 3a. Der Nutzer betätigt den \glqq Abbrechen \grqq-Button und das Dialogfenster schließt sich. Der Vorgang wird abgebrochen \\
+		& 4a. Die Applikation konnte nicht zurückgesetzt werden \\ & $\rightarrow$ Der Nutzer wird darüber durch eine Fehlermeldung informiert und der Vorgang wird abgebrochen \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall: Applikation zurücksetzen}
+	\label{tab:use-case-reset}
+\end{table}
 
 %---
 \chapter{Anhang B}
