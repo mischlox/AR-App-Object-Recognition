@@ -72,4 +72,23 @@
   keywords     = {cs.CV, cs.LG},
 }
 
+@Article{mobilenet,
+  author      = {Andrew G. Howard and Menglong Zhu and Bo Chen and Dmitry Kalenichenko and Weijun Wang and Tobias Weyand and Marco Andreetto and Hartwig Adam},
+  title       = {MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications},
+  date        = {2017-04-17},
+  eprint      = {1704.04861v1},
+  eprintclass = {cs.CV},
+  eprinttype  = {arXiv},
+  abstract    = {We present a class of efficient models called MobileNets for mobile and embedded vision applications. MobileNets are based on a streamlined architecture that uses depth-wise separable convolutions to build light weight deep neural networks. We introduce two simple global hyper-parameters that efficiently trade off between latency and accuracy. These hyper-parameters allow the model builder to choose the right sized model for their application based on the constraints of the problem. We present extensive experiments on resource and accuracy tradeoffs and show strong performance compared to other popular models on ImageNet classification. We then demonstrate the effectiveness of MobileNets across a wide range of applications and use cases including object detection, finegrain classification, face attributes and large scale geo-localization.},
+  file        = {online:http\://arxiv.org/pdf/1704.04861v1:PDF},
+  keywords    = {cs.CV},
+}
+
+@Online{,
+  author  = {Tensorflow Lite Contributors},
+  title   = {Deploy machine learning models on mobile and IoT devices},
+  url     = {https://www.tensorflow.org/lite},
+  urldate = {2021-07-31},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}

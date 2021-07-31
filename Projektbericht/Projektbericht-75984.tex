@@ -105,12 +105,12 @@
 
 %% Eintrag: \acro{Referenzname}[Kürzel]{Langform}
 %% Im Text wird die Abkürzung dann mit \ac{Referenzname} benutzt.
-\acro{rup}[RUP]{Rational Unified Process}
+\acro{api}[API]{Application Programming Interface}
 \acro{ac}[AR]{Augmented Reality}
-%\acro{bsp}[Bsp.]{Beispiel}
+\acro{blob}[Blob]{Binary Large Object}
 \acro{cnn}[CNN]{Convolutional Neural Network}
-\acro{dnn}[DNN]{Deep Neural Network}
 \acro{dcnn}[DCNN]{Deep Convolutional Neural Network}
+\acro{dnn}[DNN]{Deep Neural Network}
 \acro{dsc}[DSC]{Depthwise Separable Convolution}
 \acro{ml}[ML]{Machine Learning}
 \end{acronym}
@@ -150,9 +150,11 @@ Der Aufbau des Mobilenet v2, welches Anwendung im gegebenen Anwendungsfall finde
 \begin{figure}[hptb]
 	\centering
 	\includegraphics[height=0.27\textheight]{images/mobilenet-architecture.png}
-	\caption{Architektur eines Mobilenet v2\\(Quelle: https://www.hindawi.com/journals/cin/2020/8817849/fig2/ abgerufen am 30.07.2021) }
+	\caption{Architektur eines Mobilenet v2} Quelle: https://www.hindawi.com/journals/cin/2020/8817849/fig2/ abgerufen am 30.07.2021
 	\label{fig:mobilenet-architecture}
 \end{figure}
+
+\subsection{Imagenet}
 \section{Wiedererkennung von Objekten}
 \label{sec:basics:wiedererkennung}
 Das Einlernen und Wiedererkennen von Objekten ist im Bereich des Maschinelles Lernens noch heute eine Herausforderung für eingebettete beziehungsweise mobile Endgeräte, aufgrund der geringen Rechenleistung, die zur Verfügung steht. Es ist möglich diese Aufgabe mithilfe einer Cloudlösung auf einen externen leistungsstarken Server zu übertragen. Aufgrund von Nachteilen, wie beispielsweise Sicherheitsrisiken, die beim Übertragen von sensitiven Daten auftreten, wird im Rahmen dieser Arbeit eine Applikation programmiert, die den gegebenen Anwendungsfall mit der dem Endgerät zur Verfügung stehenden Hardware löst.\\
@@ -171,7 +173,7 @@ Wenn stets neue Klassen eingelernt werden sollen und diese Daten sich nicht inne
 \begin{figure}[hptb]
 	\centering
 	\includegraphics[height=0.4\textheight]{images/traditional-vs-tflearning.png}
-	\caption{Vergleich des Aufbaus eines Transfer Learning Models im Gegensatz zum traditionellen Maschinellen Lernen (Quelle: \cite{Sarkar2019}) }
+	\caption{Vergleich des Aufbaus eines Transfer Learning Models im Gegensatz zum traditionellen Maschinellen Lernen} Quelle: \cite{Sarkar2019}
 	\label{fig:tf-architecture}
 \end{figure}
 
@@ -184,7 +186,7 @@ Das Prinzip des Transfer Learnings kann dementsprechend mithilfe des Latent-Repl
 \begin{figure}[htbp]
   \centering
   \includegraphics[height=0.5\textheight]{images/latent-replay.png}
-  \caption{Architekturdiagramm des Latent Replay (Quelle: \cite{Pellegrini2019}) }
+  \caption{Architekturdiagramm des Latent Replay} Quelle: \cite{Pellegrini2019}
   \label{fig:latent-replay}
 \end{figure}
 % ---
@@ -233,32 +235,75 @@ Die Graphische Benutzeroberfläche ist so intuitiv wie möglich zu gestalten, um
 \subsection{Wartbarkeit und Erweiterbarkeit}
 Änderungen und Erweiterungen des Software-Systems sollten mit hinnehmbarem Aufwand bewerkstelligt werden können. Demnach sollte der Quellcode modular, strukturiert und dokumentiert sein. -- \textit{Gewichtung:} Should-Have-Anforderung.
 
-%---
-\chapter{Entwurf}
-\label{cha:Entwurf}
-Auf der Basis der im vorangegangenen Kapitel erstellten Problemanalyse 
-und der im Grundlagenkapitel aufgearbeiteten theoretischen Kenntnisse 
-wird ein Lösungskonzept erarbeitet.
-
-Bei Software-Projekten entspricht dieses Kapitel typischerweise der 
-Analyse \& Design-Phase des \ac{rup}. Typische Ergebnisse dieser Phase sind 
-Klassendiagramme etc.
-\section{Grundlegende Designentscheidungen}
-\subsection{Tensorflow Lite und Continual Learning}
-Anbindung durch Decorator Pattern. Continual Learning Wrapper Aggregation
-
-Shared Preferences und SQLite database werden durch Interface angebunden Dependency inversion principle, um auch andere Sachen benutzen zu können um testfähigkeit zu gewährleisten und loose coupling
-
-\section{Grobentwurf}
-\subsection{Anwendungsfälle}
+\section{Anwendungsfälle}
 Die zu entwickelnde Applikation soll dem Hauptakteur \glqq User\grqq\ die in Abbildung \ref{fig:usecase-diagram} dargestellten Anwendungsfälle erfüllen können. Eine genaue Beschreibung wurde in Anhang \ref{appendix:use-cases} verlagert, um den Lesefluss nicht zu stören. 
 \begin{figure}[hptb]
 	\centering
 	\includegraphics[height=0.6\textheight]{images/usecase-diagram.png}
-	\caption{UML-Anwendungsfall-Diagramm}
+	\caption{UML-Anwendungsfall-Diagramm} Quelle: Eigene Darstellung
 	\label{fig:usecase-diagram}
 \end{figure}
+%---
+\chapter{Entwurf}
 
+\label{cha:Entwurf}
+Auf der Basis der im vorangegangenen Kapitel erstellten Anforderungsanalyse 
+und der im Grundlagenkapitel aufgearbeiteten theoretischen Kenntnisse 
+wird ein Lösungskonzept erarbeitet.
+\section{Grundlegende Designentscheidungen}
+Die für den Entwurf der Applikation zugrundelegenden Entscheidungen, welche für die erfolgreiche Implentierung entscheidend sind, werden im Folgenden erklärt.
+\subsection{Tensorflow Lite und Continual Learning}
+Tensorflow Lite ist ein Open-Source Deep Learning Framework, welches für die Inferenz von Deep Learning Modellen auf Mobilen Endgeräten und eingebetteten Systemen entwickelt wurde \cite{tflite-site}.\\
+Aufgrund einer bereits vorhandenen Beispielimplementierung einer Transfer Learning Applikation, wurde eine Basis für die ersten Ansätze einer Anbindung der Wiederkennungsfunktionalität unter der Nutzung von Transfer Learning für die Applikation, die in dieser Projektarbeit zu entwickeln ist, geschaffen.
+Tensorflow Lites stellt ein \ac{api} zur Verfügung, welche die Nutzung von Transfer Learning vereinfacht. Zudem ist es durch ein Python-Skript möglich selbst generierte Tensorflow Lite-Modelle für das Transfer Learning vorzubereiten.\\
+Um einen Latent-Replay Algorithmus in die Applikation zu übertragen, wurden Anpassungen übernommen nach dem Vorbild von Demosthenous et al. \cite{cl-vs-tl}, welche im Rahmen ihrer Forschung den Transfer Learning Ansatz mit dem Continual Learning Ansatz von Pellegrini et al. \cite{Pellegrini2019} verglichen haben.
+\section{Entwurfsmuster}
+Um sich auf bereits bewährte Entwurfsansätze bestehender Software beziehen zu können, werden unter anderem mehrere Entwurfsmuster aus dem \textit{GoF-Buch} genutzt. Dies ermöglicht es qualitativ hochwertige Software zu entwickeln, welche durch das Anwenden von allgemein bekannten Mustern von anderen Entwicklern leichter nachvollzogen werden kann.
+\subsection{Ports-und-Adapter}
+Um ein möglichst wart- und erweiterbares Softwareprodukt zu entwickeln, wurde das \textit{Ports-und-Adapter-Muster}, soweit dies möglich war, angewendet, um Third-Party-Dependencies, wie beispielsweise Tensorflow Lite, aber auch um die Persistenz möglichst abstrakt zu halten und eine Bindung an konkrete Implementierungen und Technologien zu vermeiden. Dies erhöht die Testfähigkeit enorm, da das \textit{Dependency-Inversion-Prinzip} angewendet wird und die Abhängigkeiten der Geschäftslogik so gering wie möglich gehalten wird.
+
+\subsection{Factories}
+Um die Erzeugung von Objekten ähnlicher Klassen, wie beispielsweise Dialogboxen, möglichst konsistent zu halten, werden diese mithilfe des \textit{Factory}-Musters erstellt, soweit dies möglich war.
+
+\subsection{Observer}
+Um eine starke Kopplung der Komponenten zu vermeiden, wird das \textit{Observer}-Muster so weit dies möglich ist verwendet. Es findet vor allem im Aktualisieren der Graphischen Oberfläche, aber auch bei der Interkommunikation von entkoppelten Dialogfenstern und Fragments, sowie bei der Beobachtung von asynchronen Prozessen Anwendung.
+
+\subsection{Fragments}
+Da das Entwickeln einer Android-Applikation zu den Anforderungen gehört, ist zu entscheiden, ob man eine Applikation auf Basis mehrerer Android-Aktivitäten  (\textit{engl.: Activities}) erstellt, oder eine Activity mithilfe von angefügten sogenannten Fragmenten (\textit{engl: Fragments}) entwickelt. Das Nutzen von Fragments ermöglicht die Interkommunikation der Systemkomponenten über die Activity, zu welcher diese gehören. Da in mehreren Anwendungsfällen das Zusammenarbeiten mehrerer Systemkomponenten notwendig ist, ist die Nutzung von Fragments der Nutzung von mehreren Aktivitäten vorzuziehen.\\
+Die Oberfläche der Applikation kann mithilfe von XML-Code generiert werden. Programmatisch wird die Oberfläche an die Funktionalität, welche in Java-Code geschrieben wurde, gebunden.\\
+
+
+\section{Entitätsklassen}
+Die für die Geschäftslogik grundlegenden und technisch unbedingt notwendigen Entitäten werden in Abbildung \ref{fig:er-diagram} dargestellt. In den folgenden Unterkapiteln werden diese erläutert.\\
+Zu allen Entitäten wird eine einzigartige fortlaufende Identifikationsnummer (ID) gespeichert.
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/er-diagram.png}
+	\caption{Entity-Relationship-Diagramm} Quelle: Eigene Darstellung
+	\label{fig:er-diagram}
+\end{figure}
+
+\subsection{Modell}
+Um dem Nutzer eine Unterscheidungsmöglichkeit zu bieten wird zu dem Modell ein Name abgespeichert.\\
+Der absolute Pfad zu einer lokalen Binärdatei, die die derzeitige Parametrisierung des Modells festlegt wird zusätzlich abgespeichert, anstatt die Binärdaten direkt als \ac{blob} zu speichern. Dies vereinfacht es die Applikation bei Bedarf um eine \glqq Modell teilen\grqq-Funktion zu erweitern. \\
+Zusätzlich wird ein boolescher Wert zu jedem Modell abgespeichert, welcher entscheidet, ob das Modell bereits eingefroren wurde, um den Nutzer warnen zu können, wenn er im Begriff ist bereits bestehende Objekte aufgrund des Phänomen des Katastrophalen Vergessen zu überschreiben.
+\subsection{Objekt}
+Das Objekt ist die Kernentität der Applikation. Im Rahmen dieser Projektarbeit wurden einem Objekt diverse Attribute, wie beispielsweise dem Objekttyp oder dem generischen Attribut \glqq Weitere Daten\grqq\ angefügt. Es ist jedoch möglich die zusätzlichen Daten, außer dem bezeichnenden Objektnamen, leer zu lassen, da diese keine Auswirkungen auf die Funktionsweise der Applikation haben.\\
+Jedes Objekt hat eine Beziehung zu einem bestimmten Modell. Dies kann durch das Speichern einer Modell-Identifikationsnummer als Fremdschlüssel realisiert werden.\\
+Ein Modell stellt eine Anzahl an Endknoten zur Verfügung, welche sich direkt auf die Endknoten der Netzarchitektur des zugrundeliegenden \ac{dcnn} projizieren lassen. Demnach ist zu jedem Objekt eine Modelposition zu speichern. Anhand dieser Kartierung ist eine lose Kopplung zwischen Objekt und Modell und eine generische Erstellung von beliebig vielen Modellen und demnach beliebig vielen Objekten, anknüpfend an bestimmte Modelle, möglich.\\ 
+Außerdem wird dem Objekt automatisch ein Zeitstempel hinzugefügt, um dem Nutzer darüber Auskunft geben zu können, wann das jeweilige Objekt eingespeichert wurde. Zudem ist ein Zeitstempel für mögliche weitere Datenabfragen und beispielsweise Erweiterungen der Objektübersicht mit einer Nach-Datum-Sortierungsfunktion sinnvoll.\\
+Sobald ein Objekttraining gestartet wird, wird die erste Bitmap, die in der Trainings-Vorbereitungs-Pipeline eingeht persistent abgespeichert, um dem Nutzer eine Vorschau des Objektes zu geben, falls es in Vergessenheit geraten ist, um welches Objekt es sich handelt.\\
+Die Speicherung der Anzahl der Trainingsdaten pro Objekt sind von monitorischer Bedeutung. Durch das Speichern und die spätere Anzeige dieser Daten kann der Nutzer entscheiden, ob es sinnvoll ist einem Objekt weitere Trainingsdaten hinzuzufügen. Mögliche Erkennungsprobleme wie beispielsweise einer ungleichen Verteilung an Trainingsdaten können dadurch leichter festgestellt werden.\\
+\subsection{Trainingsdaten}
+Die Aktivierungen im Bottleneck-Layer des zugrundeliegenden Mobilenet v2, werden persistent abgespeichert, mitsamt der jeweiligen Modellposition und der Modell-Identifikationsnummer, zu welchem die Trainingsdaten gehören. Erforderlich ist dies aufgrund der Implementierung eines Continual Learning Ansatzes unter Verwendung des Latent-Replay Algorithmus, da alte Trainingsdaten bei einem Objekttraining vermischt werden, um das Phänomen des Katastrophalen Vergessens zu lösen.\\
+Ein Zeitstempel wird zu jedem Trainingsdatenfeld hinzugefügt, um lediglich die letzten $n$ Daten in den Latent-Replay-Puffer zu überführen.
+\subsection{Latent-Replay-Puffer}
+Der Latent-Replay-Puffer wird nach jeder Trainingssitzung aktualisiert mit den zuletzt hinzugefügten Trainingsdaten.\\
+Zudem wird die Modellidentifikationsnummer als Fremdschlüssel und die Modellposition, zu welchem das jeweilige Trainingsdatenfeld gehört mitabgespeichert, um das Vermischen von neuen Trainingsdaten und alten Trainingsdaten, nach dem Prinzip des Latent-Replay-Algoritmhus zu ermöglichen.
+\section{Grobentwurf}
+
+\subsection{Architektur}
+\subsubsection{Bausteinsicht}
 
 \section{Feinentwurf}
 Feine UMLs über Klassen, Sequenzdiagramme, Algorithmen Flussdiagramme, Verarbeitungspipelines
@@ -488,7 +533,8 @@ Und hier etwas über deren Übertragbarkeit.
 		& 8. Das Training  wurde abgeschlossen und der Text am rechten oberen Bildschildrand ändert sich wieder zu \glqq Erkennen\grqq \\ \hline
 		\textbf{Sonderfälle} & 1a. Der Nutzer befindet sich in der Kamera-Ansicht \\ & $\rightarrow$ Die Ansicht wird durch Betätigen des Buttons zur Kamera-Ansicht gewechselt \\
 		& 5a. Der Name des Objekts ist bereits vergeben \\ & $\rightarrow$ Der Nutzer wird darüber informiert und das Training wird noch nicht gestartet \\ 
-		& 7a. Der Nutzer verlässt frühzeit die Kamera-Ansicht, obwohl das Training noch nicht abgeschlossen ist \\ & $\rightarrow$ Der Nutzer wird über diesen Fehler informiert. Das Training wird abgebrochen und das Objekt gelöscht \\ \hline
+		& 7a. Der Nutzer verlässt frühzeit die Kamera-Ansicht, obwohl das Training noch nicht abgeschlossen ist \\ 
+		& 7b. Alle Objektplätze des ausgewählten Modells sind bereits belegt \\ & $\rightarrow$ Der Nutzer wird über diesen Fehler informiert. Das Training wird abgebrochen und das Objekt gelöscht \\ \hline
 		
 	\end{tabular}
 	\caption{Anwendungsfall: Objekt hinzufügen}

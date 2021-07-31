@@ -1,17 +1,17 @@
 [0] Config.pm:304> INFO - This is Biber 2.14 (beta)
 [0] Config.pm:307> INFO - Logfile is 'Projektbericht-75984.blg'
-[46] biber:322> INFO - === Fr Jul 30, 2021, 15:36:38
+[46] biber:322> INFO - === Sa Jul 31, 2021, 18:36:16
 [55] Biber.pm:415> INFO - Reading 'Projektbericht-75984.bcf'
-[97] Biber.pm:943> INFO - Found 8 citekeys in bib section 0
-[106] Biber.pm:4256> INFO - Processing section 0
-[106] Utils.pm:75> INFO - Globbing data source 'latexlit.bib'
-[106] Utils.pm:91> INFO - Globbed data source 'latexlit.bib' to latexlit.bib
-[112] Biber.pm:4455> INFO - Looking for bibtex format file 'latexlit.bib' for section 0
-[113] bibtex.pm:1653> INFO - LaTeX decoding ...
-[125] bibtex.pm:1471> INFO - Found BibTeX data source 'latexlit.bib'
-[191] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[191] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[96] Biber.pm:943> INFO - Found 9 citekeys in bib section 0
+[105] Biber.pm:4256> INFO - Processing section 0
+[105] Utils.pm:75> INFO - Globbing data source 'latexlit.bib'
+[105] Utils.pm:91> INFO - Globbed data source 'latexlit.bib' to latexlit.bib
+[111] Biber.pm:4455> INFO - Looking for bibtex format file 'latexlit.bib' for section 0
+[112] bibtex.pm:1653> INFO - LaTeX decoding ...
+[123] bibtex.pm:1471> INFO - Found BibTeX data source 'latexlit.bib'
+[192] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[192] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
 [192] Biber.pm:4084> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
 [192] Biber.pm:4090> INFO - No sort tailoring available for locale 'en-US'
-[199] bbl.pm:652> INFO - Writing 'Projektbericht-75984.bbl' with encoding 'UTF-8'
-[205] bbl.pm:755> INFO - Output to Projektbericht-75984.bbl
+[200] bbl.pm:652> INFO - Writing 'Projektbericht-75984.bbl' with encoding 'UTF-8'
+[206] bbl.pm:755> INFO - Output to Projektbericht-75984.bbl

@@ -1,0 +1,349 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 20 524 507' xmlns:xlink='http://www.w3.org/1999/xlink' width='524.0px' font-size='13' font-family='Arial, LiberationSans' version='1.1' height='507.0px'>
+  <defs>
+<style type='text/css'><![CDATA[svg text {text-rendering: geometricPrecision;}]]></style>    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='3adebf22-3871-48a7-ad03-d7658030ec0b' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='9354a50b-0bd9-4ed3-9e5b-37c5c3601d5d' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='804f61e7-9ae9-4238-b13b-b5f5329ccd5d' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='89d06799-a322-4403-8866-0755cafcc805' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='e1f4a40a-6207-4944-b23d-08888ead70e9' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='eedeb354-6833-4965-aecf-785b4e36be8d' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='5c53268d-7cba-4ed1-a9f8-aa01c3cf67fb' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='bb18d0e3-ba2e-40cb-b09f-6b0c89a59b05' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='a01c4e95-6255-4faa-b3f8-3e406507f501' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='6e42b551-2d58-4094-9478-2b2d479b8a69' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='9ea3db52-9133-4ba8-b12d-968f1dc58c78' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='7a0009da-06f1-48e5-a70b-070fe501ef79' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='7e61452f-c430-40cc-bf4b-acf3690dd18d' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='2fc538bf-6649-4d9a-9f5e-83e5e43ecfae' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='5578783d-bf78-4adf-b7be-cb157b9350b8' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='3924ac84-0e98-427b-9b95-0009b03dc6ab' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='6a7f7762-e6f4-4aae-b53a-326081e9f67e' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='53ec9de5-d7df-4d8f-aea0-a386d22cbfac' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='1af3217b-3799-473f-98da-5903fd7eec01' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='a0f2c55a-ae90-4d8a-b948-4d98af3837ae' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='e0262a93-2d22-43c1-9c0d-b1746b02e14d' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='2afd5677-62f6-4754-9b9d-4286242f4f90' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='d0e429ec-6cf3-409a-b20a-755444d62822' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='b4aa9a11-f63f-4eda-94ef-d4ca9c18bf35' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='048c7a24-fa1f-48cd-bf7a-ac98718b467b' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='c9a324f1-71a6-4115-be63-62e56dda5dfa' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='0c38d3ce-e905-4275-8b9f-69ffaf4cbd21' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='861e4b70-fac3-40bb-8a4a-e3786314b174' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='5afbb1e2-2f34-41e9-8e07-d0cdeb496470' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='04226b12-341b-4df8-ba27-75f996d483ab' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+  </defs>
+  <desc>UsecaseDiagram</desc>
+  <g transform='translate(220.0,226.0)' id='_kSZgsNQkEDmTCso-fUoo7A'>
+    <circle r='6.5' cx='20.0' cy='8.5' stroke-width='1.5' fill='rgb(255, 255, 255)' stroke='rgb(136, 136, 136)' look='allInOne'/>
+    <line y1='15.0' x1='20.0' y2='45.5' x2='20.0' stroke-width='1.5' fill='rgb(255, 255, 255)' stroke='rgb(136, 136, 136)' look='allInOne'/>
+    <line y1='26.0' x1='6.0' y2='26.0' x2='34.0' stroke-width='1.5' fill='rgb(255, 255, 255)' stroke='rgb(136, 136, 136)' look='allInOne'/>
+    <line y1='45.5' x1='20.0' y2='63.0' x2='9.2' stroke-width='1.5' fill='rgb(255, 255, 255)' stroke='rgb(136, 136, 136)' look='allInOne'/>
+    <line y1='45.5' x1='20.0' y2='63.0' x2='30.799999999999997' fill='rgb(255, 255, 255)' stroke='rgb(136, 136, 136)' look='allInOne'/>
+    <text text-anchor='middle' x='20.0' y='78.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>User</text>
+  </g>
+  <g transform='translate(364.0,114.0)' id='_mrna0NQkEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#3adebf22-3871-48a7-ad03-d7658030ec0b)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,21.0)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Add Object</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(364.0,178.0)' id='_on7WgNQkEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#9354a50b-0bd9-4ed3-9e5b-37c5c3601d5d)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,21.0)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Edit Object</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(364.0,308.0)' id='_qAP0UNQkEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#804f61e7-9ae9-4238-b13b-b5f5329ccd5d)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,21.0)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Delete Object</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(0.0,212.0)' id='_rt1XgdQkEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#89d06799-a322-4403-8866-0755cafcc805)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,21.0)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Add Model</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(364.0,245.0)' id='_tlxJgdQkEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#e1f4a40a-6207-4944-b23d-08888ead70e9)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,8.0)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Add more</text>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='26.0' font-size='13' fill='rgb(3, 54, 86)'>samples to</text>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='39.0' font-size='13' fill='rgb(3, 54, 86)'>object</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(190.0,150.0)' id='_xnw_UNQkEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#eedeb354-6833-4965-aecf-785b4e36be8d)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,14.5)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Configure</text>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='26.0' font-size='13' fill='rgb(3, 54, 86)'>training</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(190.0,344.0)' id='_zXmlQNQkEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#5c53268d-7cba-4ed1-a9f8-aa01c3cf67fb)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,14.5)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Reset</text>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='26.0' font-size='13' fill='rgb(3, 54, 86)'>application</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(0.0,151.0)' id='_Tv6JUNQlEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#bb18d0e3-ba2e-40cb-b09f-6b0c89a59b05)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,21.0)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Freeze Model</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(240.0,50.0)' id='__6ZiAdQlEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#a01c4e95-6255-4faa-b3f8-3e406507f501)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,14.5)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Set sample</text>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='26.0' font-size='13' fill='rgb(3, 54, 86)'>resolution</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(362.0,51.0)' id='_BZU-IdQmEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#6e42b551-2d58-4094-9478-2b2d479b8a69)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,14.5)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Set confidence</text>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='26.0' font-size='13' fill='rgb(3, 54, 86)'>threshold</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(125.0,51.0)' id='_DUAiINQmEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#9ea3db52-9133-4ba8-b12d-968f1dc58c78)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,14.5)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Set countdown</text>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='26.0' font-size='13' fill='rgb(3, 54, 86)'>before training</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(0.0,52.0)' id='_GULHgdQmEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#7a0009da-06f1-48e5-a70b-070fe501ef79)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,14.5)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Set samples per</text>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='26.0' font-size='13' fill='rgb(3, 54, 86)'>training</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(364.0,368.0)' id='_aKWAsdQmEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#7e61452f-c430-40cc-bf4b-acf3690dd18d)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,21.0)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>View all objects</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(0.0,342.0)' id='_engIgNQmEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='25.0' rx='50.0' ry='25.0' stroke-width='1.0' fill='url(#2fc538bf-6649-4d9a-9f5e-83e5e43ecfae)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,18.5)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>View all models</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(0.0,279.0)' id='_g9fvgNQmEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#5578783d-bf78-4adf-b7be-cb157b9350b8)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,21.0)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Change model</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(0.0,402.0)' id='_lqFacNQmEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#3924ac84-0e98-427b-9b95-0009b03dc6ab)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,14.5)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>View objects</text>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='26.0' font-size='13' fill='rgb(3, 54, 86)'>saved to model</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(364.0,442.0)' id='_Lojn4NRKEDmTCso-fUoo7A'>
+    <ellipse cx='50.0' cy='27.5' rx='50.0' ry='27.5' stroke-width='1.0' fill='url(#6a7f7762-e6f4-4aae-b53a-326081e9f67e)' stroke='rgb(187, 187, 187)' look='allInOne'/>
+    <g transform='translate(0.0,14.5)'>
+      <g transform='translate(0.0,0.0)'>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='13.0' font-size='13' fill='rgb(3, 54, 86)'>Recognize</text>
+        <text font-weight='bold' text-anchor='middle' x='50.0' y='26.0' font-size='13' fill='rgb(3, 54, 86)'>Objects</text>
+      </g>
+    </g>
+  </g>
+  <g transform='translate(219.0,283.0)' id='_C11N0dQlEDmTCso-fUoo7A'/>
+  <g transform='translate(255.0,310.0)' id='_YzsMQNQlEDmTCso-fUoo7A'/>
+  <g transform='translate(261.0,256.0)' id='_ZOD0ENQlEDmTCso-fUoo7A'/>
+  <g transform='translate(270.0,225.0)' id='_ZoPOotQlEDmTCso-fUoo7A'/>
+  <g transform='translate(168.0,231.0)' id='_Z7dFktQlEDmTCso-fUoo7A'/>
+  <g transform='translate(109.0,244.0)' id='_aQCOctQlEDmTCso-fUoo7A'/>
+  <g transform='translate(118.0,270.0)' id='_alcdwtQlEDmTCso-fUoo7A'/>
+  <g transform='translate(171.0,340.0)' id='_bBrt1NQlEDmTCso-fUoo7A'/>
+  <g transform='translate(55.0,358.0)' id='_qOvRZNQmEDmTCso-fUoo7A'/>
+  <g transform='translate(99.0,324.0)' id='_qrdpo9QmEDmTCso-fUoo7A'/>
+  <g transform='translate(109.0,298.0)' id='_rENg0NQmEDmTCso-fUoo7A'/>
+  <g transform='translate(255.0,339.0)' id='_r_caA9QmEDmTCso-fUoo7A'/>
+  <g transform='translate(259.0,381.0)' id='_N2thgtRKEDmTCso-fUoo7A'/>
+  <g id='_C1t5ENQlEDmTCso-fUoo7A'>
+    <line y1='266.0' x1='260.0' y2='270.0' x2='364.0' id='_C1xjctQlEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_YzTxwNQlEDmTCso-fUoo7A'>
+    <line y1='274.0' x1='260.0' y2='315.0' x2='364.0' id='_YzkQctQlEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_ZNvrAdQlEDmTCso-fUoo7A'>
+    <line y1='259.0' x1='260.0' y2='223.0' x2='364.0' id='_ZN8fUtQlEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_Zn7FkdQlEDmTCso-fUoo7A'>
+    <line y1='251.0' x1='260.0' y2='169.0' x2='376.0' id='_ZoGrwtQlEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_Z7KxstQlEDmTCso-fUoo7A'>
+    <line y1='226.0' x1='240.0' y2='205.0' x2='240.0' id='_Z7T7otQlEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_aPuscdQlEDmTCso-fUoo7A'>
+    <line y1='256.0' x1='220.0' y2='201.0' x2='100.0' id='_aP6SotQlEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_alJi0tQlEDmTCso-fUoo7A'>
+    <line y1='263.0' x1='220.0' y2='246.0' x2='100.0' id='_alSswtQlEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_bBYL0dQlEDmTCso-fUoo7A'>
+    <line y1='306.0' x1='240.0' y2='344.0' x2='240.0' id='_bBij4tQlEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_JfAr0NQmEDmTCso-fUoo7A'>
+    <line y1='106.0' x1='365.0' y2='150.0' x2='288.0' id='_JfDIEdQmEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+    <polygon transform='translate(288.0,150.0) rotate(-119.74488129694222)' stroke-width='1.0' fill='rgb(255, 255, 255)' stroke='rgb(0, 0, 0)' points='-6.0,10.0 0.0,0.0 6.0,10.0'/>
+  </g>
+  <g id='_MqjawdQmEDmTCso-fUoo7A'>
+    <line y1='105.0' x1='276.0' y2='150.0' x2='254.0' id='_MqlP8dQmEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+    <polygon transform='translate(254.0,150.0) rotate(-153.94650468950906)' stroke-width='1.0' fill='rgb(255, 255, 255)' stroke='rgb(0, 0, 0)' points='-6.0,10.0 0.0,0.0 6.0,10.0'/>
+  </g>
+  <g id='_NG2VMdQmEDmTCso-fUoo7A'>
+    <line y1='106.0' x1='192.0' y2='150.0' x2='221.0' id='_NG3jUtQmEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+    <polygon transform='translate(221.0,150.0) rotate(146.6114864238885)' stroke-width='1.0' fill='rgb(255, 255, 255)' stroke='rgb(0, 0, 0)' points='-6.0,10.0 0.0,0.0 6.0,10.0'/>
+  </g>
+  <g id='_NgC4UdQmEDmTCso-fUoo7A'>
+    <line y1='105.0' x1='100.0' y2='152.0' x2='190.0' id='_NgEGctQmEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+    <polygon transform='translate(190.0,152.0) rotate(117.57456395969437)' stroke-width='1.0' fill='rgb(255, 255, 255)' stroke='rgb(0, 0, 0)' points='-6.0,10.0 0.0,0.0 6.0,10.0'/>
+  </g>
+  <g id='_qOUaoNQmEDmTCso-fUoo7A'>
+    <line y1='283.0' x1='220.0' y2='402.0' x2='82.0' id='_qOlgYtQmEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_qrEBANQmEDmTCso-fUoo7A'>
+    <line y1='276.0' x1='220.0' y2='342.0' x2='97.0' id='_qrTRktQmEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_rD2UctQmEDmTCso-fUoo7A'>
+    <line y1='270.0' x1='220.0' y2='296.0' x2='100.0' id='_rEDv0tQmEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_r_CKUNQmEDmTCso-fUoo7A'>
+    <line y1='368.0' x1='376.0' y2='280.0' x2='260.0' id='_r_PlsdQmEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_N2PAYdRKEDmTCso-fUoo7A'>
+    <line y1='289.0' x1='260.0' y2='442.0' x2='390.0' id='_N2jJctRKEDmTCso-fUoo7A' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+</svg>
