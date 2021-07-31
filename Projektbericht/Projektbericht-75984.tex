@@ -109,6 +109,9 @@
 \acro{ac}[AR]{Augmented Reality}
 %\acro{bsp}[Bsp.]{Beispiel}
 \acro{cnn}[CNN]{Convolutional Neural Network}
+\acro{dnn}[DNN]{Deep Neural Network}
+\acro{dcnn}[DCNN]{Deep Convolutional Neural Network}
+\acro{dsc}[DSC]{Depthwise Separable Convolution}
 \acro{ml}[ML]{Machine Learning}
 \end{acronym}
 %---
@@ -131,55 +134,57 @@ und die zu ihrer Lösung entwickelten Konzepte zu beschreiben.
 Zur Lösung der Problemstellung sind verschiedene Grundlagengebiete zu beherr-
 schen, die zum einen bereits im Rahmen des Informatikstudiums verinnerlicht werden konnten und zum anderen Gebiete und Themen, die erst im Laufe der Recherche und Implentierung der Projektarbeit erarbeitet worden sind.
 \section{Deep Neural Networks}
-
+Konventionelle Methoden des Maschinellen Lernens sind in der Verarbeitung von rohen Daten, wie beispielsweise den Pixeln von Bildern, ineffizient.
+Deep Learning bezeichnet ein Teilgebiet des Maschinellen Lernens, welches in diesen Anwendungsfällen eine bessere Alternative darstellt. Ein \ac{dnn} ist ein mehrschichtiges Rechenmodell, welches sich vor allem in den Gebieten der Bild- und Spracherkennung als \textit{state-of-the-art} etablieren konnte.\\
+Beim Deep Learning wird zwischen Training und Inferenz unterschieden. Beim Training werden in das Netz annotierte Trainingsdaten gegegeben, welche vom Netz prozessiert werden. Daraufhin werden die Gewichte des Netzes kalibriert um die Merkmale der eingelesenen Trainingsdaten wiedererkennen zu können.\\
+Beim Vorgang der Inferenz erzeugt das Netz eigenständig Ausgaben. Der produktive Einsatz von \acp{dnn} entspricht demnach dem Vorgang der Inferenz \cite{deepl-vs-traditional, deepl-lecun}. 
+\subsection{Deep Convolutional Neural Networks}
+Bei den meisten Bildklassifizierungs- und Objektdetektionsapplikationen werden sogenannte Faltungsschichten (\textit{engl.: Convolutional Layers}) verwendet, da sich diese als sehr effizient in diesem Anwendungsfall erweisen konnten.\\
+In der Mathematik bezeichnet eine Faltungsschicht das Überlappen zweier Funktionen.\\
+Eine Faltungsschicht besteht aus sogenannten Convolutional Filters mit der Größe $D_K \times D_K \times M$ wobei $D_K$ der Höhe und Breite des Filters und $M$ der Anzahl an Kanälen beziehungsweise der Tiefe des Filters entspricht. Der Filter gleitet nun über das Eingabebild $F$ und multipliziert $F$ mit dem Filter. Die Ergebnisse dieser Multiplikation werden als Skalarprodukt zu einem Wert zusammengefasst. Nachdem der Filter über alle Pixel des Bildes gegleitet ist ergibt sich eine neue kleinere Matrix, welchere als gefaltetes Merkmal (\textit{engl.: Convolved Feature}) bezeichnet wird.
+\subsection{Mobilenet}
+Bei der rapiden Weiterentwicklung von \ac{dnn}-Architekturen wird das Augenmmerk stets auf die Verbesserung der Genauigkeit des Modells gelegt. Da die Latenzzeit und Größe des Netzes zunehmen, ist der Einsatz auf Geräten mit limitierter Rechenleistung für Echtzeitsysteme nur schwer möglich.\\
+Mobilenets sind \acp{dnn}, die speziell für Aufgaben im Bereich des Maschinellen Sehens auf mobilen Endgeräten und eingebetteten Systemen entwickelt wurden. Ein Mobilenet Modell basiert auf sogenannten \acp{dsc}, welche die Faltungsschichten in einem \ac{dcnn} hinsichtlich der Netzgröße und Inferenzzeit optimieren. \\
+Der Rechenaufwand beim Prozessieren einer Faltungsschicht ist durch die hohe Anzahl an nötigen Multiplikationen enorm. \acp{dsc} berechnen die Faltung in mehreren Phasen. In der ersten PHase wird die sogenannte Tiefenfaltung angewendet, welche die herkömmliche Faltung lediglich auf einem Kanal berechnet. In der zweiten Phase wird die sogenannte Punktfaltung angewendet, wobei die Merkmale aus der Tiefenfaltung miteinander kombiniert werden. Dies verringert den Rechenaufwand deutlich.\\
+Der Aufbau des Mobilenet v2, welches Anwendung im gegebenen Anwendungsfall findet, wird in Abbildung \ref{fig:mobilenet-architecture} dargestellt \cite{mobilenet}.
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.27\textheight]{images/mobilenet-architecture.png}
+	\caption{Architektur eines Mobilenet v2\\(Quelle: https://www.hindawi.com/journals/cin/2020/8817849/fig2/ abgerufen am 30.07.2021) }
+	\label{fig:mobilenet-architecture}
+\end{figure}
 \section{Wiedererkennung von Objekten}
 \label{sec:basics:wiedererkennung}
 Das Einlernen und Wiedererkennen von Objekten ist im Bereich des Maschinelles Lernens noch heute eine Herausforderung für eingebettete beziehungsweise mobile Endgeräte, aufgrund der geringen Rechenleistung, die zur Verfügung steht. Es ist möglich diese Aufgabe mithilfe einer Cloudlösung auf einen externen leistungsstarken Server zu übertragen. Aufgrund von Nachteilen, wie beispielsweise Sicherheitsrisiken, die beim Übertragen von sensitiven Daten auftreten, wird im Rahmen dieser Arbeit eine Applikation programmiert, die den gegebenen Anwendungsfall mit der dem Endgerät zur Verfügung stehenden Hardware löst.\\
 Ein naiver Ansatz, um dieses Problem lösen zu können ist ein  \ac{cnn} bei Eingang neuer Trainingsdaten erneut zu trainieren mitsamt den bereits vorhandenen Daten. Ein derart riesiger Lernvorgang ist jedoch nicht praktikabel und könnte mehrere Stunden oder sogar Tage dauern. Wenn lediglich die neuen Daten für das Training verwendet werden, resultiert dies im bekannten Phänomen des \textit{Katastrophalen Vergessen} \cite{Senchanka2019}.
 \subsection{Katastrophales Vergessen}
-Neuronale Netze tendieren dazu beim Einlernen von aufeinanderfolgenden unterschiedlichen Aufgaben das bereits gelernte Wissen zu vergessen. Dieses Phänomen wird als Katatrophales Vergessen beziehungsweise als \textit{Katastrophale Inferenz} bezeichnet. Die Ursache hierfür ist, dass Gewichte von Neuronen, die für eine vorherige Aufgabe wichtig sind, überschrieben werden, um die neue eingelernte Aufgabe zu erfüllen \cite{forgetting}.
+Neuronale Netze tendieren dazu beim Einlernen von aufeinanderfolgenden unterschiedlichen Aufgaben das bereits gelernte Wissen zu vergessen. Dieses Phänomen wird als Katatrophales Vergessen beziehungsweise als \textit{Katastrophale Inferenz} bezeichnet. Die Ursache hierfür ist, dass Gewichte von Neuronen, die für eine vorherige Aufgabe wichtig sind, überschrieben werden, um die neue eingelernte Aufgabe zu erfüllen \cite{forgetting}.\\
 Für den gegebenen Anwendungsfall bedeutet dies, dass alte bereits eingelernte Objekte nicht mehr erkannt werden können, wenn ein bereits trainierter Datensatz mit unbekannten Daten weitertrainiert wird. Lösungsansätze für dieses Problem werden im Folgenden erklärt.
-\subsection{Latent-Replay-Algorithmus}
-Im Rahmen dieser Thematik wurde für den gegebenen Anwendungsfall der Latent-Replay Algorithmus von Lorenzo Pellegrini et al. analysiert, jedoch aufgrund der hohen Komplexität und weniger Implementierungsbeispiele nicht für das Projekt verwendet. Um eine Vollständigkeit der Projektarbeit gewährleisten zu können wird dieser im Folgenden dennoch erläutert.\\
-Das grundlegende Konzept beim Latent-Replay-Algorithmus bildet das sogenannte \textit{Replay} beziehungsweise \textit{Rehearsal}. Bereits trainierte Traininngsdaten werden hierfür in einem separaten Datenbank persistent gespeichert und bei Eingang neuer Trainingsdaten ebenfalls mitgelernt.
-Das Problem hierbei ist jedoch, dass die Trainingsdauer massiv zunimmt, da in jeder Trainingsepoche mehrere Trainingsiterationen durch das Neuronale Netz notwendig sind. Zudem ergibt sich aus dem Abspeichern von alten Trainingsdaten ein Speicherproblem auf eingebetteten Systemen.\\
-Der Latent-Replay-Algorithmus erweitert den Ansatz des Rehearsals, um eben diese Schwierigkeiten zu beheben. Hierfür werden nicht rohe Bilddaten abgespeichert sondern Aktivierungen von Neurononen innerhalb einer Schicht der Netzarchitektur. Beim einer Trainingsiteration werden dann neue Eingangsdaten durch Schichten des Netzen weitergeleitet, welche für das erkennen von generischen Merkmalen zuständig ist, wie beispielsweise Ecken und Kanten. Anschließend werden diese Daten in die Latent-Replay-Schicht, welche die Speicherung der alten Trainingsdaten übernimmt, weitergeleitet, wobei die Eingangsdaten nun mit den Aktivierungen der alten Trainingsdaten vermischt werden. Die Scihten die oberhalb des Latent-Replay angesetzt sind sind für die Erkennung von klassenspezifischen Merkmalen zuständig 
-\cite{Pellegrini2019}. In Abbildung \ref{fig:latent-replay} wird der eben erklärte Aufbau dargestellt.
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[height=0.4\textheight]{images/latent-replay.png}
-  \caption{Architekturdiagramm des Latent Replay \cite{Pellegrini2019} }
-  \label{fig:latent-replay}
-\end{figure}
 
 \subsection{Transfer Learning}
-%Aufgaben die mit Maschinellem Lernen gelöst werden können, wie beispielsweise die Wiedererkennung von Objekten in Bildern, werden mithilfe von riesigen Datensätzen trainiert mit dem Ziel so generisch wie möglich zu sein
 Jedes menschliche Gehirn, ist dazu fähig Wissen, welches für eine Aufgabe benötigt wird, auf eine andere Aufgabe zu übertragen. So ist es beispielsweise mit geringem Aufwand möglich das Autofahren zu erlernen, wenn man bereits Motorrad fahren kann. Da es eine ähnliche Aufgabe ist, wird nicht versucht die neue Aufgabe von Grund auf neu zu lernen, sondern das Wissen, welches in der Vergangenheit erlernt werden konnte auf ein neuen ähnlichen Anwendungsfall zu transferieren.\\
 Im traditionellen Ansatz des Maschinellen Lernens wird ein Datensatz aufbereitet, welcher für eine bestimmte Aufgabe zugeschnitten ist.\\
 Die grundlegende Aufgabe, die in dieser Arbeit zu erfüllen ist, ist jedoch das Einlernen von neuen Trainingsdaten. Hierfür kann der Ansatz des sogenannten Transfer Learnings Anwendung finden.\\
-Beim Transfer Learning wird ein bereits trainiertes \ac{ml}-Modell verwendet. Das bereits errungene Wissen kann hierbei weiterverwendet werden, um mit einem kleineren Trainingsdatensatz eine neue ähnliche Aufgabe erfüllen zu können. Erkannte Merkmale wie Formen, Kanten und Ecken können demnach durch den Wissenstransfer mit einem Modell geteilt werden (\textbf{Abbildung??}).\\
+Beim Transfer Learning wird ein bereits trainiertes \ac{ml}-Modell verwendet. Das bereits errungene Wissen kann hierbei weiterverwendet werden, um mit einem kleineren Trainingsdatensatz eine neue ähnliche Aufgabe erfüllen zu können. Erkannte Merkmale wie Formen, Kanten und Ecken können demnach durch den Wissenstransfer mit einem Modell geteilt werden. Bei dieser Vorgehensweise werden die unteren Schichten, welche die nicht-klassenspezifischen Merkmale erkennen eingefroren. Dies bedeutet, dass die Gewichte der Neuronen unveränderbar sind. Die oberen Schichten sind weiterhin trainierbar. Durch Training eines Datensatzes, welcher den neu einzulernenden Daten ähnelt, werden lediglich die klassenspezifischen Merkmale trainiert \cite{Senchanka2019}. In Abbildung \ref{fig:tf-architecture} wird diese Architektur mit dem Traditionellen \ac{ml}-Ansatz verglichen.\\
+Wenn stets neue Klassen eingelernt werden sollen und diese Daten sich nicht innerhalb einer Trainingsstapels befinden, tritt jedoch das Phänomen des Katastrophalen Vergessens auf und früher eingelernte Objekte werden überschrieben \cite{cl-vs-tl}.\\
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.4\textheight]{images/traditional-vs-tflearning.png}
+	\caption{Vergleich des Aufbaus eines Transfer Learning Models im Gegensatz zum Traditionallen Maschinellen Lernens (Quelle: \cite{Sarkar2019}) }
+	\label{fig:tf-architecture}
+\end{figure}
+\subsection{Latent-Replay-Algorithmus}
+Das grundlegende Konzept beim Latent-Replay-Algorithmus bildet das sogenannte \textit{Replay} beziehungsweise \textit{Rehearsal}. Bereits trainierte Trainingsdaten werden hierfür in einem separaten Datenbank persistent gespeichert und bei Eingang neuer Trainingsdaten ebenfalls mitgelernt.
+Das Problem hierbei ist jedoch, dass die Trainingsdauer massiv zunimmt, da in jeder Trainingsepoche mehrere Trainingsiterationen durch das Neuronale Netz notwendig sind. Zudem ergibt sich aus dem Abspeichern von alten Trainingsdaten ein Speicherproblem auf eingebetteten Systemen.\\
+Der Latent-Replay-Algorithmus erweitert den Ansatz des Rehearsals, um eben diese Schwierigkeiten zu beheben. Hierfür werden nicht rohe Bilddaten abgespeichert sondern Aktivierungen von Neurononen innerhalb einer Schicht der Netzarchitektur. Bei einer Trainingsiteration werden neue Eingangsdaten durch Schichten des Netzen weitergeleitet, welche für das Erkennen von generischen Merkmalen zuständig sind, wie beispielsweise Ecken und Kanten. Anschließend werden diese Daten in die Latent-Replay-Schicht, welche die Speicherung der alten Trainingsdaten übernimmt, weitergeleitet, wobei die Eingangsdaten nun mit den Aktivierungen der alten Trainingsdaten vermischt werden. Die Schichten, die oberhalb der Latent-Replay-Schicht angesetzt sind, sind für die Erkennung von klassenspezifischen Merkmalen zuständig \cite{Pellegrini2019}. In Abbildung \ref{fig:latent-replay} wird der eben erklärte Aufbau dargestellt.\\
+Das Prinzip des Transfer Learnings kann dementsprechend mithilfe des Latent-Replay-Algorithmus erweitert werden und dadurch das Phänomen des Katastrophalen Vergessens beheben, durch das Mittrainieren von alten Trainingsdaten.
 
-\cite{Sarkar2019}
-%\subsubsection{Formale Definition}
-%Eine Domäne $D$ ist ein Tupel mit zwei Elementen, bestehend aus dem Merkmalsraum (engl.: Feature Space) $\chi$ und der Grenzwahrscheinlichkeit $P(X)$, wobei $X = \{x_1, ..., x_n\}, x_i \in \chi$ ein Beispieldatenpunkt ist. Dann lässt sich die Domäne $D$ mathematisch darstellen als $D = \{{\chi}, P(X) \}$.\\
-%Eine Aufgabe $T$ ist ein Tupel mit zwei Elementen bestehend aus dem Auszeichnungsraum (engl.: Label Space) $\gamma$ und einer Zielfunktion $\eta$. Die Zielfunktion kann aus probabilistischer Sicht auch als $P(\gamma|X)$ bezeichnet werden.\\
-%Dementsprechend ist für eine Domäne $D$ eine Aufgabe $T$ folgendermaßen definiert:
-%\begin{equation}
-%	T = \{ \gamma, P(Y | X)\} = \{\gamma, \eta\} 
-%	\quad \quad \quad
-%	Y = \{y_1, ..., y_n\}, y_i \in \gamma
-%\end{equation}
-% \cite{Sarkar2019}
-%Die Zielfunktion $\eta$ ist dementsprechend gelernt worden durch die Paare von Vektoren und Auszeichnungen $(x_i, y_i), x_i \in \chi, y_i \in \gamma $
-
-\section{Android}
-\label{sub:basics:android}
-
-\subsection{App-Entwicklung}
-Zur Entwicklung der Android-Applikation wird die Entwicklungsumgebung Android Studio der Firma JetBrains genutzt.
-Jede Seite einer Android App wird als Aktivität (engl. Activity) bezeichnet.
-Das erste Fenster, welches beim Öffnen der App angezeigt wird, wird als Main-Activity bezeichnet.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[height=0.5\textheight]{images/latent-replay.png}
+  \caption{Architekturdiagramm des Latent Replay (Quelle: \cite{Pellegrini2019}) }
+  \label{fig:latent-replay}
+\end{figure}
 % ---
 \chapter{Anforderungsanalyse}
 \label{cha:analyse}
@@ -250,7 +255,9 @@ Feine UMLs über Klassen, Sequenzdiagramme, Algorithmen Flussdiagramme, Verarbei
 %---
 \chapter{Implementierung}
 \label{cha:implementierung}
+Transfer Learning, quantisiertes MobilenetV2, Imagenet. 
 
+Ein Problem das beim Nutzen des Transfer Learnings aufgetreten ist, ist dass alle Trainingsdaten sich im derzeitigen Trainingsbatch befinden müssen, da sonst das Problem des Katastrophalen Vergessens aufkommt.
 In diesem Kapitel wird die konkrete Implementierung des im Kapitel
 \ref{cha:loesungskonzept} entwickelten Lösungskonzepts beschrieben.
 Hierbei wird auf die konkret verwendeten Entwicklungswerkzeuge etc. 

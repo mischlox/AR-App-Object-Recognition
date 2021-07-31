@@ -3,7 +3,9 @@
 \babel@toc {ngerman}{}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Architekturdiagramm des Latent Replay \cite {Pellegrini2019} \relax }}{4}{figure.caption.9}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Architektur eines Mobilenet v2 (Quelle: https://www.hindawi.com/journals/cin/2020/8817849/fig2/ abgerufen am 30.07.2021) \relax }}{3}{figure.caption.11}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Vergleich des Aufbaus eines Transfer Learning Models im Gegensatz zum Traditionallen Maschinellen Lernens (Quelle: \cite {Sarkar2019}) \relax }}{5}{figure.caption.14}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Architekturdiagramm des Latent Replay (Quelle: \cite {Pellegrini2019}) \relax }}{7}{figure.caption.15}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

@@ -39,4 +39,49 @@
   keywords    = {cs.LG, cs.AI, stat.ML},
 }
 
+@Article{cl-vs-tl,
+  author      = {Giorgos Demosthenous and Vassilis Vassiliades},
+  title       = {Continual Learning on the Edge with TensorFlow Lite},
+  date        = {2021-05-05},
+  eprint      = {2105.01946v1},
+  eprintclass = {cs.LG},
+  eprinttype  = {arXiv},
+  abstract    = {Deploying sophisticated deep learning models on embedded devices with the purpose of solving real-world problems is a struggle using today's technology. Privacy and data limitations, network connection issues, and the need for fast model adaptation are some of the challenges that constitute today's approaches unfit for many applications on the edge and make real-time on-device training a necessity. Google is currently working on tackling these challenges by embedding an experimental transfer learning API to their TensorFlow Lite, machine learning library. In this paper, we show that although transfer learning is a good first step for on-device model training, it suffers from catastrophic forgetting when faced with more realistic scenarios. We present this issue by testing a simple transfer learning model on the CORe50 benchmark as well as by demonstrating its limitations directly on an Android application we developed. In addition, we expand the TensorFlow Lite library to include continual learning capabilities, by integrating a simple replay approach into the head of the current transfer learning model. We test our continual learning model on the CORe50 benchmark to show that it tackles catastrophic forgetting, and we demonstrate its ability to continually learn, even under non-ideal conditions, using the application we developed. Finally, we open-source the code of our Android application to enable developers to integrate continual learning to their own smartphone applications, as well as to facilitate further development of continual learning functionality into the TensorFlow Lite environment.},
+  file        = {online:http\://arxiv.org/pdf/2105.01946v1:PDF},
+  keywords    = {cs.LG, cs.CV},
+}
+
+@Article{deepl-lecun,
+  author = {Yann LeCun and Yoshua Bengio and Geoffrey Hinton},
+  title  = {Deep learning},
+  date   = {2015-05},
+  file   = {:LeCun2015 - Deep learning.pdf:PDF},
+}
+
+@Article{deepl-vs-traditional,
+  author       = {Niall O' Mahony and Sean Campbell and Anderson Carvalho and Suman Harapanahalli and Gustavo Velasco-Hernandez and Lenka Krpalkova and Daniel Riordan and Joseph Walsh},
+  title        = {Deep Learning vs. Traditional Computer Vision},
+  journaltitle = {in Advances in Computer Vision Proceedings of the 2019 Computer Vision Conference (CVC). Springer Nature Switzerland AG, pp. 128-144},
+  date         = {2019-10-30},
+  doi          = {10.1007/978-3-030-17795-9},
+  eprint       = {1910.13796v1},
+  eprintclass  = {cs.CV},
+  eprinttype   = {arXiv},
+  abstract     = {Deep Learning has pushed the limits of what was possible in the domain of Digital Image Processing. However, that is not to say that the traditional computer vision techniques which had been undergoing progressive development in years prior to the rise of DL have become obsolete. This paper will analyse the benefits and drawbacks of each approach. The aim of this paper is to promote a discussion on whether knowledge of classical computer vision techniques should be maintained. The paper will also explore how the two sides of computer vision can be combined. Several recent hybrid methodologies are reviewed which have demonstrated the ability to improve computer vision performance and to tackle problems not suited to Deep Learning. For example, combining traditional computer vision techniques with Deep Learning has been popular in emerging domains such as Panoramic Vision and 3D vision for which Deep Learning models have not yet been fully optimised},
+  file         = {online:http\://arxiv.org/pdf/1910.13796v1:PDF},
+  keywords     = {cs.CV, cs.LG},
+}
+
+@Article{mobilenet,
+  author      = {Andrew G. Howard and Menglong Zhu and Bo Chen and Dmitry Kalenichenko and Weijun Wang and Tobias Weyand and Marco Andreetto and Hartwig Adam},
+  title       = {MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications},
+  date        = {2017-04-17},
+  eprint      = {1704.04861v1},
+  eprintclass = {cs.CV},
+  eprinttype  = {arXiv},
+  abstract    = {We present a class of efficient models called MobileNets for mobile and embedded vision applications. MobileNets are based on a streamlined architecture that uses depth-wise separable convolutions to build light weight deep neural networks. We introduce two simple global hyper-parameters that efficiently trade off between latency and accuracy. These hyper-parameters allow the model builder to choose the right sized model for their application based on the constraints of the problem. We present extensive experiments on resource and accuracy tradeoffs and show strong performance compared to other popular models on ImageNet classification. We then demonstrate the effectiveness of MobileNets across a wide range of applications and use cases including object detection, finegrain classification, face attributes and large scale geo-localization.},
+  file        = {online:http\://arxiv.org/pdf/1704.04861v1:PDF},
+  keywords    = {cs.CV},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}

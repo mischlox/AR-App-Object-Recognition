@@ -19,6 +19,114 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global}
+    \entry{cl-vs-tl}{article}{}
+      \name{author}{2}{}{%
+        {{hash=b8209301c426ccc720655a3f8e328416}{%
+           family={Demosthenous},
+           familyi={D\bibinitperiod},
+           given={Giorgos},
+           giveni={G\bibinitperiod}}}%
+        {{hash=ca6e04f374354aec0d261bf35fa8f4dc}{%
+           family={Vassiliades},
+           familyi={V\bibinitperiod},
+           given={Vassilis},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{dfa541459ba7ac01179888e9f5af2615}
+      \strng{fullhash}{dfa541459ba7ac01179888e9f5af2615}
+      \strng{bibnamehash}{dfa541459ba7ac01179888e9f5af2615}
+      \strng{authorbibnamehash}{dfa541459ba7ac01179888e9f5af2615}
+      \strng{authornamehash}{dfa541459ba7ac01179888e9f5af2615}
+      \strng{authorfullhash}{dfa541459ba7ac01179888e9f5af2615}
+      \field{sortinit}{D}
+      \field{sortinithash}{c438b3d5d027251ba63f5ed538d98af5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Deploying sophisticated deep learning models on embedded devices with the purpose of solving real-world problems is a struggle using today's technology. Privacy and data limitations, network connection issues, and the need for fast model adaptation are some of the challenges that constitute today's approaches unfit for many applications on the edge and make real-time on-device training a necessity. Google is currently working on tackling these challenges by embedding an experimental transfer learning API to their TensorFlow Lite, machine learning library. In this paper, we show that although transfer learning is a good first step for on-device model training, it suffers from catastrophic forgetting when faced with more realistic scenarios. We present this issue by testing a simple transfer learning model on the CORe50 benchmark as well as by demonstrating its limitations directly on an Android application we developed. In addition, we expand the TensorFlow Lite library to include continual learning capabilities, by integrating a simple replay approach into the head of the current transfer learning model. We test our continual learning model on the CORe50 benchmark to show that it tackles catastrophic forgetting, and we demonstrate its ability to continually learn, even under non-ideal conditions, using the application we developed. Finally, we open-source the code of our Android application to enable developers to integrate continual learning to their own smartphone applications, as well as to facilitate further development of continual learning functionality into the TensorFlow Lite environment.}
+      \field{day}{5}
+      \field{eprintclass}{cs.LG}
+      \field{eprinttype}{arXiv}
+      \field{month}{5}
+      \field{title}{Continual Learning on the Edge with TensorFlow Lite}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \verb{eprint}
+      \verb 2105.01946v1
+      \endverb
+      \verb{file}
+      \verb online:http\://arxiv.org/pdf/2105.01946v1:PDF
+      \endverb
+      \keyw{cs.LG,cs.CV}
+    \endentry
+    \entry{mobilenet}{article}{}
+      \name{author}{8}{}{%
+        {{hash=0cedb03f907400fc304fdfaa1f7e2085}{%
+           family={Howard},
+           familyi={H\bibinitperiod},
+           given={Andrew\bibnamedelima G.},
+           giveni={A\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=d767e8e4d733bcf728bcdf2c193462f7}{%
+           family={Zhu},
+           familyi={Z\bibinitperiod},
+           given={Menglong},
+           giveni={M\bibinitperiod}}}%
+        {{hash=31960f03389184b7f052f5b197cc9fdf}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Bo},
+           giveni={B\bibinitperiod}}}%
+        {{hash=6cbb997a11c6922af719c32863261918}{%
+           family={Kalenichenko},
+           familyi={K\bibinitperiod},
+           given={Dmitry},
+           giveni={D\bibinitperiod}}}%
+        {{hash=47ad65c82b1de7d642988df185d7d8ea}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Weijun},
+           giveni={W\bibinitperiod}}}%
+        {{hash=7dcb9c6d4d4251a7e32b502d03c9354b}{%
+           family={Weyand},
+           familyi={W\bibinitperiod},
+           given={Tobias},
+           giveni={T\bibinitperiod}}}%
+        {{hash=8f221f2afb0b5a3d95b3e97101924922}{%
+           family={Andreetto},
+           familyi={A\bibinitperiod},
+           given={Marco},
+           giveni={M\bibinitperiod}}}%
+        {{hash=c707ec5b5997dc408a14a34a8380166c}{%
+           family={Adam},
+           familyi={A\bibinitperiod},
+           given={Hartwig},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{e1fc6cab9b6009340e110518e53868c4}
+      \strng{fullhash}{cffcf38c642164887a370768f5701b8e}
+      \strng{bibnamehash}{e1fc6cab9b6009340e110518e53868c4}
+      \strng{authorbibnamehash}{e1fc6cab9b6009340e110518e53868c4}
+      \strng{authornamehash}{e1fc6cab9b6009340e110518e53868c4}
+      \strng{authorfullhash}{cffcf38c642164887a370768f5701b8e}
+      \field{sortinit}{H}
+      \field{sortinithash}{6db6145dae8dc9e1271a8d556090b50a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We present a class of efficient models called MobileNets for mobile and embedded vision applications. MobileNets are based on a streamlined architecture that uses depth-wise separable convolutions to build light weight deep neural networks. We introduce two simple global hyper-parameters that efficiently trade off between latency and accuracy. These hyper-parameters allow the model builder to choose the right sized model for their application based on the constraints of the problem. We present extensive experiments on resource and accuracy tradeoffs and show strong performance compared to other popular models on ImageNet classification. We then demonstrate the effectiveness of MobileNets across a wide range of applications and use cases including object detection, finegrain classification, face attributes and large scale geo-localization.}
+      \field{day}{17}
+      \field{eprintclass}{cs.CV}
+      \field{eprinttype}{arXiv}
+      \field{month}{4}
+      \field{title}{MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications}
+      \field{year}{2017}
+      \field{dateera}{ce}
+      \verb{eprint}
+      \verb 1704.04861v1
+      \endverb
+      \verb{file}
+      \verb online:http\://arxiv.org/pdf/1704.04861v1:PDF
+      \endverb
+      \keyw{cs.CV}
+    \endentry
     \entry{forgetting}{article}{}
       \name{author}{14}{}{%
         {{hash=5172437525948e3a9c13ee82c976ea69}{%
@@ -117,6 +225,115 @@
       \verb online:http\://arxiv.org/pdf/1612.00796v2:PDF
       \endverb
       \keyw{cs.LG,cs.AI,stat.ML}
+    \endentry
+    \entry{deepl-lecun}{article}{}
+      \name{author}{3}{}{%
+        {{hash=6a1aa6b7eab12b931ca7c7e3f927231d}{%
+           family={LeCun},
+           familyi={L\bibinitperiod},
+           given={Yann},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=40a8e4774982146adc2688546f54efb2}{%
+           family={Bengio},
+           familyi={B\bibinitperiod},
+           given={Yoshua},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=9a8750ccdb2a4cf14d2655face1ce016}{%
+           family={Hinton},
+           familyi={H\bibinitperiod},
+           given={Geoffrey},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{c6c75bd00ce5a488e91a749d8383b3df}
+      \strng{fullhash}{c6c75bd00ce5a488e91a749d8383b3df}
+      \strng{bibnamehash}{c6c75bd00ce5a488e91a749d8383b3df}
+      \strng{authorbibnamehash}{c6c75bd00ce5a488e91a749d8383b3df}
+      \strng{authornamehash}{c6c75bd00ce5a488e91a749d8383b3df}
+      \strng{authorfullhash}{c6c75bd00ce5a488e91a749d8383b3df}
+      \field{sortinit}{L}
+      \field{sortinithash}{dad3efd0836470093a7b4a7bb756eb8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{5}
+      \field{title}{Deep learning}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \verb{file}
+      \verb :LeCun2015 - Deep learning.pdf:PDF
+      \endverb
+    \endentry
+    \entry{deepl-vs-traditional}{article}{}
+      \name{author}{8}{}{%
+        {{hash=772d342489e9020bf4a91ed6146ba87a}{%
+           family={Mahony},
+           familyi={M\bibinitperiod},
+           given={Niall\bibnamedelima O'},
+           giveni={N\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
+        {{hash=3610783d90e6f33dd2825fba18530c85}{%
+           family={Campbell},
+           familyi={C\bibinitperiod},
+           given={Sean},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f6c6043c7f099e12414c35f022c46dfd}{%
+           family={Carvalho},
+           familyi={C\bibinitperiod},
+           given={Anderson},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e1f762bc2171cfad70c98da2ce1542e9}{%
+           family={Harapanahalli},
+           familyi={H\bibinitperiod},
+           given={Suman},
+           giveni={S\bibinitperiod}}}%
+        {{hash=c1b3bd460d47986764c0333d780d3952}{%
+           family={Velasco-Hernandez},
+           familyi={V\bibinithyphendelim H\bibinitperiod},
+           given={Gustavo},
+           giveni={G\bibinitperiod}}}%
+        {{hash=b3797f2c968cc507cbbe92ca103399e7}{%
+           family={Krpalkova},
+           familyi={K\bibinitperiod},
+           given={Lenka},
+           giveni={L\bibinitperiod}}}%
+        {{hash=2c218dde295b64e98278c09e600dfdb0}{%
+           family={Riordan},
+           familyi={R\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+        {{hash=2016abe7bd371587d0d74f7864ae1ef9}{%
+           family={Walsh},
+           familyi={W\bibinitperiod},
+           given={Joseph},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{e969afbe6dd1fa836d4c5bf47e2d96eb}
+      \strng{fullhash}{0545d4aa490ba25dfa262066831ee140}
+      \strng{bibnamehash}{e969afbe6dd1fa836d4c5bf47e2d96eb}
+      \strng{authorbibnamehash}{e969afbe6dd1fa836d4c5bf47e2d96eb}
+      \strng{authornamehash}{e969afbe6dd1fa836d4c5bf47e2d96eb}
+      \strng{authorfullhash}{0545d4aa490ba25dfa262066831ee140}
+      \field{sortinit}{M}
+      \field{sortinithash}{2e5c2f51f7fa2d957f3206819bf86dc3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Deep Learning has pushed the limits of what was possible in the domain of Digital Image Processing. However, that is not to say that the traditional computer vision techniques which had been undergoing progressive development in years prior to the rise of DL have become obsolete. This paper will analyse the benefits and drawbacks of each approach. The aim of this paper is to promote a discussion on whether knowledge of classical computer vision techniques should be maintained. The paper will also explore how the two sides of computer vision can be combined. Several recent hybrid methodologies are reviewed which have demonstrated the ability to improve computer vision performance and to tackle problems not suited to Deep Learning. For example, combining traditional computer vision techniques with Deep Learning has been popular in emerging domains such as Panoramic Vision and 3D vision for which Deep Learning models have not yet been fully optimised}
+      \field{day}{30}
+      \field{eprintclass}{cs.CV}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{in Advances in Computer Vision Proceedings of the 2019 Computer Vision Conference (CVC). Springer Nature Switzerland AG, pp. 128-144}
+      \field{month}{10}
+      \field{title}{Deep Learning vs. Traditional Computer Vision}
+      \field{year}{2019}
+      \field{dateera}{ce}
+      \verb{doi}
+      \verb 10.1007/978-3-030-17795-9
+      \endverb
+      \verb{eprint}
+      \verb 1910.13796v1
+      \endverb
+      \verb{file}
+      \verb online:http\://arxiv.org/pdf/1910.13796v1:PDF
+      \endverb
+      \keyw{cs.CV,cs.LG}
     \endentry
     \entry{Pellegrini2019}{article}{}
       \name{author}{4}{}{%
