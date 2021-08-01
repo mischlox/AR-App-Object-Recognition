@@ -34,6 +34,7 @@ import androidx.camera.core.ImageAnalysisConfig;
 import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -334,8 +335,6 @@ public class CameraFragment extends Fragment {
         focusBox.setFocusBoxLocation(identifyFocusBoxCorners(this.getResources().getDisplayMetrics().widthPixels,
                 this.getResources().getDisplayMetrics().heightPixels, focusBoxRatio));
 
-
-
         // Enable/Disable training
         viewModel
                 .getTrainingState()
@@ -401,6 +400,10 @@ public class CameraFragment extends Fragment {
                         objectConfidence.setText(String.format("%s %%", df.format(confidencePercent)));
                     if (!s.isEmpty()) populateAllViewItems(s);
                 }
+                else {
+                    objectConfidence.setText("");
+                    objectName.setText("");
+                }
             } catch (NullPointerException e) {
                 // Do nothing
             }
@@ -465,12 +468,17 @@ public class CameraFragment extends Fragment {
         if (progress == 0) {
             trainingProgressBarLabel.setText(R.string.detecting_progress);
             trainingProgressBarTextView.setVisibility(GONE);
+            trainingProgressBar.setProgressDrawable(ContextCompat.getDrawable(context, R.drawable.circle));
+            trainingProgressBarLabel.setTextColor(ContextCompat.getColor(context, R.color.blue_arora));
             trainingProgressBar.setIndeterminate(true);
         } else {
             trainingProgressBarLabel.setText(R.string.training_progress);
+            trainingProgressBarLabel.setTextColor(ContextCompat.getColor(context, R.color.green));
+            trainingProgressBar.setProgressDrawable(ContextCompat.getDrawable(context, R.drawable.circle_green));
             trainingProgressBarTextView.setVisibility(VISIBLE);
             trainingProgressBar.setIndeterminate(false);
         }
+
         trainingProgressBar.setProgress(progress);
         int relativeProgress = (int) (((float) progress / (float) trainingProgressBar.getMax()) * 100);
         String relativeProgressStr = relativeProgress + "%";
@@ -737,6 +745,7 @@ public class CameraFragment extends Fragment {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     String count = (millisUntilFinished / 1000) + "";
+                    if(count.equals("0")) count = "Start!";
                     countDownTextView.setText(count);
                 }
 

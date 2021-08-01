@@ -68,7 +68,7 @@
     <string name="settings_training">Training Configuration</string>
     <string name="settings_num_samples">Training Samples</string>
     <string name="num_samples">Samples</string>
-    <string name="settings_hint_num_samples">Amount of samples that are feeded to the AI when adding a new object</string>
+    <string name="settings_hint_num_samples">Amount of samples that are fed to the AI when adding a new object</string>
     <string name="key_seekbar" translatable="false">seekbar</string>
     <string name="key_nightmode" translatable="false">key_nightmode</string>
     <string name="training_state_pause_play" translatable="false">training state pause play</string>
@@ -143,7 +143,7 @@
 </p>
 
     ]]></string>
-    <string name="help_text_counter_training">After the countdown has expired, impressions of the object are collected. You can continue with the recognition as soon as the training loading circle is no longer visible in the upper right corner</string>
+    <string name="help_text_counter_training">After the countdown has expired, impressions of the object are collected. You can continue with the recognition as soon as the text next to the loading circle changed to "Detecting" in the upper right corner</string>
     <string name="reset_app">Reset Application</string>
     <string name="reset_app_summary">Delete all object folders and objects from the application</string>
     <string name="dialog_delete_obj_title">Delete Object</string>
@@ -163,5 +163,7 @@
     <string name="model_was_frozen_successfully">Object Folder was frozen successfully!</string>
     <string name="model_was_frozen_info">The object folder is already frozen. Adding further objects can cause overwriting of already learned objects!</string>
     <string name="succesfully_configured_replay">Successfully configured object folder for further samples adding! You can now continue using the application.</string>
+    <string name="success_training">Successfully learned this object!</string>
+    <string name="success_training_first_obj">Successfully learned this object! Try adding further objects!</string>
     <string name="please_wait_replay">Loading. Please wait …</string>
 </resources>

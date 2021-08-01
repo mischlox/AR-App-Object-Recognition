@@ -44,8 +44,10 @@
                 android:layout_marginTop="2dp"
                 android:fontFamily="sans-serif-black"
                 android:text=""
+                android:shadowColor="@color/white"
+                android:shadowRadius="20"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:textSize="37sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginStart="16dp"
                 app:layout_constraintTop_toTopOf="parent" />
