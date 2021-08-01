@@ -12,7 +12,7 @@
     <string name="actions">Actions</string>
     <string name="recognize_objects">Recognize Objects</string>
     <string name="object_overview">Objects</string>
-    <string name="model_overview">Models</string>
+    <string name="model_overview">Object Folders</string>
     <string name="settings">Settings</string>
     <string name="help">Help</string>
     <string name="delete_all_objects">Delete All Objects</string>
@@ -68,7 +68,7 @@
     <string name="settings_training">Training Configuration</string>
     <string name="settings_num_samples">Training Samples</string>
     <string name="num_samples">Samples</string>
-    <string name="settings_hint_num_samples">Amount of samples that are feeded to the model when adding a new object</string>
+    <string name="settings_hint_num_samples">Amount of samples that are feeded to the AI when adding a new object</string>
     <string name="key_seekbar" translatable="false">seekbar</string>
     <string name="key_nightmode" translatable="false">key_nightmode</string>
     <string name="training_state_pause_play" translatable="false">training state pause play</string>
@@ -77,32 +77,32 @@
 
     <string name="key_resolution" translatable="false">key_resolution</string>
     <string name="settings_resolution">Training Data Resolution</string>
-    <string name="settings_resolution_hint">Resolution of the sample images that are added to model training</string>
+    <string name="settings_resolution_hint">Resolution of the sample images that are added to object training</string>
     <string name="settings_resolution_small">Small</string>
     <string name="settings_resolution_medium">Medium</string>
     <string name="settings_resolution_large">Large</string>
     <string name="settings_resolution_current">"Current Resolution: "</string>
     <string name="obj_view_no_saved">No objects saved yet!</string>
-    <string name="obj_view_no_saved_for_model">No objects saved for the current model yet!</string>
-    <string name="model_name" translatable="false">Model Name</string>
-    <string name="model_view_no_saved">No model saved yet!</string>
-    <string name="saved_objects_dialog">Objects of Model</string>
-    <string name="add_model_dialog_title">Add New Model</string>
-    <string name="dialog_hint_model_name">Model Name</string>
+    <string name="obj_view_no_saved_for_model">No objects saved for the current object folder yet!</string>
+    <string name="model_name" translatable="false">Object Folder Name</string>
+    <string name="model_view_no_saved">No object folder saved yet!</string>
+    <string name="saved_objects_dialog">Objects in Folder</string>
+    <string name="add_model_dialog_title">Add New Object Folder</string>
+    <string name="dialog_hint_model_name">Object Folder Name</string>
     <string name="dialog_save">Save</string>
-    <string name="add_a_model_that_will_learn_your_objects">Add a model that will learn your objects</string>
-    <string name="please_give_model_name">Please give your model a name!</string>
+    <string name="add_a_model_that_will_learn_your_objects">Add a object folder that will learn your objects</string>
+    <string name="please_give_model_name">Please give your object folder a name!</string>
     <string name="please_do_not_change_tabs">Please do not change tabs while training! Object will not be saved.</string>
     <string name="settings_reset_application">Reset to default</string>
-    <string name="settings_reset_application_summary">Delete all models and objects</string>
+    <string name="settings_reset_application_summary">Delete all object folders and objects</string>
     <string name="key_reset" translatable="false">key_reset</string>
-    <string name="reset_are_you_sure">Are you sure you want to delete all models and objects?</string>
+    <string name="reset_are_you_sure">Are you sure you want to delete all object folders and objects?</string>
     <string name="reset_not_recoverable">(After reset your data can not be recovered)</string>
     <string name="dialog_delete">Reset</string>
-    <string name="model_is_full">Model is full! Please create a new model to add further objects.</string>
+    <string name="model_is_full">object folder is full! Please create a new object folder to add further objects.</string>
     <string name="success_edit_object">Successfully edited object!</string>
     <string name="error_occured">An error occurred! Please restart the app to avoid arbitrary behaviour.</string>
-    <string name="model_exists">A model with this name already exists. Please specify another name</string>
+    <string name="model_exists">A object folder with this name already exists. Please specify another name</string>
     <string name="object_exists">An object with this name already exists. Please specify another name</string>
     <string name="countdown_summary">Count down this period of time before training starts</string>
     <string name="info_title">About ARORA</string>
@@ -117,15 +117,15 @@
 	 (Augmented Reality and Object Recognition Application) is an Android application that was developed by Michael Schlosser as part of a project at Aalen University in Germany.
 	 </p>
 	 <p>
-	With this application it is possible to train the model for custom objects and mapping them to information and other metadata like their type and additional information. This is made possible by extending an already trained object recognition model with additional objects using so-called Transfer Learning. This functionality can be applied in various areas such as the tourism industry, Augmented Reality games and many more.
+	With this application it is possible to train the model for custom objects and mapping them to information and other metadata like their type and additional information. This is made possible by extending an already trained object recognition AI with additional objects using so-called Transfer Learning. This functionality can be applied in various areas such as the tourism industry, Augmented Reality games and many more.
 </p>
 	<p>
 	A special thing about this method is that all processing happens on the mobile device without the needs of an external server. This makes it possible to use the application even without internet access.
 </p>
 <p>
-	The model used is a MobilenetV2, which has been extended by a configurable Softmax layer. It is possible to change the model.
+	The object folder used is a MobilenetV2, which has been extended by a configurable Softmax layer. It is possible to change the object folder.
 </p>
-	More information about the configuration of a custom model can be found
+	More information about the configuration of a custom object folder can be found
 	<a href="https://github.com/tensorflow/examples/blob/master/lite/examples/model_personalization/README.md#converting-the-model-using-the-cli">
 		here</a>.
 	<p>
@@ -145,7 +145,7 @@
     ]]></string>
     <string name="help_text_counter_training">After the countdown has expired, impressions of the object are collected. You can continue with the recognition as soon as the training loading circle is no longer visible in the upper right corner</string>
     <string name="reset_app">Reset Application</string>
-    <string name="reset_app_summary">Delete all models and objects from the application</string>
+    <string name="reset_app_summary">Delete all object folders and objects from the application</string>
     <string name="dialog_delete_obj_title">Delete Object</string>
     <string name="delete_obj_are_you_sure">Are you sure you want to delete this object?</string>
     <string name="dialog_delete_obj">Delete</string>
@@ -154,14 +154,14 @@
     <string name="confidence_title">Confidence Threshold in %</string>
     <string name="detecting_progress">Detecting…</string>
     <string name="training_progress">Training…</string>
-    <string name="add_samples_sum_text">If you are not satisfied with the recognition results, it is possible to add further samples. Keep in mind that after retraining with more samples the recognition quality of other objects can be affected because of unbalanced sample amount in the model</string>
+    <string name="add_samples_sum_text">If you are not satisfied with the recognition results, it is possible to add further samples. Keep in mind that after retraining with more samples the recognition quality of other objects can be affected because of unbalanced sample amount in the object folder</string>
     <string name="add_further_samples">Add Further Samples</string>
-    <string name="replay_sum_string">If this model is ready to deploy you can freeze it now. The advantage in freezing a model is, that specific time consuming routines do not have to be run anymore for this model. You can still add further objects to this model, but it is possible that objects that were saved in previous training sessions are overwritten. </string>
+    <string name="replay_sum_string">If this object folder is ready to deploy you can freeze it now. The advantage in freezing a object folder is, that specific time consuming routines do not have to be run anymore for this object folder. You can still add further objects to this object folder, but it is possible that objects that were saved in previous training sessions are overwritten. </string>
     <string name="replay_title_string">Continue later?</string>
-    <string name="freeze_model">Freeze Model</string>
+    <string name="freeze_model">Freeze Object Folder</string>
     <string name="continue_later">Continue Later</string>
-    <string name="model_was_frozen_successfully">Model was frozen successfully!</string>
-    <string name="model_was_frozen_info">The model is already frozen. Adding further objects can cause overwriting of already learned objects!</string>
-    <string name="succesfully_configured_replay">Successfully configured model for further         samples adding! You can now continue using the application.</string>
+    <string name="model_was_frozen_successfully">Object Folder was frozen successfully!</string>
+    <string name="model_was_frozen_info">The object folder is already frozen. Adding further objects can cause overwriting of already learned objects!</string>
+    <string name="succesfully_configured_replay">Successfully configured object folder for further samples adding! You can now continue using the application.</string>
     <string name="please_wait_replay">Loading. Please wait …</string>
 </resources>
