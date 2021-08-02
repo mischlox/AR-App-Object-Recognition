@@ -303,7 +303,35 @@ Zudem wird die Modellidentifikationsnummer als Fremdschlüssel und die Modellpos
 \section{Grobentwurf}
 
 \subsection{Architektur}
-\subsubsection{Bausteinsicht}
+Zur Realisierung der Applikation auf einem Android-Endgerät, werden die Komponenten der zugrundelegenden Architektur aus Activities und Fragments bestehen. Eine Activity-Komponente wird für den Startbildschirm erstellt, welche die Haupt-Activity für die Funktionalität der App einleitet. Mithilfe von Fragments, die an diese Activity anknüpfen kann die Kommunikation und der Datenaustausch zwischen verschiedenen Fragments stattfinden.\\
+Abbildung \ref{fig:component-diagram} zeigt die Abhängigkeiten der im Folgenden erklärten verwendeten Komponenten.\\
+Im Folgenden werden die Verantwortlichkeiten der zu implementierenden Fragments erklärt und die Anwendungsfälle aus Anhang \ref{appendix:use-cases} werden zugewiesen.
+
+\begin{itemize}
+	\item \textit{Model Overview Fragment}: Dient der Übersicht über alle Modelle, sowie der Möglichkeit, die Objekte die im jeweiligen Modell gespeichert sind anzuschauen. Zudem kann in diesem Fragment ein weiteres Modell hinzugefügt werden, oder das aktuell ausgewählte Modell mit einem ebenfalls bereits bestehenden Modell ausgewechselt werden. Demnach werden die Anwendungsfälle M1-M4 von dieser Komponente erfüllt.
+
+	\item \textit{Object Overview Fragment}: Dient der Übersicht über alle Objekte und deren gespeicherten Informationen, sowie der Möglichkeit Objekte zu editieren und zu löschen. Zudem soll dem Fragment die Verantwortlichkeit hinzugefügt werden, dem jeweiligen Objekt weitere Trainingsdaten hinzuzufügen. Demnach werden die Anwendungsfälle O3-O6 von dieser Komponente erfüllt.
+	
+	\item \textit{Settings Fragment}: Konfigurationen, die der Nutzer selbst zur Laufzeit vornehmen kann, werden innerhalb dieses Fragments in einer typischen Einstellungen-Ansicht realisiert. Demnach werden die Anwendungsfälle E1-E5 von dieser Komponente erfüllt. Weitere Konfigurationsmöglichkeiten zur Verfügung zu stellen, wie zum Beispiel das Aktivieren eines Dunkelmodus ist ebenfalls geplant.
+	
+	\item \textit{Camera Fragment}: Stellt die Hauptfunktionalität des Einlernens und Wiedererkennens zur Verfügung. Eine Kameravorschau, die mit einer Fokusbox und anderen Overlays, die zum Anzeigen von Informationen dienen, ausgestattet ist, soll in Echtzeit aktualisiert werden. Durch eine Dialogbox wird zum Einlernen eines Objektes eine Dialogbox aufgerufen, um diesem optional Informationen hinzuzufügen. Innerhalb dieses Fensters wird der Trainingsvorgang initiiert. Demnach werden die Anwendungsfälle O1 und O2 von dieser Komponente erfüllt.
+	
+	\item \textit{Help Fragment}: Falls bei der Bedienung der Applikation Schwierigkeiten auftreten sollten, stellt das Help Fragment diverse Anleitungen und Nutzungsabläufe textuell und gegebenfalls durch Videoanleitungen dar.
+
+\end{itemize}
+
+Durch Anwendung dieser Architektur, wird die sogenannte \textit{separation of concerns} gewährleistet und das \textit{Single-Responsibility-Principle} angewendet.\\
+Weitere Komponenten sind der Datenbankhelfer, welcher eine zu implementierende Schnittstelle an die Applikation zur Realisierung von Persistenz-Operationen beinhaltet. Implementiert werden, kann diese Schnittstelle beispielsweise von einem SQLite-Datenbankhelfer.\\
+Zur globalen Konfiguration verschiedener Parameter, welche auch nach Neustart der App vorhanden sein sollen, wird ebenfalls eine Schnittstelle zur Verfügung gestellt, welche beispielweise durch Verwendung der \textit{Shared Preferences} implementiert werden kann.\\
+Um die Übersichtlichkeit und der darausfolgenden besseren Wart- und Testbarkeit der Applikation zu gewährleisten, werden Dialogboxen ausgelagert und mithilfe einer Schnittstelle und einer \textit{Factory-Method} erzeugt. Dialogboxen werden zur Interaktion mit dem Nutzer häufig verwendet. Das Hinzufügen oder Ändern von Daten, sowie das Anzeigen von längeren Hinweisen wird über Dialogboxen an den Nutzer kommuniziert. Bei gefährlichen Aktionen, wie beispielsweise dem Löschen von Objekten oder dem Zurücksetzen der Applikation wird der Nutzer ebenfalls durch eine Dialogbox auf die möglichen Auswirkungen der Aktion hingewiesen.\\
+Statische Methoden, die dem Parsen von Zeichenketten, oder dem Vorbereiten der Kameradaten an die Transfer Learning \ac{api} dienen, werden in eine \textit{Utilities}-Komponente ausgelagert, um den Code, der die Kernfunktionalität realisiert möglichst übersichtlich und kompakt zu halten.\\
+Die Anbindung der \textit{Transfer Learning \ac{api}} erfolgt in Form einer Wrapper-Klasse, welche die \ac{api} um weitere Verantwortlichkeiten erweitert, wie beispielsweise dem Kontinuierlichen Trainieren und Wiedererkennen innerhalb einer While-Schleife und dem Ausführen des Latent-Replay Algorithmus. Aufgrund der Ausführung des Algorithmus muss eine Abhängigkeit zur Schnittstelle des Datenbankhelfers erfolgen, da die persistente Abspeicherung von Aktivierungen früherer Trainingsdaten unabdingbar für den Replay-Vorgang ist. Zudem übernimmt der Wrapper die Erstellung des Modells und koordiniert die \ac{api} an die Parameter-Datei des ausgewählten Modells.
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.5\textheight]{images/building-block-view.png}
+	\caption{UML-Komponentendiagramm} Quelle: Eigene Darstellung
+	\label{fig:component-diagram}
+\end{figure}
 
 \section{Feinentwurf}
 Feine UMLs über Klassen, Sequenzdiagramme, Algorithmen Flussdiagramme, Verarbeitungspipelines
@@ -411,6 +439,7 @@ Und hier etwas über deren Übertragbarkeit.
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
 		\hline
+		\textbf{Nummer} & \textbf{AF-M1} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Modell hinzufügen} \\ \hline
 		\textbf{Beschreibung} & Beliebig viele neue Modelle sollen hinzufügt werden können \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -425,7 +454,7 @@ Und hier etwas über deren Übertragbarkeit.
 		& 3a. Das Modell konnte nicht gespeichert werden \\ & $\rightarrow$ Der Nutzer wird darüber mit einer Fehlermeldung informiert \\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Modell hinzufügen}
+	\caption{Anwendungsfall M1: Modell hinzufügen}
 	\label{tab:use-case-add-model}
 \end{table}
 
@@ -433,6 +462,7 @@ Und hier etwas über deren Übertragbarkeit.
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
 		\hline
+		\textbf{Nummer} & \textbf{AF-M2} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Modell wechseln} \\ \hline
 		\textbf{Beschreibung} & Das ausgewählte Modell soll gewechselt werden können mit einem anderen bestehenden Modell \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -445,7 +475,7 @@ Und hier etwas über deren Übertragbarkeit.
 		\textbf{Sonderfälle} & 2a. Das Modell konnte nichte selektiert werden \\ & $\rightarrow$ Keine Sonderbehandlung dieses Falles notwendig \\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Modell wechseln}
+	\caption{Anwendungsfall M2: Modell wechseln}
 	\label{tab:use-case-change-model}
 \end{table}
 
@@ -453,6 +483,49 @@ Und hier etwas über deren Übertragbarkeit.
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
 		\hline
+		\textbf{Nummer} & \textbf{AF-M3} \\ \hline
+		\textbf{Anwendungsfall} & \textbf{Gespeicherte Objekte im Modell betrachten} \\ \hline
+		\textbf{Beschreibung} & Alle im Modell abgespeicherten Objekte sollen besichtigt werden können \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Der Nutzer betätigt den Button welcher sich rechts neben dem Modellnamen befindet  \\ \hline
+		\textbf{Vorbedingung} & Der Nutzer befindet sich in der Modellübersicht und ein Modell wurde bereits abgespeichert \\ \hline	
+		\textbf{Nachbedingung/Ziel} & Ein Dialogfenster, welches zum Modell alle gespeicherten Objekte anzeigt wurde geöffnet \\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Es wurden noch keine Objekte für das Modell abgespeichert und ein Hilfetext befindet sich im geöffneten Dialog \\ \hline
+		\textbf{Standardablauf} & 1. Nutzer betätigt den Button, welcher sich rechts neben dem Modell befindet, dessen Objekte betrachtet werden sollen \\
+		& 2. Ein Dialogfenster öffnet sich, welches eine Listenansicht aller zum Modell gespeicherten Objekte enthält \\ \hline
+		\textbf{Sonderfälle} & 2a. Es öffnet sich keine Listenansicht, da noch kein Objekt für das jeweilige Modell abgespeichert wurde \\ & $\rightarrow$ Der Nutzer wird über das Fehlen von Objekten durch einen Text in der Mitte des Dialogfensters informiert \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall M3: Gespeicherte Objekte im Modell anschauen}
+	\label{tab:use-case-view-saved-objects}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Nummer} & \textbf{AF-M4} \\ \hline
+		\textbf{Anwendungsfall} & \textbf{Alle Modelle betrachten} \\ \hline
+		\textbf{Beschreibung} & Alle abgespeicherten Modelle sollen mitsamt wichtiger Informationen besichtigt werden können \\ \hline
+		\textbf{Akteur} & Nutzer \\ \hline
+		\textbf{Auslöser} & Das Modell soll eingefroren werden. Das bedeutet, dass der Latent-Replay Algorithmus bei Ende der Trainingssitzung nicht mehr ausgeführt wird.  \\ \hline
+		\textbf{Vorbedingung} & Es wurden bereits ein oder mehrere Modelle gespeichert \\ \hline	
+		\textbf{Nachbedingung/Ziel} &  Der Nutzer befindet sich in der Modellübersicht, in welcher die gespeicherten Modelle betrachtet werden können\\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Die Modellübersicht enthält einen Text welcher daraufhinweist, dass bisher noch kein Modell gespeichert wurde, um einen leeren Bildschirm zu vermeiden \\ \hline
+		\textbf{Standardablauf} & 1. Der Nutzer betätigt den Button in der Navigationsleiste der zur Modellübersicht führt \\
+		& 2. Der Nutzer befindet sich in der Modellübersicht, welche eine Listenansicht der gespeicherten Objekte anzeigt, mitsamt der Anzahl bereits gespeicherter Objekte \\ \hline
+		\textbf{Sonderfälle} & 2a. Es öffnet sich keine Listenansicht, da noch kein Modell abgespeichert wurde. \\ & $\rightarrow$ Der Nutzer wird über das Fehlen von Modellen durch einen Text in der Mitte des Bildschirms informiert \\ \hline
+		
+	\end{tabular}
+	\caption{Anwendungsfall M4: Alle Modelle betrachten}
+	\label{tab:use-case-view-models}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{80mm}|}
+		\hline
+		\textbf{Nummer} & \textbf{AF-M5} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Modell einfrieren} \\ \hline
 		\textbf{Beschreibung} & Das Modell soll eingefroren werden. Das bedeutet, dass der Latent-Replay Algorithmus bei Ende der Trainingssitzung nicht mehr ausgeführt wird. Diese Kontrolle dem Nutzer zu übergeben, bietet den Vorteil, dass der Nutzer nicht durch langes Warten bei Ende der Trainingssitzung aufgrund des rechenintensiven Latent-Replay Algorithmus überrascht wird und die Möglichkeit hat das Modell fertigzustellen und nicht weiter zu trainieren. \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -468,54 +541,16 @@ Und hier etwas über deren Übertragbarkeit.
 		& 3b. Latent-Replay Algorithmus wird ausgeführt und der Nutzer wird durch einen Ladekreis dazu angehalten bis zum Ende der Ausführung mit der Fortsetzung der Nutzung der Applikation zu warten \\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Modell einfrieren}
+	\caption{Anwendungsfall M5: Modell einfrieren}
 	\label{tab:use-case-freeze-model}
 \end{table}
 
-\begin{table}[htbp]
-	\centering
-	\begin{tabular}{|l|p{80mm}|}
-		\hline
-		\textbf{Anwendungsfall} & \textbf{Alle Modelle betrachten} \\ \hline
-		\textbf{Beschreibung} & Alle abgespeicherten Modelle sollen mitsamt wichtiger Informationen besichtigt werden können \\ \hline
-		\textbf{Akteur} & Nutzer \\ \hline
-		\textbf{Auslöser} & Das Modell soll eingefroren werden. Das bedeutet, dass der Latent-Replay Algorithmus bei Ende der Trainingssitzung nicht mehr ausgeführt wird.  \\ \hline
-		\textbf{Vorbedingung} & Es wurden bereits ein oder mehrere Modelle gespeichert \\ \hline	
-		\textbf{Nachbedingung/Ziel} &  Der Nutzer befindet sich in der Modellübersicht, in welcher die gespeicherten Modelle betrachtet werden können\\ \hline
-		\textbf{Nachbedingung im Sonderfall} & Die Modellübersicht enthält einen Text welcher daraufhinweist, dass bisher noch kein Modell gespeichert wurde, um einen leeren Bildschirm zu vermeiden \\ \hline
-		\textbf{Standardablauf} & 1. Der Nutzer betätigt den Button in der Navigationsleiste der zur Modellübersicht führt \\
-		& 2. Der Nutzer befindet sich in der Modellübersicht, welche eine Listenansicht der gespeicherten Objekte anzeigt, mitsamt der Anzahl bereits gespeicherter Objekte \\ \hline
-		\textbf{Sonderfälle} & 2a. Es öffnet sich keine Listenansicht, da noch kein Modell abgespeichert wurde. \\ & $\rightarrow$ Der Nutzer wird über das Fehlen von Modellen durch einen Text in der Mitte des Bildschirms informiert \\ \hline
-		
-	\end{tabular}
-	\caption{Anwendungsfall: Alle Modelle betrachten}
-	\label{tab:use-case-view-models}
-\end{table}
 
 \begin{table}[htbp]
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
 		\hline
-		\textbf{Anwendungsfall} & \textbf{Gespeicherte Objekte im Modell betrachten} \\ \hline
-		\textbf{Beschreibung} & Alle im Modell abgespeicherten Objekte sollen besichtigt werden können \\ \hline
-		\textbf{Akteur} & Nutzer \\ \hline
-		\textbf{Auslöser} & Der Nutzer betätigt den Button welcher sich rechts neben dem Modellnamen befindet  \\ \hline
-		\textbf{Vorbedingung} & Der Nutzer befindet sich in der Modellübersicht und ein Modell wurde bereits abgespeichert \\ \hline	
-		\textbf{Nachbedingung/Ziel} & Ein Dialogfenster, welches zum Modell alle gespeicherten Objekte anzeigt wurde geöffnet \\ \hline
-		\textbf{Nachbedingung im Sonderfall} & Es wurden noch keine Objekte für das Modell abgespeichert und ein Hilfetext befindet sich im geöffneten Dialog \\ \hline
-		\textbf{Standardablauf} & 1. Nutzer betätigt den Button, welcher sich rechts neben dem Modell befindet, dessen Objekte betrachtet werden sollen \\
-		& 2. Ein Dialogfenster öffnet sich, welches eine Listenansicht aller zum Modell gespeicherten Objekte enthält \\ \hline
-		\textbf{Sonderfälle} & 2a. Es öffnet sich keine Listenansicht, da noch kein Objekt für das jeweilige Modell abgespeichert wurde \\ & $\rightarrow$ Der Nutzer wird über das Fehlen von Objekten durch einen Text in der Mitte des Dialogfensters informiert \\ \hline
-		
-	\end{tabular}
-	\caption{Anwendungsfall: Gespeicherte Objekte im Modell anschauen}
-	\label{tab:use-case-view-saved-objects}
-\end{table}
-
-\begin{table}[htbp]
-	\centering
-	\begin{tabular}{|l|p{80mm}|}
-		\hline
+		\textbf{Nummer} & \textbf{AF-O1} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Objekt hinzufügen} \\ \hline
 		\textbf{Beschreibung} & Objekte sollen hinzugefügt werden können \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -537,7 +572,7 @@ Und hier etwas über deren Übertragbarkeit.
 		& 7b. Alle Objektplätze des ausgewählten Modells sind bereits belegt \\ & $\rightarrow$ Der Nutzer wird über diesen Fehler informiert. Das Training wird abgebrochen und das Objekt gelöscht \\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Objekt hinzufügen}
+	\caption{Anwendungsfall O1: Objekt hinzufügen}
 	\label{tab:use-case-add-object}
 \end{table}
 
@@ -545,6 +580,7 @@ Und hier etwas über deren Übertragbarkeit.
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
 		\hline
+		\textbf{Nummer} & \textbf{AF-O2} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Objekte wiedererkennen} \\ \hline
 		\textbf{Beschreibung} & Bereits eingespeicherte Objekte sollen durch Nutzung der Kamera wiedererkannt werden, wenn sich das Objekt innerhalb der Fokusbox befindet \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -557,7 +593,7 @@ Und hier etwas über deren Übertragbarkeit.
 		\textbf{Sonderfälle} & 2a. Das Objekt wurde nicht erkannt \\ & $\rightarrow$ Nutzer hat die Möglichkeit weitere Eindrücke über das Objekt zu sammeln, oder gewisse Einstellungen an der Applikation vorzunehmen, um das Problem selbstständig beheben zu können\\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Objekt wiedererkennen}
+	\caption{Anwendungsfall O2: Objekt wiedererkennen}
 	\label{tab:use-case-recognize-objects}
 \end{table}
 
@@ -565,6 +601,7 @@ Und hier etwas über deren Übertragbarkeit.
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
 		\hline
+		\textbf{Nummer} & \textbf{AF-O3} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Objekt bearbeiten} \\ \hline
 		\textbf{Beschreibung} & Die Attribute, die für das Objekt gespeichert wurden, sollen geändert werden können \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -580,7 +617,7 @@ Und hier etwas über deren Übertragbarkeit.
 		& 4a. Der Nutzer betätigt den Abbrechen Button \\ & $\rightarrow$ Die Änderungen werden nicht gespeichert \\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Objekt bearbeiten}
+	\caption{Anwendungsfall O3: Objekt bearbeiten}
 	\label{tab:use-case-edit-object}	
 \end{table}
 
@@ -588,6 +625,7 @@ Und hier etwas über deren Übertragbarkeit.
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
 		\hline
+		\textbf{Nummer} & \textbf{AF-O4} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Weitere Trainingsdaten für Objekt erfassen} \\ \hline
 		\textbf{Beschreibung} & Es sollen zu einem bestehenden Objekt weitere Trainingsdaten erfasst werden, um die Erkennungsgenauigkeit für das gewählte Objekt erhöhen zu können\\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -600,7 +638,7 @@ Und hier etwas über deren Übertragbarkeit.
 		\textbf{Sonderfälle} & 2a. Das Training konnte nicht gestartet werden \\ & $\rightarrow$ Der Nutzer wird darüber mit einer Fehlermeldung informiert \\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Weitere Trainingsdaten für Objekt erfassen}
+	\caption{Anwendungsfall O4: Weitere Trainingsdaten für Objekt erfassen}
 	\label{tab:use-case-add-further-samples}	
 \end{table}
 
@@ -608,6 +646,7 @@ Und hier etwas über deren Übertragbarkeit.
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
 		\hline
+		\textbf{Nummer} & \textbf{AF-O5} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Objekt löschen} \\ \hline
 		\textbf{Beschreibung} & Ein Objekt soll gelöscht werden können, sodass dieses nicht mehr von der Applikation erkannt wird \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -621,7 +660,7 @@ Und hier etwas über deren Übertragbarkeit.
 		\textbf{Sonderfälle} & 3a. Der Nutzer betätigt den \glqq Abbrechen\grqq-Button\\ & $\rightarrow$ Das Dialogfenster wird geschlossen und das Objekt wird nicht gelöscht \\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Objekt löschen}
+	\caption{Anwendungsfall O5: Objekt löschen}
 	\label{tab:use-case-delete-object}
 \end{table}
 
@@ -629,6 +668,7 @@ Und hier etwas über deren Übertragbarkeit.
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
 		\hline
+		\textbf{Nummer} & \textbf{AF-O6} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Alle Objekte betrachten} \\ \hline
 		\textbf{Beschreibung} & Alle eingespeicherten Objekte sollen mitsamt aller Attribute des Objektes betrachtet werden können \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -641,7 +681,7 @@ Und hier etwas über deren Übertragbarkeit.
 		\textbf{Sonderfälle} & 2a. Es wurde noch kein Objekt abgespeichert \\ & $\rightarrow$ Es wird in der Mitte des Bildschirm ein Informationstext angezeigt, um eine komplett leere Ansicht zu vermeiden \\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Alle Objekte betrachten}
+	\caption{Anwendungsfall O6: Alle Objekte betrachten}
 	\label{tab:use-case-view-objects}
 \end{table}
 
@@ -649,6 +689,7 @@ Und hier etwas über deren Übertragbarkeit.
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
 		\hline
+		\textbf{Nummer} & \textbf{AF-E1} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Einstellen der Anzahl der hinzuzufügenden Daten pro Training} \\ \hline
 		\textbf{Beschreibung} & Die Anzahl der Trainingsdaten die pro Objekttraining erfasst werden, soll konfigurierbar sein, um Kontrolle über die Dauer und die Genauigkeit der Erkennung zu erhalten \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -661,7 +702,7 @@ Und hier etwas über deren Übertragbarkeit.
 		\textbf{Sonderfälle} & 2a. Anzahl der Trainingsdaten pro Objekttraining kann nicht angepasst werden \\ & $\rightarrow$ Der Nutzer wird darüber durch eine Fehlermeldung informiert \\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Einstellen der Anzahl der hinzuzufügenden Daten pro Training}
+	\caption{Anwendungsfall E1: Einstellen der Anzahl der hinzuzufügenden Daten pro Training}
 	\label{tab:use-case-set-samples}
 \end{table}
 
@@ -669,6 +710,7 @@ Und hier etwas über deren Übertragbarkeit.
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
 		\hline
+		\textbf{Nummer} & \textbf{AF-E2} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Einstellen der Dauer des Countdowns vor dem Training} \\ \hline
 		\textbf{Beschreibung} & Der unmittelbar vor dem Training laufende Countdown, soll konfigurierbar sein, um unnötige Wartezeiten, oder notwendige Zeiten für die korrekte Ausrichtung der Kamera zu ermöglichen \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -681,14 +723,15 @@ Und hier etwas über deren Übertragbarkeit.
 		\textbf{Sonderfälle} & 2a. Die Länge des Countdowns konnte nicht angepasst werden \\ & $\rightarrow$ Der Nutzer wird darüber durch eine Fehlermeldung informiert \\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Einstellen der Dauer des Countdowns vor dem Training}
+	\caption{Anwendungsfall E2: Einstellen der Dauer des Countdowns vor dem Training}
 	\label{tab:use-case-set-countdown}
 \end{table}
 
 \begin{table}[htbp]
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
-		\hline
+		\hline\\
+		\textbf{Nummer} & \textbf{AF-E3} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Einstellen der Auflösung der hinzuzufügenden Trainingsdaten} \\ \hline
 		\textbf{Beschreibung} & Die Größe der Fokusbox im Kamerahauptbildschirm soll konfigurierbar sein, um nahe beziehungs Objekte in der Ferne zu erfassen, ohne zu viel Hintergrund einzufangen \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -701,7 +744,7 @@ Und hier etwas über deren Übertragbarkeit.
 		\textbf{Sonderfälle} & 2a. Die Auflösung der hinzuzufügenden Trainingsdaten konnte nicht angepasst werden \\ & $\rightarrow$ Der Nutzer wird darüber durch eine Fehlermeldung informiert \\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Einstellen der Auflösung der hinzuzufügenden Trainingsdaten}
+	\caption{Anwendungsfall E3: Einstellen der Auflösung der hinzuzufügenden Trainingsdaten}
 	\label{tab:use-case-set-resolution}
 \end{table}
 
@@ -709,6 +752,7 @@ Und hier etwas über deren Übertragbarkeit.
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
 		\hline
+		\textbf{Nummer} & \textbf{AF-E4} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Einstellen des Konfidenzschwellwerts bei Inferenz} \\ \hline
 		\textbf{Beschreibung} & Der Konfidenzschwellwert soll konfigurierbar sein. Dies bedeutet, dass ein Objekt erst im Overlay angezeigt wird, wenn das Modell mit einer bestimmen Erkennungssicherheit (Konfidenz) das Objekt richtig erkannt hat \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -722,7 +766,7 @@ Und hier etwas über deren Übertragbarkeit.
 		& $\rightarrow$ Der Nutzer wird darüber durch eine Fehlermeldung informiert \\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Einstellen des Konfidenzschwellwerts bei Inferenz}
+	\caption{Anwendungsfall E4: Einstellen des Konfidenzschwellwerts bei Inferenz}
 	\label{tab:use-case-set-conf-thres}
 \end{table}
 
@@ -730,6 +774,7 @@ Und hier etwas über deren Übertragbarkeit.
 	\centering
 	\begin{tabular}{|l|p{80mm}|}
 		\hline
+		\textbf{Nummer} & \textbf{AF-E5} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Applikation zurücksetzen} \\ \hline
 		\textbf{Beschreibung} & Alle persistent gespeicherten Daten sollen zurückgesetzt werden können, um eine Alternative zur Neuinstallation der Applikation zu schaffen\\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
@@ -745,7 +790,7 @@ Und hier etwas über deren Übertragbarkeit.
 		& 4a. Die Applikation konnte nicht zurückgesetzt werden \\ & $\rightarrow$ Der Nutzer wird darüber durch eine Fehlermeldung informiert und der Vorgang wird abgebrochen \\ \hline
 		
 	\end{tabular}
-	\caption{Anwendungsfall: Applikation zurücksetzen}
+	\caption{Anwendungsfall E5: Applikation zurücksetzen}
 	\label{tab:use-case-reset}
 \end{table}
 

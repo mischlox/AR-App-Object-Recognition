@@ -11,20 +11,20 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {A.1}{\ignorespaces Anwendungsfall: Modell hinzufügen\relax }}{22}{table.caption.23}%
-\contentsline {table}{\numberline {A.2}{\ignorespaces Anwendungsfall: Modell wechseln\relax }}{23}{table.caption.24}%
-\contentsline {table}{\numberline {A.3}{\ignorespaces Anwendungsfall: Modell einfrieren\relax }}{24}{table.caption.25}%
-\contentsline {table}{\numberline {A.4}{\ignorespaces Anwendungsfall: Alle Modelle betrachten\relax }}{25}{table.caption.26}%
-\contentsline {table}{\numberline {A.5}{\ignorespaces Anwendungsfall: Gespeicherte Objekte im Modell anschauen\relax }}{26}{table.caption.27}%
-\contentsline {table}{\numberline {A.6}{\ignorespaces Anwendungsfall: Objekt hinzufügen\relax }}{27}{table.caption.28}%
-\contentsline {table}{\numberline {A.7}{\ignorespaces Anwendungsfall: Objekt wiedererkennen\relax }}{28}{table.caption.29}%
-\contentsline {table}{\numberline {A.8}{\ignorespaces Anwendungsfall: Objekt bearbeiten\relax }}{29}{table.caption.30}%
-\contentsline {table}{\numberline {A.9}{\ignorespaces Anwendungsfall: Weitere Trainingsdaten für Objekt erfassen\relax }}{30}{table.caption.31}%
-\contentsline {table}{\numberline {A.10}{\ignorespaces Anwendungsfall: Objekt löschen\relax }}{31}{table.caption.32}%
-\contentsline {table}{\numberline {A.11}{\ignorespaces Anwendungsfall: Alle Objekte betrachten\relax }}{32}{table.caption.33}%
-\contentsline {table}{\numberline {A.12}{\ignorespaces Anwendungsfall: Einstellen der Anzahl der hinzuzufügenden Daten pro Training\relax }}{33}{table.caption.34}%
-\contentsline {table}{\numberline {A.13}{\ignorespaces Anwendungsfall: Einstellen der Dauer des Countdowns vor dem Training\relax }}{34}{table.caption.35}%
-\contentsline {table}{\numberline {A.14}{\ignorespaces Anwendungsfall: Einstellen der Auflösung der hinzuzufügenden Trainingsdaten\relax }}{35}{table.caption.36}%
-\contentsline {table}{\numberline {A.15}{\ignorespaces Anwendungsfall: Einstellen des Konfidenzschwellwerts bei Inferenz\relax }}{36}{table.caption.37}%
-\contentsline {table}{\numberline {A.16}{\ignorespaces Anwendungsfall: Applikation zurücksetzen\relax }}{37}{table.caption.38}%
+\contentsline {table}{\numberline {A.1}{\ignorespaces Anwendungsfall M1: Modell hinzufügen\relax }}{25}{table.caption.23}%
+\contentsline {table}{\numberline {A.2}{\ignorespaces Anwendungsfall M2: Modell wechseln\relax }}{26}{table.caption.24}%
+\contentsline {table}{\numberline {A.3}{\ignorespaces Anwendungsfall M3: Gespeicherte Objekte im Modell anschauen\relax }}{27}{table.caption.25}%
+\contentsline {table}{\numberline {A.4}{\ignorespaces Anwendungsfall M4: Alle Modelle betrachten\relax }}{28}{table.caption.26}%
+\contentsline {table}{\numberline {A.5}{\ignorespaces Anwendungsfall M5: Modell einfrieren\relax }}{29}{table.caption.27}%
+\contentsline {table}{\numberline {A.6}{\ignorespaces Anwendungsfall O1: Objekt hinzufügen\relax }}{30}{table.caption.28}%
+\contentsline {table}{\numberline {A.7}{\ignorespaces Anwendungsfall O2: Objekt wiedererkennen\relax }}{31}{table.caption.29}%
+\contentsline {table}{\numberline {A.8}{\ignorespaces Anwendungsfall O3: Objekt bearbeiten\relax }}{32}{table.caption.30}%
+\contentsline {table}{\numberline {A.9}{\ignorespaces Anwendungsfall O4: Weitere Trainingsdaten für Objekt erfassen\relax }}{33}{table.caption.31}%
+\contentsline {table}{\numberline {A.10}{\ignorespaces Anwendungsfall O5: Objekt löschen\relax }}{34}{table.caption.32}%
+\contentsline {table}{\numberline {A.11}{\ignorespaces Anwendungsfall O6: Alle Objekte betrachten\relax }}{35}{table.caption.33}%
+\contentsline {table}{\numberline {A.12}{\ignorespaces Anwendungsfall E1: Einstellen der Anzahl der hinzuzufügenden Daten pro Training\relax }}{36}{table.caption.34}%
+\contentsline {table}{\numberline {A.13}{\ignorespaces Anwendungsfall E2: Einstellen der Dauer des Countdowns vor dem Training\relax }}{37}{table.caption.35}%
+\contentsline {table}{\numberline {A.14}{\ignorespaces Anwendungsfall E3: Einstellen der Auflösung der hinzuzufügenden Trainingsdaten\relax }}{38}{table.caption.36}%
+\contentsline {table}{\numberline {A.15}{\ignorespaces Anwendungsfall E4: Einstellen des Konfidenzschwellwerts bei Inferenz\relax }}{39}{table.caption.37}%
+\contentsline {table}{\numberline {A.16}{\ignorespaces Anwendungsfall E5: Applikation zurücksetzen\relax }}{40}{table.caption.38}%
 \addvspace {10\p@ }
