@@ -7,10 +7,13 @@
 \contentsline {figure}{\numberline {2.2}{\ignorespaces Vergleich des Aufbaus eines Transfer Learning Models im Gegensatz zum traditionellen Maschinellen Lernen\relax }}{5}{figure.caption.14}%
 \contentsline {figure}{\numberline {2.3}{\ignorespaces Architekturdiagramm des Latent Replay\relax }}{7}{figure.caption.15}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces UML-Anwendungsfall-Diagramm\relax }}{11}{figure.caption.16}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces UML-Anwendungsfall-Diagramm\relax }}{11}{figure.caption.17}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {4.1}{\ignorespaces Entity-Relationship-Diagramm\relax }}{14}{figure.caption.18}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces UML-Komponentendiagramm\relax }}{19}{figure.caption.20}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces UML-Komponentendiagramm\relax }}{18}{figure.caption.20}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces UML-Klassendiagramm der Persistenz Komponente\relax }}{20}{figure.caption.22}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces UML-Klassendiagramm der Objekt- und Modellübersicht\relax }}{22}{figure.caption.25}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces UML-Sequenzdiagramm: Ändern des ausgewählten Modells\relax }}{23}{figure.caption.26}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

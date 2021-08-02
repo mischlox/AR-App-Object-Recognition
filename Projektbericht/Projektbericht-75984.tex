@@ -189,6 +189,11 @@ Das Prinzip des Transfer Learnings kann dementsprechend mithilfe des Latent-Repl
   \caption{Architekturdiagramm des Latent Replay} Quelle: \cite{Pellegrini2019}
   \label{fig:latent-replay}
 \end{figure}
+
+\section{Android}
+\subsection{Activities und Fragments}
+\subsection{Shared Preferences}
+Shared Preferences bezeichnen einen Key-Value-Store für primitive Daten in Form einer XML-Datei. Genutzt kann dies über die dafür zur Verfügung gestellten Android-Bibliothek, welche ein Shared Preferences-Objekt erzeugt. Dieses Objekt beinhaltet einen Zeiger auf den Pfad der jeweiligen Datei. Mithilfe von Shared Preferences können beispielsweise Konfigurationsparameter, die persistent abgespeichert werden sollen mithilfe einer einfachen \ac{api} zugänglich gemacht werden
 % ---
 \chapter{Anforderungsanalyse}
 \label{cha:analyse}
@@ -300,9 +305,8 @@ Ein Zeitstempel wird zu jedem Trainingsdatenfeld hinzugefügt, um lediglich die 
 \subsection{Latent-Replay-Puffer}
 Der Latent-Replay-Puffer wird nach jeder Trainingssitzung aktualisiert mit den zuletzt hinzugefügten Trainingsdaten.\\
 Zudem wird die Modellidentifikationsnummer als Fremdschlüssel und die Modellposition, zu welchem das jeweilige Trainingsdatenfeld gehört mitabgespeichert, um das Vermischen von neuen Trainingsdaten und alten Trainingsdaten, nach dem Prinzip des Latent-Replay-Algoritmhus zu ermöglichen.
-\section{Grobentwurf}
-
-\subsection{Architektur}
+\section{Architektur}
+\label{cha:architecture}
 Zur Realisierung der Applikation auf einem Android-Endgerät, werden die Komponenten der zugrundelegenden Architektur aus Activities und Fragments bestehen. Eine Activity-Komponente wird für den Startbildschirm erstellt, welche die Haupt-Activity für die Funktionalität der App einleitet. Mithilfe von Fragments, die an diese Activity anknüpfen kann die Kommunikation und der Datenaustausch zwischen verschiedenen Fragments stattfinden.\\
 Abbildung \ref{fig:component-diagram} zeigt die Abhängigkeiten der im Folgenden erklärten verwendeten Komponenten.\\
 Im Folgenden werden die Verantwortlichkeiten der zu implementierenden Fragments erklärt und die Anwendungsfälle aus Anhang \ref{appendix:use-cases} werden zugewiesen.
@@ -334,9 +338,78 @@ Die Anbindung der \textit{Transfer Learning \ac{api}} erfolgt in Form einer Wrap
 \end{figure}
 
 \section{Feinentwurf}
-Feine UMLs über Klassen, Sequenzdiagramme, Algorithmen Flussdiagramme, Verarbeitungspipelines
+Im Folgenden werden die Strukturen und Abläufe, der in Kapitel \ref{cha:architecture} beschriebenen Komponenten erklärt.\\
+Um eine Übersichtlichkeit der Klassendiagramme zu gewährleisten, wurden nicht alle Methoden und Komponenten aufgeführt. Die Lücken werden mit der Zeichenfolge \glqq\ ... \grqq\ gekennzeichnet.
+\subsection{Klassendiagramme}
+Im Folgenden wird die statische Struktur der Komponenten auf Klassenebene erklärt.
+Um eine Übersichtlichkeit des Entwurfes gewährleisten zu können, werden Komponenten nach ihren Verantwortlichkeiten und erfüllten Anwendungsfällen getrennt beschrieben.
+\subsubsection{Persistenz-Komponente}
+Die Persistenz des Objektes wird mithilfe von Schnittstellen angebunden und lässt sich in eine Komponente für Globale Konfigurationsparameter und eine Komponente für die Anbindung einer Datenbank aufteilen. Die Datebankhelfer-Schnittstelle stellt Methoden zur Abfrage, Einfügen und Löschen der strukturiert gespeicherten Entitätsklassen zur Verfügung. In der Schnittstelle für die globalen Konfigurationsparameter, werden Methoden zur Verfügung gestellt, die primitive Daten, die persistent für Abläufe der Applikation gespeichert werden müssen, abgefragt und gespeichert.\\
+Abbildung \ref{fig:class-diagram-persistence} zeigt den Aufbau der Komponenten auf Klassenebene und deren Beziehungen zu anderen Komponenten.
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/persistence-class-diagram.png}
+	\caption{UML-Klassendiagramm der Persistenz Komponente} Quelle: Eigene Darstellung
+	\label{fig:class-diagram-persistence}
+\end{figure}
+Durch die Verwendung von Schnittstellen wurde das Dependency Inversion Principle angewendet. Bei Bedarf ist es dadurch möglich die SQLite Datenbank durch eine andere auszutauschen unter der Bedingung, dass alle Methoden der Schnittstelle implementiert werden.
+\subsubsection{Kamera Fragment}
+// auch auf Funktionsweise und Bereitstellung der Methoden der TFLITE API eingehen
+\subsubsection{Modell- und Objektübersicht}
+Da die Modell- und Objektübersicht analog aufgebaut sind, wird die Beschreibung der Komponenten auf Klassenebene in einem einzigen Unterkapitel vereint.\\
+Die Verbindung zur Persistenzkomponente ermöglicht es die Listeninstanzen mit Daten aus der Datenbank zu füllen. Zur Erstellung einer angepassten Listenansicht wurde der Listenadapter von Android erweitert. Dieser Listenadapter bietet die Möglichkeit eine Listenansicht zu Erstellen, anhand der Position zu identifizieren und Listelement-spezifische Operationen durchzuführen. Das Dialog-Paket wird ebenfalls genutzt und fördert somit die Wiederverwendbarkeit der Komponenten. Abbildung \ref{fig:overview-classdiagram} zeigt die statische Struktur der Modell- und Objektübersicht auf Klassenebene.
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.8\textheight]{images/object-overview-class-diagram.png}
+	\caption{UML-Klassendiagramm der Objekt- und Modellübersicht} Quelle: Eigene Darstellung
+	\label{fig:overview-classdiagram}
+\end{figure}
+\subsection{Kommunikation der Komponenten}
+\label{cha:communication-components}
+Die \textit{Camera Activity} ist die Hauptkomponente und bietet die Möglichkeit Informationen und Benachrichtigungen, welche zwischen den Fragmenten erfolgen sollen, auszutauschen. Eine Navigationsleiste am unteren Bildschirmrand und ein aufklappbares Seitenmenü bietet dem Nutzer die Möglichkeit, die angezeigten Fragmente zu wechseln und deren Funktionalität zu nutzen.\\
+Die Activity beobachtet bestimmte Aktionen innerhalb der Fragmente das Registrieren als \textit{Observer} bei den Globalen Konfigurationsparametern und koordiniert Befehlsaufrufe an das jeweils benötigte Fragment. Die Komponente zur Globalen Konfiguration wird hierfür von Fragmenten, die interagieren müssen, instanziiert.\\
+Abbildung \ref{fig:sequence-diagram-change-model} stellt diesen  Ablauf in Form eines Sequenzdiagramm, am Beispiel des Änderns des ausgewählten Modells graphisch dar. 
 
-%---
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.35\textheight]{images/sequence-diagram-change-model.png}
+	\caption{UML-Sequenzdiagramm: Ändern des ausgewählten Modells} Quelle: Eigene Darstellung
+	\label{fig:sequence-diagram-change-model}
+\end{figure}
+
+Durch Nutzung dieses Musters ist eine lose Kopplung der Komponenten möglich und Fragmente können ohne voneinander abhängig zu sein ausgeführt werden. Analog zu diesem Beispiel werden die folgenden Abläufe realisiert:
+\begin{itemize}
+	\item Objekttraining auslösen
+	\item Objekttraining Rollback auslösen im Fehlerfall
+	\item Aktualisieren des Replay-Puffers
+	\item Initialisieren der Namen der Ausgabeknoten des Modells (standardmäßig werden die Ausgabeknoten mit aufsteigenden Nummern als Zeichenkette initialisiert)
+	\item Auflösung der Trainingsdaten anpassen
+	\item Konfidenzschwelle anpassen
+	\item Länge des Countdowns vor dem Training anpassen
+	\item Aktivieren des Dunkelmodus
+\end{itemize}
+
+\subsection{Vorbereitung und Vorschau der Kameradaten}
+Das Camera Fragment beinhaltet eine Vorschau in Echtzeit, welche dem Nutzer ermöglicht zu sehen, was die im Endgerät eingebaute Kamera sieht.\\
+Zur Realisierung dieser Funktionalität müssen diverse Konfigurationen vorgenommen werden. Hierzu gehört das Initialisieren der Ausrichtung des Gerätes (Portrait- oder Landscape-Modus), Das Seitenverhältnis, die Auflösung der Kamera und weiteren systembezogenen Einstellungen wie beispielsweise dem automatischen Fokussieren. Zudem wird ein Bildanalyse-Thread zur Vorkonfiguration der Kameraansicht hinzugefügt. Die Inferenz- und Trainingsfunktionalität wird direkt hier eingesetzt, da dies ermöglicht jeden angezeigten Frame asynchron zum Programmablauf zu akquirieren und zu verarbeiten. \\
+Nach Konfiguration der soeben beschriebenen Parameter, wird die Kamera an den Lebenszyklus des Fragments gebunden und demnach bei Öffnen des Fragments gestartet und Schließen beziehungsweise Wechseln geschlossen.
+\subsection{Einlernen von Objekten}
+Das Einlernen und Wiedererkennen von Objekten sind die umfangreichsten und komplexesten Anwendungsfälle in der Applikation, welche diverse Komponenten involviert und Interprozesskommunikation von nebenläufigen Prozessen erfordert.\\
+Die Struktur und der Ablauf des in Anwendungsfall \ref{tab:use-case-add-object} beschriebenen sichtbaren Verhaltens, wird im Folgenden präziser erklärt.\\
+Nach Betätigung des \glqq +\grqq-Buttons auf der graphischen Oberfläche wird ein Dialogfenster erzeugt. Nach Eingabe der Informationen zum Objekt, löst der \glqq Training starten\grqq-Button im Dialogfenster unter Anwendung des in Kapitel \ref{cha:communication-components} beschriebenen Ablauf das Objekttraining aus. Parallel dazu werden die eingegebenen Daten des Objektes in der Datenbank gespeichert. Die Activity delegiert den Aufruf an das Camera Fragment, welches die Verantwortlichkeiten für das Einlernen trägt. \\
+Eine Warteschlange bestehend aus Modellpositionen wird hierbei innerhalb eines neuen Threads mit der vorkonfigurierten Anzahl an Trainingsdaten pro Objekttraining gefüllt.\\
+Diese Warteschlange wird kontinuierlich vom Analysierer abgefragt und entscheided dadurch, ob Objekte trainiert, oder lediglich Inferenz ausgeführt werden soll.\\
+Der Analysierer bereitet die stets zugeführten Bitmaps aus der Kamera für das Training vor. Hierbei wird die Bitmap in ein Float-Datenfeld konvertiert, da dies die Datenstruktur ist, mit welchem das zugrundeliegende Deep-Learning-Modell Eingangsbilder prozessiert.\\
+Wenn sich in der Warteschlange Trainingsanfragen befinden, wird die eingehende Bitmap zum Objekt dazugespeichert, damit es bei der Wiedererkennung und in der Objektübersicht als Objektvorschau angezeigt werden kann. Das nun vorbereitete Trainingsdatenfeld wird in den Continual Learning Model Wrapper gegeben und zugleich zu den Trainingsdaten in der Datenbank abgespeichert.\\
+Der Wrapper leitet das Training an die Transfer Learning \ac{api} weiter, welche das Modell nun für die übergebene Modellposition trainiert.
+Dieser Trainingsprozess findet kontinuierlich statt, durch das starten eines Trainingthreads im Wrapper.\\
+Parallel dazu wird der Trainingsfortschritt prozentual ermittelt und im View Model aktualisiert. Ein Observer aktualisiert nun während des Trainings einen Ladekreis auf der graphischen Oberfläche.\\
+Falls ein Fehlerfall eintritt, wie beispielsweise dem frühzeitigen Wechseln des Fragments, werden die Änderungen in der Datenbank zurückgesetzt und somit das noch nicht fertig trainierte Objekte wieder gelöscht. Zudem wird der Nutzer über seinen Fehler durch eine Meldung informiert.
+
+\subsection{Wiedererkennen von Objekten}
+Das Wiedererkennen von Objekten findet kontinuierlich statt, wenn die Anfragewarteschlange leer ist. Hierfür wird eine Methode Im Modell-Wrapper, welche direkt die Inferenzmethode der Transfer Learning \ac{api} aufruft, ausgeführt. Die Ergebnisse aktualisieren im angebundenen View Model das erkannte Objekt und die Konfidenz dazu. Mithilfe eines Observers wird die graphische Oberfläche kontinuierlich aktualisiert.
+\subsection{Laden bereits existierender Modell-Parameter}
+// On create map objects und so
 \chapter{Implementierung}
 \label{cha:implementierung}
 Transfer Learning, quantisiertes MobilenetV2, Imagenet. 
