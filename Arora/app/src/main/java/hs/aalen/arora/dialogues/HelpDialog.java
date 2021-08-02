@@ -16,7 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.LinkedList;
 
-import hs.aalen.arora.persistence.GlobalSettings;
+import hs.aalen.arora.persistence.GlobalConfig;
 import hs.aalen.arora.R;
 import hs.aalen.arora.persistence.SharedPrefsHelper;
 
@@ -29,12 +29,12 @@ public class HelpDialog implements Dialog {
     private ProgressBar helpProgress;
     private TextView helpProgressText;
     private Context context;
-    private GlobalSettings settings;
+    private GlobalConfig globalConfig;
 
     @Override
     public void createDialog(Context context) {
         this.context = context;
-        this.settings = new SharedPrefsHelper(context);
+        this.globalConfig = new SharedPrefsHelper(context);
 
         AlertDialog.Builder helpDialogBuilder = new AlertDialog.Builder(context);
 
@@ -59,7 +59,7 @@ public class HelpDialog implements Dialog {
         textList.add(Pair.create(3, context.getString(R.string.help_text_counter_training)));
         textList.add(Pair.create(4, context.getString(R.string.help_text_havefun)));
 
-        notShowAgainCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> settings.setHelpShowing(!isChecked));
+        notShowAgainCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> globalConfig.setHelpShowing(!isChecked));
         // Next slide
         forwardButton.setOnClickListener(v -> {
             startTextAnimation(helpTextView, R.anim.anim_fade_out);

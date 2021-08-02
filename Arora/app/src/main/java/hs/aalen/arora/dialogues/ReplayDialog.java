@@ -9,19 +9,19 @@ import android.widget.Toast;
 
 import hs.aalen.arora.persistence.DatabaseHelper;
 import hs.aalen.arora.persistence.SQLiteHelper;
-import hs.aalen.arora.persistence.GlobalSettings;
+import hs.aalen.arora.persistence.GlobalConfig;
 import hs.aalen.arora.R;
 import hs.aalen.arora.persistence.SharedPrefsHelper;
 
 public class ReplayDialog implements Dialog {
     private AlertDialog replayDialog;
     private DatabaseHelper databaseHelper;
-    private GlobalSettings settings;
+    private GlobalConfig globalConfig;
 
     @Override
     public void createDialog(Context context) {
         databaseHelper = new SQLiteHelper(context);
-        settings = new SharedPrefsHelper(context);
+        globalConfig = new SharedPrefsHelper(context);
 
         AlertDialog.Builder replayDialogBuilder = new AlertDialog.Builder(context);
         final View replayDialogView = ((LayoutInflater) context
@@ -30,7 +30,7 @@ public class ReplayDialog implements Dialog {
 
         Button freezeButton = replayDialogView.findViewById(R.id.replay_freeze_model);
         freezeButton.setOnClickListener(v -> {
-            databaseHelper.updateModelIsFrozen(settings.getCurrentModelID(), true);
+            databaseHelper.updateModelIsFrozen(globalConfig.getCurrentModelID(), true);
             Toast.makeText(context, R.string.model_was_frozen_successfully, Toast.LENGTH_SHORT).show();
             replayDialog.dismiss();
         });
@@ -39,7 +39,7 @@ public class ReplayDialog implements Dialog {
 
         continueLaterButton.setOnClickListener(v -> {
             replayDialog.dismiss();
-            settings.switchUpdateReplayTrigger();
+            globalConfig.switchUpdateReplayTrigger();
         });
 
         replayDialogBuilder.setView(replayDialogView);

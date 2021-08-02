@@ -154,6 +154,7 @@ public class CameraFragment extends Fragment {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    // Necessary to avoid exception because TFL API learns in training batches of 20 Samples
                     viewModel.increaseNumSamples(sampleClass);
                     if (numSamplesPerClass > 20) {
                         viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.STARTED);

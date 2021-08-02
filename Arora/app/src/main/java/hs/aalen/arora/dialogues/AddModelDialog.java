@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import hs.aalen.arora.persistence.DatabaseHelper;
 import hs.aalen.arora.persistence.SQLiteHelper;
-import hs.aalen.arora.persistence.GlobalSettings;
+import hs.aalen.arora.persistence.GlobalConfig;
 import hs.aalen.arora.R;
 import hs.aalen.arora.persistence.SharedPrefsHelper;
 
@@ -23,12 +23,12 @@ public class AddModelDialog implements Dialog {
     private AlertDialog addModelDialog;
     private EditText dialogModelName;
     private DatabaseHelper databaseHelper;
-    private GlobalSettings settings;
+    private GlobalConfig globalConfig;
 
     @Override
     public void createDialog(Context context) {
         databaseHelper = new SQLiteHelper(context);
-        settings = new SharedPrefsHelper(context);
+        globalConfig = new SharedPrefsHelper(context);
         // Add Model dialog items
         AlertDialog.Builder addModelDialogBuilder = new AlertDialog.Builder(context);
         final View addModelDialogView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.add_model_dialog_popup, null);
@@ -52,7 +52,7 @@ public class AddModelDialog implements Dialog {
             } else {
                 // Insert a model to DB and set it up for Transfer Learning
                 if (databaseHelper.insertModel(modelName)) {
-                    settings.setCurrentModelID(databaseHelper.getModelIdByName(modelName));
+                    globalConfig.setCurrentModelID(databaseHelper.getModelIdByName(modelName));
                     dialogModelName.setText("");
                     addModelDialog.dismiss();
                 } else {

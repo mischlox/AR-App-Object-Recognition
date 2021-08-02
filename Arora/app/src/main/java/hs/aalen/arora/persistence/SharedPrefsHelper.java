@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import hs.aalen.arora.R;
-import hs.aalen.arora.persistence.GlobalSettings;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -13,7 +12,7 @@ import static android.content.Context.MODE_PRIVATE;
  *
  * @author Michael Schlosser
  */
-public class SharedPrefsHelper implements GlobalSettings {
+public class SharedPrefsHelper implements GlobalConfig {
     Context context;
     SharedPreferences prefs;
 

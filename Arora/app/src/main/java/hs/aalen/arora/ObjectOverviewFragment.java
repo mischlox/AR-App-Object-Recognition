@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 import hs.aalen.arora.persistence.DatabaseHelper;
-import hs.aalen.arora.persistence.GlobalSettings;
+import hs.aalen.arora.persistence.GlobalConfig;
 import hs.aalen.arora.persistence.SQLiteHelper;
 import hs.aalen.arora.persistence.SharedPrefsHelper;
 import hs.aalen.arora.utils.DateUtils;
@@ -49,7 +49,7 @@ public class ObjectOverviewFragment extends ListFragment {
     private final ArrayList<byte[]> objectPreviewImages = new ArrayList<>();
     private final ArrayList<Integer> objectNumSamples = new ArrayList<>();
     private DatabaseHelper objectDatabaseHelper;
-    private GlobalSettings settings;
+    private GlobalConfig globalConfig;
     private ListView objectListView;
 
     @Override
@@ -63,7 +63,7 @@ public class ObjectOverviewFragment extends ListFragment {
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_object_overview, container, false);
         objectDatabaseHelper = new SQLiteHelper(getActivity());
-        settings = new SharedPrefsHelper(requireActivity());
+        globalConfig = new SharedPrefsHelper(requireActivity());
         objectListView = view.findViewById(android.R.id.list);
         TextView noObjectsText = view.findViewById(R.id.no_objects_info_text);
         if (populateView())
@@ -163,7 +163,7 @@ public class ObjectOverviewFragment extends ListFragment {
         public View getView(int position, @Nullable View convertView, ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) requireActivity()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            GlobalSettings settings = new SharedPrefsHelper(context);
+            GlobalConfig globalConfig = new SharedPrefsHelper(context);
 
             item = layoutInflater.inflate(R.layout.object_item, parent, false);
 
@@ -178,7 +178,7 @@ public class ObjectOverviewFragment extends ListFragment {
 
             ImageView previewImageView = item.findViewById(R.id.list_image_preview);
             // Mark objects that are in the selected model
-            if(modelID.get(position).equals(settings.getCurrentModelID())) {
+            if(modelID.get(position).equals(globalConfig.getCurrentModelID())) {
                 previewImageView.setBackgroundColor(ContextCompat.getColor(context, R.color.blue_arora));
             }
             else {
@@ -282,9 +282,9 @@ public class ObjectOverviewFragment extends ListFragment {
             Button addSamplesButton = addSamplesDialogView.findViewById(R.id.dialog_add_samples_button);
             addSamplesButton.setOnClickListener(v -> {
                 String objectName = objectNames.get(position);
-                settings.setCurrentModelPos(objectName);
-                objectDatabaseHelper.addSamplesToObject(objectName, settings.getAmountSamples());
-                settings.switchAddSamplesTrigger();
+                globalConfig.setCurrentModelPos(objectName);
+                objectDatabaseHelper.addSamplesToObject(objectName, globalConfig.getAmountSamples());
+                globalConfig.switchAddSamplesTrigger();
                 addSamplesDialog.dismiss();
             });
 

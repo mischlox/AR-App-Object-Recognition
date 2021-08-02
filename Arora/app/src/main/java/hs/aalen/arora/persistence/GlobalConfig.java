@@ -5,7 +5,7 @@ package hs.aalen.arora.persistence;
  *
  * @author Michael Schlosser
  */
-public interface GlobalSettings {
+public interface GlobalConfig {
     double SMALL = 0.5;
     double MEDIUM = 0.75;
     double LARGE = 1;

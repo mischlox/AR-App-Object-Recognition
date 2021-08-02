@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import hs.aalen.arora.dialogues.DialogFactory;
 import hs.aalen.arora.dialogues.DialogType;
-import hs.aalen.arora.persistence.GlobalSettings;
+import hs.aalen.arora.persistence.GlobalConfig;
 import hs.aalen.arora.persistence.SharedPrefsHelper;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
@@ -53,7 +53,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     private int amountSamples = 50;
     private String className;
 
-    private GlobalSettings settings;
+    private GlobalConfig globalConfig;
 
     // Checks if SharedPreferences were changed and delegates calls to its fragments
     SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -61,18 +61,18 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             try {
                 if (key.equals(getString(R.string.key_resolution))) {
-                    cameraFragment.setFocusBoxRatio(settings.getFocusBoxRatio());
+                    cameraFragment.setFocusBoxRatio(globalConfig.getFocusBoxRatio());
                 } else if (key.equals(getString(R.string.key_nightmode))) {
-                    if (settings.getNightMode()) {
+                    if (globalConfig.getNightMode()) {
                         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                     } else {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     }
                     recreate();
                 } else if (key.equals(getString(R.string.key_seekbar))) {
-                    amountSamples = settings.getAmountSamples();
+                    amountSamples = globalConfig.getAmountSamples();
                 } else if (key.equals("addSamplesState")) {
-                    if (settings.getAddSamplesTrigger()) {
+                    if (globalConfig.getAddSamplesTrigger()) {
                         // This can only happen if adding further samples from Object Overview
                         if(!cameraFragment.isAdded()) {
                             getSupportFragmentManager()
@@ -81,39 +81,39 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
                                     .commit();
                         }
                         Log.d(TAG, "onSharedPreferenceChanged: backup Start training");
-                        if(className == null) className = settings.getCurrentModelPos();
+                        if(className == null) className = globalConfig.getCurrentModelPos();
                         cameraFragment.addSamples(className, amountSamples);
                         cameraFragment.setNewObjectAdded(true);
-                        settings.switchAddSamplesTrigger();
+                        globalConfig.switchAddSamplesTrigger();
                     }
                 } else if (key.equals("illegalStateTrigger")) {
-                    if (settings.getIllegalStateTrigger()) {
-                        cameraFragment.removeObjectFromModel(settings.getCurrentObjectName(),
-                                settings.getCurrentModelID(),
+                    if (globalConfig.getIllegalStateTrigger()) {
+                        cameraFragment.removeObjectFromModel(globalConfig.getCurrentObjectName(),
+                                globalConfig.getCurrentModelID(),
                                 true);
-                        settings.switchIllegalStateTrigger();
+                        globalConfig.switchIllegalStateTrigger();
                         Toast.makeText(CameraActivity.this, R.string.please_do_not_change_tabs, Toast.LENGTH_SHORT).show();
                     }
                 } else if(key.equals("updateReplayTrigger")) {
-                    if(settings.getUpdateReplayTrigger()) {
+                    if(globalConfig.getUpdateReplayTrigger()) {
                         cameraFragment.updateReplayBuffer();
-                        settings.switchUpdateReplayTrigger();
+                        globalConfig.switchUpdateReplayTrigger();
                     }
                 } else if (key.equals("currentClass")) {
-                    className = settings.getCurrentModelPos();
+                    className = globalConfig.getCurrentModelPos();
                 } else if (key.equals("currentModel")) {
-                    cameraFragment.setModelID(settings.getCurrentModelID());
+                    cameraFragment.setModelID(globalConfig.getCurrentModelID());
                     if (cameraFragment.isAdded()) {
                         cameraFragment.loadNewModel();
                     } else if (modelOverviewFragment.isAdded()) {
                         modelOverviewFragment.populateView();
                     }
                 } else if (key.equals("maxObjects")) {
-                    cameraFragment.setPositionsList(settings.getMaxObjects());
+                    cameraFragment.setPositionsList(globalConfig.getMaxObjects());
                 } else if (key.equals("key_countdown")) {
-                    cameraFragment.setCountDown(settings.getCountDown());
+                    cameraFragment.setCountDown(globalConfig.getCountDown());
                 } else if (key.equals("key_confidence")) {
-                    cameraFragment.setConfidenceThres(settings.getConfidenceThreshold());
+                    cameraFragment.setConfidenceThres(globalConfig.getConfidenceThreshold());
                 }
 
             } catch (NullPointerException e) {
@@ -127,19 +127,19 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: entrypoint");
         super.onCreate(savedInstanceState);
-        settings = new SharedPrefsHelper(this);
-        SharedPrefsHelper prefsHelper = (SharedPrefsHelper) settings;
+        globalConfig = new SharedPrefsHelper(this);
+        SharedPrefsHelper prefsHelper = (SharedPrefsHelper) globalConfig;
         prefsHelper.getPrefs().registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
         setContentView(R.layout.activity_camera);
 
         // Configure cameraFragment on startup
-        amountSamples = settings.getAmountSamples();
-        cameraFragment.setFocusBoxRatio(settings.getFocusBoxRatio());
-        cameraFragment.setModelID(settings.getCurrentModelID());
-        cameraFragment.setPositionsList(settings.getMaxObjects());
-        cameraFragment.setCountDown(settings.getCountDown());
-        cameraFragment.setConfidenceThres(settings.getConfidenceThreshold());
-        cameraFragment.setPositionsList(settings.getMaxObjects());
+        amountSamples = globalConfig.getAmountSamples();
+        cameraFragment.setFocusBoxRatio(globalConfig.getFocusBoxRatio());
+        cameraFragment.setModelID(globalConfig.getCurrentModelID());
+        cameraFragment.setPositionsList(globalConfig.getMaxObjects());
+        cameraFragment.setCountDown(globalConfig.getCountDown());
+        cameraFragment.setConfidenceThres(globalConfig.getConfidenceThreshold());
+        cameraFragment.setPositionsList(globalConfig.getMaxObjects());
 
         // Bind navigation views
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -192,7 +192,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
      * Skips the showing of the Help Dialog if disabled and starts the Add Object Dialog directly
      */
     public void createDialog() {
-        boolean showHelp = settings.getHelpShowing();
+        boolean showHelp = globalConfig.getHelpShowing();
 
         if (showHelp) {
             DialogFactory.getDialog(DialogType.HELP).createDialog(this);

@@ -12,19 +12,19 @@ import java.io.File;
 
 import hs.aalen.arora.persistence.DatabaseHelper;
 import hs.aalen.arora.persistence.SQLiteHelper;
-import hs.aalen.arora.persistence.GlobalSettings;
+import hs.aalen.arora.persistence.GlobalConfig;
 import hs.aalen.arora.R;
 import hs.aalen.arora.persistence.SharedPrefsHelper;
 
 public class ResetAppDialog implements Dialog {
     private AlertDialog resetAppDialog;
     private DatabaseHelper databaseHelper;
-    private GlobalSettings settings;
+    private GlobalConfig globalConfig;
 
     @Override
     public void createDialog(Context context) {
         databaseHelper = new SQLiteHelper(context);
-        settings = new SharedPrefsHelper(context);
+        globalConfig = new SharedPrefsHelper(context);
         AlertDialog.Builder resetAppDialogBuilder = new AlertDialog.Builder(context);
         final View resetAppDialogView = ((LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
@@ -55,7 +55,7 @@ public class ResetAppDialog implements Dialog {
      * @return true if successful, false otherwise
      */
     private boolean deleteAllData() {
-        settings.clearConfiguration();
+        globalConfig.clearConfiguration();
         Cursor cursor = databaseHelper.getAllModels();
         long success = 1;
         while (cursor.moveToNext()) {

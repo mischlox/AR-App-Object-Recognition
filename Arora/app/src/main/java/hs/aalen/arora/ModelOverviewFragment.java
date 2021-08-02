@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import hs.aalen.arora.dialogues.DialogFactory;
 import hs.aalen.arora.dialogues.DialogType;
 import hs.aalen.arora.persistence.DatabaseHelper;
-import hs.aalen.arora.persistence.GlobalSettings;
+import hs.aalen.arora.persistence.GlobalConfig;
 import hs.aalen.arora.persistence.SQLiteHelper;
 import hs.aalen.arora.persistence.SharedPrefsHelper;
 
@@ -46,7 +46,7 @@ public class ModelOverviewFragment extends ListFragment {
     private static final String TAG = ModelOverviewFragment.class.getSimpleName();
     private final ArrayList<String> modelNames = new ArrayList<>();
     private DatabaseHelper modelDatabaseHelper;
-    private GlobalSettings settings;
+    private GlobalConfig globalConfig;
     private ListView modelListView;
 
     @Override
@@ -60,7 +60,7 @@ public class ModelOverviewFragment extends ListFragment {
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_model_overview, container, false);
         modelDatabaseHelper = new SQLiteHelper(getActivity());
-        settings = new SharedPrefsHelper(requireContext());
+        globalConfig = new SharedPrefsHelper(requireContext());
         FloatingActionButton addModelButton = view.findViewById(R.id.list_model_add_model_button);
 
         addModelButton.setOnClickListener(v -> DialogFactory.getDialog(DialogType.ADD_MODEL).createDialog(getContext()));
@@ -113,8 +113,8 @@ public class ModelOverviewFragment extends ListFragment {
             this.context = c;
             this.modelName = name;
 
-            if(settings.getCurrentModelID() != null) {
-                this.selectedPosition = Integer.parseInt(settings.getCurrentModelID()) - 1;
+            if(globalConfig.getCurrentModelID() != null) {
+                this.selectedPosition = Integer.parseInt(globalConfig.getCurrentModelID()) - 1;
             }
             else {
                 this.selectedPosition = -1;
@@ -143,14 +143,14 @@ public class ModelOverviewFragment extends ListFragment {
             modelSelectorButton.setOnClickListener(v -> {
                 selectedPosition = (Integer) v.getTag();
                 int newModelID = selectedPosition + 1;
-                settings.setCurrentModelID(newModelID + "");
+                globalConfig.setCurrentModelID(newModelID + "");
                 Log.d(TAG, "onClick: test model selection: current model: "
-                        + settings.getCurrentModelID());
+                        + globalConfig.getCurrentModelID());
                 Log.d(TAG, "onClick: test model selection: current model: "
-                        + settings.getCurrentModelID() + " selected position: " +  selectedPosition + " new Model ID: " + newModelID + " position: " + position);
+                        + globalConfig.getCurrentModelID() + " selected position: " +  selectedPosition + " new Model ID: " + newModelID + " position: " + position);
                 notifyDataSetChanged();
             });
-            if(position == selectedPosition && modelDatabaseHelper.modelIsFrozen(settings.getCurrentModelID())) {
+            if(position == selectedPosition && modelDatabaseHelper.modelIsFrozen(globalConfig.getCurrentModelID())) {
                 infoButton.setVisibility(View.VISIBLE);
             } else {
                 infoButton.setVisibility(View.INVISIBLE);
@@ -164,7 +164,7 @@ public class ModelOverviewFragment extends ListFragment {
         }
 
         public void updateProgressBar(int position) {
-            int maxObjects = settings.getMaxObjects();
+            int maxObjects = globalConfig.getMaxObjects();
             int numCurrentObjects = modelDatabaseHelper.getAllObjectsByModelID((position + 1) + "").getCount();
             numObjectsInModelProgressBar.setMax(maxObjects);
             numObjectsInModelProgressBar.setProgress(numCurrentObjects);

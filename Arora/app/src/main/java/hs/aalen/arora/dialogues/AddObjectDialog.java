@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import hs.aalen.arora.persistence.DatabaseHelper;
 import hs.aalen.arora.persistence.SQLiteHelper;
-import hs.aalen.arora.persistence.GlobalSettings;
+import hs.aalen.arora.persistence.GlobalConfig;
 import hs.aalen.arora.R;
 import hs.aalen.arora.persistence.SharedPrefsHelper;
 
@@ -26,12 +26,12 @@ public class AddObjectDialog implements Dialog {
     private EditText dialogObjectType;
     private EditText dialogObjectAdditionalData;
     private DatabaseHelper databaseHelper;
-    private GlobalSettings settings;
+    private GlobalConfig globalConfig;
 
     @Override
     public void createDialog(Context context) {
         databaseHelper = new SQLiteHelper(context);
-        settings = new SharedPrefsHelper(context);
+        globalConfig = new SharedPrefsHelper(context);
         // Add Object Dialog items
         AlertDialog.Builder addObjectDialogBuilder = new AlertDialog.Builder(context);
         final View addObjectDialogView = ((LayoutInflater) context
@@ -55,17 +55,17 @@ public class AddObjectDialog implements Dialog {
             String objectAdditionalData = dialogObjectAdditionalData.getText().toString();
 
             if (objectName.length() != 0) {
-                long success = addObject(objectName, objectType, objectAdditionalData, settings.getCurrentModelID());
+                long success = addObject(objectName, objectType, objectAdditionalData, globalConfig.getCurrentModelID());
                 if (success != -1) {
                     // Save the name of the object to Global Configuration
-                    settings.setCurrentModelPos(dialogObjectName.getText().toString());
-                    settings.setCurrentObjectName(objectName);
+                    globalConfig.setCurrentModelPos(dialogObjectName.getText().toString());
+                    globalConfig.setCurrentObjectName(objectName);
                     // Reset text
                     dialogObjectName.setText("");
                     dialogObjectType.setText("");
                     dialogObjectAdditionalData.setText("");
                     // Trigger adding Samples in Camera Fragment and therefore start training
-                    settings.switchAddSamplesTrigger();
+                    globalConfig.switchAddSamplesTrigger();
                     addObjectDialog.dismiss();
                 } else {
                     Toast.makeText(context, R.string.object_exists, Toast.LENGTH_SHORT).show();
@@ -87,7 +87,7 @@ public class AddObjectDialog implements Dialog {
      * @return id of inserted object
      */
     private long addObject(String objectName, String objectType, String objectAdditionalData, String modelID) {
-        settings.setCurrentObjectName(objectName);
+        globalConfig.setCurrentObjectName(objectName);
         return databaseHelper.insertObject(objectName, objectType, objectAdditionalData, modelID);
     }
 }
