@@ -104,7 +104,7 @@ public class CameraFragment extends Fragment {
     private Size viewFinderDimens = new Size(0, 0);
     private CameraFragmentViewModel viewModel;
 
-    private ContinualLearningModelWrapper transferLearningModel;
+    private ContinualLearningModelWrapper continualLearningModel;
     private Bitmap preview = null;
     private String currentObjectName; // for mapping preview image correctly
 
@@ -145,8 +145,8 @@ public class CameraFragment extends Fragment {
                         databaseHelper.updateImageBlob(currentObjectName, preview);
                     }
                     try {
-                        transferLearningModel.addSample(rgbImage, sampleClass).get();
-                        transferLearningModel.storeTrainingSample();
+                        continualLearningModel.addSample(rgbImage, sampleClass).get();
+                        continualLearningModel.storeTrainingSample();
                     } catch (ExecutionException | NullPointerException | IllegalStateException e) {
                         removeObjectFromModel(currentObjectName, modelID, true);
                         Toast.makeText(context, R.string.please_do_not_change_tabs, Toast.LENGTH_LONG).show();
@@ -168,7 +168,7 @@ public class CameraFragment extends Fragment {
                     // at the time, so the inference results are not actually displayed.
                     TransferLearningModel.Prediction[] predictions = null;
                     try {
-                        predictions = transferLearningModel.predict(rgbImage);
+                        predictions = continualLearningModel.predict(rgbImage);
                     } catch (NullPointerException | IllegalStateException e) {
                         // do nothing
                     }
@@ -276,7 +276,7 @@ public class CameraFragment extends Fragment {
             DialogFactory.getDialog(DialogType.ADD_MODEL).createDialog(context);
         } else {
             mapObjectsFromDB();
-            transferLearningModel = new ContinualLearningModelWrapper(getActivity(), positionsList, modelID);
+            continualLearningModel = new ContinualLearningModelWrapper(getActivity(), positionsList, modelID);
         }
     }
 
@@ -343,11 +343,11 @@ public class CameraFragment extends Fragment {
                         trainingState -> {
                             switch (trainingState) {
                                 case STARTED:
-                                    transferLearningModel.enableTraining((epoch, loss) -> viewModel.setLastLoss(loss));
+                                    continualLearningModel.enableTraining((epoch, loss) -> viewModel.setLastLoss(loss));
                                     Log.d(TAG, "addSamples:  training enabled");
                                     break;
                                 case PAUSED:
-                                    transferLearningModel.disableTraining();
+                                    continualLearningModel.disableTraining();
                                     Log.d(TAG, "addSamples: training disabled (pause)");
                                     setProgressCircle(0);
                                     break;
@@ -700,8 +700,8 @@ public class CameraFragment extends Fragment {
             addSampleRequests.clear();
             Toast.makeText(context, R.string.please_do_not_change_tabs, Toast.LENGTH_SHORT).show();
         }
-        transferLearningModel.close();
-        transferLearningModel = null;
+        continualLearningModel.close();
+        continualLearningModel = null;
     }
 
     public void setCountDown(int countDown) {
@@ -783,8 +783,8 @@ public class CameraFragment extends Fragment {
         this.newObjectAdded = newObjectAdded;
     }
 
-    public ContinualLearningModelWrapper getTransferLearningModel() {
-        return transferLearningModel;
+    public ContinualLearningModelWrapper getContinualLearningModel() {
+        return continualLearningModel;
     }
 
     public void updateReplayBuffer() {
@@ -797,7 +797,7 @@ public class CameraFragment extends Fragment {
             replayText.setVisibility(VISIBLE);
         });
         executor.execute(() -> {
-            transferLearningModel.updateReplayBufferSmart();
+            continualLearningModel.updateReplayBufferSmart();
             handler.post(() -> {
                 replaySpinner.setVisibility(View.INVISIBLE);
                 replayText.setVisibility(View.INVISIBLE);
