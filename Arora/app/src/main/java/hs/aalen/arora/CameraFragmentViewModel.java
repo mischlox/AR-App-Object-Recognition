@@ -31,7 +31,6 @@ public class CameraFragmentViewModel extends ViewModel {
     private final MutableLiveData<Map<String, Integer>> numSamples = new MutableLiveData<>(new TreeMap<>());
     private final MutableLiveData<TrainingState> trainingState = new MutableLiveData<>(TrainingState.NOT_STARTED);
     private final MutableLiveData<Float> lastLoss = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> inferenceSnackbarWasDisplayed = new MutableLiveData<>(false);
     private final ArrayList<String> positions = new ArrayList<>();
     private LiveData<String> firstChoice;
 
@@ -121,13 +120,6 @@ public class CameraFragmentViewModel extends ViewModel {
 
     public void setLastLoss(float newLoss) {
         lastLoss.postValue(newLoss);
-    }
-
-    /**
-     * Whether "you can switch to inference mode now" snackbar has been shown before.
-     */
-    public MutableLiveData<Boolean> getInferenceSnackbarWasDisplayed() {
-        return inferenceSnackbarWasDisplayed;
     }
 
     /**
