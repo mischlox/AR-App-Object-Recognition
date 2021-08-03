@@ -53,20 +53,23 @@
 \contentsline {subsection}{\numberline {4.5.1}Klassendiagramme}{19}{subsection.4.5.1}%
 \contentsline {subsubsection}{\nonumberline Persistenz-Komponente}{19}{section*.21}%
 \contentsline {subsubsection}{\nonumberline Kamera Fragment}{19}{section*.23}%
-\contentsline {subsubsection}{\nonumberline Modell- und Objektübersicht}{21}{section*.24}%
-\contentsline {subsection}{\numberline {4.5.2}Kommunikation der Komponenten}{21}{subsection.4.5.2}%
-\contentsline {subsection}{\numberline {4.5.3}Vorbereitung und Vorschau der Kameradaten}{23}{subsection.4.5.3}%
-\contentsline {subsection}{\numberline {4.5.4}Einlernen von Objekten}{24}{subsection.4.5.4}%
-\contentsline {subsection}{\numberline {4.5.5}Wiedererkennen von Objekten}{24}{subsection.4.5.5}%
-\contentsline {subsection}{\numberline {4.5.6}Laden bereits existierender Modell-Parameter}{25}{subsection.4.5.6}%
-\contentsline {chapter}{\numberline {5}Implementierung}{26}{chapter.5}%
-\contentsline {chapter}{\numberline {6}Tests}{27}{chapter.6}%
-\contentsline {chapter}{\numberline {7}Evaluation}{28}{chapter.7}%
-\contentsline {chapter}{\numberline {8}Zusammenfassung und Ausblick}{29}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Erreichte Ergebnisse}{29}{section.8.1}%
-\contentsline {section}{\numberline {8.2}Ausblick}{29}{section.8.2}%
-\contentsline {subsection}{\numberline {8.2.1}Erweiterbarkeit der Ergebnisse}{29}{subsection.8.2.1}%
-\contentsline {subsection}{\numberline {8.2.2}Übertragbarkeit der Ergebnisse}{29}{subsection.8.2.2}%
-\contentsline {chapter}{\nonumberline Literatur}{30}{chapter*.28}%
-\contentsline {chapter}{\numberline {A}Beschreibung der Anwendungsfälle}{31}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Anhang B}{47}{appendix.B}%
+\contentsline {subsubsection}{\nonumberline Modell- und Objektübersicht}{22}{section*.25}%
+\contentsline {subsection}{\numberline {4.5.2}Kommunikation der Komponenten}{22}{subsection.4.5.2}%
+\contentsline {subsection}{\numberline {4.5.3}Vorbereitung und Vorschau der Kameradaten}{24}{subsection.4.5.3}%
+\contentsline {subsection}{\numberline {4.5.4}Einlernen von Objekten}{25}{subsection.4.5.4}%
+\contentsline {subsection}{\numberline {4.5.5}Wiedererkennen von Objekten}{26}{subsection.4.5.5}%
+\contentsline {subsection}{\numberline {4.5.6}Speichern und Laden von Parameterdateien}{27}{subsection.4.5.6}%
+\contentsline {subsection}{\numberline {4.5.7}Anbindung des Latent-Replay Algorithmus}{27}{subsection.4.5.7}%
+\contentsline {subsection}{\numberline {4.5.8}Belegen der Modellpositionen mit Objekten}{28}{subsection.4.5.8}%
+\contentsline {subsection}{\numberline {4.5.9}Konfigurierbarkeit mit Einstellungsfragment}{28}{subsection.4.5.9}%
+\contentsline {chapter}{\numberline {5}Implementierung}{29}{chapter.5}%
+\contentsline {chapter}{\numberline {6}Tests}{30}{chapter.6}%
+\contentsline {chapter}{\numberline {7}Evaluation}{31}{chapter.7}%
+\contentsline {chapter}{\numberline {8}Zusammenfassung und Ausblick}{32}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Erreichte Ergebnisse}{32}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Ausblick}{32}{section.8.2}%
+\contentsline {subsection}{\numberline {8.2.1}Erweiterbarkeit der Ergebnisse}{32}{subsection.8.2.1}%
+\contentsline {subsection}{\numberline {8.2.2}Übertragbarkeit der Ergebnisse}{32}{subsection.8.2.2}%
+\contentsline {chapter}{\nonumberline Literatur}{33}{chapter*.30}%
+\contentsline {chapter}{\numberline {A}Beschreibung der Anwendungsfälle}{34}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Anhang B}{50}{appendix.B}%

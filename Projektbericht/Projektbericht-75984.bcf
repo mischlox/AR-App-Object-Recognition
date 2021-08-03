@@ -2195,6 +2195,8 @@
     <bcf:citekey order="10">tflite-site</bcf:citekey>
     <bcf:citekey order="11">cl-vs-tl</bcf:citekey>
     <bcf:citekey order="12">Pellegrini2019</bcf:citekey>
+    <bcf:citekey order="13">Pellegrini2019</bcf:citekey>
+    <bcf:citekey order="14">cl-vs-tl</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

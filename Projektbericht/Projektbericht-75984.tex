@@ -354,13 +354,26 @@ Abbildung \ref{fig:class-diagram-persistence} zeigt den Aufbau der Komponenten a
 \end{figure}
 Durch die Verwendung von Schnittstellen wurde das Dependency Inversion Principle angewendet. Bei Bedarf ist es dadurch möglich die SQLite Datenbank durch eine andere auszutauschen unter der Bedingung, dass alle Methoden der Schnittstelle implementiert werden.
 \subsubsection{Kamera Fragment}
+Das Kamerafragment enthält Methoden zur Ansteuerung des Continual Learning Modell Wrappers und zur Konfiguration und Vorbereitung der Kameradaten. Zudem werden die in der Datenbank gespeicherten Objekte an die Endknoten des Modells angeheftet, um bei einer Wiedererkennung die Daten des Objektes wiederanzeigen lassen zu können.\\ 
+Aufgrund des Einsetzens des MVVM-Patterns wird ein Viewmodel für das Fragment aggregiert, welches unter Verwendung von Livedaten die Graphische Oberfläche kontinuierlich aktualisiert. Die Livedaten werden hierbei innerhalb eines anonymen Observers, welcher in der von Fragment geerbten \glqq \textit{onViewCreated}\grqq-Methode erzeugt werden.\\
+Um den Wertebereich des Trainingsstatus zu optimieren, wird eine Enumeration mit den Status \glqq Noch nicht gestartet \grqq, \glqq Gestartet \grqq\ und \glqq pausiert\grqq\ eingebunden.\\
+Um die Daten in Echtzeit und eine möglichst nicht blockierende Applikation zu schreiben, wird eine Unterklasse zum Hinzufügen von Trainingsdatenanfragen als Thread ausgeführt, welche zudem einen Countdown vor dem Starten der Methode zum Trainingsdaten hinzufügen ausführt.\\
+Der Continual Learning Model Wrapper erweitert die von Tensorflow Lite zur Verfügung gestellte Transfer Learning \ac{api}, um den Latent-Replay-Algorithmus und Methoden um die Modellparameter in einer separaten Datei abzuspeichern und zu laden.\\
+Die Transfer Learning \ac{api} stellt die wichtigsten Methoden für das Training, die Inferenz und dem Speichern und Laden von Parameterdaten zur Verfügung.
 // auch auf Funktionsweise und Bereitstellung der Methoden der TFLITE API eingehen
-\subsubsection{Modell- und Objektübersicht}
-Da die Modell- und Objektübersicht analog aufgebaut sind, wird die Beschreibung der Komponenten auf Klassenebene in einem einzigen Unterkapitel vereint.\\
-Die Verbindung zur Persistenzkomponente ermöglicht es die Listeninstanzen mit Daten aus der Datenbank zu füllen. Zur Erstellung einer angepassten Listenansicht wurde der Listenadapter von Android erweitert. Dieser Listenadapter bietet die Möglichkeit eine Listenansicht zu Erstellen, anhand der Position zu identifizieren und Listelement-spezifische Operationen durchzuführen. Das Dialog-Paket wird ebenfalls genutzt und fördert somit die Wiederverwendbarkeit der Komponenten. Abbildung \ref{fig:overview-classdiagram} zeigt die statische Struktur der Modell- und Objektübersicht auf Klassenebene.
+
 \begin{figure}[hptb]
 	\centering
-	\includegraphics[height=0.8\textheight]{images/object-overview-class-diagram.png}
+	\includegraphics[height=0.55\textheight]{images/camera-fragment-class-diagram.png}
+	\caption{UML-Klassendiagramm der Wiedererkennungs-Komponente} Quelle: Eigene Darstellung
+	\label{fig:recognition-classdiagram}
+\end{figure}
+\subsubsection{Modell- und Objektübersicht}
+Da die Modell- und Objektübersicht analog aufgebaut sind, wird die Beschreibung der Komponenten auf Klassenebene in einem einzigen Unterkapitel vereint.\\
+Die Verbindung zur Persistenzkomponente ermöglicht es die Listeninstanzen mit Daten aus der Datenbank zu füllen. Zur Erstellung einer angepassten Listenansicht wurde der Listenadapter von Android erweitert. Dieser Listenadapter bietet die Möglichkeit eine Listenansicht zu Erstellen, anhand der Position der zu identifizierenden Elemente. Dadurch können Listelement-spezifische Daten an die Methoden übergeben werden. Ein Beispiel hierfür ist das Einfügen von Click-Listenern auf Buttons, welche anhang dieser Position angesteuert werden. Das Dialog-Paket wird ebenfalls genutzt und fördert somit die Wiederverwendbarkeit der Komponenten. Abbildung \ref{fig:overview-classdiagram} zeigt die statische Struktur der Modell- und Objektübersicht auf Klassenebene.
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.7\textheight]{images/object-overview-class-diagram.png}
 	\caption{UML-Klassendiagramm der Objekt- und Modellübersicht} Quelle: Eigene Darstellung
 	\label{fig:overview-classdiagram}
 \end{figure}
@@ -404,12 +417,34 @@ Wenn sich in der Warteschlange Trainingsanfragen befinden, wird die eingehende B
 Der Wrapper leitet das Training an die Transfer Learning \ac{api} weiter, welche das Modell nun für die übergebene Modellposition trainiert.
 Dieser Trainingsprozess findet kontinuierlich statt, durch das starten eines Trainingthreads im Wrapper.\\
 Parallel dazu wird der Trainingsfortschritt prozentual ermittelt und im View Model aktualisiert. Ein Observer aktualisiert nun während des Trainings einen Ladekreis auf der graphischen Oberfläche.\\
-Falls ein Fehlerfall eintritt, wie beispielsweise dem frühzeitigen Wechseln des Fragments, werden die Änderungen in der Datenbank zurückgesetzt und somit das noch nicht fertig trainierte Objekte wieder gelöscht. Zudem wird der Nutzer über seinen Fehler durch eine Meldung informiert.
+Falls ein Fehlerfall eintritt, wie beispielsweise dem frühzeitigen Wechseln des Fragments, werden die Änderungen in der Datenbank zurückgesetzt und somit das noch nicht fertig trainierte Objekte wieder gelöscht. Zudem wird der Nutzer über seinen Fehler durch eine Meldung informiert.\\
 
 \subsection{Wiedererkennen von Objekten}
-Das Wiedererkennen von Objekten findet kontinuierlich statt, wenn die Anfragewarteschlange leer ist. Hierfür wird eine Methode Im Modell-Wrapper, welche direkt die Inferenzmethode der Transfer Learning \ac{api} aufruft, ausgeführt. Die Ergebnisse aktualisieren im angebundenen View Model das erkannte Objekt und die Konfidenz dazu. Mithilfe eines Observers wird die graphische Oberfläche kontinuierlich aktualisiert.
-\subsection{Laden bereits existierender Modell-Parameter}
-// On create map objects und so
+Das Wiedererkennen von Objekten findet kontinuierlich statt, wenn die Anfragewarteschlange leer ist. Hierfür wird eine Methode Im Modell-Wrapper, welche direkt die Inferenzmethode der Transfer Learning \ac{api} aufruft, ausgeführt. Die Ergebnisse aktualisieren im angebundenen View Model das erkannte Objekt und die Konfidenz dazu. Mithilfe eines Observers wird die graphische Oberfläche kontinuierlich aktualisiert.\\
+Die eben erklärten Abläufe zum Einlernen und Wiedererkennen von Objekten, werden in Abbildung \ref{fig:activity-diagram-model} als Aktivitätsdiagramm graphisch dargestellt.
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/addobject-diagram.png}	\caption{UML-Aktivitätsdiagramm: Einlernen und Wiedererkennen von Objekten} Quelle: Eigene Darstellung
+	\label{fig:activity-diagram-model}
+\end{figure}
+\subsection{Speichern und Laden von Parameterdateien}
+Eine Parameterdatei bezeichnet die Parametrisierung des Modells, welche binär in einer Datei abgespeichert wird. Um Mehrdeutigkeit zu vermeiden wird die Bezeichnung \textit{model-parameters} mit einer möglichst zufällig generierten Zeichenfolge und dem Suffix \textit{.bin} konkateniert und eine leere Datei wird im Verzeichnis der Applikation erzeugt.\\
+Die Transfer Learning \ac{api} stellt Methoden zum Speichern und Laden von Modell-Parametern zur Verfügung. Durch das Erzeugen eines Ein-/Ausgabestromes können die Dateien unter Angabe des absoluten Pfades der eben generierten leeren Datei zur Laufzeit der Applikation geladen beziehungsweise mit Binärdaten gefüllt werden.
+\subsection{Anbindung des Latent-Replay Algorithmus}
+Zu Beginn der Entwicklung der Applikation wurde lediglich auf Basis des Model-Personalization-Beispiels, welches von Tensorflow Lite zur Verfügung gestellt wird, die Funktionalität der Wiedererkennung von Objekten realisiert. Im Laufe der Testphase, wurde jedoch klar, dass das Phänomen des Katastrophalen Vergessens fatal für eine wiederverwendbare Applikation ist. Transfer Learning funktioniert, solange das Modell nicht geschlossen beziehungsweise neu gestartet wird. Bereits das Wechseln der Fragmente zur Laufzeit verursacht das Schließen des Transfer Learning Modells. Dies hat zur Folge, dass die Trainingsdaten aus der letzten Sitzung nicht mehr für das Modell zur Verfügung stehen.\\
+Bereits in der Anfangsphase dieser Projektarbeit, wurde der Latent-Replay Algorithmus von Pellegrini et al. studiert, welcher eine Lösung zum Phänomen des Katastrophalen Vergessens vorstellt \cite{Pellegrini2019}. Aufgrund keiner vorhandenen Beispielimplementierung wurde dieser Ansatz jedoch verworfen.\\
+Im Laufe der Implementierungsphase der Applikation dieser Projektarbeit publizierten Demosthenous et al. ein Paper mit zugehörigem offenen Quellcode, welcher die Einbindung des Latent-Replay Algorithmus unter Verwendung der Transfer Learning API massiv erleichtern konnte \cite{cl-vs-tl}. Auf Basis dieser Beispielimplementierung wurde der Algorithmus eingebunden. Lediglich wenige Änderungen waren hierfür notwendig.\\
+Sobald der Analysierer Trainingsanfragen erhält, werden während dem Hinzufügen der Trainingsdaten zum zugrundeliegenden Modell, die Daten persistent in der Datenbank abgespeichert, um diese später beim Ausführen des Latent-Replay erneut einzulernen.\\
+Methoden, in welchen die neuen Trainingsdaten an das Modell weitergegeben werden, werden durch eine Replay-Methode erweitert. Daraufhin werden die Trainingsdaten zusammen mit bereits vorhandenen Trainingsdaten zusammen trainiert und das Phänomen des Katastrophalen Vergessens kann gelöst werden.
+\subsection{Belegen der Modellpositionen mit Objekten}
+Das Anknüpfen der Objekte an die zur Verfügung stehenden Modellpositionen wird im Folgenden erklärt.\\
+Jedes Deep Learning Modell hat am am Ende der Netzarchitektur eine vordefinierte Anzahl an Ausgabeknoten, welche für die endgültige Klassifizierung nach Prozessieren der Eingabedaten einen Wert zwischen 0 und 1 annimmt. Diese ausgegebene Zahl kann als Konfidenzwert, das heißt die Sicherheit mit welcher das Modell die Eingabedaten diesem Ausgabeknoten zuordnen kann, interpretiert werden.\\
+Durch eine festdefinierte Anzahl an Ausgabeknoten, ergibt sich eine Einschränkung der gleichzeitig wiedererkennbaren Objekte, welches durch das Einführen von Objektordnern gelöst wird. Die Bezeichnung Objektordner ist gleichbedeutend mit der auch im Quellcode vorkommenden Bezeichnung Model und wurde gewählt, um den Nutzer mit technischen \ac{ml}-spezifischen Begriffen nicht zu überfordern.\\
+Es ist demnach möglich Objekte in ein Objektordner in Höhe der Anzahl an verfügbaren Endknoten des Modells zu speichern. In der Modellübersicht, beziehungsweise der Ordnerübersicht, lässt sich die Parametrisierung des Modells durch Selektieren eines anderen bereits bestehenden Modells wechseln.\\
+Bereits gespeicherte Objekte enthalten immer eine Referenz auf das Modell, welches die Bilddaten des Objektes trainiert hat.\\
+Das Camera Fragment View Model hält eine Liste an verfügbaren Modellpositionen. Bei Erzeugung des Fragments wird diese Liste mit der Anzahl an Objekten, die das ausgewählte Modell referenzieren, abgeglichen. Sobald ein Objekt zu diesem Modell gehört und eine Modellposition zugewiesen bekommen hat, wird die entsprechende Position aus der Liste des Viewmodels entfernt.\\
+Beim Hinzufügen von neuen Objekten wird die erste Position, die in der im View Model gespeicherten Liste vorkommt, zum Objekt hinzugefügt und persistent mit diesem abgespeichert. Falls die Liste leer ist, wird der Nutzer darüber informiert, dass der Objektordner, beziehungsweise das Modell, voll ist.
+\subsection{Konfigurierbarkeit mit Einstellungsfragment}
 \chapter{Implementierung}
 \label{cha:implementierung}
 Transfer Learning, quantisiertes MobilenetV2, Imagenet. 
