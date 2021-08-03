@@ -251,7 +251,6 @@ Die zu entwickelnde Applikation soll dem Hauptakteur \glqq User\grqq\ die in Abb
 \end{figure}
 %---
 \chapter{Entwurf}
-
 \label{cha:Entwurf}
 Auf der Basis der im vorangegangenen Kapitel erstellten Anforderungsanalyse 
 und der im Grundlagenkapitel aufgearbeiteten theoretischen Kenntnisse 
@@ -407,14 +406,15 @@ Durch Nutzung dieses Musters ist eine lose Kopplung der Komponenten möglich und
 \subsection{Vorbereitung und Vorschau der Kameradaten}
 Das Camera Fragment beinhaltet eine Vorschau in Echtzeit, welche dem Nutzer ermöglicht zu sehen, was die im Endgerät eingebaute Kamera sieht.\\
 Zur Realisierung dieser Funktionalität müssen diverse Konfigurationen vorgenommen werden. Hierzu gehört das Initialisieren der Ausrichtung des Gerätes (Portrait- oder Landscape-Modus), Das Seitenverhältnis, die Auflösung der Kamera und weiteren systembezogenen Einstellungen wie beispielsweise dem automatischen Fokussieren. Zudem wird ein Bildanalyse-Thread zur Vorkonfiguration der Kameraansicht hinzugefügt. Die Inferenz- und Trainingsfunktionalität wird direkt hier eingesetzt, da dies ermöglicht jeden angezeigten Frame asynchron zum Programmablauf zu akquirieren und zu verarbeiten. \\
-Nach Konfiguration der soeben beschriebenen Parameter, wird die Kamera an den Lebenszyklus des Fragments gebunden und demnach bei Öffnen des Fragments gestartet und Schließen beziehungsweise Wechseln geschlossen.
+Nach Konfiguration der soeben beschriebenen Parameter, wird die Kamera an den Lebenszyklus des Fragments gebunden und demnach bei Öffnen des Fragments gestartet und Schließen beziehungsweise Wechseln geschlossen.\\
 \subsection{Einlernen von Objekten}
 Das Einlernen und Wiedererkennen von Objekten sind die umfangreichsten und komplexesten Anwendungsfälle in der Applikation, welche diverse Komponenten involviert und Interprozesskommunikation von nebenläufigen Prozessen erfordert.\\
 Die Struktur und der Ablauf des in Anwendungsfall \ref{tab:use-case-add-object} beschriebenen sichtbaren Verhaltens, wird im Folgenden präziser erklärt.\\
 Nach Betätigung des \glqq +\grqq-Buttons auf der graphischen Oberfläche wird ein Dialogfenster erzeugt. Nach Eingabe der Informationen zum Objekt, löst der \glqq Training starten\grqq-Button im Dialogfenster unter Anwendung des in Kapitel \ref{cha:communication-components} beschriebenen Ablauf das Objekttraining aus. Parallel dazu werden die eingegebenen Daten des Objektes in der Datenbank gespeichert. Die Activity delegiert den Aufruf an das Camera Fragment, welches die Verantwortlichkeiten für das Einlernen trägt. \\
 Eine Warteschlange bestehend aus Modellpositionen wird hierbei innerhalb eines neuen Threads mit der vorkonfigurierten Anzahl an Trainingsdaten pro Objekttraining gefüllt.\\
 Diese Warteschlange wird kontinuierlich vom Analysierer abgefragt und entscheided dadurch, ob Objekte trainiert, oder lediglich Inferenz ausgeführt werden soll.\\
-Der Analysierer bereitet die stets zugeführten Bitmaps aus der Kamera für das Training vor. Hierbei wird die Bitmap in ein Float-Datenfeld konvertiert, da dies die Datenstruktur ist, mit welchem das zugrundeliegende Deep-Learning-Modell Eingangsbilder prozessiert.\\
+Der Analysierer bereitet die stets zugeführten Kameradaten im YUV-Format für das Training vor.\\
+Beim Vorbereiten der Daten werden die von der Kamera bereitgestellten Daten in Bitmaps umgewandelt und in die Größe der auf dem Bildschirm dargestellten Fokusbox zugeschnitten. Danach wird die Bitmap auf die Größe der Eingangsknoten des Netzes skaliert. Die Bitmap wird anschließend in ein Float-Datenfeld konvertiert, da dies die Datenstruktur ist, mit welchem das zugrundeliegende Deep-Learning-Modell Eingangsbilder prozessiert.\\
 Wenn sich in der Warteschlange Trainingsanfragen befinden, wird die eingehende Bitmap zum Objekt dazugespeichert, damit es bei der Wiedererkennung und in der Objektübersicht als Objektvorschau angezeigt werden kann. Das nun vorbereitete Trainingsdatenfeld wird in den Continual Learning Model Wrapper gegeben und zugleich zu den Trainingsdaten in der Datenbank abgespeichert.\\
 Der Wrapper leitet das Training an die Transfer Learning \ac{api} weiter, welche das Modell nun für die übergebene Modellposition trainiert.
 Dieser Trainingsprozess findet kontinuierlich statt, durch das starten eines Trainingthreads im Wrapper.\\
@@ -446,20 +446,25 @@ Es ist demnach möglich Objekte in ein Objektordner in Höhe der Anzahl an verf�
 Bereits gespeicherte Objekte enthalten immer eine Referenz auf das Modell, welches die Bilddaten des Objektes trainiert hat.\\
 Das Camera Fragment View Model hält eine Liste an verfügbaren Modellpositionen. Bei Erzeugung des Fragments wird diese Liste mit der Anzahl an Objekten, die das ausgewählte Modell referenzieren, abgeglichen. Sobald ein Objekt zu diesem Modell gehört und eine Modellposition zugewiesen bekommen hat, wird die entsprechende Position aus der Liste des Viewmodels entfernt.\\
 Beim Hinzufügen von neuen Objekten wird die erste Position, die in der im View Model gespeicherten Liste vorkommt, zum Objekt hinzugefügt und persistent mit diesem abgespeichert. Falls die Liste leer ist, wird der Nutzer darüber informiert, dass der Objektordner, beziehungsweise das Modell, voll ist.
-\subsection{Konfigurierbarkeit mit Einstellungsfragment}
-
-\subsection{Entwurf der Graphischen Oberfläche}
-
+\subsection{Konfigurierbarkeit}
+Die Konfigurierbarkeit der Applikation, soll mit einem zusätzlichen Fragment gewährleistet werden, dessen einzige Aufgabe es ist die Globale Konfiguration, beispielsweise realisiert durch Shared Preferences, für den Nutzer zugänglich zu machen durch Buttons, Schieberegler und andere graphischen Steuerelemente. Die Nutzung der Schnittstelle zur Globalen Applikationskonfiguration wird anschließend von den restlichen Komponenten bei Bedarf angebunden.
+\subsection{Entwurf der graphischen Oberfläche}
+Die graphische Oberfläche soll möglichst intuitiv und übersichtlich gestaltet werden.\\
+Zur Navigation soll eine Navigationsleiste am unteren Bildschirmrand hinzugefügt werden und eine weitere aufklappbare Alternativleiste soll am linken oberen Bildschirmrand geöffnet werden können.\\
+Aktions- und Steuerelemente sollen mit möglichst selbsterklärenden Icons besetzt werden. Um das \glqq Principle of Least Surprise\grqq\ zu gewährleisten, sollen Klicks auf Buttons meistens lediglich Dialoge erzeugen. In diesen Dialogen wird erneut erklärt, was die nächste Aktion zur Folge hat. Unter Anwendung der Globalen Konfiguration, soll eine Checkbox mit der Beschreibung \glqq Nicht mehr anzeigen\grqq\ das Erzeugen von Dialogen unterdrücken, um die Arbeit mit dem Applikation für erfahrene Nutzer beschleunigen zu können.\\
+Nachdem eine Aktion, wie beispielsweise das Hinzufügen oder Löschen von Objekten abgeschlossen ist, soll dies dem Nutzer mithilfe von sogenannten Toasts, die bei Android eine Art Notifier-Popup darstellen, mitgeteilt werden, um stets eine Rückmeldung des Systems gewährleisten zu können. Länger andauernde Operationen, wie beispielsweise dem Trainieren von Objekten, oder dem Aktualisieren des Latent-Replay-Puffers, soll mithilfe von Ladekreisen hervorgehoben werden, um dem Nutzer zu signalisieren, dass das System eine länger andauernde Operation durchführt. Da das Ende des Trainings durch das Entfernen des letzten Elementes in der Anfragewarteschlange gekennzeichnet ist, kann hierfür ein deterministischer Ladekreis verwendet werden, welcher dem Nutzer eine präzisere Angabe für die verbleibende Dauer des Prozesses zur Verfügung stellen kann.\\
+Die Oberfläche der Applikation wird in deutsch und englisch verfügbar sein. Dies ist möglich durch das Verwenden von extern gespeicherten Zeichenketten in einer Datei im XML-Format, welche stets als Platzhalter in den Quelltext der Applikation eingebunden werden können. Je nach Systemsprache des Betriebssystems, auf welchem die Applikation ausgeführt wird, kann die Sprache dynamisch festgelegt werden.\\
+Ein Dunkelmodus wird nach einem ähnlichen Prinzip zur Verfügung gestellt. Durch das Auslagern von Farben und Stilen in dafür vorgesehene XML-Dateien, kann die Applikation das Farbschema der Oberfläche dynamisch ändern.
 \chapter{Implementierung}
 \label{cha:implementierung}
-In diesem Kapitel wird die konkrete Implementierung des im Kapitel
-\ref{cha:loesungskonzept} entwickelten Lösungskonzepts beschrieben.\\
+In diesem Kapitel wird die konkrete Implementierung des in Kapitel
+\ref{cha:Entwurf} entwickelten Lösungskonzepts beschrieben.\\
 Hierbei wird auf die konkret verwendeten Entwicklungswerkzeuge und Implementierungsdetails der Applikation eingegangen.
-Bezug genommen.
 \section{Entwicklungswerkzeuge}
+Im Folgenden werden Werkzeuge, die die Entwicklung der Applikation vereinfachen, vorgestellt.
 \subsection{Android Studio}
-Android Studio ist eine auf IntelliJ basierende Entwicklungsumgebung der Firma Jetbrains, die von der Open-Source Community und Google entwickelt wird. Es ist die offizielle Entwicklungsumgebung für die Entwicklung von Android-Apps.\\
-Die Applikation wurde mithilfe von Android Studio implementiert, da es ein breites Spektrum an hilfreichen Werkzeugen zur Android-App-Entwicklung zur Verfügung stellt. Genutzt wurden vor allem ein integrierter Emulator, ein Datenbankuntersuchungswerkzeug und der integrierte Debugger. Zum Messen von kritischen Codeabschnitten wird ein Profiler zur Verfügung gestellt, der die Systemauslastung in Echtzeit misst.
+\textit{Android Studio} ist eine auf IntelliJ basierende Entwicklungsumgebung der Firma Jetbrains, die von der Open-Source Community und Google entwickelt wird. Es ist die offizielle Entwicklungsumgebung für Android-Apps.\\
+Die Applikation wurde mithilfe von Android Studio implementiert, da es ein breites Spektrum an hilfreichen Werkzeugen zur Android-App-Entwicklung zur Verfügung stellt. Genutzt wurden vor allem ein integrierter Emulator, ein Datenbankuntersuchungswerkzeug und der integrierte Debugger. Zum Messen von kritischen Code-Abschnitten, wird ein Profiler zur Verfügung gestellt, der die Systemauslastung in Echtzeit misst.
 
 \subsection{Gradle}
 Mithilfe des Build-Tools \textit{Gradle} wird die lauffähige Applikation erzeugt. Gradle erleichtert die Kontrolle über die Abhängigkeit von Third-Party-Software. Zudem ist es möglich Konfigurationen, die vor dem Bauvorgang vorgenommen werden sollen, anzuwenden.\\
@@ -477,10 +482,11 @@ Tabelle \ref{tab:gradle-config}, zeigt die vorgenommenen Android-spezifischen Ko
 	\label{tab:gradle-config}
 \end{table}Weitere wichtige Einstellungen, die in der \texttt{build.gradle}-Datei vorzunehmen waren, sind Optionen für das sogenannte Android Asset Packaging Tool (AAPT). Die einzelnen Bestandteile des zugrundliegenden Modells, die im \texttt{.tflite}-Format gespeichert sind, sollen nicht durch das Packaging-Tool komprimiert werden, da das korrekte Prozessieren der Daten dadurch nicht mehr möglich ist. Demnach muss die Option \texttt{noCompress "tflite"} in dem zugehörigen Block der Datei angegeben werden.\\ 
 Standardmäßig wird von Tensorflow Lite am Ende der \texttt{build.gradle}-Datei eine Funktion hinzugefügt, welche aus dem Internet ein Modell herunterlädt und in das für die Transfer Learning Library auffindbare Verzeichnis im Projekt kopiert.\\
-Da für die Applikation jedoch eine modifizierte Version der Modellarchitektur genutzt wird, welche zehn statt den standardmäßig festgelegten vier Endknoten beinhaltet, werden diese Zeilen auskommentiert.
+Da für die Applikation jedoch eine modifizierte Version der Modellarchitektur genutzt wird, welche zehn statt den von Tensorflow Lite standardmäßig festgelegten vier Endknoten beinhaltet, werden diese Zeilen auskommentiert.
 \section{Implementierung der Kamerafunktionalität mit CameraX}
 \section{Implementierung der Persistenzschnittstelle mit SQLite}
 Zur strukturierten Speicherung der Entitätsklassen wird für die Implementierung der Persistenzschnittstelle der Zugriff auf eine SQLite Datenbank implementiert. SQLite ist die meistgenutzte Datenbank-Engine der Welt. Sie ist in allen mobilen Endgeräten installiert und überzeugt durch dessen Robustheit und Abwärtskompatibilität \cite{sqlite-documentation}. Die in Kapitel \ref{cha:design:entities} beschriebenen Entitätsklassen wurden wie in Quelltext \ref{lst:sql-statements} implementiert.\\
+
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=SQL, breaklines=true, caption={SQLite Statements zum Erstellen der Tabellen}]
 CREATE TABLE object_table (
@@ -517,7 +523,9 @@ CREATE TABLE training_samples (
 \end{minipage}
 \label{lst:sql-statements}
 Da das Speichern von Boolschen Werten nicht von SQLite unterstützt wird, wird die \texttt{isFrozen}-Spalte als Integer-Wert gespeichert. Der Wert 0 entspricht hierbei \texttt{false} und 1 entspricht \texttt{true}.\\
-Das Datum wird als Unix-Zeitstempel, welcher die vergangenen Sekunden seit dem 1. Januar 1970 um 0 Uhr zählt gespeichert. Dies vereinfacht unter anderem das chronologische Sortieren der Daten. Mithilfer des \texttt{SimpleDateFormat}-Pakets kann dieses Datum in ein lesbares Format gebracht und auf der graphischen Benutzeroberfläche angezeigt werden.
+Das Datum wird als Unix-Zeitstempel, welcher die vergangenen Sekunden seit dem 1. Januar 1970 um 0 Uhr zählt gespeichert. Dies vereinfacht unter anderem das chronologische Sortieren der Daten. Mithilfe des \texttt{SimpleDateFormat}-Pakets kann dieses Datum in ein lesbares Format gebracht und auf der graphischen Benutzeroberfläche angezeigt werden.\\
+Um das Abspeichern von Objekten und Modellen mit gleichen Namen zu vermeiden, wird \texttt{model\_name} und \texttt{object\_name} mit dem Schlüsselwort \texttt{UNIQUE} deklariert, um direkt auf Datenbankebene entscheiden zu können, dass ein Objekt beziehungweise ein Modell mit diesem Namen bereits vorhanden ist.
+
 %---
 \chapter{Tests}
 \label{cha:tests}
