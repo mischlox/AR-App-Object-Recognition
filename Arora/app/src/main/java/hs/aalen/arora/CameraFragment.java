@@ -521,7 +521,7 @@ public class CameraFragment extends Fragment {
     /**
      * Setup the Camera Preview and Analysis Method using CameraX
      */
-    private void startCamera() {
+    public void startCamera() {
         // Check if display is in portrait or landscape mode
         viewFinderRotation = ImageUtils.getDisplaySurfaceRotation(viewFinder.getDisplay());
         if (viewFinderRotation == null) {
@@ -688,11 +688,6 @@ public class CameraFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.PAUSED);
@@ -784,10 +779,9 @@ public class CameraFragment extends Fragment {
         this.newObjectAdded = newObjectAdded;
     }
 
-    public ContinualLearningModelWrapper getContinualLearningModel() {
-        return continualLearningModel;
-    }
-
+    /**
+     * Shows a loading spinner while the heavy update algorithm is executed
+     */
     public void updateReplayBuffer() {
         ProgressBar replaySpinner = requireActivity().findViewById(R.id.wait_for_replay_spinner);
         TextView replayText = requireActivity().findViewById(R.id.wait_for_replay_spinner_text);
