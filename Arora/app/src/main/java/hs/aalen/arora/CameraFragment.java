@@ -60,6 +60,7 @@ import hs.aalen.arora.dialogues.DialogType;
 import hs.aalen.arora.persistence.DatabaseHelper;
 import hs.aalen.arora.persistence.SQLiteHelper;
 import hs.aalen.arora.utils.DateUtils;
+import hs.aalen.arora.utils.FocusBoxImage;
 import hs.aalen.arora.utils.ImageUtils;
 
 import static android.view.View.GONE;

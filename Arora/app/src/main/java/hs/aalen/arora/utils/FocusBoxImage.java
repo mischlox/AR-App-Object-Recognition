@@ -1,4 +1,4 @@
-package hs.aalen.arora;
+package hs.aalen.arora.utils;
 
 import android.content.Context;
 import android.graphics.Canvas;
