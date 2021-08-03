@@ -189,8 +189,9 @@ Das Prinzip des Transfer Learnings kann dementsprechend mithilfe des Latent-Repl
   \caption{Architekturdiagramm des Latent Replay} Quelle: \cite{Pellegrini2019}
   \label{fig:latent-replay}
 \end{figure}
-
+\subsection{Tensorflow Lite}
 \section{Android}
+\subsection{API Levels}
 \subsection{Activities und Fragments}
 \subsection{Shared Preferences}
 Shared Preferences bezeichnen einen Key-Value-Store für primitive Daten in Form einer XML-Datei. Genutzt kann dies über die dafür zur Verfügung gestellten Android-Bibliothek, welche ein Shared Preferences-Objekt erzeugt. Dieses Objekt beinhaltet einen Zeiger auf den Pfad der jeweiligen Datei. Mithilfe von Shared Preferences können beispielsweise Konfigurationsparameter, die persistent abgespeichert werden sollen mithilfe einer einfachen \ac{api} zugänglich gemacht werden
@@ -279,6 +280,7 @@ Die Oberfläche der Applikation kann mithilfe von XML-Code generiert werden. Pro
 
 
 \section{Entitätsklassen}
+\label{cha:design:entities}
 Die für die Geschäftslogik grundlegenden und technisch unbedingt notwendigen Entitäten werden in Abbildung \ref{fig:er-diagram} dargestellt. In den folgenden Unterkapiteln werden diese erläutert.\\
 Zu allen Entitäten wird eine einzigartige fortlaufende Identifikationsnummer (ID) gespeichert.
 \begin{figure}[hptb]
@@ -445,40 +447,77 @@ Bereits gespeicherte Objekte enthalten immer eine Referenz auf das Modell, welch
 Das Camera Fragment View Model hält eine Liste an verfügbaren Modellpositionen. Bei Erzeugung des Fragments wird diese Liste mit der Anzahl an Objekten, die das ausgewählte Modell referenzieren, abgeglichen. Sobald ein Objekt zu diesem Modell gehört und eine Modellposition zugewiesen bekommen hat, wird die entsprechende Position aus der Liste des Viewmodels entfernt.\\
 Beim Hinzufügen von neuen Objekten wird die erste Position, die in der im View Model gespeicherten Liste vorkommt, zum Objekt hinzugefügt und persistent mit diesem abgespeichert. Falls die Liste leer ist, wird der Nutzer darüber informiert, dass der Objektordner, beziehungsweise das Modell, voll ist.
 \subsection{Konfigurierbarkeit mit Einstellungsfragment}
+
+\subsection{Entwurf der Graphischen Oberfläche}
+
 \chapter{Implementierung}
 \label{cha:implementierung}
-Transfer Learning, quantisiertes MobilenetV2, Imagenet. 
-
-Ein Problem das beim Nutzen des Transfer Learnings aufgetreten ist, ist dass alle Trainingsdaten sich im derzeitigen Trainingsbatch befinden müssen, da sonst das Problem des Katastrophalen Vergessens aufkommt.
 In diesem Kapitel wird die konkrete Implementierung des im Kapitel
-\ref{cha:loesungskonzept} entwickelten Lösungskonzepts beschrieben.
-Hierbei wird auf die konkret verwendeten Entwicklungswerkzeuge etc. 
+\ref{cha:loesungskonzept} entwickelten Lösungskonzepts beschrieben.\\
+Hierbei wird auf die konkret verwendeten Entwicklungswerkzeuge und Implementierungsdetails der Applikation eingegangen.
 Bezug genommen.
+\section{Entwicklungswerkzeuge}
+\subsection{Android Studio}
+Android Studio ist eine auf IntelliJ basierende Entwicklungsumgebung der Firma Jetbrains, die von der Open-Source Community und Google entwickelt wird. Es ist die offizielle Entwicklungsumgebung für die Entwicklung von Android-Apps.\\
+Die Applikation wurde mithilfe von Android Studio implementiert, da es ein breites Spektrum an hilfreichen Werkzeugen zur Android-App-Entwicklung zur Verfügung stellt. Genutzt wurden vor allem ein integrierter Emulator, ein Datenbankuntersuchungswerkzeug und der integrierte Debugger. Zum Messen von kritischen Codeabschnitten wird ein Profiler zur Verfügung gestellt, der die Systemauslastung in Echtzeit misst.
 
-Bei Software-Projekten besteht dieses Kapitel typischerweise aus den 
-Phasen Implementierung \& Test im \ac{rup}.
+\subsection{Gradle}
+Mithilfe des Build-Tools \textit{Gradle} wird die lauffähige Applikation erzeugt. Gradle erleichtert die Kontrolle über die Abhängigkeit von Third-Party-Software. Zudem ist es möglich Konfigurationen, die vor dem Bauvorgang vorgenommen werden sollen, anzuwenden.\\
+Tabelle \ref{tab:gradle-config}, zeigt die vorgenommenen Android-spezifischen Konfigurationsparameter, die für die Kompatibilität mit unterschiedlichen Endgeräten zuständig sind und deren in der Implementierung angegebene API Level.\\
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|p{1cm}|p{8.5cm}|}
+		\hline
+		\textbf{Parameter} & \textbf{API-Level} & \textbf{Beschreibung} \\ \hline
+		\texttt{compileSdkVersion} & 30 & Kompiliert wird mit API Level 30. Diese Option hat lediglich Auswirkungen zur Kompilierzeit  \\ \hline
+		\texttt{minSdkVersion} & 26 & Setzt die minimal zu verwendende Version vorraus. Geräte, die diese Version nicht installiert haben können demnach nicht verwendet werden. Aufgrund der Nutzung diverse API Level 26 Funktionen wurde die Version auf 26 hochgesetzt \\ \hline
+		\texttt{targetSdkVersion} & 30 & Gewährleistet Aufwärtskompatibilität bis in dieses API Level. Dieser Wert sollte höchstens so hoch wie der Wert von \texttt{compileSdkVersion}  \\ \hline
+	\end{tabular}
+	\caption{Kompatibilitätskonfiguration mit Gradle}
+	\label{tab:gradle-config}
+\end{table}Weitere wichtige Einstellungen, die in der \texttt{build.gradle}-Datei vorzunehmen waren, sind Optionen für das sogenannte Android Asset Packaging Tool (AAPT). Die einzelnen Bestandteile des zugrundliegenden Modells, die im \texttt{.tflite}-Format gespeichert sind, sollen nicht durch das Packaging-Tool komprimiert werden, da das korrekte Prozessieren der Daten dadurch nicht mehr möglich ist. Demnach muss die Option \texttt{noCompress "tflite"} in dem zugehörigen Block der Datei angegeben werden.\\ 
+Standardmäßig wird von Tensorflow Lite am Ende der \texttt{build.gradle}-Datei eine Funktion hinzugefügt, welche aus dem Internet ein Modell herunterlädt und in das für die Transfer Learning Library auffindbare Verzeichnis im Projekt kopiert.\\
+Da für die Applikation jedoch eine modifizierte Version der Modellarchitektur genutzt wird, welche zehn statt den standardmäßig festgelegten vier Endknoten beinhaltet, werden diese Zeilen auskommentiert.
+\section{Implementierung der Kamerafunktionalität mit CameraX}
+\section{Implementierung der Persistenzschnittstelle mit SQLite}
+Zur strukturierten Speicherung der Entitätsklassen wird für die Implementierung der Persistenzschnittstelle der Zugriff auf eine SQLite Datenbank implementiert. SQLite ist die meistgenutzte Datenbank-Engine der Welt. Sie ist in allen mobilen Endgeräten installiert und überzeugt durch dessen Robustheit und Abwärtskompatibilität \cite{sqlite-documentation}. Die in Kapitel \ref{cha:design:entities} beschriebenen Entitätsklassen wurden wie in Quelltext \ref{lst:sql-statements} implementiert.\\
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=SQL, breaklines=true, caption={SQLite Statements zum Erstellen der Tabellen}]
+CREATE TABLE object_table (
+	object_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+	object_name TEXT UNIQUE NOT NULL,
+	object_type TEXT,
+	object_additional_data TEXT,
+	object_created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	object_image BLOB,
+	model_pos TEXT,
+	model_id INTEGER NOT NULL,
+	object_amount_samples INTEGER,\\
+	FOREIGN KEY(model_id) REFERENCES model_table(model_ID));
 
-Zum Beispiel kann man hier auch ein kleines Listing einfügen.
+CREATE TABLE model_table (
+	model_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+	model_name TEXT UNIQUE NOT NULL,
+	model_path TEXT,
+	is_frozen INTEGER DEFAULT 0);
 
-\begin{lstlisting}[language=c,%
-                   caption={Überschrift des Quelltexts}]
-#include<stdio.h>
-
-int main() {
-    // Kommentar
-    int answer = 20 << 1;
-    answer += 2;
-    printf("Hallöchen Welt!\n");
-    printf("Die Antwort ist: %d\n", answer);
-    return 0;
-}
+CREATE TABLE replay_buffer_images (
+	buffer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+	class TEXT NOT NULL, 
+	sample_blob BLOB NOT NULL,
+	model_id INTEGER NOT NULL);
+	
+CREATE TABLE training_samples (
+	sample_id INTEGER PRIMARY KEY AUTOINCREMENT,
+	class TEXT NOT NULL,
+	sample BLOB NOT NULL,
+	sample_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	model_id INTEGER NOT NULL);
 \end{lstlisting}
-
-Manchmal hilft auch eine kleine Tabelle:
-
-
-
-Details siehe Tabelle~\ref{tab:my-table}.
+\end{minipage}
+\label{lst:sql-statements}
+Da das Speichern von Boolschen Werten nicht von SQLite unterstützt wird, wird die \texttt{isFrozen}-Spalte als Integer-Wert gespeichert. Der Wert 0 entspricht hierbei \texttt{false} und 1 entspricht \texttt{true}.\\
+Das Datum wird als Unix-Zeitstempel, welcher die vergangenen Sekunden seit dem 1. Januar 1970 um 0 Uhr zählt gespeichert. Dies vereinfacht unter anderem das chronologische Sortieren der Daten. Mithilfer des \texttt{SimpleDateFormat}-Pakets kann dieses Datum in ein lesbares Format gebracht und auf der graphischen Benutzeroberfläche angezeigt werden.
 %---
 \chapter{Tests}
 \label{cha:tests}
@@ -490,8 +529,6 @@ Programms beschrieben oder die Integration eines erstellten
 Programmodules dargestellt.
 
 Bei der Software-Erstellung entspricht dieses Kapitel der 
-Auslieferungsphase (Deployment) im \ac{rup}.
-
 %---
 \chapter{Evaluation}
 \label{cha:evaluation}
@@ -532,6 +569,8 @@ Hier kann man was über die Erweiterbarkeit der Ergebnisse sagen.
 \label{sub:uebertragbarkeit}
 
 Und hier etwas über deren Übertragbarkeit.
+
+\chapter{Fazit}
 
 %-----------------------------------------------------------------------
 \appendix

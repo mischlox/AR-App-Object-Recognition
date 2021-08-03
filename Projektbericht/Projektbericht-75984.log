@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.5.19)  3 AUG 2021 14:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.5.19)  3 AUG 2021 21:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1785,37 +1785,11 @@ Package tocbasic Warning: number width of table toc entries should be increased
 (tocbasic)                Currently used number width = 26.17007pt,
 (tocbasic)                Wanted number separation    = 4.37993pt,
 (tocbasic)                Reserved number width       = 25.18501pt on input lin
-e 23.
-
-
-Overfull \hbox (0.98506pt too wide) detected at line 23
-\T1/pnc/m/n/10.95 A.10. 
- []
-
-
-Package tocbasic Warning: number width of table toc entries should be increased
-!
-(tocbasic)                Currently used number width = 26.17007pt,
-(tocbasic)                Wanted number separation    = 4.37993pt,
-(tocbasic)                Reserved number width       = 25.18501pt on input lin
-e 24.
-
-
-Overfull \hbox (0.98506pt too wide) detected at line 24
-\T1/pnc/m/n/10.95 A.11. 
- []
-
-
-Package tocbasic Warning: number width of table toc entries should be increased
-!
-(tocbasic)                Currently used number width = 26.17007pt,
-(tocbasic)                Wanted number separation    = 4.37993pt,
-(tocbasic)                Reserved number width       = 25.18501pt on input lin
 e 25.
 
 
 Overfull \hbox (0.98506pt too wide) detected at line 25
-\T1/pnc/m/n/10.95 A.12. 
+\T1/pnc/m/n/10.95 A.10. 
  []
 
 
@@ -1828,7 +1802,7 @@ e 26.
 
 
 Overfull \hbox (0.98506pt too wide) detected at line 26
-\T1/pnc/m/n/10.95 A.13. 
+\T1/pnc/m/n/10.95 A.11. 
  []
 
 
@@ -1841,7 +1815,7 @@ e 27.
 
 
 Overfull \hbox (0.98506pt too wide) detected at line 27
-\T1/pnc/m/n/10.95 A.14. 
+\T1/pnc/m/n/10.95 A.12. 
  []
 
 
@@ -1854,7 +1828,7 @@ e 28.
 
 
 Overfull \hbox (0.98506pt too wide) detected at line 28
-\T1/pnc/m/n/10.95 A.15. 
+\T1/pnc/m/n/10.95 A.13. 
  []
 
 
@@ -1867,6 +1841,32 @@ e 29.
 
 
 Overfull \hbox (0.98506pt too wide) detected at line 29
+\T1/pnc/m/n/10.95 A.14. 
+ []
+
+
+Package tocbasic Warning: number width of table toc entries should be increased
+!
+(tocbasic)                Currently used number width = 26.17007pt,
+(tocbasic)                Wanted number separation    = 4.37993pt,
+(tocbasic)                Reserved number width       = 25.18501pt on input lin
+e 30.
+
+
+Overfull \hbox (0.98506pt too wide) detected at line 30
+\T1/pnc/m/n/10.95 A.15. 
+ []
+
+
+Package tocbasic Warning: number width of table toc entries should be increased
+!
+(tocbasic)                Currently used number width = 26.17007pt,
+(tocbasic)                Wanted number separation    = 4.37993pt,
+(tocbasic)                Reserved number width       = 25.18501pt on input lin
+e 31.
+
+
+Overfull \hbox (0.98506pt too wide) detected at line 31
 \T1/pnc/m/n/10.95 A.16. 
  []
 
@@ -1958,7 +1958,7 @@ although it is yet undefined on input line 147.
 Package acronym Info: Label `acro:dcnn' newly defined as it shall be overridden
 
 although it is yet undefined on input line 147.
-<images/mobilenet-architecture.png, id=305, 614.295pt x 245.91875pt>
+<images/mobilenet-architecture.png, id=325, 614.295pt x 245.91875pt>
 File: images/mobilenet-architecture.png Graphic file (type png)
 <use images/mobilenet-architecture.png>
 Package pdftex.def Info: images/mobilenet-architecture.png  used on input line 
@@ -1970,7 +1970,7 @@ although it is yet undefined on input line 161.
 Package acronym Info: Label `acro:ml' newly defined as it shall be overridden
 although it is yet undefined on input line 170.
  [4]
-<images/traditional-vs-tflearning.png, id=327, 702.625pt x 378.41376pt>
+<images/traditional-vs-tflearning.png, id=348, 702.625pt x 378.41376pt>
 File: images/traditional-vs-tflearning.png Graphic file (type png)
 <use images/traditional-vs-tflearning.png>
 Package pdftex.def Info: images/traditional-vs-tflearning.png  used on input li
@@ -1982,131 +1982,131 @@ Overfull \hbox (24.23972pt too wide) in paragraph at lines 175--176
  []
 
 [5 <./images/traditional-vs-tflearning.png (PNG copy)>]
-<images/latent-replay.png, id=338, 702.625pt x 629.35126pt>
+<images/latent-replay.png, id=358, 702.625pt x 629.35126pt>
 File: images/latent-replay.png Graphic file (type png)
 <use images/latent-replay.png>
 Package pdftex.def Info: images/latent-replay.png  used on input line 188.
 (pdftex.def)             Requested size: 332.58173pt x 297.90013pt.
 Package acronym Info: Label `acro:api' newly defined as it shall be overridden
-although it is yet undefined on input line 196.
- [6] [7 <./images/latent-replay.png>]
+although it is yet undefined on input line 197.
+ [6] [7 <./images/latent-replay.png>] [8]
 chapter 3.
-[8
+[9
 
 
-] [9]
-<images/usecase-diagram.png, id=362, 394.47375pt x 381.67593pt>
+] [10]
+<images/usecase-diagram.png, id=386, 394.47375pt x 381.67593pt>
 File: images/usecase-diagram.png Graphic file (type png)
 <use images/usecase-diagram.png>
-Package pdftex.def Info: images/usecase-diagram.png  used on input line 247.
+Package pdftex.def Info: images/usecase-diagram.png  used on input line 248.
 (pdftex.def)             Requested size: 369.48717pt x 357.48378pt.
- [10] [11 <./images/usecase-diagram.png>]
+ [11] [12 <./images/usecase-diagram.png>]
 chapter 4.
-[12
+[13
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 277--279
+Underfull \hbox (badness 10000) in paragraph at lines 278--280
 
  []
 
-[13]
-<images/er-diagram.png, id=386, 608.2725pt x 614.295pt>
+[14]
+<images/er-diagram.png, id=411, 608.2725pt x 614.295pt>
 File: images/er-diagram.png Graphic file (type png)
 <use images/er-diagram.png>
-Package pdftex.def Info: images/er-diagram.png  used on input line 286.
+Package pdftex.def Info: images/er-diagram.png  used on input line 288.
 (pdftex.def)             Requested size: 353.97705pt x 357.48378pt.
 Package acronym Info: Label `acro:blob' newly defined as it shall be overridden
 
-although it is yet undefined on input line 293.
- [14 <./images/er-diagram.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 296--302
+although it is yet undefined on input line 295.
+ [15 <./images/er-diagram.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 298--304
 
  []
 
-[15] [16]
-Overfull \hbox (3.79395pt too wide) in paragraph at lines 319--320
+[16] [17]
+Overfull \hbox (3.79395pt too wide) in paragraph at lines 321--322
 \T1/pnc/m/n/10.95 (-20) men kann, wer-den in-ner-halb die-ses Frag-ments in ei-
 ner ty-pi-schen Einstellungen-
  []
 
-<images/building-block-view.png, id=409, 1265.72874pt x 804.00375pt>
+<images/building-block-view.png, id=434, 1265.72874pt x 804.00375pt>
 File: images/building-block-view.png Graphic file (type png)
 <use images/building-block-view.png>
-Package pdftex.def Info: images/building-block-view.png  used on input line 335
+Package pdftex.def Info: images/building-block-view.png  used on input line 337
 .
 (pdftex.def)             Requested size: 468.96896pt x 297.90013pt.
 
-Overfull \hbox (50.71341pt too wide) in paragraph at lines 335--336
+Overfull \hbox (50.71341pt too wide) in paragraph at lines 337--338
  [][] 
  []
 
-[17] [18 <./images/building-block-view.png>]
-<images/persistence-class-diagram.png, id=422, 884.30376pt x 845.1575pt>
+[18] [19 <./images/building-block-view.png>]
+<images/persistence-class-diagram.png, id=446, 884.30376pt x 845.1575pt>
 File: images/persistence-class-diagram.png Graphic file (type png)
 <use images/persistence-class-diagram.png>
 Package pdftex.def Info: images/persistence-class-diagram.png  used on input li
-ne 351.
+ne 353.
 (pdftex.def)             Requested size: 374.04974pt x 357.48378pt.
- [19] [20 <./images/persistence-class-diagram.png>]
-<images/camera-fragment-class-diagram.png, id=437, 1075.01625pt x 825.0825pt>
+ [20] [21 <./images/persistence-class-diagram.png>]
+<images/camera-fragment-class-diagram.png, id=461, 1075.01625pt x 825.0825pt>
 File: images/camera-fragment-class-diagram.png Graphic file (type png)
 <use images/camera-fragment-class-diagram.png>
 Package pdftex.def Info: images/camera-fragment-class-diagram.png  used on inpu
-t line 367.
+t line 369.
 (pdftex.def)             Requested size: 426.96426pt x 327.69196pt.
 
-Overfull \hbox (8.70871pt too wide) in paragraph at lines 367--368
+Overfull \hbox (8.70871pt too wide) in paragraph at lines 369--370
  [][] 
  []
 
-<images/object-overview-class-diagram.png, id=439, 703.62875pt x 814.04124pt>
+<images/object-overview-class-diagram.png, id=463, 703.62875pt x 814.04124pt>
 File: images/object-overview-class-diagram.png Graphic file (type png)
 <use images/object-overview-class-diagram.png>
 Package pdftex.def Info: images/object-overview-class-diagram.png  used on inpu
-t line 376.
+t line 378.
 (pdftex.def)             Requested size: 360.4886pt x 417.05836pt.
-[21 <./images/camera-fragment-class-diagram.png>]
-<images/sequence-diagram-change-model.png, id=446, 584.1825pt x 286.06876pt>
+[22 <./images/camera-fragment-class-diagram.png>]
+<images/sequence-diagram-change-model.png, id=470, 584.1825pt x 286.06876pt>
 File: images/sequence-diagram-change-model.png Graphic file (type png)
 <use images/sequence-diagram-change-model.png>
 Package pdftex.def Info: images/sequence-diagram-change-model.png  used on inpu
-t line 388.
+t line 390.
 (pdftex.def)             Requested size: 425.85243pt x 208.53372pt.
 
-Overfull \hbox (7.59688pt too wide) in paragraph at lines 388--389
+Overfull \hbox (7.59688pt too wide) in paragraph at lines 390--391
  [][] 
  []
 
-[22] [23 <./images/object-overview-class-diagram.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 410--421
+[23] [24 <./images/object-overview-class-diagram.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 412--423
 
  []
 
-[24 <./images/sequence-diagram-change-model.png>]
-<images/addobject-diagram.png, id=467, 490.08093pt x 563.10374pt>
+[25 <./images/sequence-diagram-change-model.png>]
+<images/addobject-diagram.png, id=491, 490.08093pt x 563.10374pt>
 File: images/addobject-diagram.png Graphic file (type png)
 <use images/addobject-diagram.png>
-Package pdftex.def Info: images/addobject-diagram.png  used on input line 427.
+Package pdftex.def Info: images/addobject-diagram.png  used on input line 429.
 (pdftex.def)             Requested size: 311.12315pt x 357.48378pt.
- [25] [26 <./images/addobject-diagram.png>] [27] [28]
+ [26] [27 <./images/addobject-diagram.png>] [28] [29]
 chapter 5.
 
-LaTeX Warning: Reference `cha:loesungskonzept' on page 29 undefined on input li
-ne 454.
-
-Package acronym Info: Label `acro:rup' newly defined as it shall be overridden
-although it is yet undefined on input line 459.
-
-Package acronym Warning: Acronym `rup' is not defined on input line 459.
+LaTeX Warning: Reference `cha:loesungskonzept' on page 30 undefined on input li
+ne 456.
 
 
-Package acronym Warning: Acronym `rup' is not defined on input line 459.
+Underfull \hbox (badness 10000) in paragraph at lines 471--471
+[]|\T1/pnc/b/n/10.95 API-
+ []
 
-Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 464.
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 46
-4.
+
+Overfull \hbox (2.56837pt too wide) in paragraph at lines 471--471
+\T1/pnc/b/n/10.95 Level| 
+ []
+
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 47
+2.
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
@@ -2115,190 +2115,203 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-
-LaTeX Warning: Reference `tab:my-table' on page 29 undefined on input line 481.
-
-
-[29
+Underfull \hbox (badness 1314) in paragraph at lines 473--473
+[]|\T1/pnc/m/n/10.95 (+20) Setzt die mi-ni-mal zu ver-wen-den-de Ver-si-on
+ []
 
 
-]
-chapter 6.
-
-Package acronym Warning: Acronym `rup' is not defined on input line 493.
+Overfull \hbox (1.33546pt too wide) in paragraph at lines 469--476
+ [][] 
+ []
 
 [30
 
 
+] (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2019/09/10 1.8c listings language file
+)
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
+nput line 485.
+ [31]
+[32]
+chapter 6.
+[33
+
+
 ]
 chapter 7.
-[31
+[34
 
 
 ]
 chapter 8.
-[32
+[35
+
+
+]
+chapter 9.
+[36
 
 
 ]
 chapter without number
 
-Overfull \hbox (23.24309pt too wide) in paragraph at lines 540--540
+Overfull \hbox (29.3312pt too wide) in paragraph at lines 579--579
 \T1/pcr/m/n/10.95 example -[] on -[] device -[] model -[] personalization . htm
 l$[][] \T1/pnc/m/n/10.95 (-20) (be-sucht am 12.05.2021). 
  []
 
-[33
+[37
 
 
 ]
 chapter A.
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 548--565
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 587--604
  [][] 
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 571--586
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 610--625
  [][] 
  []
 
 
-Underfull \hbox (badness 4531) in paragraph at lines 595--595
+Underfull \hbox (badness 4531) in paragraph at lines 634--634
 []|\T1/pnc/b/n/10.95 Gespeicherte Ob-jek-te im Mo-dell be-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 592--607
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 631--646
  [][] 
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 613--628
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 652--667
  [][] 
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 634--652
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 673--691
  [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 3.3997pt on input line 654.
+LaTeX Warning: Float too large for page by 3.3997pt on input line 693.
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 659--683
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 698--722
  [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 180.19965pt on input line 685.
+LaTeX Warning: Float too large for page by 180.19965pt on input line 724.
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 689--704
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 728--743
  [][] 
  []
 
 
-Underfull \hbox (badness 1194) in paragraph at lines 720--721
+Underfull \hbox (badness 1194) in paragraph at lines 759--760
 []|\T1/pnc/m/n/10.95 (+20) 1. Der Nut-zer be-tä-tigt den ^^RBearbeiten^^P-
  []
 
 
-Underfull \hbox (badness 1424) in paragraph at lines 723--723
+Underfull \hbox (badness 1424) in paragraph at lines 762--762
 []|\T1/pnc/m/n/10.95 (+20) 4. Der Nut-zer be-tä-tigt den ^^RBestätigen^^P-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 710--728
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 749--767
  [][] 
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 734--749
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 773--788
  [][] 
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 755--771
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 794--810
  [][] 
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 777--792
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 816--831
  [][] 
  []
 
 
-Underfull \hbox (badness 4859) in paragraph at lines 805--805
+Underfull \hbox (badness 4859) in paragraph at lines 844--844
 []|\T1/pnc/m/n/10.95 (+20) Der Nut-zer be-fin-det sich in den App-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 798--813
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 837--852
  [][] 
  []
 
 
-Underfull \hbox (badness 4859) in paragraph at lines 826--826
+Underfull \hbox (badness 4859) in paragraph at lines 865--865
 []|\T1/pnc/m/n/10.95 (+20) Der Nut-zer be-fin-det sich in den App-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 819--834
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 858--873
  [][] 
  []
 
 
-Underfull \hbox (badness 4859) in paragraph at lines 847--847
+Underfull \hbox (badness 4859) in paragraph at lines 886--886
 []|\T1/pnc/m/n/10.95 (+20) Der Nut-zer be-fin-det sich in den App-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 840--855
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 879--894
  [][] 
  []
 
 
-Underfull \hbox (badness 3449) in paragraph at lines 864--864
+Underfull \hbox (badness 3449) in paragraph at lines 903--903
 []|\T1/pnc/b/n/10.95 Einstellen des Kon-fi-denz-schwell-werts
  []
 
 
-Underfull \hbox (badness 4859) in paragraph at lines 868--868
+Underfull \hbox (badness 4859) in paragraph at lines 907--907
 []|\T1/pnc/m/n/10.95 (+20) Der Nut-zer be-fin-det sich in den App-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 861--877
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 900--916
  [][] 
  []
 
 
-Underfull \hbox (badness 4859) in paragraph at lines 890--890
+Underfull \hbox (badness 4859) in paragraph at lines 929--929
 []|\T1/pnc/m/n/10.95 (+20) Der Nut-zer be-fin-det sich in den App-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 883--901
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 922--940
  [][] 
  []
 
-[34
+[38
 
 
-] [35] [36] [37] [38] [39] [40] [41] [42] [43] [44] [45] [46] [47] [48]
-[49]
+] [39] [40] [41] [42] [43] [44] [45] [46] [47] [48] [49] [50] [51] [52]
+[53]
 chapter B.
-[50
+[54
 
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 909.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 909.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 948.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 948.
  (./Projektbericht-75984.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 909.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 909.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 948.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 948.
 Package rerunfilecheck Info: File `Projektbericht-75984.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
@@ -2310,11 +2323,11 @@ Package logreq Info: Writing requests to 'Projektbericht-75984.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 38645 strings out of 481239
- 750949 string characters out of 5920377
- 1646682 words of memory out of 5000000
- 52774 multiletter control sequences out of 15000+600000
- 611475 words of font info for 219 fonts, out of 8000000 for 9000
+ 38872 strings out of 481239
+ 754226 string characters out of 5920377
+ 1647915 words of memory out of 5000000
+ 52952 multiletter control sequences out of 15000+600000
+ 612192 words of font info for 228 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
  63i,19n,88p,10143b,3676s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texmf/
@@ -2326,10 +2339,10 @@ onts/type1/urw/ncntrsbk/uncb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/u
 rw/ncntrsbk/uncr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/ncntrsbk/
 uncr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/ncntrsbk/uncri8a.pfb>
 
-Output written on Projektbericht-75984.pdf (61 pages, 897929 bytes).
+Output written on Projektbericht-75984.pdf (65 pages, 907754 bytes).
 PDF statistics:
- 893 PDF objects out of 1000 (max. 8388607)
- 792 compressed objects within 8 object streams
- 195 named destinations out of 1000 (max. 500000)
- 41585 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 993 PDF objects out of 1000 (max. 8388607)
+ 887 compressed objects within 9 object streams
+ 229 named destinations out of 1000 (max. 500000)
+ 41657 words of extra memory for PDF output out of 42996 (max. 10000000)
 

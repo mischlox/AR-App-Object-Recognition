@@ -92,4 +92,12 @@
   urldate = {2021-07-31},
 }
 
+@Online{sqlite-documentation,
+  author  = {SQLite Contributors},
+  title   = {What is SQLite?},
+  date    = {2021-06-18},
+  url     = {https://www.sqlite.org/index.html},
+  urldate = {2021-08-03},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}
