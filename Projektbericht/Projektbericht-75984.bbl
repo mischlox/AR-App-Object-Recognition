@@ -19,6 +19,73 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global}
+    \entry{android:jetpack}{online}{}
+      \name{author}{1}{}{%
+        {{hash=8b61139eb9da7091f52a501afa78fc23}{%
+           family={Contributors},
+           familyi={C\bibinitperiod},
+           given={Android},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{8b61139eb9da7091f52a501afa78fc23}
+      \strng{fullhash}{8b61139eb9da7091f52a501afa78fc23}
+      \strng{bibnamehash}{8b61139eb9da7091f52a501afa78fc23}
+      \strng{authorbibnamehash}{8b61139eb9da7091f52a501afa78fc23}
+      \strng{authornamehash}{8b61139eb9da7091f52a501afa78fc23}
+      \strng{authorfullhash}{8b61139eb9da7091f52a501afa78fc23}
+      \field{extraname}{1}
+      \field{sortinit}{C}
+      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Android Jetpack}
+      \field{urlday}{3}
+      \field{urlmonth}{8}
+      \field{urlyear}{2021}
+      \field{year}{2021}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://developer.android.com/jetpack?hl=de
+      \endverb
+      \verb{url}
+      \verb https://developer.android.com/jetpack?hl=de
+      \endverb
+    \endentry
+    \entry{android:camerax}{online}{}
+      \name{author}{1}{}{%
+        {{hash=8b61139eb9da7091f52a501afa78fc23}{%
+           family={Contributors},
+           familyi={C\bibinitperiod},
+           given={Android},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{8b61139eb9da7091f52a501afa78fc23}
+      \strng{fullhash}{8b61139eb9da7091f52a501afa78fc23}
+      \strng{bibnamehash}{8b61139eb9da7091f52a501afa78fc23}
+      \strng{authorbibnamehash}{8b61139eb9da7091f52a501afa78fc23}
+      \strng{authornamehash}{8b61139eb9da7091f52a501afa78fc23}
+      \strng{authorfullhash}{8b61139eb9da7091f52a501afa78fc23}
+      \field{extraname}{2}
+      \field{sortinit}{C}
+      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{19}
+      \field{month}{3}
+      \field{title}{CameraX Overview}
+      \field{urlday}{4}
+      \field{urlmonth}{8}
+      \field{urlyear}{2021}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://developer.android.com/training/camerax?hl=de
+      \endverb
+      \verb{url}
+      \verb https://developer.android.com/training/camerax?hl=de
+      \endverb
+    \endentry
     \entry{sqlite-documentation}{online}{}
       \name{author}{1}{}{%
         {{hash=00006a9d8d52fbca7d58ab7b159df066}{%
@@ -33,7 +100,7 @@
       \strng{authorbibnamehash}{00006a9d8d52fbca7d58ab7b159df066}
       \strng{authornamehash}{00006a9d8d52fbca7d58ab7b159df066}
       \strng{authorfullhash}{00006a9d8d52fbca7d58ab7b159df066}
-      \field{extraname}{1}
+      \field{extraname}{3}
       \field{sortinit}{C}
       \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
       \field{labelnamesource}{author}
@@ -68,7 +135,7 @@
       \strng{authorbibnamehash}{073eba0d635edcd0dc7f643815bc92ec}
       \strng{authornamehash}{073eba0d635edcd0dc7f643815bc92ec}
       \strng{authorfullhash}{073eba0d635edcd0dc7f643815bc92ec}
-      \field{extraname}{2}
+      \field{extraname}{4}
       \field{sortinit}{C}
       \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
       \field{labelnamesource}{author}

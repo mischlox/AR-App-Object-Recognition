@@ -408,6 +408,7 @@ Das Camera Fragment beinhaltet eine Vorschau in Echtzeit, welche dem Nutzer erm�
 Zur Realisierung dieser Funktionalität müssen diverse Konfigurationen vorgenommen werden. Hierzu gehört das Initialisieren der Ausrichtung des Gerätes (Portrait- oder Landscape-Modus), Das Seitenverhältnis, die Auflösung der Kamera und weiteren systembezogenen Einstellungen wie beispielsweise dem automatischen Fokussieren. Zudem wird ein Bildanalyse-Thread zur Vorkonfiguration der Kameraansicht hinzugefügt. Die Inferenz- und Trainingsfunktionalität wird direkt hier eingesetzt, da dies ermöglicht jeden angezeigten Frame asynchron zum Programmablauf zu akquirieren und zu verarbeiten. \\
 Nach Konfiguration der soeben beschriebenen Parameter, wird die Kamera an den Lebenszyklus des Fragments gebunden und demnach bei Öffnen des Fragments gestartet und Schließen beziehungsweise Wechseln geschlossen.\\
 \subsection{Einlernen von Objekten}
+\label{cha:train-objects}
 Das Einlernen und Wiedererkennen von Objekten sind die umfangreichsten und komplexesten Anwendungsfälle in der Applikation, welche diverse Komponenten involviert und Interprozesskommunikation von nebenläufigen Prozessen erfordert.\\
 Die Struktur und der Ablauf des in Anwendungsfall \ref{tab:use-case-add-object} beschriebenen sichtbaren Verhaltens, wird im Folgenden präziser erklärt.\\
 Nach Betätigung des \glqq +\grqq-Buttons auf der graphischen Oberfläche wird ein Dialogfenster erzeugt. Nach Eingabe der Informationen zum Objekt, löst der \glqq Training starten\grqq-Button im Dialogfenster unter Anwendung des in Kapitel \ref{cha:communication-components} beschriebenen Ablauf das Objekttraining aus. Parallel dazu werden die eingegebenen Daten des Objektes in der Datenbank gespeichert. Die Activity delegiert den Aufruf an das Camera Fragment, welches die Verantwortlichkeiten für das Einlernen trägt. \\
@@ -484,9 +485,19 @@ Tabelle \ref{tab:gradle-config}, zeigt die vorgenommenen Android-spezifischen Ko
 Standardmäßig wird von Tensorflow Lite am Ende der \texttt{build.gradle}-Datei eine Funktion hinzugefügt, welche aus dem Internet ein Modell herunterlädt und in das für die Transfer Learning Library auffindbare Verzeichnis im Projekt kopiert.\\
 Da für die Applikation jedoch eine modifizierte Version der Modellarchitektur genutzt wird, welche zehn statt den von Tensorflow Lite standardmäßig festgelegten vier Endknoten beinhaltet, werden diese Zeilen auskommentiert.
 \section{Implementierung der Kamerafunktionalität mit CameraX}
-\section{Implementierung der Persistenzschnittstelle mit SQLite}
-Zur strukturierten Speicherung der Entitätsklassen wird für die Implementierung der Persistenzschnittstelle der Zugriff auf eine SQLite Datenbank implementiert. SQLite ist die meistgenutzte Datenbank-Engine der Welt. Sie ist in allen mobilen Endgeräten installiert und überzeugt durch dessen Robustheit und Abwärtskompatibilität \cite{sqlite-documentation}. Die in Kapitel \ref{cha:design:entities} beschriebenen Entitätsklassen wurden wie in Quelltext \ref{lst:sql-statements} implementiert.\\
+\textit{CameraX} ist eine sogenannte \textit{Jetpack support library} von Android. Diese Bibliotheken werden zur Verfügung gestellt, um Boilerplate-Code in der Kernlogik der Applikation vermeiden zu können. Zudem werden die Anwendung von \textit{best practices} und die Kompatibilität mit diversen Android Versionen unterstützt \cite{android:jetpack}.\\
+Die CameraX-Bibliothek stellt eine einfach benutzbare \ac{api} zur Verfügung, die für die App, die in diesem Projekt entwickelt werden soll, eingesetzt wird \cite{android:camerax}. Die Anwendungsfälle, die hierbei erfüllt werden sind:
+\begin{enumerate}
+	\item Eine Vorschau der Kameradaten auf dem Display
+	\item Bildanalyse-/prozessierung
+	\item Bilderfassung
+\end{enumerate}
+Das Anzeigen der Kameradaten in Echtzeit entspricht dem ersten Punkt und wird dementsprechend mit diesem Teil der CameraX-\ac{api} implementiert.\\
+Der in Kapitel \ref{cha:train-objects} erwähnte Bildanalysierer, der die Daten an den Trainings- bzw Inferenzprozess weiterleitet, wird durch den zweiten Punkt implementiert.\\
+Um lediglich Bilder zu erfassen, die in im Rahmen der Fokusbox sind, wurde der dritte Punkt nicht genutzt. Die bereits korrekt zugeschnitteten Kameradaten wurden im Analysierer in Form einer Bitmap an die SQLite-Datenbankschnittstelle übergeben. Diese Bitmaps werden in Byte-Felder konvertiert und als Blob gespeichert. Das Konvertieren und Zurückkonvertieren in eine anzeigbare Bitmap wird direkt von der SQLite-Datenbankschnittstelle übernommen.
 
+\section{Implementierung der Persistenzschnittstelle mit SQLite und Shared Preferences}
+Zur strukturierten Speicherung der Entitätsklassen wird für die Implementierung der Persistenzschnittstelle der Zugriff auf eine SQLite Datenbank implementiert. SQLite ist die meistgenutzte Datenbank-Engine der Welt. Sie ist in allen mobilen Endgeräten installiert und überzeugt durch dessen Robustheit und Abwärtskompatibilität \cite{sqlite-documentation}. Die in Kapitel \ref{cha:design:entities} beschriebenen Entitätsklassen wurden wie in Quelltext \ref{lst:sql-statements} implementiert.\\
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=SQL, breaklines=true, caption={SQLite Statements zum Erstellen der Tabellen}]
 CREATE TABLE object_table (
@@ -524,29 +535,62 @@ CREATE TABLE training_samples (
 \label{lst:sql-statements}
 Da das Speichern von Boolschen Werten nicht von SQLite unterstützt wird, wird die \texttt{isFrozen}-Spalte als Integer-Wert gespeichert. Der Wert 0 entspricht hierbei \texttt{false} und 1 entspricht \texttt{true}.\\
 Das Datum wird als Unix-Zeitstempel, welcher die vergangenen Sekunden seit dem 1. Januar 1970 um 0 Uhr zählt gespeichert. Dies vereinfacht unter anderem das chronologische Sortieren der Daten. Mithilfe des \texttt{SimpleDateFormat}-Pakets kann dieses Datum in ein lesbares Format gebracht und auf der graphischen Benutzeroberfläche angezeigt werden.\\
-Um das Abspeichern von Objekten und Modellen mit gleichen Namen zu vermeiden, wird \texttt{model\_name} und \texttt{object\_name} mit dem Schlüsselwort \texttt{UNIQUE} deklariert, um direkt auf Datenbankebene entscheiden zu können, dass ein Objekt beziehungweise ein Modell mit diesem Namen bereits vorhanden ist.
+Um das Abspeichern von Objekten und Modellen mit gleichen Namen zu vermeiden, wird \texttt{model\_name} und \texttt{object\_name} mit dem Schlüsselwort \texttt{UNIQUE} deklariert, um direkt auf Datenbankebene entscheiden zu können, dass ein Objekt beziehungweise ein Modell mit diesem Namen bereits vorhanden ist.\\
+Die in Kapitel \ref{cha:communication-components} erklärte Kommunikation der Komponenten wird vor allem durch Shared Preferences gestützt. Diese ermöglichen es auch nach Schließen der App, Daten zu halten und abzurufen, die für den Ablauf der Prozesse wichtig sind.\\
+Der \texttt{SharedPrefsHelper} implementiert die \texttt{GlobalConfig}-Schnittstelle.\\
+Die Shared Preferences können durch einfache Befehle, wie in Quelltext \ref{lst:shared-prefs} dargestellt, gesetzt und abgefragt werden. Der Schlüssel des gespeichertes Key-Value-Paares wird beim Setzen der Shared Preference initialisiert, falls er noch nicht vorhanden ist und aktualisiert, falls ein Key mit dem angegebenen Namen bereits existiert.\\
+Zudem können beim Abfragen Standardwerte gesetzt werden, die zurückgegeben werden, falls der Wert für diesen Schlüssel noch nicht gesetzt worden ist. Dies kann beispielsweise beim ersten Start nach Installation der Applikation, oder durch das Zurücksetzen der Applikation durch das Betätigen der jeweiligen Option in den internen App-Einstellungen, der Fall sein.
+
+\begin{minipage}{\linewidth}
+	\begin{lstlisting}[language=Java, breaklines=true, caption={Auschnitt aus SharedPrefsHelper}]
+// ...
+@Override
+public int getAmountSamples() {
+	return prefs.getInt("key_num_samples"), 50);
+}
+
+// ...
+
+@Override
+public boolean getHelpShowing() {
+	return prefs.getBoolean("key_show_help", true);
+}
+
+@Override
+public void setHelpShowing(boolean show) {
+	SharedPreferences.Editor editor = prefs.edit();
+	editor.putBoolean("key_show_help", show);
+	editor.apply();
+}
+
+// ...
+
+@Override
+public String getCurrentModelID() {
+	return prefs.getString("key_current_model", null);
+}
+
+@Override
+public void setCurrentModelID(String id) {
+	SharedPreferences.Editor editor = prefs.edit();
+	editor.putString("key_current_model", id);
+	editor.apply();
+}
+// ...
+	\end{lstlisting}
+\end{minipage}
+\label{lst:shared-prefs}
 
 %---
 \chapter{Tests}
 \label{cha:tests}
-
-Aufgabe des Kapitels Inbetriebnahme ist es, die Überführung der in 
-Kapitel \ref{cha:implementierung} entwickelte Lösung in das betriebliche 
-Umfeld aufzuzeigen. Dabei wird beispielsweise die Inbetriebnahme eines 
-Programms beschrieben oder die Integration eines erstellten 
-Programmodules dargestellt.
-
-Bei der Software-Erstellung entspricht dieses Kapitel der 
-%---
-\chapter{Evaluation}
-\label{cha:evaluation}
-Aufgabe des Kapitels Evaluierung ist es, in wie weit die Ziele der 
-Arbeit erreicht wurden. Es sollen also die erreichten Arbeitsergebnisse 
-mit den Zielen verglichen werden. Ergebnis der Evaluierung kann auch 
-sein, das bestimmte Ziele nicht erreicht werden konnten, wobei die 
-Ursachen hierfür auch außerhalb des Verantwortungsbereichs des 
-Praktikanten liegen können.
-
+\section{Unit-Tests}
+\section{Akzeptanztest}
+Die durch Unit-Tests getestete Applikation, wurde als Beta-Test im Rahmen einer Feldstudie getestet. Mithilfe eines Fragebogens, der von den Testern ausgefüllt wurde, konnten Ergebnisse und Eindrücke gesammelt werden, die für die weitere Entwicklung der Applikation von Bedeutung sein können. Außerdem konnten noch einige Bugs identifiziert und gelöst werden.\\
+Bei den Testern handelt es sich um Frauen und Männer, im Alter zwischen 18 und 50 Jahren mit keiner Erfahrung im Fachgebiet der Informatik. Demnach konnten Ergebnisse von Laien verschiedener Altersgruppen erfasst werden, welche unterschiedliche Hardware zur Ausführung der Applikation genutzt haben.\\
+Aus den Ergebnissen wurden diverse Änderungen an der Oberfläche vorgenommen. Der Begriff \glqq Model\grqq, sorgte bei den Testern für Verwirrung. Demnach wurde er zu \glqq Objektordner\grqq\ auf der graphischen Oberfläche abgeändert, um den technischen Hintergrund zu verbergen. Die Implementierung führt jedoch weiterhin den Begriff Model. Durch das Verwenden von externen String-Ressourcen, konnte das Umbenennen in kurzer Zeit realisiert werden. \\
+Der ausklappbare Text oberhalb der Kamera-Ansicht, welcher den Namen und die weiteren gespeicherten Daten des Objektexs beinhaltet, wurde hervorgehobener gestaltet, um das Blickfeld des Nutzers an den oberen Bildschirmrand zu lenken. Zudem wurde die Schriftfarbe des \glqq Training\grqq-Schriftzugs, der sich ebenfalls an der oberen Leiste befindet, gewechselt, um den Nutzer auf das laufende Training besser aufmerksam machen zu können.\\
+Diverse Darstellungsbugs, wie sich überlappende Elemente der graphischen Oberfläche, oder \textit{TextViews}, die nicht den gesamten Text dargestellt haben, konnten ebenfalls durch die Beta-Tests gefunden, reproduziert und behoben werden.
 %---
 \chapter{Zusammenfassung und Ausblick}
 \label{cha:zusammenfassung}

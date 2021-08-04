@@ -2197,7 +2197,9 @@
     <bcf:citekey order="12">Pellegrini2019</bcf:citekey>
     <bcf:citekey order="13">Pellegrini2019</bcf:citekey>
     <bcf:citekey order="14">cl-vs-tl</bcf:citekey>
-    <bcf:citekey order="15">sqlite-documentation</bcf:citekey>
+    <bcf:citekey order="15">android:jetpack</bcf:citekey>
+    <bcf:citekey order="16">android:camerax</bcf:citekey>
+    <bcf:citekey order="17">sqlite-documentation</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

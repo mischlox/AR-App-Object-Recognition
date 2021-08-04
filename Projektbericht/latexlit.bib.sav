@@ -100,4 +100,20 @@
   urldate = {2021-08-03},
 }
 
+@Online{android:jetpack,
+  author  = {Android Contributors},
+  title   = {Android Jetpack},
+  year    = {2021},
+  url     = {https://developer.android.com/jetpack?hl=de},
+  urldate = {2021-08-03},
+}
+
+@Online{android:camerax,
+  author  = {Android Contributors},
+  title   = {CameraX Overview},
+  date    = {2021-03-19},
+  url     = {https://developer.android.com/training/camerax?hl=de},
+  urldate = {2021-08-04},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}
