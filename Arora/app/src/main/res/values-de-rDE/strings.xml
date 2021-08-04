@@ -100,4 +100,5 @@
     <string name="succesfully_configured_replay">Konfiguration für das Hinzufügen von weiteren Samples erfolgreich. Du kannst nun mit Nutzung der App fortfahren.</string>
     <string name="success_training">Das Objekt wurde erfolgreich eingelernt!</string>
     <string name="success_training_first_obj">Das Objekt wurde erfolgreich eingelernt! Füge weitere Objekte hinzu!</string>
+    <string name="model_overview_bottom">Ordner</string>
 </resources>
