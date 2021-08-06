@@ -82,7 +82,8 @@
 \begin{abstract}
 	Das Einlernen und Wiedererkennen von beliebigen Objekten ist im Bereich des Maschinellen Sehens immer noch ein aktuelles Thema. Ein exemplarischer Anwendungsfall hierfür, wäre dem Nutzer die Möglichkeit zu bieten durch eine Kamera ein Objekt einzulesen und das Kamerabild bei Erkennung des Objektes mit bildunterstützenden Elementen zu ergänzen.\\
 	Die geringe Rechenleistung von Mobile und Embedded Devices stellt jedoch den Einsatz dieser Technologie auf diesen Geräten vor eine Herausforderung. Verschiedene Ansätze, um die Rechenintensität eines Einlern-/ und Wiedererkennungsalgorithmus gering zu halten, sind bereits verfügbar und einsetzbar. \\
-	Im Rahmen dieser Arbeit wird eine Android-Applikation für mobile Endgeräte entwickelt, welche den im obigen beschriebenen Anwendungsfall erfüllen kann. Zum Einlernen und Wiedererkennen werden bereits trainierte Deep Learning Architekturen mithilfe der Methode \glqq Modellgeneralisierung\grqq\ erweitert, um die Kernfunktionalität erbringen zu können.
+	Eine weitere Schwierigkeit, die sich beim kontinuierlichen Einlernen von Objekten ergeben kann, ist das bekannte Phänomen des Katastrophalen Vergessens, welches dafür sorgt, dass beim Trainingsvorgang bereits eingelernte Objekte mit neuen überschrieben werden.\\
+	Im Rahmen dieser Arbeit wird eine Android-Applikation für mobile Endgeräte entwickelt, welche den im obigen beschriebenen Anwendungsfall erfüllen kann. Zum Einlernen und Wiedererkennen werden bereits trainierte Deep Learning Architekturen mithilfe der Methode \glqq Continual Learning\grqq\ erweitert, um die Kernfunktionalität erbringen zu können.
 \end{abstract}
 %-----------------------------------------------------------------------
 \cleardoublepage
@@ -321,7 +322,7 @@ Im Folgenden werden die Verantwortlichkeiten der zu implementierenden Fragments 
 	
 	\item \textit{Camera Fragment}: Stellt die Hauptfunktionalität des Einlernens und Wiedererkennens zur Verfügung. Eine Kameravorschau, die mit einer Fokusbox und anderen Overlays, die zum Anzeigen von Informationen dienen, ausgestattet ist, soll in Echtzeit aktualisiert werden. Durch eine Dialogbox wird zum Einlernen eines Objektes eine Dialogbox aufgerufen, um diesem optional Informationen hinzuzufügen. Innerhalb dieses Fensters wird der Trainingsvorgang initiiert. Demnach werden die Anwendungsfälle O1 und O2 von dieser Komponente erfüllt.
 	
-	\item \textit{Help Fragment}: Falls bei der Bedienung der Applikation Schwierigkeiten auftreten sollten, stellt das Help Fragment diverse Anleitungen und Nutzungsabläufe textuell und gegebenfalls durch Videoanleitungen dar.
+	\item \textit{Help Fragment}: Falls bei der Bedienung der Applikation Schwierigkeiten auftreten sollten, stellt das Help Fragment diverse Anleitungen und Nutzungsabläufe textuell dar.
 
 \end{itemize}
 
@@ -377,6 +378,17 @@ Die Verbindung zur Persistenzkomponente ermöglicht es die Listeninstanzen mit D
 	\includegraphics[height=0.7\textheight]{images/object-overview-class-diagram.png}
 	\caption{UML-Klassendiagramm der Objekt- und Modellübersicht} Quelle: Eigene Darstellung
 	\label{fig:overview-classdiagram}
+\end{figure}
+\subsubsection{Dialoge}
+Die Dialoge wurden innerhalb eines Paketes gebündelt und werden mithilfe einer statischen \textit{Factory-Method} erstellt. Mithilfe einer Methode zum Erzeugen des Dialoges werden diese für den Nutzer sichtbar.\\
+Die Dialoge, die dem Nutzer Hilfestellungen geben, werden im \textit{Help Fragment} aufrufbar sein und werden mithilfe einer generischen Methode initialisiert. Eine abstrakte \textit{Help Dialog}-Klasse stellt die notwendige Logik für Hilfe-Dialoge zur Verfügung. Innerhalb der konkreten Klassen können die einzelnen textuellen Hinweise einer Methode als Argument übergeben werden. \\
+Das Help Fragment wird analog zur Modell- und Objektübersicht mit einem angepassten Listenadapter entworfen. Diese Liste wird fest in der Implementierung des Help Fragment initialisiert. Klicks auf das jeweilige Listenelement öffnet den zugehörigen Hilfedialog.\\
+Abbildung \ref{fig:dialogues} zeigt den Entwurf des Help Fragments und die statische Struktur des Dialogpakets.
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/dialogues.png}
+	\caption{UML-Klassendiagramm der Dialogpakets und des Help Fragments} Quelle: Eigene Darstellung
+	\label{fig:dialogues}
 \end{figure}
 \subsection{Kommunikation der Komponenten}
 \label{cha:communication-components}
@@ -496,6 +508,8 @@ Die CameraX-Bibliothek stellt eine einfach benutzbare \ac{api} zur Verfügung, d
 Das Anzeigen der Kameradaten in Echtzeit entspricht dem ersten Punkt und wird dementsprechend mit diesem Teil der CameraX-\ac{api} implementiert.\\
 Der in Kapitel \ref{cha:train-objects} erwähnte Bildanalysierer, der die Daten an den Trainings- bzw Inferenzprozess weiterleitet, wird durch den zweiten Punkt implementiert.\\
 Um lediglich Bilder zu erfassen, die in im Rahmen der Fokusbox sind, wurde der dritte Punkt nicht genutzt. Die bereits korrekt zugeschnitteten Kameradaten wurden im Analysierer in Form einer Bitmap an die SQLite-Datenbankschnittstelle übergeben. Diese Bitmaps werden in Byte-Felder konvertiert und als Blob gespeichert. Das Konvertieren und Zurückkonvertieren in eine anzeigbare Bitmap wird direkt von der SQLite-Datenbankschnittstelle übernommen.
+\subsection{Implementierung der konfigurierbaren Fokusbox}
+
 
 \section{Implementierung der Persistenzschnittstelle mit SQLite und Shared Preferences}
 Zur strukturierten Speicherung der Entitätsklassen wird für die Implementierung der Persistenzschnittstelle der Zugriff auf eine SQLite Datenbank implementiert. SQLite ist die meistgenutzte Datenbank-Engine der Welt. Sie ist in allen mobilen Endgeräten installiert und überzeugt durch dessen Robustheit und Abwärtskompatibilität \cite{sqlite-documentation}. Die in Kapitel \ref{cha:design:entities} beschriebenen Entitätsklassen wurden wie in Quelltext \ref{lst:sql-statements} implementiert.\\

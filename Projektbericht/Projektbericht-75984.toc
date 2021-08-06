@@ -56,31 +56,33 @@
 \contentsline {subsubsection}{\nonumberline Persistenz-Komponente}{20}{section*.21}%
 \contentsline {subsubsection}{\nonumberline Kamera Fragment}{20}{section*.23}%
 \contentsline {subsubsection}{\nonumberline Modell- und Objektübersicht}{23}{section*.25}%
+\contentsline {subsubsection}{\nonumberline Dialoge}{23}{section*.27}%
 \contentsline {subsection}{\numberline {4.5.2}Kommunikation der Komponenten}{23}{subsection.4.5.2}%
-\contentsline {subsection}{\numberline {4.5.3}Vorbereitung und Vorschau der Kameradaten}{25}{subsection.4.5.3}%
-\contentsline {subsection}{\numberline {4.5.4}Einlernen von Objekten}{26}{subsection.4.5.4}%
-\contentsline {subsection}{\numberline {4.5.5}Wiedererkennen von Objekten}{27}{subsection.4.5.5}%
+\contentsline {subsection}{\numberline {4.5.3}Vorbereitung und Vorschau der Kameradaten}{27}{subsection.4.5.3}%
+\contentsline {subsection}{\numberline {4.5.4}Einlernen von Objekten}{27}{subsection.4.5.4}%
+\contentsline {subsection}{\numberline {4.5.5}Wiedererkennen von Objekten}{28}{subsection.4.5.5}%
 \contentsline {subsection}{\numberline {4.5.6}Speichern und Laden von Parameterdateien}{28}{subsection.4.5.6}%
-\contentsline {subsection}{\numberline {4.5.7}Anbindung des Latent-Replay Algorithmus}{28}{subsection.4.5.7}%
-\contentsline {subsection}{\numberline {4.5.8}Belegen der Modellpositionen mit Objekten}{29}{subsection.4.5.8}%
-\contentsline {subsection}{\numberline {4.5.9}Konfigurierbarkeit}{29}{subsection.4.5.9}%
-\contentsline {subsection}{\numberline {4.5.10}Entwurf der graphischen Oberfläche}{30}{subsection.4.5.10}%
-\contentsline {chapter}{\numberline {5}Implementierung}{31}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Entwicklungswerkzeuge}{31}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Android Studio}{31}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}Gradle}{31}{subsection.5.1.2}%
-\contentsline {section}{\numberline {5.2}Implementierung der Kamerafunktionalität mit CameraX}{32}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Implementierung der Persistenzschnittstelle mit SQLite und Shared Preferences}{33}{section.5.3}%
-\contentsline {chapter}{\numberline {6}Tests}{37}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Unit-Tests}{37}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Akzeptanztest}{37}{section.6.2}%
-\contentsline {chapter}{\numberline {7}Zusammenfassung und Ausblick}{39}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Erreichte Ergebnisse}{39}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Ausblick}{39}{section.7.2}%
-\contentsline {subsection}{\numberline {7.2.1}Erweiterbarkeit der Ergebnisse}{39}{subsection.7.2.1}%
-\contentsline {subsection}{\numberline {7.2.2}Übertragbarkeit der Ergebnisse}{39}{subsection.7.2.2}%
-\contentsline {chapter}{\numberline {8}Fazit}{40}{chapter.8}%
-\contentsline {chapter}{\nonumberline Literatur}{41}{chapter*.30}%
-\contentsline {chapter}{\numberline {A}Beschreibung der Anwendungsfälle}{42}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Umfrageergebnisse Beta-Test}{58}{appendix.B}%
-\contentsline {chapter}{\numberline {C}Screenshots der graphischen Benutzeroberfläche}{59}{appendix.C}%
+\contentsline {subsection}{\numberline {4.5.7}Anbindung des Latent-Replay Algorithmus}{30}{subsection.4.5.7}%
+\contentsline {subsection}{\numberline {4.5.8}Belegen der Modellpositionen mit Objekten}{30}{subsection.4.5.8}%
+\contentsline {subsection}{\numberline {4.5.9}Konfigurierbarkeit}{31}{subsection.4.5.9}%
+\contentsline {subsection}{\numberline {4.5.10}Entwurf der graphischen Oberfläche}{31}{subsection.4.5.10}%
+\contentsline {chapter}{\numberline {5}Implementierung}{33}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Entwicklungswerkzeuge}{33}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Android Studio}{33}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Gradle}{33}{subsection.5.1.2}%
+\contentsline {section}{\numberline {5.2}Implementierung der Kamerafunktionalität mit CameraX}{34}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Implementierung der konfigurierbaren Fokusbox}{35}{subsection.5.2.1}%
+\contentsline {section}{\numberline {5.3}Implementierung der Persistenzschnittstelle mit SQLite und Shared Preferences}{35}{section.5.3}%
+\contentsline {chapter}{\numberline {6}Tests}{39}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Unit-Tests}{39}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Akzeptanztest}{39}{section.6.2}%
+\contentsline {chapter}{\numberline {7}Zusammenfassung und Ausblick}{41}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Erreichte Ergebnisse}{41}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Ausblick}{41}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Erweiterbarkeit der Ergebnisse}{41}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Übertragbarkeit der Ergebnisse}{41}{subsection.7.2.2}%
+\contentsline {chapter}{\numberline {8}Fazit}{42}{chapter.8}%
+\contentsline {chapter}{\nonumberline Literatur}{43}{chapter*.32}%
+\contentsline {chapter}{\numberline {A}Beschreibung der Anwendungsfälle}{44}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Umfrageergebnisse Beta-Test}{60}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Screenshots der graphischen Benutzeroberfläche}{61}{appendix.C}%
