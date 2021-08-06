@@ -455,7 +455,8 @@ Zur Navigation soll eine Navigationsleiste am unteren Bildschirmrand hinzugefüg
 Aktions- und Steuerelemente sollen mit möglichst selbsterklärenden Icons besetzt werden. Um das \glqq Principle of Least Surprise\grqq\ zu gewährleisten, sollen Klicks auf Buttons meistens lediglich Dialoge erzeugen. In diesen Dialogen wird erneut erklärt, was die nächste Aktion zur Folge hat. Unter Anwendung der Globalen Konfiguration, soll eine Checkbox mit der Beschreibung \glqq Nicht mehr anzeigen\grqq\ das Erzeugen von Dialogen unterdrücken, um die Arbeit mit dem Applikation für erfahrene Nutzer beschleunigen zu können.\\
 Nachdem eine Aktion, wie beispielsweise das Hinzufügen oder Löschen von Objekten abgeschlossen ist, soll dies dem Nutzer mithilfe von sogenannten Toasts, die bei Android eine Art Notifier-Popup darstellen, mitgeteilt werden, um stets eine Rückmeldung des Systems gewährleisten zu können. Länger andauernde Operationen, wie beispielsweise dem Trainieren von Objekten, oder dem Aktualisieren des Latent-Replay-Puffers, soll mithilfe von Ladekreisen hervorgehoben werden, um dem Nutzer zu signalisieren, dass das System eine länger andauernde Operation durchführt. Da das Ende des Trainings durch das Entfernen des letzten Elementes in der Anfragewarteschlange gekennzeichnet ist, kann hierfür ein deterministischer Ladekreis verwendet werden, welcher dem Nutzer eine präzisere Angabe für die verbleibende Dauer des Prozesses zur Verfügung stellen kann.\\
 Die Oberfläche der Applikation wird in deutsch und englisch verfügbar sein. Dies ist möglich durch das Verwenden von extern gespeicherten Zeichenketten in einer Datei im XML-Format, welche stets als Platzhalter in den Quelltext der Applikation eingebunden werden können. Je nach Systemsprache des Betriebssystems, auf welchem die Applikation ausgeführt wird, kann die Sprache dynamisch festgelegt werden.\\
-Ein Dunkelmodus wird nach einem ähnlichen Prinzip zur Verfügung gestellt. Durch das Auslagern von Farben und Stilen in dafür vorgesehene XML-Dateien, kann die Applikation das Farbschema der Oberfläche dynamisch ändern.
+Ein Dunkelmodus wird nach einem ähnlichen Prinzip zur Verfügung gestellt. Durch das Auslagern von Farben und Stilen in dafür vorgesehene XML-Dateien, kann die Applikation das Farbschema der Oberfläche dynamisch ändern.\\
+In Anhang \ref{appendix:gui} werden Screenshots von der Gestaltung der graphischen Oberfläche dargestellt.
 \chapter{Implementierung}
 \label{cha:implementierung}
 In diesem Kapitel wird die konkrete Implementierung des in Kapitel
@@ -533,8 +534,9 @@ CREATE TABLE training_samples (
 \end{lstlisting}
 \end{minipage}
 \label{lst:sql-statements}
+Die Daten werden in ein sogenannte \texttt{Cursor}-Objekte gespeichert und können spaltenweise iteriert werden mit der \texttt{moveToNext()}-Methode. Die Datenbank-Helferklasse \texttt{SQLiteDatabase} stellt zudem verschiedene Methoden zum Einfügen, Aktualisieren und Löschen von Reihen in der Datenbank zur Verfügung. Dies erleichtert den Umgang mit dem persistenten Speichern von Daten, da es dadurch möglich ist SQL-Anfragen in einer einzelnen Zeile Quelltext zu formulieren.\\
 Da das Speichern von Boolschen Werten nicht von SQLite unterstützt wird, wird die \texttt{isFrozen}-Spalte als Integer-Wert gespeichert. Der Wert 0 entspricht hierbei \texttt{false} und 1 entspricht \texttt{true}.\\
-Das Datum wird als Unix-Zeitstempel, welcher die vergangenen Sekunden seit dem 1. Januar 1970 um 0 Uhr zählt gespeichert. Dies vereinfacht unter anderem das chronologische Sortieren der Daten. Mithilfe des \texttt{SimpleDateFormat}-Pakets kann dieses Datum in ein lesbares Format gebracht und auf der graphischen Benutzeroberfläche angezeigt werden.\\
+Das Datum wird als Unix-Zeitstempel, welcher die vergangenen Sekunden seit dem 1. Januar 1970 um 0 Uhr zählt, gespeichert. Dies vereinfacht unter anderem das chronologische Sortieren der Daten. Mithilfe des \texttt{SimpleDateFormat}-Pakets kann dieses Datum in ein lesbares Format gebracht und auf der graphischen Benutzeroberfläche angezeigt werden.\\
 Um das Abspeichern von Objekten und Modellen mit gleichen Namen zu vermeiden, wird \texttt{model\_name} und \texttt{object\_name} mit dem Schlüsselwort \texttt{UNIQUE} deklariert, um direkt auf Datenbankebene entscheiden zu können, dass ein Objekt beziehungweise ein Modell mit diesem Namen bereits vorhanden ist.\\
 Die in Kapitel \ref{cha:communication-components} erklärte Kommunikation der Komponenten wird vor allem durch Shared Preferences gestützt. Diese ermöglichen es auch nach Schließen der App, Daten zu halten und abzurufen, die für den Ablauf der Prozesse wichtig sind.\\
 Der \texttt{SharedPrefsHelper} implementiert die \texttt{GlobalConfig}-Schnittstelle.\\
@@ -588,8 +590,10 @@ public void setCurrentModelID(String id) {
 \section{Akzeptanztest}
 Die durch Unit-Tests getestete Applikation, wurde als Beta-Test im Rahmen einer Feldstudie getestet. Mithilfe eines Fragebogens, der von den Testern ausgefüllt wurde, konnten Ergebnisse und Eindrücke gesammelt werden, die für die weitere Entwicklung der Applikation von Bedeutung sein können. Außerdem konnten noch einige Bugs identifiziert und gelöst werden.\\
 Bei den Testern handelt es sich um Frauen und Männer, im Alter zwischen 18 und 50 Jahren mit keiner Erfahrung im Fachgebiet der Informatik. Demnach konnten Ergebnisse von Laien verschiedener Altersgruppen erfasst werden, welche unterschiedliche Hardware zur Ausführung der Applikation genutzt haben.\\
-Aus den Ergebnissen wurden diverse Änderungen an der Oberfläche vorgenommen. Der Begriff \glqq Model\grqq, sorgte bei den Testern für Verwirrung. Demnach wurde er zu \glqq Objektordner\grqq\ auf der graphischen Oberfläche abgeändert, um den technischen Hintergrund zu verbergen. Die Implementierung führt jedoch weiterhin den Begriff Model. Durch das Verwenden von externen String-Ressourcen, konnte das Umbenennen in kurzer Zeit realisiert werden. \\
-Der ausklappbare Text oberhalb der Kamera-Ansicht, welcher den Namen und die weiteren gespeicherten Daten des Objektexs beinhaltet, wurde hervorgehobener gestaltet, um das Blickfeld des Nutzers an den oberen Bildschirmrand zu lenken. Zudem wurde die Schriftfarbe des \glqq Training\grqq-Schriftzugs, der sich ebenfalls an der oberen Leiste befindet, gewechselt, um den Nutzer auf das laufende Training besser aufmerksam machen zu können.\\
+Die Ergebnisse sind in Anhang \ref{appendix:beta-test} zu finden. Ein überwiegend positiver Eindruck über die Applikation konnte festgestellt werden. Lediglich die Einfachheit der Benutzung wurde aufgrund von diversen User-Interface-Designfehlern kritisiert, welche größtenteils behoben werden konnten.\\
+Demnach wurden aus den Ergebnissen diverse Änderungen an der Oberfläche vorgenommen. Der Begriff \glqq Model\grqq, sorgte bei den Testern für Verwirrung. Demnach wurde er zu \glqq Objektordner\grqq\ auf der graphischen Oberfläche abgeändert, um den technischen Hintergrund zu verbergen. Die Implementierung führt jedoch weiterhin den Begriff Model. Durch das Verwenden von externen String-Ressourcen, konnte das Umbenennen in kurzer Zeit realisiert werden. \\
+Der ausklappbare Text oberhalb der Kamera-Ansicht, welcher den Namen und die weiteren gespeicherten Daten des Objekts beinhaltet, wurde hervorgehobener gestaltet, um das Blickfeld des Nutzers an den oberen Bildschirmrand zu lenken. Zudem wurde die Schriftfarbe des \glqq Training\grqq-Schriftzugs, der sich ebenfalls an der oberen Leiste befindet, gewechselt, um den Nutzer auf das laufende Training besser aufmerksam machen zu können.\\
+Die oben genannten Probleme, die für die Tester entstanden sind, könnten auch durch die Verwendung eines \texttt{OnBoardingSupportFragment} gelöst werden. Dieses Fragment ermöglicht es diverse Hilfeelemente beim ersten Start der Applikation anzeigen zu lassen. Mithilfe des \texttt{Help Fragments}, zu welchem man stets navigieren kann, erhält der Nutzer ebenfalls eine textuelle Anleitung für die Nutzung der Applikation.\\
 Diverse Darstellungsbugs, wie sich überlappende Elemente der graphischen Oberfläche, oder \textit{TextViews}, die nicht den gesamten Text dargestellt haben, konnten ebenfalls durch die Beta-Tests gefunden, reproduziert und behoben werden.
 %---
 \chapter{Zusammenfassung und Ausblick}
@@ -994,7 +998,11 @@ Und hier etwas über deren Übertragbarkeit.
 \end{table}
 
 %---
-\chapter{Anhang B}
+\chapter{Umfrageergebnisse Beta-Test}
+\label{appendix:beta-test}
+
+\chapter{Screenshots der graphischen Benutzeroberfläche}
+\label{appendix:gui}
 
 
 \end{document}

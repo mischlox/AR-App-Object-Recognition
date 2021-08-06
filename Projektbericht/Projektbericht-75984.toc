@@ -74,12 +74,13 @@
 \contentsline {chapter}{\numberline {6}Tests}{37}{chapter.6}%
 \contentsline {section}{\numberline {6.1}Unit-Tests}{37}{section.6.1}%
 \contentsline {section}{\numberline {6.2}Akzeptanztest}{37}{section.6.2}%
-\contentsline {chapter}{\numberline {7}Zusammenfassung und Ausblick}{38}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Erreichte Ergebnisse}{38}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Ausblick}{38}{section.7.2}%
-\contentsline {subsection}{\numberline {7.2.1}Erweiterbarkeit der Ergebnisse}{38}{subsection.7.2.1}%
-\contentsline {subsection}{\numberline {7.2.2}Übertragbarkeit der Ergebnisse}{38}{subsection.7.2.2}%
-\contentsline {chapter}{\numberline {8}Fazit}{39}{chapter.8}%
-\contentsline {chapter}{\nonumberline Literatur}{40}{chapter*.30}%
-\contentsline {chapter}{\numberline {A}Beschreibung der Anwendungsfälle}{41}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Anhang B}{57}{appendix.B}%
+\contentsline {chapter}{\numberline {7}Zusammenfassung und Ausblick}{39}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Erreichte Ergebnisse}{39}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Ausblick}{39}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Erweiterbarkeit der Ergebnisse}{39}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Übertragbarkeit der Ergebnisse}{39}{subsection.7.2.2}%
+\contentsline {chapter}{\numberline {8}Fazit}{40}{chapter.8}%
+\contentsline {chapter}{\nonumberline Literatur}{41}{chapter*.30}%
+\contentsline {chapter}{\numberline {A}Beschreibung der Anwendungsfälle}{42}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Umfrageergebnisse Beta-Test}{58}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Screenshots der graphischen Benutzeroberfläche}{59}{appendix.C}%
