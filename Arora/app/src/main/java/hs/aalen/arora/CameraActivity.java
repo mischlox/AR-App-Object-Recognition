@@ -195,7 +195,7 @@ public class CameraActivity extends AppCompatActivity implements NavigationView.
         boolean showHelp = globalConfig.getHelpShowing();
 
         if (showHelp) {
-            DialogFactory.getDialog(DialogType.HELP).createDialog(this);
+            DialogFactory.getDialog(DialogType.HELP_ADD_OBJ).createDialog(this);
         } else {
             DialogFactory.getDialog(DialogType.ADD_OBJ).createDialog(this);
         }

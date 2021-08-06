@@ -101,4 +101,9 @@
     <string name="success_training">Das Objekt wurde erfolgreich eingelernt!</string>
     <string name="success_training_first_obj">Das Objekt wurde erfolgreich eingelernt! Füge weitere Objekte hinzu!</string>
     <string name="model_overview_bottom">Ordner</string>
+    <string name="help_add_object">Füge Objekte hinzu</string>
+    <string name="help_add_further_samples">Trainiere bestehendes Objekt</string>
+    <string name="help_configure_app">Konfiguriere die App</string>
+    <string name="help_object_overview">Betrachte alle Objekte</string>
+    <string name="help_model_overview">Betrachte alle Objektordner</string>
 </resources>

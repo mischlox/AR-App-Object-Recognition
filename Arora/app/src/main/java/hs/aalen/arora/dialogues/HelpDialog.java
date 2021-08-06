@@ -21,15 +21,20 @@ import hs.aalen.arora.R;
 import hs.aalen.arora.persistence.SharedPrefsHelper;
 
 /**
- * Dialog that gives instructions for the usage of this app
+ * Base Dialog that gives instructions for the usage of this app.
+ * Extending classes only have to define elements the textList LinkedList
+ *
+ * @author Michael Schlosser
  */
-public class HelpDialog implements Dialog {
+public abstract class HelpDialog implements Dialog {
     private AlertDialog helpDialog;
-    private TextView helpTextView;
     private ProgressBar helpProgress;
     private TextView helpProgressText;
     private Context context;
     private GlobalConfig globalConfig;
+    private TextView helpTextView;
+    private int helpCardCount = 1;
+    protected LinkedList<Pair<Integer, String>> textList = new LinkedList<>();
 
     @Override
     public void createDialog(Context context) {
@@ -52,12 +57,6 @@ public class HelpDialog implements Dialog {
         helpDialogBuilder.setView(helpDialogView);
         helpDialog = helpDialogBuilder.create();
         helpDialog.show();
-
-        // Linked list to browse through text views
-        LinkedList<Pair<Integer, String>> textList = new LinkedList<>();
-        textList.add(Pair.create(2, context.getString(R.string.help_text_tilt_camera)));
-        textList.add(Pair.create(3, context.getString(R.string.help_text_counter_training)));
-        textList.add(Pair.create(4, context.getString(R.string.help_text_havefun)));
 
         notShowAgainCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> globalConfig.setHelpShowing(!isChecked));
         // Next slide
@@ -97,6 +96,28 @@ public class HelpDialog implements Dialog {
             helpDialog.dismiss();
             new AddObjectDialog().createDialog(context);
         });
+    }
+
+    /**
+     * Method to initialize the Card View with any amount of texts and therefore make
+     * it very generic in showing cards
+     *
+     * @param cardTexts text that will appear on the slide
+     */
+    protected void initCards(String... cardTexts) {
+        for(String text : cardTexts) {
+            if(helpCardCount == 1) {
+                helpTextView.setText(text);
+            }
+            else {
+                textList.add(Pair.create(helpCardCount, text));
+            }
+            helpCardCount++;
+        }
+        helpProgress.setMax(helpCardCount-1);
+        // Init progress text
+        String progressText = 1 + " / " + helpProgress.getMax();
+        helpProgressText.setText(progressText);
     }
 
     private void startTextAnimation(TextView textView, int animationResource) {

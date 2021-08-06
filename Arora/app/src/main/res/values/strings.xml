@@ -167,4 +167,9 @@
     <string name="success_training_first_obj">Successfully learned this object! Try adding further objects!</string>
     <string name="please_wait_replay">Loading. Please wait …</string>
     <string name="model_overview_bottom">Folders</string>
+    <string name="help_add_object">Add New Object</string>
+    <string name="help_add_further_samples">Train Existing Object</string>
+    <string name="help_configure_app">Configure App</string>
+    <string name="help_object_overview">View All Objects</string>
+    <string name="help_model_overview">View All Object Folders</string>
 </resources>

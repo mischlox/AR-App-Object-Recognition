@@ -49,11 +49,6 @@ public class ModelOverviewFragment extends ListFragment {
     private GlobalConfig globalConfig;
     private ListView modelListView;
 
-    @Override
-    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
@@ -98,7 +93,7 @@ public class ModelOverviewFragment extends ListFragment {
      */
     class ModelOverviewAdapter extends ArrayAdapter<String> {
         Context context;
-        ArrayList<String> modelName;
+        ArrayList<String> modelNames;
         int selectedPosition;
 
         private AlertDialog showObjectDialog;
@@ -108,10 +103,10 @@ public class ModelOverviewFragment extends ListFragment {
         private ProgressBar numObjectsInModelProgressBar;
         private TextView numObjectsInModelTextView;
 
-        ModelOverviewAdapter(Context c, ArrayList<String> name) {
-            super(c, R.layout.model_item, R.id.list_model_name, name);
+        ModelOverviewAdapter(Context c, ArrayList<String> names) {
+            super(c, R.layout.model_item, R.id.list_model_name, names);
             this.context = c;
-            this.modelName = name;
+            this.modelNames = names;
 
             if(globalConfig.getCurrentModelID() != null) {
                 this.selectedPosition = Integer.parseInt(globalConfig.getCurrentModelID()) - 1;
@@ -135,7 +130,7 @@ public class ModelOverviewFragment extends ListFragment {
             ImageView infoButton = item.findViewById(R.id.list_model_is_frozen);
             infoButton.setOnClickListener(v -> Toast.makeText(context, R.string.model_was_frozen_info, Toast.LENGTH_LONG).show());
 
-            modelNameTextView.setText(this.modelName.get(position));
+            modelNameTextView.setText(this.modelNames.get(position));
 
             RadioButton modelSelectorButton = item.findViewById(R.id.list_model_radiobutton);
             modelSelectorButton.setChecked(position == selectedPosition);
