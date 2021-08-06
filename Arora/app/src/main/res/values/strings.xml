@@ -54,7 +54,7 @@
     <!-- Help Dialog -->
     <string name="usage">How it works</string>
     <string name="do_not_show_again">Do not show again</string>
-    <string name="help_text_add_info">Enter the name of the object and if you want to additional information</string>
+    <string name="help_text_add_info">Enter the name of the object and optionally additional information</string>
     <string name="help_text_tilt_camera">Move your phone slowly during the training in order to train impressions from several perspectives</string>
     <string name="help_text_havefun">Have Fun!</string>
     <string name="back" translatable="false">back</string>
@@ -172,4 +172,27 @@
     <string name="help_configure_app">Configure App</string>
     <string name="help_object_overview">View All Objects</string>
     <string name="help_model_overview">View All Object Folders</string>
+    <string name="close">Close</string>
+    <string name="help_text_fill_focusbox">Make sure the object completely fills the focus box in the middle of the screen</string>
+    <string name="help_text_train_further_samples">If you are not satisfied with the recognition results, it is possible to add further samples.</string>
+    <string name="help_text_train_further_samples_adv">Keep in mind that after retraining with more samples the recognition quality of other objects can be affected because of unbalanced sample amount in the object folder</string>
+    <string name="help_text_train_further_samples_third">Go to Object Overview and press the + Button below the preview image</string>
+    <string name="help_text_train_further_samples_fourth">After accepting the possible consequences you will find yourself back in the camera view and the countdown for adding a new object will start</string>
+    <string name="help_config_intro">Go to the settings view by pressing on the gear wheel. You can configure several parameters of the app</string>
+    <string name="help_config_samples">You can change the number of samples that are added in a training session per object. The advantage is, that a training session will not be that long. But the accuracy of the detection results can suffer from making this value too low</string>
+    <string name="help_config_thres">The confidence threshold decides from which percentual certainity the object is considered recognized</string>
+    <string name="help_config_countdown">You can configure the countdown that appears before the training starts</string>
+    <string name="help_config_resolution">You can downsize the focusbox, if you want to train an object that is too far away and upsize it if you want to train with a higher resolution</string>
+    <string name="help_config_darkmode">If you prefer a dark theme you can also find the dark mode toggle in the settings</string>
+    <string name="help_config_reset">if you want to delete all data without reinstalling the app, you have the possibility for that in the settings too</string>
+    <string name="help_text_obj_view">Go to the object overview to see all objects you have saved so far</string>
+    <string name="help_text_obj_view_2">The object view shows which object folder your object is belonging to and will show you all information that you have defined for it</string>
+    <string name="help_text_obj_edit_del">If something is wrong you always have the possiblity to edit or delete an existing object from the object overview</string>
+    <string name="help_text_obj_blue_border">The blue border around the image preview on the left side of the information of the specific object, means that this object is in your selected object folder and therefore recognizable right now</string>
+    <string name="help_text_model_intro">Go to the object folder overview to see all saved folders</string>
+    <string name="help_text_radiobutton">By clicking the radiobutton on the left side of the object folder you want to choose, it will be selected</string>
+    <string name="help_text_see_all_objects">By pressing the list button on the right you can get an overview of all objects that are saved in the specified object folder</string>
+    <string name="help_text_add_new_model">By pressing the big + Button in the bottom right corner, you can add a new object folder</string>
+    <string name="help_text_model_frozen">If there is a snowflake beside an object folder name, the folder is frozen and should not be selected furthermore for adding new objects, because the detection results of old objects can suffer from this</string>
+
 </resources>

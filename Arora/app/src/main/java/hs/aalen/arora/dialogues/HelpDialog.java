@@ -27,38 +27,39 @@ import hs.aalen.arora.persistence.SharedPrefsHelper;
  * @author Michael Schlosser
  */
 public abstract class HelpDialog implements Dialog {
-    private AlertDialog helpDialog;
     private ProgressBar helpProgress;
     private TextView helpProgressText;
     private Context context;
-    private GlobalConfig globalConfig;
+
     private TextView helpTextView;
+    private TextView helpTextTitle;
     private int helpCardCount = 1;
+    protected AlertDialog helpDialog;
     protected LinkedList<Pair<Integer, String>> textList = new LinkedList<>();
+    protected View helpDialogView;
 
     @Override
     public void createDialog(Context context) {
         this.context = context;
-        this.globalConfig = new SharedPrefsHelper(context);
 
         AlertDialog.Builder helpDialogBuilder = new AlertDialog.Builder(context);
 
-        final View helpDialogView = ((LayoutInflater) context
+        helpDialogView = ((LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.help_popup, null);
         FloatingActionButton backwardButton = helpDialogView.findViewById(R.id.help_backward_button);
         FloatingActionButton forwardButton = helpDialogView.findViewById(R.id.help_forward_button);
-        Button trainingButton = helpDialogView.findViewById(R.id.help_training_button);
-        CheckBox notShowAgainCheckBox = helpDialogView.findViewById(R.id.help_checkbox);
+
         helpTextView = helpDialogView.findViewById(R.id.help_dialog_text);
         helpProgress = helpDialogView.findViewById(R.id.help_progress);
         helpProgressText = helpDialogView.findViewById(R.id.help_progress_text);
+        helpTextTitle = helpDialogView.findViewById(R.id.help_dialog_title);
 
         helpDialogBuilder.setView(helpDialogView);
         helpDialog = helpDialogBuilder.create();
         helpDialog.show();
 
-        notShowAgainCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> globalConfig.setHelpShowing(!isChecked));
+
         // Next slide
         forwardButton.setOnClickListener(v -> {
             startTextAnimation(helpTextView, R.anim.anim_fade_out);
@@ -91,10 +92,9 @@ public abstract class HelpDialog implements Dialog {
 
             textList.addFirst(Pair.create(currentProgress, currentText));
         });
-        // Go to Add object dialog
+        Button trainingButton = helpDialogView.findViewById(R.id.help_training_button);
         trainingButton.setOnClickListener(v -> {
             helpDialog.dismiss();
-            new AddObjectDialog().createDialog(context);
         });
     }
 
@@ -102,9 +102,11 @@ public abstract class HelpDialog implements Dialog {
      * Method to initialize the Card View with any amount of texts and therefore make
      * it very generic in showing cards
      *
+     * @param title title of card view has to be the first argument
      * @param cardTexts text that will appear on the slide
      */
-    protected void initCards(String... cardTexts) {
+    protected void initCards(String title, String... cardTexts) {
+        helpTextTitle.setText(title);
         for(String text : cardTexts) {
             if(helpCardCount == 1) {
                 helpTextView.setText(text);

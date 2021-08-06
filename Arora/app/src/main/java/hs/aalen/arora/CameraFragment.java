@@ -468,12 +468,16 @@ public class CameraFragment extends Fragment {
     private void setProgressCircle(int progress) {
         Log.d(TAG, "addSamples setProgressCircle Max: " + trainingProgressBar.getMax() + " progress: " + progress);
         if (progress == 0) {
+            objectName.setVisibility(VISIBLE);
+            objectConfidence.setVisibility(VISIBLE);
             trainingProgressBarLabel.setText(R.string.detecting_progress);
             trainingProgressBarTextView.setVisibility(GONE);
             trainingProgressBar.setProgressDrawable(ContextCompat.getDrawable(context, R.drawable.circle));
             trainingProgressBarLabel.setTextColor(ContextCompat.getColor(context, R.color.blue_arora));
             trainingProgressBar.setIndeterminate(true);
         } else {
+            objectName.setVisibility(View.INVISIBLE);
+            objectConfidence.setVisibility(View.INVISIBLE);
             trainingProgressBarLabel.setText(R.string.training_progress);
             trainingProgressBarLabel.setTextColor(ContextCompat.getColor(context, R.color.green));
             trainingProgressBar.setProgressDrawable(ContextCompat.getDrawable(context, R.drawable.circle_green));

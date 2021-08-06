@@ -10,8 +10,8 @@ public class DialogFactory {
         if (dialogType == DialogType.REPLAY) return new ReplayDialog();
         if (dialogType == DialogType.HELP_ADD_OBJ) return new HelpAddObjDialog();
         if (dialogType == DialogType.HELP_ADD_MORE_SAMPLES) return new HelpAddFurtherSamplesDialog();
-        if (dialogType == DialogType.HELP_OBJ_OVERVIEW) return new HelpAddObjDialog();
-        if (dialogType == DialogType.HELP_MODEL_OVERVIEW) return new HelpAddObjDialog();
+        if (dialogType == DialogType.HELP_OBJ_OVERVIEW) return new HelpObjectOverview();
+        if (dialogType == DialogType.HELP_MODEL_OVERVIEW) return new HelpModelOverview();
         if (dialogType == DialogType.HELP_SETTINGS) return new HelpSettingsDialog();
         return null;
     }

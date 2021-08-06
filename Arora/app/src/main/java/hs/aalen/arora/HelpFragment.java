@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import hs.aalen.arora.dialogues.Dialog;
 import hs.aalen.arora.dialogues.DialogFactory;
 import hs.aalen.arora.dialogues.DialogType;
 
@@ -33,16 +34,16 @@ import hs.aalen.arora.dialogues.DialogType;
 public class HelpFragment extends ListFragment {
     private final ArrayList<String> helpTitles = new ArrayList<>();
     private final ArrayList<Integer> helpIcons = new ArrayList<>();
-    private ListView helpListView;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_help, container, false);
-        helpListView = view.findViewById(android.R.id.list);
+        ListView helpListView = view.findViewById(android.R.id.list);
 
         // Initialize Titles with Resource Strings
+        helpTitles.clear();
         helpTitles.addAll(Arrays.asList(
                 getString(R.string.help_add_object),
                 getString(R.string.help_add_further_samples),
@@ -51,6 +52,7 @@ public class HelpFragment extends ListFragment {
                 getString(R.string.help_model_overview)));
 
         // Initialize Icons with ResourceIDs
+        helpIcons.clear();
         helpIcons.addAll(Arrays.asList(
                 R.drawable.ic_eye,
                 R.drawable.ic_add,
@@ -103,16 +105,16 @@ public class HelpFragment extends ListFragment {
                     DialogFactory.getDialog(DialogType.HELP_ADD_OBJ).createDialog(context);
                 }
                 else if(helpTitles.get(position).equals(getString(R.string.help_add_further_samples))) {
-
+                    DialogFactory.getDialog(DialogType.HELP_ADD_MORE_SAMPLES).createDialog(context);
                 }
                 else if(helpTitles.get(position).equals(getString(R.string.help_configure_app))) {
-
+                    DialogFactory.getDialog(DialogType.HELP_SETTINGS).createDialog(context);
                 }
                 else if(helpTitles.get(position).equals(getString(R.string.help_object_overview))) {
-
+                    DialogFactory.getDialog(DialogType.HELP_OBJ_OVERVIEW).createDialog(context);
                 }
                 else if(helpTitles.get(position).equals(getString(R.string.help_model_overview))) {
-
+                    DialogFactory.getDialog(DialogType.HELP_MODEL_OVERVIEW).createDialog(context);
                 }
             });
             return item;

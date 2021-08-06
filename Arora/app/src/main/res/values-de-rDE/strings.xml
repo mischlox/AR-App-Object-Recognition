@@ -106,4 +106,26 @@
     <string name="help_configure_app">Konfiguriere die App</string>
     <string name="help_object_overview">Betrachte alle Objekte</string>
     <string name="help_model_overview">Betrachte alle Objektordner</string>
+    <string name="close">Schließen</string>
+    <string name="help_text_fill_focusbox">Stelle sicher, dass das Objekt die Fokusbox in der Mitte des Bildschirms komplett füllt</string>
+    <string name="help_text_train_further_samples">Wenn du mit den Erkennungsergebnissen nicht zufrieden bist, ist es mögliche weitere Trainingseindrücke zu sammeln</string>
+    <string name="help_text_train_further_samples_adv">Beachte jedoch, dass nach dem Einlernen von neuen Eindrücken die Erkennungsqualität anderer Objekte negativ beeinflusst werden kann, aufgrund von einer unausgeglichenen Anzahl von trainierten Daten.</string>
+    <string name="help_text_train_further_samples_third">Gehe zur Objektübersicht und drücke den + Button unterhalb des Vorschaubildes</string>
+    <string name="help_text_train_further_samples_fourth">Nachdem du die möglichen Konsequenzen akzeptiert hast wechselt sich die Ansicht zur Kameraansicht und der Countdown, welcher das Hinzufügen eines neuen Objektes einleitet wird gestartet</string>
+    <string name="help_config_intro">Gehe in die Einstellung durch das Drücken des Zahnrad-Buttons. In diesem Menü kannst du verschiedene Parameter der App konfigurieren</string>
+    <string name="help_config_samples">Du kannst die Anzahl der Trainingseindrücke pro Trainingssitzung ändern. Der Vorteil ist, dass eine Sitzung nicht so lange dauert. Ein Nachteil ist jedoch, dass die Erkennungsergebnisse an einem zu geringen Wert leiden können</string>
+    <string name="help_config_thres">Die Konfidenzschwelle entscheidet ab welcher prozentualen Gewissheit das Objekt als erkannt gilt</string>
+    <string name="help_config_countdown">Du kannst den Countdown, der vor dem Training runterzählt, einstellen</string>
+    <string name="help_config_resolution">Du kannst die Fokusbox verkleinern, wenn du Objekte einlernen willst, die zu weit weg sind, oder vergrößern falls du mit einer höheren Auflösung trainieren willst</string>
+    <string name="help_config_darkmode">Wenn du den Dunkelmodus bevorzugst, kannst du ihn ebenfalls in den Einstellungen setzen</string>
+    <string name="help_config_reset">Wenn du alle Daten löschen möchtest ohne die App dafür neu installieren zu müssen, findest du die Möglichkeit dafür ebenfalls in den Einstellungen</string>
+    <string name="help_text_obj_view">Gehe zur Objektübersicht, um alle bisher gespeicherten Objekte einzusehen</string>
+    <string name="help_text_obj_view_2">Die Objektübersicht zeigt in welchem Ordner sich das Objekt befindet und zeigt alle Informationen die du für das Objekt gespeichert hast an</string>
+    <string name="help_text_obj_edit_del">Falls etwas mit einem eingelernten Objekt nicht stimmen sollte, findest du hier die Möglichkeit die Information anzupassen oder das Objekt komplett zu löschen</string>
+    <string name="help_text_obj_blue_border">Der blaue Rahmen um die Objektvorschau auf der linken Seite der Ansicht eines Objektes bedeutet, dass das Objekt sich im ausgewählten Objektordner befindet und demnach wiedererkannt werden kann</string>
+    <string name="help_text_model_intro">Gehe zur Objektordner Übersicht, um alle gespeicherten Objektordner einsehen zu können</string>
+    <string name="help_text_radiobutton">Durch das Selektieren des Radio Buttons links vom Objektordner kannst du diesen Objektordner für das Einlernen und die Wiedererkennung auswählen</string>
+    <string name="help_text_see_all_objects">Durch das Drücken des Listen-Buttons rechts vom Namen des Objektordners, kannst du alle Objekte die sich in diesem Ordner befinden einsehen</string>
+    <string name="help_text_add_new_model">Durch das Drücken des großen +-Buttons in der rechten unteren Ecken, kannst du einen neuen Objektordner hinzufügen</string>
+    <string name="help_text_model_frozen">Wenn sich eine Schneeflocke neben dem Namen deines Objektordners befindet bedeutet das, dass der Ordner eingefroren ist und weitere Objekte nicht hinzugefügt werden sollten, da sonst die Erkennugnsergebnisse alter Objekte darunter leiden könnten.</string>
 </resources>
