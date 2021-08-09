@@ -2182,24 +2182,25 @@
     <bcf:datasource type="file" datatype="bibtex">latexlit.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">deepl-vs-traditional</bcf:citekey>
-    <bcf:citekey order="1">deepl-lecun</bcf:citekey>
-    <bcf:citekey order="2">mobilenet</bcf:citekey>
-    <bcf:citekey order="3">Senchanka2019</bcf:citekey>
-    <bcf:citekey order="4">forgetting</bcf:citekey>
-    <bcf:citekey order="5">Senchanka2019</bcf:citekey>
-    <bcf:citekey order="6">cl-vs-tl</bcf:citekey>
-    <bcf:citekey order="7">Sarkar2019</bcf:citekey>
-    <bcf:citekey order="8">Pellegrini2019</bcf:citekey>
+    <bcf:citekey order="1">dl-review</bcf:citekey>
+    <bcf:citekey order="2">deepl-vs-traditional</bcf:citekey>
+    <bcf:citekey order="2">deepl-lecun</bcf:citekey>
+    <bcf:citekey order="3">mobilenet</bcf:citekey>
+    <bcf:citekey order="4">Senchanka2019</bcf:citekey>
+    <bcf:citekey order="5">forgetting</bcf:citekey>
+    <bcf:citekey order="6">Senchanka2019</bcf:citekey>
+    <bcf:citekey order="7">cl-vs-tl</bcf:citekey>
+    <bcf:citekey order="8">Sarkar2019</bcf:citekey>
     <bcf:citekey order="9">Pellegrini2019</bcf:citekey>
-    <bcf:citekey order="10">tflite-site</bcf:citekey>
-    <bcf:citekey order="11">cl-vs-tl</bcf:citekey>
-    <bcf:citekey order="12">Pellegrini2019</bcf:citekey>
+    <bcf:citekey order="10">Pellegrini2019</bcf:citekey>
+    <bcf:citekey order="11">tflite-site</bcf:citekey>
+    <bcf:citekey order="12">cl-vs-tl</bcf:citekey>
     <bcf:citekey order="13">Pellegrini2019</bcf:citekey>
-    <bcf:citekey order="14">cl-vs-tl</bcf:citekey>
-    <bcf:citekey order="15">android:jetpack</bcf:citekey>
-    <bcf:citekey order="16">android:camerax</bcf:citekey>
-    <bcf:citekey order="17">sqlite-documentation</bcf:citekey>
+    <bcf:citekey order="14">Pellegrini2019</bcf:citekey>
+    <bcf:citekey order="15">cl-vs-tl</bcf:citekey>
+    <bcf:citekey order="16">android:jetpack</bcf:citekey>
+    <bcf:citekey order="17">android:camerax</bcf:citekey>
+    <bcf:citekey order="18">sqlite-documentation</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

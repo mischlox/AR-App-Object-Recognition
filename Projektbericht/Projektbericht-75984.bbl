@@ -583,6 +583,55 @@
       \verb https://blog.tensorflow.org/2019/12/example-on-device-model-personalization.html
       \endverb
     \endentry
+    \entry{dl-review}{article}{}
+      \name{author}{4}{}{%
+        {{hash=dd8a99db4576468b122bf3d2c834a631}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Zhong-Qiu},
+           giveni={Z\bibinithyphendelim Q\bibinitperiod}}}%
+        {{hash=05fe66e8b4eb6dd8303e7517398cb8ca}{%
+           family={Zheng},
+           familyi={Z\bibinitperiod},
+           given={Peng},
+           giveni={P\bibinitperiod}}}%
+        {{hash=1ce486a3108697c732439bdbeb76a77c}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Shou-tao},
+           giveni={S\bibinithyphendelim t\bibinitperiod}}}%
+        {{hash=a425d40644d310de2ce5bb61aee8b039}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Xindong},
+           giveni={X\bibinitperiod}}}%
+      }
+      \strng{namehash}{3829c329a225de8b4e2bde308d383cb1}
+      \strng{fullhash}{ea2f82fac2dbb78de883e932683f8421}
+      \strng{bibnamehash}{3829c329a225de8b4e2bde308d383cb1}
+      \strng{authorbibnamehash}{3829c329a225de8b4e2bde308d383cb1}
+      \strng{authornamehash}{3829c329a225de8b4e2bde308d383cb1}
+      \strng{authorfullhash}{ea2f82fac2dbb78de883e932683f8421}
+      \field{sortinit}{Z}
+      \field{sortinithash}{8f7b480688e809b50b6f6577b16f3db5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Due to object detection's close relationship with video analysis and image understanding, it has attracted much research attention in recent years. Traditional object detection methods are built on handcrafted features and shallow trainable architectures. Their performance easily stagnates by constructing complex ensembles which combine multiple low-level image features with high-level context from object detectors and scene classifiers. With the rapid development in deep learning, more powerful tools, which are able to learn semantic, high-level, deeper features, are introduced to address the problems existing in traditional architectures. These models behave differently in network architecture, training strategy and optimization function, etc. In this paper, we provide a review on deep learning based object detection frameworks. Our review begins with a brief introduction on the history of deep learning and its representative tool, namely Convolutional Neural Network (CNN). Then we focus on typical generic object detection architectures along with some modifications and useful tricks to improve detection performance further. As distinct specific detection tasks exhibit different characteristics, we also briefly survey several specific tasks, including salient object detection, face detection and pedestrian detection. Experimental analyses are also provided to compare various methods and draw some meaningful conclusions. Finally, several promising directions and tasks are provided to serve as guidelines for future work in both object detection and relevant neural network based learning systems.}
+      \field{day}{15}
+      \field{eprintclass}{cs.CV}
+      \field{eprinttype}{arXiv}
+      \field{month}{7}
+      \field{title}{Object Detection with Deep Learning: A Review}
+      \field{year}{2018}
+      \field{dateera}{ce}
+      \verb{eprint}
+      \verb 1807.05511v2
+      \endverb
+      \verb{file}
+      \verb online:http\://arxiv.org/pdf/1807.05511v2:PDF
+      \endverb
+      \keyw{cs.CV}
+    \endentry
   \enddatalist
 \endrefsection
 \endinput
