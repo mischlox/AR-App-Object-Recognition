@@ -1,6 +1,19 @@
 package hs.aalen.arora.dialogues;
 
+/**
+ * The Dialog factory is responsible for creating the dialogs of this application
+ * using a static factory-method
+ *
+ * @author Michael Schlosser
+ */
 public class DialogFactory {
+    /**
+     * By using the DialogType enum a specific dialog will be created
+     *
+     * @param dialogType type of dialog that will be created
+     *
+     * @return the created dialog
+     */
     public static Dialog getDialog(DialogType dialogType) {
         if (dialogType == null) return null;
         if (dialogType == DialogType.ADD_OBJ) return new AddObjectDialog();

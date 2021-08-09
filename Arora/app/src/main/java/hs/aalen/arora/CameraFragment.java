@@ -98,6 +98,7 @@ public class CameraFragment extends Fragment {
     private ProgressBar trainingProgressBar;
     private TextView trainingProgressBarLabel;
     private TextView trainingProgressBarTextView;
+    private TextView countDownTextView;
     private TextureView viewFinder;
     private Integer viewFinderRotation = null;
     private Size bufferDimens = new Size(0, 0);
@@ -111,6 +112,9 @@ public class CameraFragment extends Fragment {
 
     private String modelID;
     private double focusBoxRatio;
+    private ArrayList<String> positionsList;
+    private int countdown;
+    private int confidenceThres;
 
     private boolean newObjectAdded;
 
@@ -143,19 +147,22 @@ public class CameraFragment extends Fragment {
                                         rgbBitmap.getHeight(),
                                         focusBoxRatio)
                         );
+                        // Update the preview image for the specific object
                         databaseHelper.updateImageBlob(currentObjectName, preview);
                     }
                     try {
+                        // Add Sample to model and save to DB for Latent Replay
                         continualLearningModel.addSample(rgbImage, sampleClass).get();
                         continualLearningModel.storeTrainingSample();
                     } catch (ExecutionException | NullPointerException | IllegalStateException e) {
+                        // Rollback DB if something went wrong
                         removeObjectFromModel(currentObjectName, modelID, true);
                         Toast.makeText(context, R.string.please_do_not_change_tabs, Toast.LENGTH_LONG).show();
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    // Necessary to avoid exception because TFL API learns in training batches of 20 Samples
+                    // Necessary in order to avoid exception because TFL API learns in training batches of 20 Samples
                     viewModel.increaseNumSamples(sampleClass);
                     if (numSamplesPerClass > 20) {
                         viewModel.setTrainingState(CameraFragmentViewModel.TrainingState.STARTED);
@@ -183,10 +190,6 @@ public class CameraFragment extends Fragment {
                     Log.d(TAG, "addSamples: inference: object is: " + viewModel.getFirstChoice().getValue());
                 }
             };
-    private ArrayList<String> positionsList;
-    private TextView countDownTextView;
-    private int countdown;
-    private int confidenceThres;
 
     /**
      * Add specific amount of Training Data to queue
@@ -415,6 +418,9 @@ public class CameraFragment extends Fragment {
         viewFinder.post(this::startCamera);
     }
 
+    /**
+     * Helper method to initialize all view elements in this fragment
+     */
     private void initCardView() {
         objectName = requireActivity().findViewById(R.id.object_name);
         objectConfidence = requireActivity().findViewById(R.id.object_confidence);
@@ -492,7 +498,7 @@ public class CameraFragment extends Fragment {
     }
 
     /**
-     * Populates all item from expandable cardview with data from DB
+     * Populates all item from expandable card view with data from DB
      *
      * @param pos primary key of data
      */
@@ -517,7 +523,6 @@ public class CameraFragment extends Fragment {
                 } else if (item == timestampObjectInfoValues) {
                     String dateString = data.getString(4);
                     item.setText(DateUtils.parseDateTime(dateString));
-
                 }
             }
         }
@@ -579,7 +584,7 @@ public class CameraFragment extends Fragment {
     }
 
     /**
-     * expand the cardview and show all object info at the top of the fragment
+     * expand the card view and show all object info at the top of the fragment
      * when clicking the expand/collapse button
      */
     private void showMore() {

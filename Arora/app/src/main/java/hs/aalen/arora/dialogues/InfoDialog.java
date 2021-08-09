@@ -11,6 +11,12 @@ import android.widget.TextView;
 
 import hs.aalen.arora.R;
 
+/**
+ * The Info dialog shows a scrollable Text View that contains some further information about this
+ * application
+ *
+ * @author Michael Schlosser
+ */
 public class InfoDialog implements Dialog {
     private AlertDialog infoDialog;
 

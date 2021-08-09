@@ -13,6 +13,12 @@ import hs.aalen.arora.persistence.GlobalConfig;
 import hs.aalen.arora.R;
 import hs.aalen.arora.persistence.SharedPrefsHelper;
 
+/**
+ * The Replay Dialog will pop up if a user added an object and has the choice
+ * to freeze model or update the replay buffer. This choice can be made using this dialog
+ *
+ * @author Michael Schlosser
+ */
 public class ReplayDialog implements Dialog {
     private AlertDialog replayDialog;
     private DatabaseHelper databaseHelper;

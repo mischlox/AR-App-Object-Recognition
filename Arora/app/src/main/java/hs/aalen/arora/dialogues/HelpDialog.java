@@ -122,6 +122,12 @@ public abstract class HelpDialog implements Dialog {
         helpProgressText.setText(progressText);
     }
 
+    /**
+     * Do an animation to make the change of the text in the card more smooth
+     *
+     * @param textView the animation refers to
+     * @param animationResource the Resource-File of the animation
+     */
     private void startTextAnimation(TextView textView, int animationResource) {
         Animation animation = AnimationUtils.loadAnimation(context, animationResource);
         textView.startAnimation(animation);

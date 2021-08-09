@@ -16,6 +16,12 @@ import hs.aalen.arora.persistence.GlobalConfig;
 import hs.aalen.arora.R;
 import hs.aalen.arora.persistence.SharedPrefsHelper;
 
+/**
+ * This dialog will inform the user about the consequences of resetting the application
+ * The choice if everything should be actually deleted will be made through this dialog
+ *
+ * @author Michael Schlosser
+ */
 public class ResetAppDialog implements Dialog {
     private AlertDialog resetAppDialog;
     private DatabaseHelper databaseHelper;
