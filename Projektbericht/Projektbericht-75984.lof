@@ -4,19 +4,19 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Architektur eines Mobilenet v2\relax }}{3}{figure.caption.11}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Vergleich des Aufbaus eines Transfer Learning Models im Gegensatz zum traditionellen Maschinellen Lernen\relax }}{5}{figure.caption.14}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Vergleich des Aufbaus eines Transfer Learning Models im Gegensatz zum traditionellen Maschinellen Lernen\relax }}{6}{figure.caption.14}%
 \contentsline {figure}{\numberline {2.3}{\ignorespaces Architekturdiagramm des Latent Replay\relax }}{7}{figure.caption.15}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces UML-Anwendungsfall-Diagramm\relax }}{12}{figure.caption.17}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces UML-Anwendungsfall-Diagramm\relax }}{11}{figure.caption.18}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Entity-Relationship-Diagramm\relax }}{16}{figure.caption.18}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces UML-Komponentendiagramm\relax }}{20}{figure.caption.20}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces UML-Klassendiagramm der Persistenz Komponente\relax }}{22}{figure.caption.22}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces UML-Klassendiagramm der Wiedererkennungs-Komponente\relax }}{23}{figure.caption.24}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces UML-Klassendiagramm der Objekt- und Modellübersicht\relax }}{25}{figure.caption.26}%
-\contentsline {figure}{\numberline {4.6}{\ignorespaces UML-Klassendiagramm der Dialogpakets und des Help Fragments\relax }}{26}{figure.caption.28}%
-\contentsline {figure}{\numberline {4.7}{\ignorespaces UML-Sequenzdiagramm: Ändern des ausgewählten Modells\relax }}{27}{figure.caption.29}%
-\contentsline {figure}{\numberline {4.8}{\ignorespaces UML-Aktivitätsdiagramm: Einlernen und Wiedererkennen von Objekten\relax }}{30}{figure.caption.30}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Entity-Relationship-Diagramm\relax }}{15}{figure.caption.19}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces UML-Komponentendiagramm\relax }}{19}{figure.caption.21}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces UML-Klassendiagramm der Persistenz Komponente\relax }}{21}{figure.caption.23}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces UML-Klassendiagramm der Wiedererkennungs-Komponente\relax }}{22}{figure.caption.25}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces UML-Klassendiagramm der Objekt- und Modellübersicht\relax }}{23}{figure.caption.27}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces UML-Klassendiagramm der Dialogpakets und des Help Fragments\relax }}{25}{figure.caption.29}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces UML-Sequenzdiagramm: Ändern des ausgewählten Modells\relax }}{26}{figure.caption.30}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces UML-Aktivitätsdiagramm: Einlernen und Wiedererkennen von Objekten\relax }}{28}{figure.caption.31}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
