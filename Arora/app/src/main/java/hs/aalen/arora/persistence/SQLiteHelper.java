@@ -84,6 +84,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
 
     @Override
     public Cursor getReplayBuffer(String modelID) {
+        if(modelID == null) modelID="";
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM "+ REPLAY_BUFFER_TABLE_NAME + " WHERE " + REPLAY_BUFFER_COL3+"=?";
         return db.rawQuery(query,new String[]{modelID});
@@ -137,6 +138,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
 
     @Override
     public boolean modelIsFrozen(String modelID) {
+        if(modelID == null) modelID = "";
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT " + MODEL_COL3 + " FROM " + MODEL_TABLE_NAME
                 + " WHERE " + MODEL_COL0 + "=?";
@@ -155,7 +157,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(MODEL_COL3, (isFrozen ? 1 : 0));
 
-        long success = db.update(MODEL_TABLE_NAME,
+        db.update(MODEL_TABLE_NAME,
                 contentValues,
                 MODEL_COL0 + "=?",
                 new String[]{modelID});
