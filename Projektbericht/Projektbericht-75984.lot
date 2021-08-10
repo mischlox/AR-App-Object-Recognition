@@ -12,21 +12,21 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {A.1}{\ignorespaces Anwendungsfall M1: Modell hinzufügen\relax }}{44}{table.caption.34}%
-\contentsline {table}{\numberline {A.2}{\ignorespaces Anwendungsfall M2: Modell wechseln\relax }}{45}{table.caption.35}%
-\contentsline {table}{\numberline {A.3}{\ignorespaces Anwendungsfall M3: Gespeicherte Objekte im Modell anschauen\relax }}{46}{table.caption.36}%
-\contentsline {table}{\numberline {A.4}{\ignorespaces Anwendungsfall M4: Alle Modelle betrachten\relax }}{47}{table.caption.37}%
-\contentsline {table}{\numberline {A.5}{\ignorespaces Anwendungsfall M5: Modell einfrieren\relax }}{48}{table.caption.38}%
-\contentsline {table}{\numberline {A.6}{\ignorespaces Anwendungsfall O1: Objekt hinzufügen\relax }}{49}{table.caption.39}%
-\contentsline {table}{\numberline {A.7}{\ignorespaces Anwendungsfall O2: Objekt wiedererkennen\relax }}{50}{table.caption.40}%
-\contentsline {table}{\numberline {A.8}{\ignorespaces Anwendungsfall O3: Objekt bearbeiten\relax }}{51}{table.caption.41}%
-\contentsline {table}{\numberline {A.9}{\ignorespaces Anwendungsfall O4: Weitere Trainingsdaten für Objekt erfassen\relax }}{52}{table.caption.42}%
-\contentsline {table}{\numberline {A.10}{\ignorespaces Anwendungsfall O5: Objekt löschen\relax }}{53}{table.caption.43}%
-\contentsline {table}{\numberline {A.11}{\ignorespaces Anwendungsfall O6: Alle Objekte betrachten\relax }}{54}{table.caption.44}%
-\contentsline {table}{\numberline {A.12}{\ignorespaces Anwendungsfall E1: Einstellen der Anzahl der hinzuzufügenden Daten pro Training\relax }}{55}{table.caption.45}%
-\contentsline {table}{\numberline {A.13}{\ignorespaces Anwendungsfall E2: Einstellen der Dauer des Countdowns vor dem Training\relax }}{56}{table.caption.46}%
-\contentsline {table}{\numberline {A.14}{\ignorespaces Anwendungsfall E3: Einstellen der Auflösung der hinzuzufügenden Trainingsdaten\relax }}{57}{table.caption.47}%
-\contentsline {table}{\numberline {A.15}{\ignorespaces Anwendungsfall E4: Einstellen des Konfidenzschwellwerts bei Inferenz\relax }}{58}{table.caption.48}%
-\contentsline {table}{\numberline {A.16}{\ignorespaces Anwendungsfall E5: Applikation zurücksetzen\relax }}{59}{table.caption.49}%
+\contentsline {table}{\numberline {A.1}{\ignorespaces Anwendungsfall M1: Modell hinzufügen\relax }}{45}{table.caption.34}%
+\contentsline {table}{\numberline {A.2}{\ignorespaces Anwendungsfall M2: Modell wechseln\relax }}{46}{table.caption.35}%
+\contentsline {table}{\numberline {A.3}{\ignorespaces Anwendungsfall M3: Gespeicherte Objekte im Modell anschauen\relax }}{47}{table.caption.36}%
+\contentsline {table}{\numberline {A.4}{\ignorespaces Anwendungsfall M4: Alle Modelle betrachten\relax }}{48}{table.caption.37}%
+\contentsline {table}{\numberline {A.5}{\ignorespaces Anwendungsfall M5: Modell einfrieren\relax }}{49}{table.caption.38}%
+\contentsline {table}{\numberline {A.6}{\ignorespaces Anwendungsfall O1: Objekt hinzufügen\relax }}{50}{table.caption.39}%
+\contentsline {table}{\numberline {A.7}{\ignorespaces Anwendungsfall O2: Objekt wiedererkennen\relax }}{51}{table.caption.40}%
+\contentsline {table}{\numberline {A.8}{\ignorespaces Anwendungsfall O3: Objekt bearbeiten\relax }}{52}{table.caption.41}%
+\contentsline {table}{\numberline {A.9}{\ignorespaces Anwendungsfall O4: Weitere Trainingsdaten für Objekt erfassen\relax }}{53}{table.caption.42}%
+\contentsline {table}{\numberline {A.10}{\ignorespaces Anwendungsfall O5: Objekt löschen\relax }}{54}{table.caption.43}%
+\contentsline {table}{\numberline {A.11}{\ignorespaces Anwendungsfall O6: Alle Objekte betrachten\relax }}{55}{table.caption.44}%
+\contentsline {table}{\numberline {A.12}{\ignorespaces Anwendungsfall E1: Einstellen der Anzahl der hinzuzufügenden Daten pro Training\relax }}{56}{table.caption.45}%
+\contentsline {table}{\numberline {A.13}{\ignorespaces Anwendungsfall E2: Einstellen der Dauer des Countdowns vor dem Training\relax }}{57}{table.caption.46}%
+\contentsline {table}{\numberline {A.14}{\ignorespaces Anwendungsfall E3: Einstellen der Auflösung der hinzuzufügenden Trainingsdaten\relax }}{58}{table.caption.47}%
+\contentsline {table}{\numberline {A.15}{\ignorespaces Anwendungsfall E4: Einstellen des Konfidenzschwellwerts bei Inferenz\relax }}{59}{table.caption.48}%
+\contentsline {table}{\numberline {A.16}{\ignorespaces Anwendungsfall E5: Applikation zurücksetzen\relax }}{60}{table.caption.49}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }

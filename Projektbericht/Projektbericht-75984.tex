@@ -194,12 +194,11 @@ Das Prinzip des Transfer Learnings kann dementsprechend mithilfe des Latent-Repl
 \end{figure}
 \section{Android}
 Android ist ein auf Linux basierender Open-Source-Software-Stack, der für eine Vielzahl von Geräten entwickelt wurde.\\
-Jede Applikation läuft in einer separaten Instanz der \ac{art}, welche dafür konzipiert wurde Applikationen auf Geräten mit geringem Hauptspeicher innerhalb separater Virtueller Maschinen auszuführen. Die \ac{art} basiert auf dem Linux-Kernel und ermöglicht es Geräteherstellern Hardware-Treiber für einen bekannten Kernel herzustellen.
+Jede Applikation läuft in einer separaten Instanz der \ac{art}, welche dafür konzipiert wurde Applikationen auf Geräten mit geringem Hauptspeicher innerhalb separater virtueller Maschinen auszuführen. Die \ac{art} basiert auf dem Linux-Kernel und ermöglicht es Geräteherstellern Hardware-Treiber für einen bekannten Kernel zu entwickeln.\\
+Jede Android Version wird mit einer ganzen Zahl bezeichnet, welche als API-Ebene beziehungsweise API-Level bekannt ist und bei der Entwicklung von neuen Applikationen angegeben werden muss. Um bestimmte Features nutzen zu können, muss die API-Ebene einen bestimmten Wert besitzen. Geräte die nur bis zu einer bestimmten Version kompatibel sind, werden demnach die zu entwickelnde Applikation nicht ausführen können.
 \cite{android-platform}
-\subsection{API Levels}
-\subsection{Activities und Fragments}
 \subsection{Shared Preferences}
-Shared Preferences bezeichnen einen Key-Value-Store für primitive Daten in Form einer XML-Datei. Genutzt werden kann dies über die dafür zur Verfügung gestellte Android-Bibliothek, welche ein Shared Preferences-Objekt erzeugt. Dieses Objekt beinhaltet einen Zeiger auf den Pfad der jeweiligen Datei. Mithilfe von Shared Preferences können beispielsweise Konfigurationsparameter, die persistent abgespeichert werden sollen mithilfe einer einfachen \ac{api} zugänglich gemacht werden
+Shared Preferences bezeichnen einen Key-Value-Store für primitive Daten in Form einer XML-Datei. Genutzt werden kann dies über die dafür zur Verfügung gestellte Android-Bibliothek, welche ein Shared Preferences-Objekt erzeugt. Dieses Objekt beinhaltet einen Zeiger auf den Pfad der jeweiligen Datei. Mithilfe von Shared Preferences können beispielsweise Konfigurationsparameter, die persistent abgespeichert werden sollen mithilfe einer einfachen \ac{api} zugänglich gemacht werden.
 % ---
 \chapter{Anforderungsanalyse}
 \label{cha:analyse}
@@ -607,7 +606,17 @@ public void setCurrentModelID(String id) {
 %---
 \chapter{Tests}
 \label{cha:tests}
+Im Rahmen der zu entwickelnden Applikation sind diverse Tests durchzuführen, um eine qualitativ hochwertige und fehlerfreie Software ausliefern zu können.\\
+Zum Einen wurden Unit-Tests zum Testen der einzelnen Methoden erstellt. Diese sind hilfreich für das Verändern oder Refactoring einzelner Methoden, da die Logik des Quellcodes auf diese Weise stets überprüft werden kann. Zum anderen wurde ein Akzeptanztest für das Testen des korrekten Zusammenspiels aller Komponenten in einer natürlichen Testumgebung erstellt, um mögliche Fehler oder UI/UX-spezifische Unklarheiten vor Beginn der Auslieferung der Applikation beheben zu können.
 \section{Unit-Tests}
+Für die Implementierung der zu schreibenden Tests werden die Test Frameworks \texttt{JUnit} und AndroidX-Testbibliotheken standardmäßig von Android Studio bei Erstellung eines Projektes eingebunden und demnach auch für das Testen der zu entwickelnden Applikation genutzt.\\
+Für das Erstellen von instrumentierten Unit-Tests, welche auf einem Android-Emulator ausgeführt werden, werden AndroidX Tests in einem Verzeichnis angelegt. Diese instrumentierten Unit-Tests sind notwendig für das Testen von Methoden, welche Android-spezifische Abhängigkeiten enthalten, wie beispielsweise \textit{Activities} oder \textit{Contexts} nutzen und nicht lokal auf dem Entwicklungsrechner ausführbar sind. Alle anderen Tests werden mit \texttt{JUnit} geschrieben und sind demnach schneller ausführbar, da sie in der lokalen Java Virtual Machine (JVM) ausgeführt werden und demnach die Verwendung eines Emulators nicht notwendig ist.\\
+Aus Zeitgründen konnte kein extensives Testing durchgeführt werden. Relativ komplexe und kritische Methoden für den korrekten Ablauf wichtiger Algorithmen wurden jedoch ausführlich für den gesamten Wertebereich der zu übergebenden Parameter getestet. Im Folgenden werden die wichtigsten Tests beschrieben.
+\subsection{Testen der Datenbankhelfer}
+\subsection{Testen des Objekt-Mappings}
+\subsection{Testen des Speichern und Ladens von Parameterdateien}
+\subsection{Testen des Latent-Replay Algorithmus}
+
 \section{Akzeptanztest}
 Die durch Unit-Tests getestete Applikation, wurde als Beta-Test im Rahmen einer Feldstudie getestet. Mithilfe eines Fragebogens, der von den Testern ausgefüllt wurde, konnten Ergebnisse und Eindrücke gesammelt werden, die für die weitere Entwicklung der Applikation von Bedeutung sein können. Außerdem konnten noch einige Bugs identifiziert und gelöst werden.\\
 Bei den Testern handelt es sich um Frauen und Männer, im Alter zwischen 18 und 50 Jahren mit keiner Erfahrung im Fachgebiet der Informatik. Demnach konnten Ergebnisse von Laien verschiedener Altersgruppen erfasst werden, welche unterschiedliche Hardware zur Ausführung der Applikation genutzt haben.\\
