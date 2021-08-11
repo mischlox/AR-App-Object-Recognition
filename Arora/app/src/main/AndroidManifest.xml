@@ -14,7 +14,8 @@
         <activity
             android:name=".CameraActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Arora.NoActionBar" />
+            android:theme="@style/Theme.Arora.NoActionBar"
+            android:configChanges="orientation|screenSize"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
