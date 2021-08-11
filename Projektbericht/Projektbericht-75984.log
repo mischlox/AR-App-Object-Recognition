@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.5.19)  11 AUG 2021 14:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.5.19)  11 AUG 2021 20:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1958,7 +1958,7 @@ although it is yet undefined on input line 149.
 Package acronym Info: Label `acro:dcnn' newly defined as it shall be overridden
 
 although it is yet undefined on input line 149.
-<images/mobilenet-architecture.png, id=343, 614.295pt x 245.91875pt>
+<images/mobilenet-architecture.png, id=335, 614.295pt x 245.91875pt>
 File: images/mobilenet-architecture.png Graphic file (type png)
 <use images/mobilenet-architecture.png>
 Package pdftex.def Info: images/mobilenet-architecture.png  used on input line 
@@ -1975,7 +1975,7 @@ although it is yet undefined on input line 164.
  [4]
 Package acronym Info: Label `acro:ml' newly defined as it shall be overridden
 although it is yet undefined on input line 173.
-<images/traditional-vs-tflearning.png, id=368, 702.625pt x 378.41376pt>
+<images/traditional-vs-tflearning.png, id=360, 702.625pt x 378.41376pt>
 File: images/traditional-vs-tflearning.png Graphic file (type png)
 <use images/traditional-vs-tflearning.png>
 Package pdftex.def Info: images/traditional-vs-tflearning.png  used on input li
@@ -1987,7 +1987,7 @@ Overfull \hbox (24.23972pt too wide) in paragraph at lines 178--179
  []
 
 [5]
-<images/latent-replay.png, id=377, 702.625pt x 629.35126pt>
+<images/latent-replay.png, id=369, 702.625pt x 629.35126pt>
 File: images/latent-replay.png Graphic file (type png)
 <use images/latent-replay.png>
 Package pdftex.def Info: images/latent-replay.png  used on input line 191.
@@ -2003,7 +2003,7 @@ chapter 3.
 
 
 ] [9]
-<images/usecase-diagram.png, id=406, 394.47375pt x 381.67593pt>
+<images/usecase-diagram.png, id=398, 394.47375pt x 381.67593pt>
 File: images/usecase-diagram.png Graphic file (type png)
 <use images/usecase-diagram.png>
 Package pdftex.def Info: images/usecase-diagram.png  used on input line 252.
@@ -2019,7 +2019,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 282--284
  []
 
 [13]
-<images/er-diagram.png, id=430, 608.2725pt x 614.295pt>
+<images/er-diagram.png, id=422, 608.2725pt x 614.295pt>
 File: images/er-diagram.png Graphic file (type png)
 <use images/er-diagram.png>
 Package pdftex.def Info: images/er-diagram.png  used on input line 292.
@@ -2039,7 +2039,7 @@ ner ty-pi-schen Einstellungen-
  []
 
 [17]
-<images/building-block-view.png, id=458, 1265.72874pt x 804.00375pt>
+<images/building-block-view.png, id=450, 1265.72874pt x 804.00375pt>
 File: images/building-block-view.png Graphic file (type png)
 <use images/building-block-view.png>
 Package pdftex.def Info: images/building-block-view.png  used on input line 341
@@ -2051,14 +2051,14 @@ Overfull \hbox (50.71341pt too wide) in paragraph at lines 341--342
  []
 
 [18] [19 <./images/building-block-view.png>]
-<images/persistence-class-diagram.png, id=470, 884.30376pt x 845.1575pt>
+<images/persistence-class-diagram.png, id=462, 884.30376pt x 845.1575pt>
 File: images/persistence-class-diagram.png Graphic file (type png)
 <use images/persistence-class-diagram.png>
 Package pdftex.def Info: images/persistence-class-diagram.png  used on input li
 ne 357.
 (pdftex.def)             Requested size: 374.04974pt x 357.48378pt.
  [20] [21 <./images/persistence-class-diagram.png>]
-<images/camera-fragment-class-diagram.png, id=485, 1075.01625pt x 825.0825pt>
+<images/camera-fragment-class-diagram.png, id=477, 1075.01625pt x 825.0825pt>
 File: images/camera-fragment-class-diagram.png Graphic file (type png)
 <use images/camera-fragment-class-diagram.png>
 Package pdftex.def Info: images/camera-fragment-class-diagram.png  used on inpu
@@ -2069,14 +2069,14 @@ Overfull \hbox (8.70871pt too wide) in paragraph at lines 372--373
  [][] 
  []
 
-<images/object-overview-class-diagram.png, id=487, 708.6475pt x 814.04124pt>
+<images/object-overview-class-diagram.png, id=479, 708.6475pt x 814.04124pt>
 File: images/object-overview-class-diagram.png Graphic file (type png)
 <use images/object-overview-class-diagram.png>
 Package pdftex.def Info: images/object-overview-class-diagram.png  used on inpu
 t line 381.
 (pdftex.def)             Requested size: 363.05984pt x 417.05836pt.
 [22 <./images/camera-fragment-class-diagram.png>]
-<images/dialogues.png, id=495, 945.5325pt x 764.8575pt>
+<images/dialogues.png, id=487, 945.5325pt x 764.8575pt>
 File: images/dialogues.png Graphic file (type png)
 <use images/dialogues.png>
 Package pdftex.def Info: images/dialogues.png  used on input line 392.
@@ -2087,7 +2087,7 @@ Overfull \hbox (23.67766pt too wide) in paragraph at lines 392--393
  []
 
 [23 <./images/object-overview-class-diagram.png>]
-<images/sequence-diagram-change-model.png, id=502, 584.1825pt x 286.06876pt>
+<images/sequence-diagram-change-model.png, id=494, 584.1825pt x 286.06876pt>
 File: images/sequence-diagram-change-model.png Graphic file (type png)
 <use images/sequence-diagram-change-model.png>
 Package pdftex.def Info: images/sequence-diagram-change-model.png  used on inpu
@@ -2109,7 +2109,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 427--439
  []
 
 [26 <./images/sequence-diagram-change-model.png>]
-<images/addobject-diagram.png, id=524, 490.08093pt x 563.10374pt>
+<images/addobject-diagram.png, id=516, 490.08093pt x 563.10374pt>
 File: images/addobject-diagram.png Graphic file (type png)
 <use images/addobject-diagram.png>
 Package pdftex.def Info: images/addobject-diagram.png  used on input line 445.
@@ -2160,189 +2160,194 @@ Underfull \hbox (badness 10000) in paragraph at lines 521--565
 
 [34] [35] [36] [37]
 chapter 6.
+
+Underfull \hbox (badness 10000) in paragraph at lines 612--615
+
+ []
+
 [38
 
 
-] [39] [40]
+] [39]
 chapter 7.
-[41
+[40
 
 
 ]
 chapter 8.
-[42
+[41
 
 
 ]
 chapter without number
 
-Overfull \hbox (27.3312pt too wide) in paragraph at lines 666--666
+Overfull \hbox (27.3312pt too wide) in paragraph at lines 662--662
 \T1/pcr/m/n/10.95 developer . android . com / training / camerax ? hl = de$[][]
  \T1/pnc/m/n/10.95 (-20) (be-sucht am 04.08.2021). 
  []
 
-[43
+[42
 
 
 ]
-Overfull \hbox (29.3312pt too wide) in paragraph at lines 666--666
+Overfull \hbox (29.3312pt too wide) in paragraph at lines 662--662
 \T1/pcr/m/n/10.95 example -[] on -[] device -[] model -[] personalization . htm
 l$[][] \T1/pnc/m/n/10.95 (-20) (be-sucht am 12.05.2021). 
  []
 
-[44]
+[43]
 chapter A.
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 674--691
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 670--687
  [][] 
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 697--712
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 693--708
  [][] 
  []
 
 
-Underfull \hbox (badness 4531) in paragraph at lines 721--721
+Underfull \hbox (badness 4531) in paragraph at lines 717--717
 []|\T1/pnc/b/n/10.95 Gespeicherte Ob-jek-te im Mo-dell be-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 718--733
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 714--729
  [][] 
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 739--754
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 735--750
  [][] 
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 760--778
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 756--774
  [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 3.3997pt on input line 780.
+LaTeX Warning: Float too large for page by 3.3997pt on input line 776.
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 785--809
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 781--805
  [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 180.19965pt on input line 811.
+LaTeX Warning: Float too large for page by 180.19965pt on input line 807.
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 815--830
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 811--826
  [][] 
  []
 
 
-Underfull \hbox (badness 1194) in paragraph at lines 846--847
+Underfull \hbox (badness 1194) in paragraph at lines 842--843
 []|\T1/pnc/m/n/10.95 (+20) 1. Der Nut-zer be-tä-tigt den ^^RBearbeiten^^P-
  []
 
 
-Underfull \hbox (badness 1424) in paragraph at lines 849--849
+Underfull \hbox (badness 1424) in paragraph at lines 845--845
 []|\T1/pnc/m/n/10.95 (+20) 4. Der Nut-zer be-tä-tigt den ^^RBestätigen^^P-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 836--854
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 832--850
  [][] 
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 860--875
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 856--871
  [][] 
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 881--897
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 877--893
  [][] 
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 903--918
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 899--914
  [][] 
  []
 
 
-Underfull \hbox (badness 4859) in paragraph at lines 931--931
+Underfull \hbox (badness 4859) in paragraph at lines 927--927
 []|\T1/pnc/m/n/10.95 (+20) Der Nut-zer be-fin-det sich in den App-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 924--939
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 920--935
  [][] 
  []
 
 
-Underfull \hbox (badness 4859) in paragraph at lines 952--952
+Underfull \hbox (badness 4859) in paragraph at lines 948--948
 []|\T1/pnc/m/n/10.95 (+20) Der Nut-zer be-fin-det sich in den App-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 945--960
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 941--956
  [][] 
  []
 
 
-Underfull \hbox (badness 4859) in paragraph at lines 973--973
+Underfull \hbox (badness 4859) in paragraph at lines 969--969
 []|\T1/pnc/m/n/10.95 (+20) Der Nut-zer be-fin-det sich in den App-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 966--981
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 962--977
  [][] 
  []
 
 
-Underfull \hbox (badness 3449) in paragraph at lines 990--990
+Underfull \hbox (badness 3449) in paragraph at lines 986--986
 []|\T1/pnc/b/n/10.95 Einstellen des Kon-fi-denz-schwell-werts
  []
 
 
-Underfull \hbox (badness 4859) in paragraph at lines 994--994
+Underfull \hbox (badness 4859) in paragraph at lines 990--990
 []|\T1/pnc/m/n/10.95 (+20) Der Nut-zer be-fin-det sich in den App-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 987--1003
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 983--999
  [][] 
  []
 
 
-Underfull \hbox (badness 4859) in paragraph at lines 1016--1016
+Underfull \hbox (badness 4859) in paragraph at lines 1012--1012
 []|\T1/pnc/m/n/10.95 (+20) Der Nut-zer be-fin-det sich in den App-
  []
 
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 1009--1027
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 1005--1023
  [][] 
  []
 
-[45
+[44
 
 
-] [46] [47] [48] [49] [50] [51] [52] [53] [54] [55] [56] [57] [58] [59]
-[60]
+] [45] [46] [47] [48] [49] [50] [51] [52] [53] [54] [55] [56] [57] [58]
+[59]
 chapter B.
-[61
+[60
 
 
 ]
 chapter C.
-[62
+[61
 
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1039.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1039.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1035.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1035.
  (./Projektbericht-75984.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1039.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1039.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1035.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1035.
 
 Package rerunfilecheck Info: File `Projektbericht-75984.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
@@ -2351,40 +2356,28 @@ Package logreq Info: Writing requests to 'Projektbericht-75984.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 39126 strings out of 481239
- 757803 string characters out of 5920377
+ 39108 strings out of 481239
+ 757597 string characters out of 5920377
  1654977 words of memory out of 5000000
- 53125 multiletter control sequences out of 15000+600000
- 613057 words of font info for 238 fonts, out of 8000000 for 9000
+ 53120 multiletter control sequences out of 15000+600000
+ 612884 words of font info for 236 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
  63i,19n,88p,10143b,3676s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{subsection.6.1.4} has been referenced but does no
-t exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.6.1.3} has been referenced but does not 
-exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.6.1.2} has been referenced but does not 
-exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.6.1.1} has been referenced but does not 
-exist, replaced by a fixed one
-
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/
-dvips/lm/lm-rm.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{
-/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}</usr/share/texmf/fonts/type1
-/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/s
-hare/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texlive/texmf-dist/font
-s/type1/urw/avantgar/uagd8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/
-avantgar/uagk8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr
-8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/ncntrsbk/uncb8a.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/urw/ncntrsbk/uncr8a.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/urw/ncntrsbk/uncr8a.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/urw/ncntrsbk/uncri8a.pfb>
-Output written on Projektbericht-75984.pdf (73 pages, 1016717 bytes).
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/en
+c/dvips/lm/lm-rm.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc
+}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}</usr/share/texmf/fonts/typ
+e1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr
+/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/urw/avantgar/uagd8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/ur
+w/avantgar/uagk8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/uc
+rr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/ncntrsbk/uncb8a.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/urw/ncntrsbk/uncr8a.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/urw/ncntrsbk/uncr8a.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/urw/ncntrsbk/uncri8a.pfb>
+Output written on Projektbericht-75984.pdf (72 pages, 1015324 bytes).
 PDF statistics:
- 1159 PDF objects out of 1200 (max. 8388607)
- 1039 compressed objects within 11 object streams
- 294 named destinations out of 1000 (max. 500000)
- 41702 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 1123 PDF objects out of 1200 (max. 8388607)
+ 1004 compressed objects within 11 object streams
+ 284 named destinations out of 1000 (max. 500000)
+ 41662 words of extra memory for PDF output out of 42996 (max. 10000000)
 
