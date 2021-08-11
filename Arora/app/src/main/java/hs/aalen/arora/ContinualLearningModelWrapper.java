@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -119,7 +120,13 @@ public class ContinualLearningModelWrapper {
      */
     private void readParametersFromFile(String id) throws IOException {
         Log.d(TAG, "readParametersFromFile: backup: file");
-        Path path = Paths.get(databaseHelper.getModelPathByID(id));
+        Path path;
+        try {
+            path = Paths.get(databaseHelper.getModelPathByID(id));
+        } catch (InvalidPathException e) {
+            Log.d(TAG, "readParametersFromFile: path is not valid!");
+            return;
+        }
         Log.d(TAG, "readParametersFromFile: backup1: latest path is: " + path.toString());
         model.loadParameters(FileChannel.open(path, StandardOpenOption.READ));
     }

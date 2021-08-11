@@ -153,14 +153,6 @@ public interface DatabaseHelper {
     String getModelPathByID(String modelID);
 
     /**
-     * Check if a model with the given name exists
-     *
-     * @param name name of model to be checked
-     * @return true if it exists, false otherwise
-     */
-    boolean modelWithNameExists(String name);
-
-    /**
      * Insert a model with name only.
      * The path should be updated when the application is closed
      *

@@ -284,6 +284,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
 
     @Override
     public String getObjectModelPosByNameAndModelID(String name, String modelID) {
+        if(name == null || modelID == null) return "";
         SQLiteDatabase db = this.getWritableDatabase();
         String modelPos = "";
         String query = "SELECT " + OBJECT_COL6 + " FROM " + OBJECT_TABLE_NAME
@@ -293,7 +294,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
             modelPos = cursor.getString(0);
         }
         cursor.close();
-        return modelPos;
+        return modelPos != null ? modelPos : "";
     }
 
     @Override
@@ -303,7 +304,10 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
                               String objectAdditionalData) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(OBJECT_COL1, objectName);
+
+        if(objectName != null && !objectName.isEmpty())  {
+            contentValues.put(OBJECT_COL1, objectName);
+        }
         contentValues.put(OBJECT_COL2, objectType);
         contentValues.put(OBJECT_COL3, objectAdditionalData);
 
@@ -336,6 +340,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
 
     @Override
     public String getObjectModelPosByName(String objectName) {
+        if(objectName == null) return null;
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT " + OBJECT_COL6 + " FROM " + OBJECT_TABLE_NAME
                 + " WHERE " + OBJECT_COL1 + "=?";
@@ -350,6 +355,8 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
 
     @Override
     public boolean insertOrUpdateModel(String name, Path path) {
+        if(path == null || name == null || name.isEmpty()) return false;
+
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -365,19 +372,6 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
             success = db.insert(MODEL_TABLE_NAME, null, contentValues);
         }
         return success != -1;
-    }
-
-    @Override
-    public boolean modelWithNameExists(String name) {
-        if (name == null) name = "";
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor;
-        String query = "SELECT " + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME
-                + " WHERE " + MODEL_COL1 + "=?";
-        cursor = db.rawQuery(query, new String[]{name});
-        int count = cursor.getCount();
-        cursor.close();
-        return count > 0;
     }
 
     @Override
@@ -397,6 +391,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
 
     @Override
     public boolean modelHasPath(String modelID) {
+        if(modelID == null) return false;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor;
         String query = "SELECT " + MODEL_COL0 + " FROM " + MODEL_TABLE_NAME
@@ -422,7 +417,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
     @Override
     public void addSamplesToObject(String objectName, int amount) {
         SQLiteDatabase db = this.getWritableDatabase();
-
+        if(amount < 0) amount = 0;
         ContentValues contentValues = new ContentValues();
         int updatedAmount = getAmountSamplesByObjectName(objectName) + amount;
         contentValues.put(OBJECT_COL8, updatedAmount);
@@ -431,6 +426,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
 
     @Override
     public int getAmountSamplesByObjectName(String objectName) {
+        if(objectName==null) objectName="";
         SQLiteDatabase db = this.getWritableDatabase();
         int amountSamples = 0;
         String query = "SELECT " + OBJECT_COL8 + " FROM " + OBJECT_TABLE_NAME
@@ -456,6 +452,24 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
         db.execSQL("DROP TABLE IF EXISTS " + REPLAY_BUFFER_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + TRAINING_SAMPLES_TABLE_NAME);
         onCreate(db);
+    }
+
+    /**
+     * Check if a model with the given name exists
+     *
+     * @param name name of model to be checked
+     * @return true if it exists, false otherwise
+     */
+    private boolean modelWithNameExists(String name) {
+        if (name == null) name = "";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor;
+        String query = "SELECT " + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME
+                + " WHERE " + MODEL_COL1 + "=?";
+        cursor = db.rawQuery(query, new String[]{name});
+        int count = cursor.getCount();
+        cursor.close();
+        return count > 0;
     }
 
     /**
@@ -508,7 +522,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
             cursorString.append("\n");
             do {
                 for (String name : columnNames) {
-                    if (name.equals("object_image") || name.equals("parameters")) {
+                    if (name.equals("object_image") || name.equals("parameters") || name.equals("sample_blob")) {
                         cursorString.append(String.format("%s ][ ",
                                 (cursor.getBlob(cursor.getColumnIndex(name)) != null)));
                     } else {
