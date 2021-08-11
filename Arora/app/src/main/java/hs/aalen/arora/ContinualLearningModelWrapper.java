@@ -62,6 +62,7 @@ public class ContinualLearningModelWrapper {
     private final TransferLearningModel model;
 
     private final ConditionVariable shouldTrain = new ConditionVariable();
+
     private final DatabaseHelper databaseHelper;
     private final Context context;
     Path parametersFilePath;
@@ -275,5 +276,9 @@ public class ContinualLearningModelWrapper {
             trainingSamplesStored++;
         }
         databaseHelper.insertTrainingSampleBatch(activationsMap, modelID);
+    }
+
+    public DatabaseHelper getDatabaseHelper() {
+        return databaseHelper;
     }
 }

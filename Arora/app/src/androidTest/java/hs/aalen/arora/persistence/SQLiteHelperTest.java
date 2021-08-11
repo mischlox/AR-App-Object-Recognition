@@ -28,7 +28,7 @@ public class SQLiteHelperTest {
     public void setUp() {
         dbHelper = new SQLiteHelper(ApplicationProvider.getApplicationContext());
         db = dbHelper.getWritableDatabase();
-        seedDB();
+        dbHelper.seedDB();
     }
 
     @After
@@ -653,28 +653,5 @@ public class SQLiteHelperTest {
         int afterInvalid = dbHelper.getAmountSamplesByObjectName(OBJECT_NAME);
         assertThat(before).isEqualTo(afterNull);
         assertThat(before).isEqualTo(afterInvalid);
-    }
-
-    private void seedDB() {
-        dbHelper.insertModel("model 1");
-        dbHelper.insertModel("model 2");
-        dbHelper.insertModel("model 3");
-
-        dbHelper.insertObject("object 1", "type", "add","1");
-        dbHelper.insertObject("object 2", "type", null, "2");
-        dbHelper.insertObject("object 3", null, null, "3");
-
-        HashMap<String, byte[]> TEST_ACTIVATIONS = new HashMap<String, byte[]>() {{
-            put("1", new byte[]{1, 2, 4, 8, 64, 32, 11});
-        }};
-        dbHelper.insertTrainingSampleBatch(TEST_ACTIVATIONS, "1");
-        dbHelper.insertTrainingSampleBatch(TEST_ACTIVATIONS, "2");
-        dbHelper.insertTrainingSampleBatch(TEST_ACTIVATIONS, "3");
-        dbHelper.insertTrainingSampleBatch(TEST_ACTIVATIONS, "4");
-
-        dbHelper.insertReplaySampleBatch(TEST_ACTIVATIONS, "1");
-        dbHelper.insertReplaySampleBatch(TEST_ACTIVATIONS, "2");
-        dbHelper.insertReplaySampleBatch(TEST_ACTIVATIONS, "3");
-
     }
 }

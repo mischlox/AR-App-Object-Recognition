@@ -329,4 +329,9 @@ public interface DatabaseHelper {
      * Drop all tables
      */
     void deleteAll();
+
+    /**
+     * Seed the DB with mock values for testing
+     */
+    void seedDB();
 }

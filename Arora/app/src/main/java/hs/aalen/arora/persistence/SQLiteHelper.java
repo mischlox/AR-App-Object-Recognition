@@ -454,6 +454,29 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
         onCreate(db);
     }
 
+    @Override
+    public void seedDB() {
+        insertModel("model 1");
+        insertModel("model 2");
+        insertModel("model 3");
+
+        insertObject("object 1", "type", "add","1");
+        insertObject("object 2", "type", null, "2");
+        insertObject("object 3", null, null, "3");
+
+        HashMap<String, byte[]> TEST_ACTIVATIONS = new HashMap<String, byte[]>() {{
+            put("1", new byte[]{1, 2, 4, 8, 64, 32, 11});
+        }};
+        insertTrainingSampleBatch(TEST_ACTIVATIONS, "1");
+        insertTrainingSampleBatch(TEST_ACTIVATIONS, "2");
+        insertTrainingSampleBatch(TEST_ACTIVATIONS, "3");
+        insertTrainingSampleBatch(TEST_ACTIVATIONS, "4");
+
+        insertReplaySampleBatch(TEST_ACTIVATIONS, "1");
+        insertReplaySampleBatch(TEST_ACTIVATIONS, "2");
+        insertReplaySampleBatch(TEST_ACTIVATIONS, "3");
+    }
+
     /**
      * Check if a model with the given name exists
      *
