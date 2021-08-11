@@ -222,10 +222,10 @@ public interface DatabaseHelper {
     /**
      * Update the image bitmap that is stored in the object
      *
-     * @param objectID of object that will be updated
+     * @param objectName of object that will be updated
      * @param bitmap that will be stored in the specified object row
      */
-    void updateImageBlob(String objectID, Bitmap bitmap);
+    void updateImageBlob(String objectName, Bitmap bitmap);
 
     /**
      * Returns all data from Object Table

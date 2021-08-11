@@ -182,7 +182,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
     }
 
     @Override
-    public void updateImageBlob(String objectID, Bitmap bitmap) {
+    public void updateImageBlob(String objectName, Bitmap bitmap) {
         SQLiteDatabase db = this.getWritableDatabase();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
@@ -193,7 +193,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
         db.update(OBJECT_TABLE_NAME,
                 contentValues,
                 OBJECT_COL1 + "=?",
-                new String[]{objectID});
+                new String[]{objectName});
 
     }
 
@@ -208,7 +208,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
                 OBJECT_COL1 + "=?",
                 new String[]{objectName});
 
-        return success != -1;
+        return success != 0;
     }
 
     @Override
@@ -236,6 +236,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
 
     @Override
     public String getModelNameByID(String modelID) {
+        if(modelID==null) modelID="";
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT " + MODEL_COL1 + " FROM " + MODEL_TABLE_NAME
                 + " WHERE " + MODEL_COL0 + "=?";
@@ -259,6 +260,9 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
 
     @Override
     public Cursor getObjectByModelPosAndModelID(String modelPos, String modelID) {
+        if(modelPos == null) modelPos="";
+        if(modelID == null) modelID="";
+
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + OBJECT_TABLE_NAME
                 + " WHERE " + OBJECT_COL6 + "=? AND " + OBJECT_COL7 + "=?";
@@ -378,8 +382,8 @@ public class SQLiteHelper extends SQLiteOpenHelper implements DatabaseHelper {
 
     @Override
     public boolean insertModel(String name) {
+        if(name == null || name.equals("")) return false;
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
         contentValues.put(MODEL_COL1, name);
         long success;
