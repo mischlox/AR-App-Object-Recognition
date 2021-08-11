@@ -467,9 +467,9 @@ Die Konfigurierbarkeit der Applikation, soll mit einem zusätzlichen Fragment ge
 \subsection{Entwurf der graphischen Oberfläche}
 Die graphische Oberfläche soll möglichst intuitiv und übersichtlich gestaltet werden.\\
 Zur Navigation soll eine Navigationsleiste am unteren Bildschirmrand hinzugefügt werden und eine weitere aufklappbare Alternativleiste soll am linken oberen Bildschirmrand geöffnet werden können.\\
-Aktions- und Steuerelemente sollen mit möglichst selbsterklärenden Icons besetzt werden. Um das \glqq Principle of Least Surprise\grqq\ zu gewährleisten, sollen Klicks auf Buttons meistens lediglich Dialoge erzeugen. In diesen Dialogen wird erneut erklärt, was die nächste Aktion zur Folge hat. Unter Anwendung der Globalen Konfiguration, soll eine Checkbox mit der Beschreibung \glqq Nicht mehr anzeigen\grqq\ das Erzeugen von Dialogen unterdrücken, um die Arbeit mit dem Applikation für erfahrene Nutzer beschleunigen zu können.\\
+Aktions- und Steuerelemente sollen mit möglichst selbsterklärenden Icons besetzt werden. Um das \glqq Principle of Least Surprise\grqq\ zu gewährleisten, sollen Klicks auf Buttons meistens lediglich Dialoge erzeugen. In diesen Dialogen wird erneut erklärt, was die nächste Aktion zur Folge hat. Unter Anwendung der Globalen Konfiguration, soll eine Checkbox mit der Beschreibung \glqq Nicht mehr anzeigen\grqq\ das Erzeugen von Dialogen unterdrücken, um die Arbeit mit der Applikation für erfahrene Nutzer beschleunigen zu können.\\
 Nachdem eine Aktion, wie beispielsweise das Hinzufügen oder Löschen von Objekten abgeschlossen ist, soll dies dem Nutzer mithilfe von sogenannten Toasts, die bei Android eine Art Notifier-Popup darstellen, mitgeteilt werden, um stets eine Rückmeldung des Systems gewährleisten zu können. Länger andauernde Operationen, wie beispielsweise dem Trainieren von Objekten, oder dem Aktualisieren des Latent-Replay-Puffers, soll mithilfe von Ladekreisen hervorgehoben werden, um dem Nutzer zu signalisieren, dass das System eine länger andauernde Operation durchführt. Da das Ende des Trainings durch das Entfernen des letzten Elementes in der Anfragewarteschlange gekennzeichnet ist, kann hierfür ein deterministischer Ladekreis verwendet werden, welcher dem Nutzer eine präzisere Angabe für die verbleibende Dauer des Prozesses zur Verfügung stellen kann.\\
-Die Oberfläche der Applikation wird in deutsch und englisch verfügbar sein. Dies ist möglich durch das Verwenden von extern gespeicherten Zeichenketten in einer Datei im XML-Format, welche stets als Platzhalter in den Quelltext der Applikation eingebunden werden können. Je nach Systemsprache des Betriebssystems, auf welchem die Applikation ausgeführt wird, kann die Sprache dynamisch festgelegt werden. Falls eine andere nicht übersetzte Sprache als Systemsprache ausgewählt ist, werden standardmäßig die Datei, welche die englischen Zeichenketten beinhaltet, als Fallback-Lösung verwendet.\\
+Die Oberfläche der Applikation wird in deutsch und englisch verfügbar sein. Dies ist möglich durch das Verwenden von extern gespeicherten Zeichenketten in einer Datei im XML-Format, welche stets als Platzhalter in den Quelltext der Applikation eingebunden werden können. Je nach Systemsprache des Betriebssystems, auf welchem die Applikation ausgeführt wird, kann die Sprache dynamisch festgelegt werden. Falls eine andere nicht übersetzte Sprache als Systemsprache ausgewählt ist, wird standardmäßig die Datei, welche die englischen Zeichenketten beinhaltet, als Fallback-Lösung verwendet.\\
 Ein Dunkelmodus wird nach einem ähnlichen Prinzip zur Verfügung gestellt. Durch das Auslagern von Farben und Stilen in dafür vorgesehene XML-Dateien, kann die Applikation das Farbschema der Oberfläche dynamisch ändern.\\
 In Anhang \ref{appendix:gui} werden Screenshots von der Gestaltung der graphischen Oberfläche dargestellt.
 \chapter{Implementierung}
@@ -612,7 +612,6 @@ Zum Einen wurden Unit-Tests zum Testen der einzelnen Methoden erstellt. Diese si
 Für die Implementierung der zu schreibenden Tests werden die Test Frameworks \texttt{JUnit} und AndroidX-Testbibliotheken standardmäßig von Android Studio bei Erstellung eines Projektes eingebunden und demnach auch für das Testen der zu entwickelnden Applikation genutzt. Für die Assertions der Tests wird für eine bessere Lesbarkeit die von Google zur Verfügung gestellte Bibliothek \texttt{Truth} verwendet.\\
 Für das Erstellen von instrumentierten Unit-Tests, welche auf einem Android-Emulator ausgeführt werden, werden AndroidX Tests in einer Ordnerstruktur angelegt, welche der Struktur des Hauptprojektes entspricht. Diese instrumentierten Unit-Tests sind notwendig für das Testen von Methoden, welche Android-spezifische Abhängigkeiten enthalten, wie beispielsweise \textit{Activities} oder \textit{Contexts} und nicht lokal auf dem Entwicklungsrechner ausführbar sind. Alle anderen Tests werden mit \texttt{JUnit} geschrieben und sind demnach schneller ausführbar, da sie in der lokalen Java Virtual Machine (JVM) ausgeführt werden können und demnach die Verwendung eines Emulators nicht notwendig ist.\\
 Aus Zeitgründen konnte kein extensives Testing durchgeführt werden für die meisten Komponenten. Die Implementierung der Datenbankhelferklasse wurde jedoch auf den gesamten Wertebereich getestet, um eine möglichst hohe Testabdeckung erzielen zu können.\\
-
 
 \section{Akzeptanztest}
 Die durch Unit-Tests getestete Applikation, wurde als Beta-Test im Rahmen einer Feldstudie getestet. Mithilfe eines Fragebogens, der von den Testern ausgefüllt wurde, konnten Ergebnisse und Eindrücke gesammelt werden, die für die weitere Entwicklung der Applikation von Bedeutung sein können. Außerdem konnten noch einige Bugs identifiziert und gelöst werden.\\
@@ -1027,9 +1026,125 @@ Und hier etwas über deren Übertragbarkeit.
 %---
 \chapter{Umfrageergebnisse Beta-Test}
 \label{appendix:beta-test}
+Die Darstellung der Ergebnisse des Betatests wurden mithilfe von Google Forms erstellt.
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.3\textheight]{images/umfrage-allgemeiner-eindruck.png}
+	\caption{Frage 1: Allgemeiner Eindruck}
+	\label{fig:beta:allgemein}
+\end{figure}
+
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.5\textheight]{images/umfrage-einfach-zu-finden.png}
+	\caption{Frage 2: Leichte Auffindbarkeit der Informationen}
+	\label{fig:beta:einfach-zu-finden}
+\end{figure}
+
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.5\textheight]{images/umfrage-selbsterklaerend.png}
+	\caption{Frage 3: Intuitivität der Applikation}
+	\label{fig:beta:selbsterklaerend}
+\end{figure}
+
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.4\textheight]{images/umfrage-fehlerfrei-funktioniert.png}
+	\caption{Frage 4: Fehlerfreie Benutzung}
+	\label{fig:beta:nobugs}
+\end{figure}
+
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.25\textheight]{images/umfrage-further-questions.png}
+	\caption{Frage 5: Weitere Anregungen oder Fragen}
+	\label{fig:beta:further}
+\end{figure}
 
 \chapter{Screenshots der graphischen Benutzeroberfläche}
 \label{appendix:gui}
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/screenshots/start-screen.png}
+	\caption{Screenshot: Startbildschirm}
+	\label{fig:screenshot:start}
+\end{figure}
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/screenshots/detecting.png}
+	\caption{Screenshot: Erkennen von Objekten}
+	\label{fig:screenshot:detecting}
+\end{figure}
 
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/screenshots/add-info.png}
+	\caption{Screenshot: Hinzufügen von Objektinformationen}
+	\label{fig:screenshot:add-info}
+\end{figure}
+
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/screenshots/training.png}
+	\caption{Screenshot: Einlernen von Objekten}
+	\label{fig:screenshot:training}
+\end{figure}
+
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/screenshots/object-overview.png}
+	\caption{Screenshot: Objektübersicht}
+	\label{fig:screenshot:obj-overview}
+\end{figure}
+
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/screenshots/model-overview.png}
+	\caption{Screenshot: Modellübersicht/Objektordner-Übersicht}
+	\label{fig:screenshot:model-overview}
+\end{figure}
+
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/screenshots/add-folder.png}
+	\caption{Screenshot: Hinzufügen eines Objektordners}
+	\label{fig:screenshot:add-model}
+\end{figure}
+
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/screenshots/settings-light.png}
+	\caption{Screenshot: Einstellungsansicht im hellen Modus}
+	\label{fig:screenshot:settings-light}
+\end{figure}
+
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/screenshots/settings-dark.png}
+	\caption{Screenshot: Einstellungsansicht im Dunkelmodus}
+	\label{fig:screenshot:settings-dark}
+\end{figure}
+
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/screenshots/help-overview.png}
+	\caption{Screenshot: Hilfeübersicht}
+	\label{fig:screenshot:help-overview}
+\end{figure}
+
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/screenshots/help-dialog.png}
+	\caption{Screenshot: Beispiel eines Hilfedialogs}
+	\label{fig:screenshot:help-dialog}
+\end{figure}
+
+\begin{figure}[hptb]
+	\centering
+	\includegraphics[height=0.6\textheight]{images/screenshots/side-nav.png}
+	\caption{Screenshot: Ausklappbare Seitennavigationsleiste}
+	\label{fig:screenshot:side-nav}
+\end{figure}
 
 \end{document}

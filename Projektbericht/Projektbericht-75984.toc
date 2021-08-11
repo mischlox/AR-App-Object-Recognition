@@ -5,9 +5,9 @@
 \contentsline {chapter}{Kurzfassung}{ii}{chapter*.2}%
 \contentsline {chapter}{Inhaltsverzeichnis}{iii}{chapter*.3}%
 \contentsline {chapter}{Abbildungsverzeichnis}{vii}{chapter*.4}%
-\contentsline {chapter}{Tabellenverzeichnis}{viii}{chapter*.5}%
-\contentsline {chapter}{Quelltextverzeichnis}{ix}{chapter*.6}%
-\contentsline {chapter}{Abkürzungsverzeichnis}{x}{chapter*.7}%
+\contentsline {chapter}{Tabellenverzeichnis}{ix}{chapter*.5}%
+\contentsline {chapter}{Quelltextverzeichnis}{x}{chapter*.6}%
+\contentsline {chapter}{Abkürzungsverzeichnis}{xi}{chapter*.7}%
 \contentsline {chapter}{\numberline {1}Einleitung}{1}{chapter.1}%
 \contentsline {chapter}{\numberline {2}Grundlagen}{2}{chapter.2}%
 \contentsline {section}{\numberline {2.1}Deep Neural Networks}{2}{section.2.1}%
@@ -82,4 +82,4 @@
 \contentsline {chapter}{\nonumberline Literatur}{42}{chapter*.33}%
 \contentsline {chapter}{\numberline {A}Beschreibung der Anwendungsfälle}{44}{appendix.A}%
 \contentsline {chapter}{\numberline {B}Umfrageergebnisse Beta-Test}{60}{appendix.B}%
-\contentsline {chapter}{\numberline {C}Screenshots der graphischen Benutzeroberfläche}{61}{appendix.C}%
+\contentsline {chapter}{\numberline {C}Screenshots der graphischen Benutzeroberfläche}{64}{appendix.C}%
