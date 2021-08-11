@@ -1,8 +1,6 @@
 package hs.aalen.arora.dialogues;
 
 import android.content.Context;
-import android.util.Pair;
-
 import hs.aalen.arora.R;
 /**
  * Help dialog that shows an explanation for configuration options
