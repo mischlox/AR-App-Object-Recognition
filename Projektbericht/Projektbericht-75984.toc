@@ -71,12 +71,13 @@
 \contentsline {subsection}{\numberline {5.2.1}Implementierung der konfigurierbaren Fokusbox}{34}{subsection.5.2.1}%
 \contentsline {section}{\numberline {5.3}Implementierung der Persistenzschnittstelle mit SQLite und Shared Preferences}{35}{section.5.3}%
 \contentsline {chapter}{\numberline {6}Tests}{38}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Unit-Tests}{38}{section.6.1}%
-\contentsline {subsection}{\numberline {6.1.1}Testen der Datenbankhelfer}{39}{subsection.6.1.1}%
-\contentsline {subsection}{\numberline {6.1.2}Testen des Objekt-Mappings}{39}{subsection.6.1.2}%
-\contentsline {subsection}{\numberline {6.1.3}Testen des Speichern und Ladens von Parameterdateien}{39}{subsection.6.1.3}%
-\contentsline {subsection}{\numberline {6.1.4}Testen des Latent-Replay Algorithmus}{39}{subsection.6.1.4}%
-\contentsline {section}{\numberline {6.2}Akzeptanztest}{39}{section.6.2}%
+\contentsline {section}{\numberline {6.1}Unit- und Integrations-Tests}{38}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Integrationstests}{39}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Testen der Datenbankhelfer}{39}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Testen des Objekt-Mappings}{39}{subsection.6.2.2}%
+\contentsline {subsection}{\numberline {6.2.3}Testen des Speichern und Ladens von Parameterdateien}{39}{subsection.6.2.3}%
+\contentsline {subsection}{\numberline {6.2.4}Testen des Latent-Replay Algorithmus}{39}{subsection.6.2.4}%
+\contentsline {section}{\numberline {6.3}Akzeptanztest}{39}{section.6.3}%
 \contentsline {chapter}{\numberline {7}Zusammenfassung und Ausblick}{41}{chapter.7}%
 \contentsline {section}{\numberline {7.1}Erreichte Ergebnisse}{41}{section.7.1}%
 \contentsline {section}{\numberline {7.2}Ausblick}{41}{section.7.2}%
