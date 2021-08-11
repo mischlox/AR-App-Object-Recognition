@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.5.19)  12 AUG 2021 00:32
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.5.19)  12 AUG 2021 01:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2116,7 +2116,7 @@ Package pdftex.def Info: images/object-overview-class-diagram.png  used on inpu
 t line 381.
 (pdftex.def)             Requested size: 363.05984pt x 417.05836pt.
 [22 <./images/camera-fragment-class-diagram.png>]
-<images/dialogues.png, id=525, 945.5325pt x 764.8575pt>
+<images/dialogues.png, id=524, 945.5325pt x 764.8575pt>
 File: images/dialogues.png Graphic file (type png)
 <use images/dialogues.png>
 Package pdftex.def Info: images/dialogues.png  used on input line 392.
@@ -2126,8 +2126,9 @@ Overfull \hbox (23.67766pt too wide) in paragraph at lines 392--393
  [][] 
  []
 
-[23 <./images/object-overview-class-diagram.png>]
-<images/sequence-diagram-change-model.png, id=532, 584.1825pt x 286.06876pt>
+[23] [24 <./images/object-overview-class-diagram.png>] [25 <./images/dialogues.
+png>]
+<images/sequence-diagram-change-model.png, id=543, 584.1825pt x 286.06876pt>
 File: images/sequence-diagram-change-model.png Graphic file (type png)
 <use images/sequence-diagram-change-model.png>
 Package pdftex.def Info: images/sequence-diagram-change-model.png  used on inpu
@@ -2138,23 +2139,23 @@ Overfull \hbox (7.59688pt too wide) in paragraph at lines 404--405
  [][] 
  []
 
-[24] [25 <./images/dialogues.png>]
+
 Underfull \hbox (badness 10000) in paragraph at lines 422--425
 
  []
 
-
+[26 <./images/sequence-diagram-change-model.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 427--439
 
  []
 
-[26 <./images/sequence-diagram-change-model.png>]
-<images/addobject-diagram.png, id=554, 490.08093pt x 563.10374pt>
+[27]
+<images/addobject-diagram.png, id=558, 490.08093pt x 563.10374pt>
 File: images/addobject-diagram.png Graphic file (type png)
 <use images/addobject-diagram.png>
 Package pdftex.def Info: images/addobject-diagram.png  used on input line 445.
 (pdftex.def)             Requested size: 311.12315pt x 357.48378pt.
- [27] [28 <./images/addobject-diagram.png>] [29] [30] [31]
+ [28] [29 <./images/addobject-diagram.png>] [30] [31] [32]
 chapter 5.
 
 Underfull \hbox (badness 10000) in paragraph at lines 493--493
@@ -2185,10 +2186,10 @@ Overfull \hbox (1.33546pt too wide) in paragraph at lines 491--498
  [][] 
  []
 
-[32
+[33
 
 
-] [33] (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+] [34] (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/09/10 1.8c listings language file
 )
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
@@ -2198,24 +2199,24 @@ Underfull \hbox (badness 10000) in paragraph at lines 521--565
 
  []
 
-[34] [35] [36] [37]
+[35] [36] [37] [38]
 chapter 6.
 
 Underfull \hbox (badness 10000) in paragraph at lines 612--615
 
  []
 
-[38
+[39
 
 
-] [39]
+] [40]
 chapter 7.
-[40
+[41
 
 
 ]
 chapter 8.
-[41
+[42
 
 
 ]
@@ -2226,7 +2227,7 @@ Overfull \hbox (27.3312pt too wide) in paragraph at lines 661--661
  \T1/pnc/m/n/10.95 (-20) (be-sucht am 04.08.2021). 
  []
 
-[42
+[43
 
 
 ]
@@ -2235,7 +2236,7 @@ Overfull \hbox (29.3312pt too wide) in paragraph at lines 661--661
 l$[][] \T1/pnc/m/n/10.95 (-20) (be-sucht am 12.05.2021). 
  []
 
-[43]
+[44]
 chapter A.
 
 Overfull \hbox (4.89227pt too wide) in paragraph at lines 669--686
@@ -2368,19 +2369,19 @@ Overfull \hbox (4.89227pt too wide) in paragraph at lines 1004--1022
  [][] 
  []
 
-[44
+[45
 
 
-] [45] [46] [47] [48] [49] [50] [51] [52] [53] [54] [55] [56] [57] [58]
-[59]
+] [46] [47] [48] [49] [50] [51] [52] [53] [54] [55] [56] [57] [58] [59]
+[60]
 chapter B.
-<images/umfrage-allgemeiner-eindruck.png, id=815, 529.71527pt x 266.84308pt>
+<images/umfrage-allgemeiner-eindruck.png, id=819, 529.71527pt x 266.84308pt>
 File: images/umfrage-allgemeiner-eindruck.png Graphic file (type png)
 <use images/umfrage-allgemeiner-eindruck.png>
 Package pdftex.def Info: images/umfrage-allgemeiner-eindruck.png  used on input
  line 1032.
 (pdftex.def)             Requested size: 354.84273pt x 178.74188pt.
-<images/umfrage-einfach-zu-finden.png, id=816, 709.199pt x 447.12099pt>
+<images/umfrage-einfach-zu-finden.png, id=820, 709.199pt x 447.12099pt>
 File: images/umfrage-einfach-zu-finden.png Graphic file (type png)
 <use images/umfrage-einfach-zu-finden.png>
 Package pdftex.def Info: images/umfrage-einfach-zu-finden.png  used on input li
@@ -2391,19 +2392,19 @@ Overfull \hbox (54.2757pt too wide) in paragraph at lines 1039--1040
  [][] 
  []
 
-<images/umfrage-selbsterklaerend.png, id=817, 709.199pt x 527.33275pt>
+<images/umfrage-selbsterklaerend.png, id=821, 709.199pt x 527.33275pt>
 File: images/umfrage-selbsterklaerend.png Graphic file (type png)
 <use images/umfrage-selbsterklaerend.png>
 Package pdftex.def Info: images/umfrage-selbsterklaerend.png  used on input lin
 e 1046.
 (pdftex.def)             Requested size: 400.64407pt x 297.90013pt.
-<images/umfrage-fehlerfrei-funktioniert.png, id=818, 709.199pt x 423.29572pt>
+<images/umfrage-fehlerfrei-funktioniert.png, id=822, 709.199pt x 423.29572pt>
 File: images/umfrage-fehlerfrei-funktioniert.png Graphic file (type png)
 <use images/umfrage-fehlerfrei-funktioniert.png>
 Package pdftex.def Info: images/umfrage-fehlerfrei-funktioniert.png  used on in
 put line 1053.
 (pdftex.def)             Requested size: 399.2914pt x 238.31647pt.
-<images/umfrage-further-questions.png, id=819, 709.199pt x 218.39835pt>
+<images/umfrage-further-questions.png, id=823, 709.199pt x 218.39835pt>
 File: images/umfrage-further-questions.png Graphic file (type png)
 <use images/umfrage-further-questions.png>
 Package pdftex.def Info: images/umfrage-further-questions.png  used on input li
@@ -2414,96 +2415,96 @@ Overfull \hbox (65.43265pt too wide) in paragraph at lines 1060--1061
  [][] 
  []
 
-[60
+[61
 
 
- <./images/umfrage-allgemeiner-eindruck.png (PNG copy)>] [61 <./images/umfrage-
-einfach-zu-finden.png (PNG copy)>] [62 <./images/umfrage-selbsterklaerend.png (
+ <./images/umfrage-allgemeiner-eindruck.png (PNG copy)>] [62 <./images/umfrage-
+einfach-zu-finden.png (PNG copy)>] [63 <./images/umfrage-selbsterklaerend.png (
 PNG copy)> <./images/umfrage-fehlerfrei-funktioniert.png (PNG copy)>]
-[63 <./images/umfrage-further-questions.png (PNG copy)>]
+[64 <./images/umfrage-further-questions.png (PNG copy)>]
 chapter C.
-<images/screenshots/start-screen.png, id=837, 1084.05pt x 2228.325pt>
+<images/screenshots/start-screen.png, id=841, 1084.05pt x 2228.325pt>
 File: images/screenshots/start-screen.png Graphic file (type png)
 <use images/screenshots/start-screen.png>
 Package pdftex.def Info: images/screenshots/start-screen.png  used on input lin
 e 1069.
 (pdftex.def)             Requested size: 173.89815pt x 357.48378pt.
-<images/screenshots/detecting.png, id=838, 1084.05pt x 2228.325pt>
+<images/screenshots/detecting.png, id=842, 1084.05pt x 2228.325pt>
 File: images/screenshots/detecting.png Graphic file (type png)
 <use images/screenshots/detecting.png>
 Package pdftex.def Info: images/screenshots/detecting.png  used on input line 1
 075.
 (pdftex.def)             Requested size: 173.89815pt x 357.48378pt.
-<images/screenshots/add-info.png, id=839, 1084.05pt x 2228.325pt>
+<images/screenshots/add-info.png, id=843, 1084.05pt x 2228.325pt>
 File: images/screenshots/add-info.png Graphic file (type png)
 <use images/screenshots/add-info.png>
 Package pdftex.def Info: images/screenshots/add-info.png  used on input line 10
 82.
 (pdftex.def)             Requested size: 173.89815pt x 357.48378pt.
-<images/screenshots/training.png, id=840, 1084.05pt x 2228.325pt>
+<images/screenshots/training.png, id=844, 1084.05pt x 2228.325pt>
 File: images/screenshots/training.png Graphic file (type png)
 <use images/screenshots/training.png>
 Package pdftex.def Info: images/screenshots/training.png  used on input line 10
 89.
 (pdftex.def)             Requested size: 173.89815pt x 357.48378pt.
-<images/screenshots/object-overview.png, id=841, 1084.05pt x 2228.325pt>
+<images/screenshots/object-overview.png, id=845, 1084.05pt x 2228.325pt>
 File: images/screenshots/object-overview.png Graphic file (type png)
 <use images/screenshots/object-overview.png>
 Package pdftex.def Info: images/screenshots/object-overview.png  used on input 
 line 1096.
 (pdftex.def)             Requested size: 173.89815pt x 357.48378pt.
-<images/screenshots/model-overview.png, id=842, 1084.05pt x 2228.325pt>
+<images/screenshots/model-overview.png, id=846, 1084.05pt x 2228.325pt>
 File: images/screenshots/model-overview.png Graphic file (type png)
 <use images/screenshots/model-overview.png>
 Package pdftex.def Info: images/screenshots/model-overview.png  used on input l
 ine 1103.
 (pdftex.def)             Requested size: 173.89815pt x 357.48378pt.
-<images/screenshots/add-folder.png, id=843, 1084.05pt x 2228.325pt>
+<images/screenshots/add-folder.png, id=847, 1084.05pt x 2228.325pt>
 File: images/screenshots/add-folder.png Graphic file (type png)
 <use images/screenshots/add-folder.png>
 Package pdftex.def Info: images/screenshots/add-folder.png  used on input line 
 1110.
 (pdftex.def)             Requested size: 173.89815pt x 357.48378pt.
-<images/screenshots/settings-light.png, id=844, 1084.05pt x 2228.325pt>
+<images/screenshots/settings-light.png, id=848, 1084.05pt x 2228.325pt>
 File: images/screenshots/settings-light.png Graphic file (type png)
 <use images/screenshots/settings-light.png>
 Package pdftex.def Info: images/screenshots/settings-light.png  used on input l
 ine 1117.
 (pdftex.def)             Requested size: 173.89815pt x 357.48378pt.
-<images/screenshots/settings-dark.png, id=845, 1084.05pt x 2228.325pt>
+<images/screenshots/settings-dark.png, id=849, 1084.05pt x 2228.325pt>
 File: images/screenshots/settings-dark.png Graphic file (type png)
 <use images/screenshots/settings-dark.png>
 Package pdftex.def Info: images/screenshots/settings-dark.png  used on input li
 ne 1124.
 (pdftex.def)             Requested size: 173.89815pt x 357.48378pt.
-<images/screenshots/help-overview.png, id=846, 1084.05pt x 2228.325pt>
+<images/screenshots/help-overview.png, id=850, 1084.05pt x 2228.325pt>
 File: images/screenshots/help-overview.png Graphic file (type png)
 <use images/screenshots/help-overview.png>
 Package pdftex.def Info: images/screenshots/help-overview.png  used on input li
 ne 1131.
 (pdftex.def)             Requested size: 173.89815pt x 357.48378pt.
-<images/screenshots/help-dialog.png, id=847, 1084.05pt x 2228.325pt>
+<images/screenshots/help-dialog.png, id=851, 1084.05pt x 2228.325pt>
 File: images/screenshots/help-dialog.png Graphic file (type png)
 <use images/screenshots/help-dialog.png>
 Package pdftex.def Info: images/screenshots/help-dialog.png  used on input line
  1138.
 (pdftex.def)             Requested size: 173.89815pt x 357.48378pt.
-<images/screenshots/side-nav.png, id=848, 1084.05pt x 2228.325pt>
+<images/screenshots/side-nav.png, id=852, 1084.05pt x 2228.325pt>
 File: images/screenshots/side-nav.png Graphic file (type png)
 <use images/screenshots/side-nav.png>
 Package pdftex.def Info: images/screenshots/side-nav.png  used on input line 11
 45.
 (pdftex.def)             Requested size: 173.89815pt x 357.48378pt.
-[64
+[65
 
 
- <./images/screenshots/start-screen.png>] [65 <./images/screenshots/detecting.p
-ng>] [66 <./images/screenshots/add-info.png>] [67 <./images/screenshots/trainin
-g.png>] [68 <./images/screenshots/object-overview.png>] [69 <./images/screensho
-ts/model-overview.png>] [70 <./images/screenshots/add-folder.png>] [71 <./image
-s/screenshots/settings-light.png>] [72 <./images/screenshots/settings-dark.png>
-] [73 <./images/screenshots/help-overview.png>] [74 <./images/screenshots/help-
-dialog.png>] [75 <./images/screenshots/side-nav.png>]
+ <./images/screenshots/start-screen.png>] [66 <./images/screenshots/detecting.p
+ng>] [67 <./images/screenshots/add-info.png>] [68 <./images/screenshots/trainin
+g.png>] [69 <./images/screenshots/object-overview.png>] [70 <./images/screensho
+ts/model-overview.png>] [71 <./images/screenshots/add-folder.png>] [72 <./image
+s/screenshots/settings-light.png>] [73 <./images/screenshots/settings-dark.png>
+] [74 <./images/screenshots/help-overview.png>] [75 <./images/screenshots/help-
+dialog.png>] [76 <./images/screenshots/side-nav.png>]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1150.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 1150.
 
@@ -2518,9 +2519,9 @@ Package logreq Info: Writing requests to 'Projektbericht-75984.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 39260 strings out of 481239
- 762102 string characters out of 5920377
- 1656229 words of memory out of 5000000
+ 39261 strings out of 481239
+ 762109 string characters out of 5920377
+ 1656226 words of memory out of 5000000
  53222 multiletter control sequences out of 15000+600000
  612884 words of font info for 236 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
@@ -2536,10 +2537,10 @@ rr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/ncntrsbk/uncb8a.pfb></u
 sr/share/texlive/texmf-dist/fonts/type1/urw/ncntrsbk/uncr8a.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/urw/ncntrsbk/uncr8a.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/urw/ncntrsbk/uncri8a.pfb>
-Output written on Projektbericht-75984.pdf (87 pages, 2183395 bytes).
+Output written on Projektbericht-75984.pdf (88 pages, 2183656 bytes).
 PDF statistics:
- 1256 PDF objects out of 1440 (max. 8388607)
- 1093 compressed objects within 11 object streams
- 316 named destinations out of 1000 (max. 500000)
+ 1260 PDF objects out of 1440 (max. 8388607)
+ 1096 compressed objects within 11 object streams
+ 317 named destinations out of 1000 (max. 500000)
  41747 words of extra memory for PDF output out of 42996 (max. 10000000)
 
