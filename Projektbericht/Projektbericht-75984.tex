@@ -81,7 +81,7 @@
 %---
 \begin{abstract}
 	Das Einlernen und Wiedererkennen von beliebigen Objekten ist im Bereich des Maschinellen Sehens immer noch ein aktuelles und noch nicht gänzlich erforschtes Thema. Ein exemplarischer Anwendungsfall hierfür, wäre dem Nutzer die Möglichkeit zu bieten durch eine Kamera ein Objekt einzulesen und das Kamerabild bei Erkennung des Objektes mit bildunterstützenden Elementen zu ergänzen.\\
-	Die geringe Rechenleistung von Mobile und Embedded Devices stellt jedoch den Einsatz dieser Technologie auf diesen Geräten vor eine Herausforderung. Verschiedene Ansätze, um die Rechenintensität eines Einlern-/ und Wiedererkennungsalgorithmus gering zu halten, sind bereits verfügbar und einsetzbar. \\
+	Die geringe Rechenleistung von mobilen Endgeräten und eingebetteten Systemen stellt jedoch den Einsatz dieser Technologie auf diesen Geräten vor eine Herausforderung. Verschiedene Ansätze, um die Rechenintensität eines Einlern-/ und Wiedererkennungsalgorithmus gering zu halten, sind bereits verfügbar und einsetzbar. \\
 	Eine weitere Schwierigkeit, die sich beim kontinuierlichen Einlernen von Objekten ergeben kann, ist das bekannte Phänomen des Katastrophalen Vergessens, welches dafür sorgt, dass beim Trainingsvorgang bereits eingelernte Objekte mit neuen überschrieben werden.\\
 	Im Rahmen dieser Arbeit wird eine Android-Applikation für mobile Endgeräte entwickelt, welche den im obigen beschriebenen Anwendungsfall erfüllen kann. Zum Einlernen und Wiedererkennen werden bereits trainierte Deep Learning Architekturen mithilfe der Methode \glqq Continual Learning\grqq\ erweitert, um die Kernfunktionalität erbringen zu können.
 \end{abstract}
@@ -127,14 +127,14 @@
 \chapter{Einleitung}
 \label{cha:einleitung}
 Das Einlernen und Wiedererkennen von Objekten kann in vielen Bereichen Anwendung finden, wie beispielsweise in der Tourismus- oder Videospielbranche, sowie auch in der Medizin und Rüstungsindustrie. Die Nutzung von Deep-Learning-Algorithmen hat sich als \textit{state-of-the-art} im Bereich der Bildklassifizierung etablieren können. Bei diesem Ansatz werden mit einer enormen Anzahl von Trainingsdaten sogenannte Neuronale Netze für ein bestimmtes Anwendungsgebiet trainiert.\\
-Deep Learning wurde bereits in den frühen 50er Jahren erforscht, bei der Simulation von Neuronen im menschlichen Gehirn, um generelle Lernprozesse besser verstehen zu können. Aufgrund der enormen Rechenleistung, die aufzubringen ist, fand der Ansatz erst später wieder Anklang im Bereich des Maschinellen Lernens, da die Hardware die zur Verfügung steht, immer leistungsstärker wird \cite{dl-review}. Gleichzeitig werden im Bereich der Robotik und dem Internet der Dinge, die Verwendung von eingebetten Systemen und Mikroprozessoren und die Verwendung von Smartphones immer gefragter. Um einen effizienten Klassifizierungsalgorithmus implementieren zu können ist demnach eine möglichst kleine Deep Learning Architektur zu verwenden.\\
+Deep Learning wurde bereits in den frühen 50er Jahren erforscht, bei der Simulation von Neuronen im menschlichen Gehirn, um generelle Lernprozesse besser verstehen zu können. Aufgrund der enormen Rechenleistung, die aufzubringen ist, fand der Ansatz erst später wieder Anklang im Bereich des Maschinellen Lernens, da die Hardware die zur Verfügung steht, immer leistungsstärker wird \cite{dl-review}. Gleichzeitig werden im Bereich der Robotik und dem Internet der Dinge, die Verwendung von eingebetten Systemen und Mikroprozessoren und die Verwendung von Smartphones immer gefragter. Um einen effizienten Klassifizierungsalgorithmus implementieren zu können, ist demnach eine möglichst kleine Deep Learning Architektur zu verwenden.\\
 Der in dieser Ausarbeitung gegebene Anwendungsfall unterscheidet sich jedoch vom eben beschriebenen Ansatz des Trainings und dem Einsatz von Klassifizierungsalgorithmen. Der gewöhnliche Arbeitsablauf für die Bereitstellung einer Klassifizierungsapplikation wäre ein Training bestehend aus einer erheblichen Anzahl an Trainingsdaten auf einem rechenstarken Computer zu vollziehen. Anschließend würde ein vollständig trainiertes Netz nicht mehr weitertrainiert werden, sondern lediglich versuchen Objekte aufgrund des stattgefundenen Trainings korrekt klassifizieren zu können. In dieser Ausarbeitung ist jedoch ein Netz noch nicht endgültig trainiert worden und weitere Objekte sollen vom Nutzer eingelernt werden können. Dies erfordert den Trainingsalgorithmus auch auf leistungsärmeren Geräten, welche für den Einsatz der Technologie genutzt werden, zur Verfügung zu stellen.\\
 Im Rahmen dieser Projektarbeit wird eine Applikation für ein Android-Smartphone entwickelt, welche die Funktionalität des Einlernens und Wiedererkennens bereitstellen kann. Hierfür werden diverse Technologien und Ansätze im Grundlagenkapitel aufgearbeitet, welche zum Verständnis dieser Ausarbeitung essentiell sind. Anhand dieser Grundlagen ist eine Softwarearchitektur zuerst im Groben und daraufhin in Form eines Feinentwurfs zu designen. Die Applikation soll daraufhin implementiert und getestet werden.
 % ---
 \chapter{Grundlagen}
 \label{cha:grundlagen}
 Zur Lösung der Problemstellung sind verschiedene Grundlagengebiete zu beherr-
-schen, die zum einen bereits im Rahmen des Informatikstudiums verinnerlicht werden konnten und zum anderen Gebiete und Themen, die erst im Laufe der Recherche und Implementierung der Projektarbeit erarbeitet worden sind.
+schen, die zum Einen bereits im Rahmen des Informatikstudiums verinnerlicht werden konnten und zum Anderen Gebiete und Themen, die erst im Laufe der Recherche und Implementierung der Projektarbeit erarbeitet worden sind.
 \section{Deep Neural Networks}
 Konventionelle Methoden des Maschinellen Lernens sind in der Verarbeitung von rohen Daten, wie beispielsweise den Pixeln von Bildern, ineffizient.
 Deep Learning bezeichnet ein Teilgebiet des Maschinellen Lernens, welches in diesen Anwendungsfällen eine bessere Alternative darstellt. Ein \ac{dnn} ist ein mehrschichtiges Rechenmodell, welches sich vor allem in den Gebieten der Bild- und Spracherkennung als \textit{state-of-the-art} etablieren konnte.\\
@@ -143,7 +143,7 @@ Beim Vorgang der Inferenz erzeugt das Netz eigenständig Ausgaben. Der produktiv
 \subsection{Deep Convolutional Neural Networks}
 Bei den meisten Bildklassifizierungs- und Objektdetektionsapplikationen werden sogenannte Faltungsschichten (\textit{engl.: Convolutional Layers}) verwendet, da sich diese als sehr effizient in diesem Anwendungsfall erweisen konnten.\\
 In der Mathematik bezeichnet eine Faltungsschicht das Überlappen zweier Funktionen.\\
-Eine Faltungsschicht besteht aus sogenannten Convolutional Filters mit der Größe $D_K \times D_K \times M$ wobei $D_K$ der Höhe und Breite des Filters und $M$ der Anzahl an Kanälen beziehungsweise der Tiefe des Filters entspricht. Der Filter gleitet nun über das Eingabebild $F$ und multipliziert $F$ mit dem Filter. Die Ergebnisse dieser Multiplikation werden als Skalarprodukt zu einem Wert zusammengefasst. Nachdem der Filter über alle Pixel des Bildes gegleitet ist ergibt sich eine neue kleinere Matrix, welchere als gefaltetes Merkmal (\textit{engl.: Convolved Feature}) bezeichnet wird.
+Eine Faltungsschicht besteht aus sogenannten Convolutional Filters mit der Größe $D_K \times D_K \times M$, wobei $D_K$ der Höhe und Breite des Filters und $M$ der Anzahl an Kanälen, beziehungsweise der Tiefe des Filters entspricht. Der Filter gleitet nun über das Eingabebild $F$ und multipliziert $F$ mit dem Filter. Die Ergebnisse dieser Multiplikation werden als Skalarprodukt zu einem Wert zusammengefasst. Nachdem der Filter über alle Pixel des Bildes gegleitet ist, ergibt sich eine neue kleinere Matrix, welche als gefaltetes Merkmal (\textit{engl.: Convolved Feature}) bezeichnet wird.
 \subsection{Mobilenet}
 Bei der rapiden Weiterentwicklung von \ac{dnn}-Architekturen wird das Augenmmerk stets auf die Verbesserung der Genauigkeit des Modells gelegt. Da die Latenzzeit und Größe des Netzes zunehmen, ist der Einsatz auf Geräten mit limitierter Rechenleistung für Echtzeitsysteme nur schwer möglich.\\
 Mobilenets sind \acp{dnn}, die speziell für Aufgaben im Bereich des Maschinellen Sehens auf mobilen Endgeräten und eingebetteten Systemen entwickelt wurden. Ein Mobilenet Modell basiert auf sogenannten \acp{dsc}, welche die Faltungsschichten in einem \ac{dcnn} hinsichtlich der Netzgröße und Inferenzzeit optimieren. \\
@@ -209,12 +209,12 @@ Zur Erarbeitung der Anforderungen der gegebenen Aufgabenstellung, werden diese h
 \item \textbf{Could-Have-Anforderungen} sind optionale Anforderungen an Eigenschaften des Systems, die ebenfalls einen relevanten Mehrwert bieten können, welcher jedoch nicht zwingend erforderlich für die Lösung der gegebenen Aufgabenstellung ist. 
 \item \textbf{Nice-To-Have-Anforderungen} sind ebenfalls optionale Anforderungen an Eigenschaften des Softwaresystems. Diese sind jedoch von untergeordneter Bedeutung.
 \end{itemize}
-Im Folgenden werden die Anforderungen an das zu entwickelnde Softwaresystem thematisch gruppiert und unterteilt in funktionale und nicht-funktionale Anforderungen.
+Im Folgenden werden die Anforderungen an das zu entwickelnde Softwaresystem thematisch gruppiert und in funktionale und nicht-funktionale Anforderungen unterteilt.
 \section{Funktionale Anforderungen}
 Funktionale Anforderungen erklären, welche Funktionen und Dienste vom Software-System bereitzustellen sind und insbesondere die Beziehungen zwischen den Ein- und Ausgabedaten.
 
 \subsection{Lauffähigkeit als Android-App}
-Eine auf einem aktuellen Android-Betriebssystem lauffähige Applikation soll entwickelt und auf einem Smartphone in den Betrieb genommen werden. Es wird gefordert, dass der Nutzer des Software-Systems die im Smartphone integrierte Kamera nutzt und diese als Eingabe für das Einlernen und die Wiedererkennung eines Objektes nutzt.  -- \textit{Gewichtung:} Must-Have-Anforderung.
+Eine auf einem aktuellen Android-Betriebssystem lauffähige Applikation soll entwickelt und auf einem Smartphone in Betrieb genommen werden. Es wird gefordert, dass der Nutzer des Software-Systems die im Smartphone integrierte Kamera nutzt und diese als Eingabe für das Einlernen und die Wiedererkennung eines Objektes nutzt.  -- \textit{Gewichtung:} Must-Have-Anforderung.
 \subsection{Entwicklung einer graphischen Benutzeroberfläche}
 Es wird gefordert eine Graphische Benutzeroberfläche zur Verfügung zu stellen, mit welcher der Nutzer interagieren kann. Der Touchscreen des Smartphones sollte das Haupteingabegerät des Nutzers zur Steuerung der Applikation sein. -- \textit{Gewichtung:} Must-Have-Anforderung.
 \subsection{Einlernen von Objekten mithilfe einer Kamera}
@@ -257,7 +257,7 @@ Die zu entwickelnde Applikation soll dem Hauptakteur \glqq User\grqq\ die in Abb
 \chapter{Entwurf}
 \label{cha:Entwurf}
 Auf der Basis der im vorangegangenen Kapitel erstellten Anforderungsanalyse 
-und der im Grundlagenkapitel aufgearbeiteten theoretischen Kenntnisse 
+und der im Grundlagenkapitel aufgearbeiteten theoretischen Kenntnisse, 
 wird im Folgenden ein Lösungskonzept erarbeitet.
 \section{Grundlegende Designentscheidungen}
 Die für den Entwurf der Applikation zugrundelegenden Entscheidungen, welche für die erfolgreiche Implementierung entscheidend sind, werden im Folgenden erklärt.
@@ -270,7 +270,7 @@ Um einen Latent-Replay Algorithmus in die Applikation zu übertragen, wurden Anp
 \section{Entwurfsmuster}
 Um sich auf bereits bewährte Entwurfsansätze bestehender Software beziehen zu können, werden unter anderem mehrere Entwurfsmuster aus dem \textit{GoF-Buch} genutzt. Dies ermöglicht es qualitativ hochwertige Software zu entwickeln, welche durch das Anwenden von allgemein bekannten Mustern von anderen Entwicklern leichter nachvollzogen werden kann.
 \subsection{Ports-und-Adapter}
-Um ein möglichst wart- und erweiterbares Softwareprodukt zu entwickeln, wurde das \textit{Ports-und-Adapter-Muster}, soweit dies möglich war, angewendet, um Third-Party-Dependencies, wie beispielsweise Tensorflow Lite, aber auch um die Persistenz möglichst abstrakt zu halten und eine Bindung an konkrete Implementierungen und Technologien zu vermeiden. Dies erhöht die Testfähigkeit enorm, da das \textit{Dependency-Inversion-Prinzip} angewendet wird und die Abhängigkeiten der Geschäftslogik so gering wie möglich gehalten werden .
+Um ein möglichst wart- und erweiterbares Softwareprodukt zu entwickeln, wurde das \textit{Ports-und-Adapter-Muster}, soweit dies möglich war, angewendet, um Third-Party-Dependencies, wie beispielsweise Tensorflow Lite, aber auch um die Persistenz möglichst abstrakt zu halten und eine Bindung an konkrete Implementierungen und Technologien zu vermeiden. Dies erhöht die Testfähigkeit enorm, da das \textit{Dependency-Inversion-Prinzip} angewendet wird und die Abhängigkeiten der Geschäftslogik so gering wie möglich gehalten werden.
 
 \subsection{Factories}
 Um die Erzeugung von Objekten ähnlicher Klassen, wie beispielsweise Dialogboxen, möglichst konsistent zu halten, werden diese mithilfe des \textit{Factory}-Musters erstellt, soweit dies möglich war.
@@ -313,7 +313,7 @@ Der Latent-Replay-Puffer wird nach jeder Trainingssitzung aktualisiert mit den z
 Zudem wird die Modellidentifikationsnummer als Fremdschlüssel und die Modellposition, zu welchem das jeweilige Trainingsdatenfeld gehört mitabgespeichert, um das Vermischen von neuen Trainingsdaten und alten Trainingsdaten, nach dem Prinzip des Latent-Replay-Algoritmhus zu ermöglichen.
 \section{Architektur}
 \label{cha:architecture}
-Zur Realisierung der Applikation auf einem Android-Endgerät, werden die Komponenten der zugrundelegenden Architektur aus Activities und Fragments bestehen. Eine Activity-Komponente wird für den Startbildschirm erstellt, welche die Haupt-Activity für die Funktionalität der App einleitet. Mithilfe von Fragments, die an diese Activity anknüpfen kann die Kommunikation und der Datenaustausch zwischen verschiedenen Fragments stattfinden.\\
+Zur Realisierung der Applikation auf einem Android-Endgerät, werden die Komponenten der zugrundelegenden Architektur aus Activities und Fragments bestehen. Eine Activity-Komponente wird für den Startbildschirm erstellt, welche die Haupt-Activity für die Funktionalität der App einleitet. Mithilfe von Fragments, die an diese Activity anknüpfen, kann die Kommunikation und der Datenaustausch zwischen verschiedenen Fragments stattfinden.\\
 Abbildung \ref{fig:component-diagram} zeigt die Abhängigkeiten der im Folgenden erklärten verwendeten Komponenten.\\
 Im Folgenden werden die Verantwortlichkeiten der zu implementierenden Fragments erklärt und die Anwendungsfälle aus Anhang \ref{appendix:use-cases} werden zugewiesen.
 
@@ -322,7 +322,7 @@ Im Folgenden werden die Verantwortlichkeiten der zu implementierenden Fragments 
 
 	\item \textit{Object Overview Fragment}: Dient der Übersicht über alle Objekte und deren gespeicherten Informationen, sowie der Möglichkeit Objekte zu editieren und zu löschen. Zudem soll dem Fragment die Verantwortlichkeit hinzugefügt werden, dem jeweiligen Objekt weitere Trainingsdaten hinzuzufügen. Demnach werden die Anwendungsfälle O3-O6 von dieser Komponente erfüllt.
 	
-	\item \textit{Settings Fragment}: Konfigurationen, die der Nutzer selbst zur Laufzeit vornehmen kann, werden innerhalb dieses Fragments in einer typischen Einstellungen-Ansicht realisiert. Demnach werden die Anwendungsfälle E1-E5 von dieser Komponente erfüllt. Weitere Konfigurationsmöglichkeiten zur Verfügung zu stellen, wie zum Beispiel das Aktivieren eines Dunkelmodus ist ebenfalls geplant.
+	\item \textit{Settings Fragment}: Konfigurationen, die der Nutzer selbst zur Laufzeit vornehmen kann, werden innerhalb dieses Fragments in einer typischen Einstellungen-Ansicht realisiert. Demnach werden die Anwendungsfälle E1-E5 von dieser Komponente erfüllt. Weitere Konfigurationsmöglichkeiten zur Verfügung zu stellen, wie zum Beispiel das Aktivieren eines Dunkelmodus, ist ebenfalls geplant.
 	
 	\item \textit{Camera Fragment}: Stellt die Hauptfunktionalität des Einlernens und Wiedererkennens zur Verfügung. Eine Kameravorschau, die mit einer Fokusbox und anderen Overlays, die zum Anzeigen von Informationen dienen, ausgestattet ist, soll in Echtzeit aktualisiert werden. Eine Dialogbox wird zum Einlernen eines Objektes aufgerufen, um diesem optional Informationen hinzufügen zu können. Innerhalb dieses Fensters wird der Trainingsvorgang initiiert. Demnach werden die Anwendungsfälle O1 und O2 von dieser Komponente erfüllt.
 	
@@ -333,9 +333,9 @@ Im Folgenden werden die Verantwortlichkeiten der zu implementierenden Fragments 
 Durch Anwendung dieser Architektur, wird die sogenannte \textit{separation of concerns} gewährleistet und das \textit{Single-Responsibility-Principle} angewendet.\\
 Weitere Komponenten sind der Datenbankhelfer, welcher eine zu implementierende Schnittstelle an die Applikation zur Realisierung von Persistenz-Operationen beinhaltet. Implementiert werden, kann diese Schnittstelle beispielsweise von einem SQLite-Datenbankhelfer.\\
 Zur globalen Konfiguration verschiedener Parameter, welche auch nach Neustart der App vorhanden sein sollen, wird ebenfalls eine Schnittstelle zur Verfügung gestellt, welche beispielweise durch Verwendung der \textit{Shared Preferences} implementiert werden kann.\\
-Um die Übersichtlichkeit und der darausfolgenden besseren Wart- und Testbarkeit der Applikation zu gewährleisten, werden Dialogboxen ausgelagert und mithilfe einer Schnittstelle und einer \textit{Factory-Method} erzeugt. Dialogboxen werden zur Interaktion mit dem Nutzer häufig verwendet. Das Hinzufügen oder Ändern von Daten, sowie das Anzeigen von längeren Hinweisen wird über Dialogboxen an den Nutzer kommuniziert. Bei gefährlichen Aktionen, wie beispielsweise dem Löschen von Objekten oder dem Zurücksetzen der Applikation wird der Nutzer ebenfalls durch eine Dialogbox auf die möglichen Auswirkungen der Aktion hingewiesen.\\
+Um die Übersichtlichkeit und der darausfolgenden besseren Wart- und Testbarkeit der Applikation zu gewährleisten, werden Dialogboxen ausgelagert und mithilfe einer Schnittstelle und einer \textit{Factory-Method} erzeugt. Dialogboxen werden zur Interaktion mit dem Nutzer häufig verwendet. Das Hinzufügen oder Ändern von Daten, sowie das Anzeigen von längeren Hinweisen wird über Dialogboxen an den Nutzer kommuniziert. Bei kritischen nicht-umkehrbaren Aktionen, wie beispielsweise dem Löschen von Objekten oder dem Zurücksetzen der Applikation, wird der Nutzer ebenfalls durch eine Dialogbox auf die möglichen Auswirkungen der Aktion hingewiesen.\\
 Statische Methoden, die dem Parsen von Zeichenketten, oder dem Vorbereiten der Kameradaten an die Transfer Learning \ac{api} dienen, werden in eine \textit{Utilities}-Komponente ausgelagert, um den Code, der die Kernfunktionalität realisiert möglichst übersichtlich und kompakt zu halten.\\
-Die Anbindung der \textit{Transfer Learning \ac{api}} erfolgt in Form einer Wrapper-Klasse, welche die \ac{api} um weitere Verantwortlichkeiten erweitert, wie beispielsweise dem Kontinuierlichen Trainieren und Wiedererkennen innerhalb einer While-Schleife und dem Ausführen des Latent-Replay Algorithmus. Aufgrund der Ausführung des Algorithmus muss eine Abhängigkeit zur Schnittstelle des Datenbankhelfers erfolgen, da die persistente Abspeicherung von Aktivierungen früherer Trainingsdaten unabdingbar für den Replay-Vorgang ist. Zudem übernimmt der Wrapper die Erstellung des Modells und koordiniert die \ac{api} an die Parameter-Datei des ausgewählten Modells.
+Die Anbindung der \textit{Transfer Learning \ac{api}} erfolgt in Form einer Wrapper-Klasse, welche die \ac{api} um weitere Verantwortlichkeiten erweitert, wie beispielsweise dem Kontinuierlichen Trainieren und Wiedererkennen innerhalb einer While-Schleife und dem Ausführen des Latent-Replay Algorithmus. Aufgrund der Ausführung des Algorithmus, muss eine Abhängigkeit zur Schnittstelle des Datenbankhelfers erfolgen, da die persistente Abspeicherung von Aktivierungen früherer Trainingsdaten unabdingbar für den Replay-Vorgang ist. Zudem übernimmt der Wrapper die Erstellung des Modells und koordiniert die \ac{api} an die Parameter-Datei des ausgewählten Modells.
 \begin{figure}[hptb]
 	\centering
 	\includegraphics[height=0.5\textheight]{images/building-block-view.png}
@@ -350,7 +350,7 @@ Um eine Übersichtlichkeit der Klassendiagramme zu gewährleisten, wurden nicht 
 Im Folgenden wird die statische Struktur der Komponenten auf Klassenebene erklärt.
 Um eine Übersichtlichkeit des Entwurfes gewährleisten zu können, werden Komponenten nach ihren Verantwortlichkeiten und erfüllten Anwendungsfällen getrennt beschrieben.
 \subsubsection{Persistenz-Komponente}
-Die Persistenz des Objektes wird mithilfe von Schnittstellen angebunden und lässt sich in eine Komponente für Globale Konfigurationsparameter und eine Komponente für die Anbindung einer Datenbank aufteilen. Die Datebankhelfer-Schnittstelle stellt Methoden zur Abfrage, Einfügen und Löschen der strukturiert gespeicherten Entitätsklassen zur Verfügung. In der Schnittstelle für die globalen Konfigurationsparameter, werden Methoden zur Verfügung gestellt, die primitive Daten, die persistent für Abläufe der Applikation gespeichert werden müssen, abgefragt und gespeichert.\\
+Die Persistenz des Objektes wird mithilfe von Schnittstellen angebunden und lässt sich in eine Komponente für Globale Konfigurationsparameter und eine Komponente für die Anbindung einer Datenbank aufteilen. Die Datenbankhelfer-Schnittstelle stellt Methoden zur Abfrage, Einfügen und Löschen der strukturiert gespeicherten Entitätsklassen zur Verfügung. In der Schnittstelle für die globalen Konfigurationsparameter, werden Methoden zur Verfügung gestellt, die primitive Daten, die persistent für Abläufe der Applikation gespeichert werden müssen, abgefragt und gespeichert.\\
 Abbildung \ref{fig:class-diagram-persistence} zeigt den Aufbau der Komponenten auf Klassenebene und deren Beziehungen zu anderen Komponenten.
 \begin{figure}[hptb]
 	\centering
@@ -361,7 +361,7 @@ Abbildung \ref{fig:class-diagram-persistence} zeigt den Aufbau der Komponenten a
 Durch die Verwendung von Schnittstellen wurde das Dependency Inversion Principle angewendet. Bei Bedarf ist es dadurch möglich die SQLite Datenbank durch eine andere auszutauschen unter der Bedingung, dass alle Methoden der Schnittstelle implementiert werden.
 \subsubsection{Kamera Fragment}
 Das Kamerafragment enthält Methoden zur Ansteuerung des Continual Learning Modell Wrappers und zur Konfiguration und Vorbereitung der Kameradaten. Zudem werden die in der Datenbank gespeicherten Objekte an die Endknoten des Modells angeheftet, um bei einer Wiedererkennung die Daten des Objektes wiederanzeigen lassen zu können.\\ 
-Aufgrund des Einsetzens des MVVM-Patterns wird ein Viewmodel für das Fragment aggregiert, welches unter Verwendung von Livedaten die Graphische Oberfläche kontinuierlich aktualisiert. Die Livedaten werden hierbei innerhalb eines anonymen Observers, welcher in der von Fragment geerbten \glqq \textit{onViewCreated}\grqq-Methode erzeugt werden.\\
+Aufgrund des Einsetzens des MVVM-Patterns wird ein Viewmodel für das Fragment aggregiert, welches unter Verwendung von Livedaten die Graphische Oberfläche kontinuierlich aktualisiert. Die Livedaten werden hierbei innerhalb eines anonymen Observers beobachtet, welcher in der von Fragment geerbten \glqq \textit{onViewCreated}\grqq-Methode erzeugt wird.\\
 Um den Wertebereich des Trainingsstatus zu optimieren, wird eine Enumeration mit den Status \glqq Noch nicht gestartet \grqq, \glqq Gestartet \grqq\ und \glqq pausiert\grqq\ eingebunden.\\
 Um die Daten in Echtzeit und eine möglichst nicht blockierende Applikation zu schreiben, wird eine Unterklasse zum Hinzufügen von Trainingsdatenanfragen als Thread ausgeführt, welche zudem einen Countdown vor dem Starten der Methode zum Trainingsdaten hinzufügen ausführt.\\
 Der Continual Learning Model Wrapper erweitert die von Tensorflow Lite zur Verfügung gestellte Transfer Learning \ac{api}, um den Latent-Replay-Algorithmus und Methoden um die Modellparameter in einer separaten Datei abzuspeichern und zu laden.\\
@@ -375,7 +375,7 @@ Die Transfer Learning \ac{api} stellt die wichtigsten Methoden für das Training
 \end{figure}
 \subsubsection{Modell- und Objektübersicht}
 Da die Modell- und Objektübersicht analog aufgebaut sind, wird die Beschreibung der Komponenten auf Klassenebene in einem einzigen Unterkapitel vereint.\\
-Die Verbindung zur Persistenzkomponente ermöglicht es die Listeninstanzen mit Daten aus der Datenbank zu füllen. Zur Erstellung einer angepassten Listenansicht wurde der Listenadapter von Android erweitert. Dieser Listenadapter bietet die Möglichkeit eine Listenansicht zu Erstellen, anhand der Position der zu identifizierenden Elemente. Dadurch können Listelement-spezifische Daten an die Methoden übergeben werden. Ein Beispiel hierfür ist das Einfügen von Click-Listenern auf Buttons, welche anhang dieser Position angesteuert werden. Das Dialog-Paket wird ebenfalls genutzt und fördert somit die Wiederverwendbarkeit der Komponenten. Abbildung \ref{fig:overview-classdiagram} zeigt die statische Struktur der Modell- und Objektübersicht auf Klassenebene.
+Die Verbindung zur Persistenzkomponente ermöglicht es die Listeninstanzen mit Daten aus der Datenbank zu füllen. Zur Erstellung einer angepassten Listenansicht wurde der Listenadapter von Android erweitert. Dieser Listenadapter bietet die Möglichkeit eine Listenansicht zu Erstellen, anhand der Position der zu identifizierenden Elemente. Dadurch können Listenelement-spezifische Daten an die Methoden übergeben werden. Ein Beispiel hierfür ist das Einfügen von Click-Listenern auf Buttons, welche anhand dieser Position angesteuert werden. Das Dialog-Paket wird ebenfalls genutzt und fördert somit die Wiederverwendbarkeit der Komponenten. Abbildung \ref{fig:overview-classdiagram} zeigt die statische Struktur der Modell- und Objektübersicht auf Klassenebene.
 \begin{figure}[hptb]
 	\centering
 	\includegraphics[height=0.7\textheight]{images/object-overview-class-diagram.png}
@@ -397,7 +397,7 @@ Abbildung \ref{fig:dialogues} zeigt den Entwurf des Help Fragments und die stati
 \label{cha:communication-components}
 Die \textit{Camera Activity} ist die Hauptkomponente und bietet die Möglichkeit Informationen und Benachrichtigungen, welche zwischen den Fragmenten erfolgen sollen, auszutauschen. Eine Navigationsleiste am unteren Bildschirmrand und ein aufklappbares Seitenmenü bietet dem Nutzer die Möglichkeit, die angezeigten Fragmente zu wechseln und deren Funktionalität zu nutzen.\\
 Die Activity beobachtet bestimmte Aktionen innerhalb der Fragmente, registriert sich als \textit{Observer} bei den Globalen Konfigurationsparametern und koordiniert Befehlsaufrufe an das jeweils benötigte Fragment. Die Komponente zur Globalen Konfiguration wird hierfür von Fragmenten, die interagieren müssen, instanziiert.\\
-Abbildung \ref{fig:sequence-diagram-change-model} stellt diesen  Ablauf in Form eines Sequenzdiagrammes, am Beispiel des Änderns des ausgewählten Modells graphisch dar. 
+Abbildung \ref{fig:sequence-diagram-change-model} stellt diesen  Ablauf in Form eines Sequenzdiagrammes, am Beispiel des Änderns des ausgewählten Modells, graphisch dar. 
 
 \begin{figure}[hptb]
 	\centering
@@ -420,14 +420,14 @@ Durch Nutzung dieses Musters ist eine lose Kopplung der Komponenten möglich und
 
 \subsection{Vorbereitung und Vorschau der Kameradaten}
 Das Camera Fragment beinhaltet eine Vorschau in Echtzeit, welche dem Nutzer ermöglicht zu sehen, was die im Endgerät eingebaute Kamera sieht.\\
-Zur Realisierung dieser Funktionalität müssen diverse Konfigurationen vorgenommen werden. Hierzu gehört das Initialisieren der Ausrichtung des Gerätes (Portrait- oder Landscape-Modus), Das Seitenverhältnis, die Auflösung der Kamera und weiteren systembezogenen Einstellungen wie beispielsweise dem automatischen Fokussieren. Zudem wird ein Bildanalyse-Thread zur Vorkonfiguration der Kameraansicht hinzugefügt. Die Inferenz- und Trainingsfunktionalität wird direkt hier eingesetzt, da dies ermöglicht jeden angezeigten Frame asynchron zum Programmablauf zu akquirieren und zu verarbeiten. \\
-Nach Konfiguration der soeben beschriebenen Parameter, wird die Kamera an den Lebenszyklus des Fragments gebunden und demnach bei Öffnen des Fragments gestartet und Schließen beziehungsweise Wechseln geschlossen.\\
+Zur Realisierung dieser Funktionalität müssen diverse Konfigurationen vorgenommen werden. Hierzu gehört das Initialisieren der Ausrichtung des Gerätes (Portrait- oder Landscape-Modus), das Seitenverhältnis, die Auflösung der Kamera und weiteren systembezogenen Einstellungen, wie beispielsweise dem automatischen Fokussieren. Zudem wird ein Bildanalyse-Thread zur Vorkonfiguration der Kameraansicht hinzugefügt. Die Inferenz- und Trainingsfunktionalität wird direkt hier eingesetzt, da dies ermöglicht jeden angezeigten Frame asynchron zum Programmablauf zu akquirieren und zu verarbeiten. \\
+Nach Konfiguration der soeben beschriebenen Parameter, wird die Kamera an den Lebenszyklus des Fragments gebunden und demnach bei Öffnen des Fragments gestartet. Beim Schließen beziehungsweise Wechseln des Fragments wird die Kamera geschlossen.\\
 \subsection{Einlernen von Objekten}
 \label{cha:train-objects}
 Das Einlernen und Wiedererkennen von Objekten sind die umfangreichsten und komplexesten Anwendungsfälle in der Applikation, welche diverse Komponenten involvieren und Interprozesskommunikation von nebenläufigen Prozessen erfordert.\\
 Die Struktur und der Ablauf des in Anwendungsfall \ref{tab:use-case-add-object} beschriebenen sichtbaren Verhaltens, wird im Folgenden präziser erklärt.\\
 Nach Betätigung des \glqq +\grqq-Buttons auf der graphischen Oberfläche wird ein Dialogfenster erzeugt. Nach Eingabe der Informationen zum Objekt, löst der \glqq Training starten\grqq-Button im Dialogfenster unter Anwendung des in Kapitel \ref{cha:communication-components} beschriebenen Ablauf das Objekttraining aus. Parallel dazu werden die eingegebenen Daten des Objektes in der Datenbank gespeichert. Die Activity delegiert den Aufruf an das Camera Fragment, welches die Verantwortlichkeiten für das Einlernen trägt. \\
-Eine Warteschlange bestehend aus Modellpositionen wird hierbei innerhalb eines neuen Threads mit der vorkonfigurierten Anzahl an Trainingsdaten pro Objekttraining gefüllt.\\
+Eine Warteschlange bestehend aus Modellpositionen, wird hierbei innerhalb eines neuen Threads mit der vorkonfigurierten Anzahl an Trainingsdaten pro Objekttraining gefüllt.\\
 Diese Warteschlange wird kontinuierlich vom Analysierer abgefragt und entscheided dadurch, ob Objekte trainiert, oder lediglich Inferenz ausgeführt werden soll.\\
 Der Analysierer bereitet die stets zugeführten Kameradaten im YUV-Format für das Training vor.\\
 Beim Vorbereiten der Daten werden die von der Kamera bereitgestellten Daten in Bitmaps umgewandelt und in die Größe der auf dem Bildschirm dargestellten Fokusbox zugeschnitten. Danach wird die Bitmap auf die Größe der Eingangsknoten des Netzes skaliert. Die Bitmap wird anschließend in ein Float-Datenfeld konvertiert, da dies die Datenstruktur ist, mit welchem das zugrundeliegende Deep-Learning-Modell Eingangsbilder prozessiert.\\
@@ -453,7 +453,7 @@ Zu Beginn der Entwicklung der Applikation wurde lediglich auf Basis des Model-Pe
 Bereits in der Anfangsphase dieser Projektarbeit, wurde der Latent-Replay Algorithmus von Pellegrini et al. studiert, welcher eine Lösung zum Phänomen des Katastrophalen Vergessens vorstellt \cite{Pellegrini2019}. Aufgrund keiner vorhandenen Beispielimplementierung wurde dieser Ansatz jedoch verworfen.\\
 Im Laufe der Implementierungsphase der Applikation dieser Projektarbeit publizierten Demosthenous et al. ein Paper mit zugehörigem offenen Quellcode, welcher die Einbindung des Latent-Replay Algorithmus unter Verwendung der Transfer Learning API massiv erleichtern konnte \cite{cl-vs-tl}. Auf Basis dieser Beispielimplementierung wurde der Algorithmus eingebunden. Lediglich wenige Änderungen waren hierfür notwendig.\\
 Sobald der Analysierer Trainingsanfragen erhält, werden während dem Hinzufügen der Trainingsdaten zum zugrundeliegenden Modell, die Daten persistent in der Datenbank abgespeichert, um diese später beim Ausführen des Latent-Replay erneut einzulernen.\\
-Methoden, in welchen die neuen Trainingsdaten an das Modell weitergegeben werden, werden durch eine Replay-Methode erweitert. Daraufhin werden die Trainingsdaten zusammen mit bereits vorhandenen Trainingsdaten zusammen trainiert und das Phänomen des Katastrophalen Vergessens kann gelöst werden.
+Methoden, in welchen die neuen Trainingsdaten an das Modell weitergegeben werden, werden durch eine Replay-Methode erweitert. Daraufhin werden die Trainingsdaten zusammen mit bereits vorhandenen Trainingsdaten trainiert und das Phänomen des Katastrophalen Vergessens kann gelöst werden.
 \subsection{Belegen der Modellpositionen mit Objekten}
 Das Anknüpfen der Objekte an die zur Verfügung stehenden Modellpositionen wird im Folgenden erklärt.\\
 Jedes Deep Learning Modell hat am am Ende der Netzarchitektur eine vordefinierte Anzahl an Ausgabeknoten, welche für die endgültige Klassifizierung nach Prozessieren der Eingabedaten einen Wert zwischen 0 und 1 annimmt. Diese ausgegebene Zahl kann als Konfidenzwert, das heißt die Sicherheit mit welcher das Modell die Eingabedaten diesem Ausgabeknoten zuordnen kann, interpretiert werden.\\
@@ -496,6 +496,7 @@ Tabelle \ref{tab:gradle-config}, zeigt die vorgenommenen Android-spezifischen Ko
 		\texttt{targetSdkVersion} & 30 & Gewährleistet Aufwärtskompatibilität bis in dieses API Level. Dieser Wert sollte höchstens so hoch wie der Wert von \texttt{compileSdkVersion}  \\ \hline
 	\end{tabular}
 	\caption{Kompatibilitätskonfiguration mit Gradle}
+	Quelle: Eigene Darstellung
 	\label{tab:gradle-config}
 \end{table}Weitere wichtige Einstellungen, die in der \texttt{build.gradle}-Datei vorzunehmen waren, sind Optionen für das sogenannte Android Asset Packaging Tool (AAPT). Die einzelnen Bestandteile des zugrundliegenden Modells, die im \texttt{.tflite}-Format gespeichert sind, sollen nicht durch das Packaging-Tool komprimiert werden, da das korrekte Prozessieren der Daten dadurch nicht mehr möglich ist. Demnach muss die Option \texttt{noCompress "tflite"} in dem zugehörigen Block der Datei angegeben werden.\\ 
 Standardmäßig wird von Tensorflow Lite am Ende der \texttt{build.gradle}-Datei eine Funktion hinzugefügt, welche aus dem Internet ein Modell herunterlädt und in das für die Transfer Learning Library auffindbare Verzeichnis im Projekt kopiert.\\
@@ -560,7 +561,7 @@ Das Datum wird als Unix-Zeitstempel, welcher die vergangenen Sekunden seit dem 1
 Um das Abspeichern von Objekten und Modellen mit gleichen Namen zu vermeiden, wird \texttt{model\_name} und \texttt{object\_name} mit dem Schlüsselwort \texttt{UNIQUE} deklariert, um direkt auf Datenbankebene entscheiden zu können, dass ein Objekt beziehungweise ein Modell mit diesem Namen bereits vorhanden ist.\\
 Die in Kapitel \ref{cha:communication-components} erklärte Kommunikation der Komponenten wird vor allem durch Shared Preferences gestützt. Diese ermöglichen es auch nach Schließen der App, Daten zu halten und abzurufen, die für den Ablauf der Prozesse wichtig sind.\\
 Der \texttt{SharedPrefsHelper} implementiert die \texttt{GlobalConfig}-Schnittstelle.\\
-Die Shared Preferences können durch einfache Befehle, wie in Quelltext 5.2 dargestellt, gesetzt und abgefragt werden. Der Schlüssel des gespeicherten Key-Value-Paares wird beim Setzen der Shared Preference initialisiert, falls er noch nicht vorhanden ist und aktualisiert, falls ein Key mit dem angegebenen Namen bereits existiert.\\
+Die Shared Preferences können durch einfache Befehle, wie in Quelltext 5.2 dargestellt, gesetzt und abgefragt werden. Der Schlüssel des gespeicherten Key-Value-Paares wird beim Setzen der Shared Preference initialisiert, falls er noch nicht vorhanden ist und aktualisiert, wenn ein Key mit dem angegebenen Namen bereits existiert.\\
 Zudem können beim Abfragen Standardwerte gesetzt werden, die zurückgegeben werden, falls der Wert für diesen Schlüssel noch nicht gesetzt worden ist. Dies kann beispielsweise beim ersten Start nach Installation der Applikation, oder durch das Zurücksetzen der Applikation durch das Betätigen der jeweiligen Option in den internen App-Einstellungen, der Fall sein.
 
 \begin{minipage}{\linewidth}
@@ -607,11 +608,38 @@ public void setCurrentModelID(String id) {
 \chapter{Tests}
 \label{cha:tests}
 Im Rahmen der zu entwickelnden Applikation sind diverse Tests durchzuführen, um eine qualitativ hochwertige und fehlerfreie Software ausliefern zu können.\\
-Zum Einen wurden Unit-Tests zum Testen der einzelnen Methoden erstellt. Diese sind hilfreich für das Verändern oder Refactoring einzelner Methoden, da die Logik des Quellcodes auf diese Weise stets überprüft werden kann. Zum anderen wurde ein Akzeptanztest für das Testen des korrekten Zusammenspiels aller Komponenten in einer natürlichen Testumgebung erstellt, um mögliche Fehler oder UI/UX-spezifische Unklarheiten vor Beginn der Auslieferung der Applikation beheben zu können.
+Zum Einen wurden Unit-Tests zum Testen der einzelnen Methoden erstellt. Diese sind hilfreich für das Verändern oder Refactoring einzelner Methoden, da die Logik des Quellcodes auf diese Weise stets überprüft werden kann. Zum Anderen wurde ein Akzeptanztest für das Testen des korrekten Zusammenspiels aller Komponenten in einer natürlichen Testumgebung erstellt, um mögliche Fehler oder UI/UX-spezifische Unklarheiten vor Beginn der Auslieferung der Applikation beheben zu können.
 \section{Unit-Tests}
-Für die Implementierung der zu schreibenden Tests werden die Test Frameworks \texttt{JUnit} und AndroidX-Testbibliotheken standardmäßig von Android Studio bei Erstellung eines Projektes eingebunden und demnach auch für das Testen der zu entwickelnden Applikation genutzt. Für die Assertions der Tests wird für eine bessere Lesbarkeit die von Google zur Verfügung gestellte Bibliothek \texttt{Truth} verwendet.\\
-Für das Erstellen von instrumentierten Unit-Tests, welche auf einem Android-Emulator ausgeführt werden, werden AndroidX Tests in einer Ordnerstruktur angelegt, welche der Struktur des Hauptprojektes entspricht. Diese instrumentierten Unit-Tests sind notwendig für das Testen von Methoden, welche Android-spezifische Abhängigkeiten enthalten, wie beispielsweise \textit{Activities} oder \textit{Contexts} und nicht lokal auf dem Entwicklungsrechner ausführbar sind. Alle anderen Tests werden mit \texttt{JUnit} geschrieben und sind demnach schneller ausführbar, da sie in der lokalen Java Virtual Machine (JVM) ausgeführt werden können und demnach die Verwendung eines Emulators nicht notwendig ist.\\
+Für die Implementierung der zu schreibenden Tests, werden das Test-Framework \textit{JUnit} und \textit{AndroidX}-Testbibliotheken standardmäßig von Android Studio bei Erstellung eines Projektes eingebunden und demnach auch für das Testen der zu entwickelnden Applikation genutzt. Für die Assertions der Tests wird für eine bessere Lesbarkeit die von Google zur Verfügung gestellte Bibliothek \textit{Truth} verwendet.\\
+Für das Erstellen von instrumentierten Unit-Tests, welche auf einem Android-Emulator ausgeführt werden, werden AndroidX Tests in einer Ordnerstruktur angelegt, welche der Struktur des Hauptprojektes entspricht. Diese instrumentierten Unit-Tests sind notwendig für das Testen von Methoden, welche Android-spezifische Abhängigkeiten enthalten, wie beispielsweise \textit{Activities} oder \textit{Contexts} und nicht lokal auf dem Entwicklungsrechner ausführbar sind. Alle anderen Tests werden mit \textit{JUnit} geschrieben und sind demnach schneller ausführbar, da sie in der lokalen Java Virtual Machine (JVM) ausgeführt werden können. Die Verwendung eines Emulators ist somit nicht notwendig.\\
 Aus Zeitgründen konnte kein extensives Testing durchgeführt werden für die meisten Komponenten. Die Implementierung der Datenbankhelferklasse wurde jedoch auf den gesamten Wertebereich getestet, um eine möglichst hohe Testabdeckung erzielen zu können.\\
+Hierfür wurden Testszenarien für die einzelnen Methoden erstellt. Mithilfe von Assertions konnte die Ausgabe beziehungsweise die Folgen der Ausführung der Methode einzeln getestet werden. Durch das Implementieren der \texttt{setUp}- und \texttt{tearDown}-Methode, welche vor beziehungsweise nach Durchlauf des Unit-Tests  ausgeführt werden, konnte für die Unit-Tests Boilerplate-Code gespart werden, welcher für das Erstellen und Schließen des Datenbanktreibers notwendig ist. Dieses Prinzip gewährleistet zudem die Unabhängigkeit der einzelnen Tests, da diese sich nicht beeinflussen dürfen. Demnach wäre das Verwenden einer gemeinsamen Datenbankhelfer-Instanz nicht möglich.\\
+Ein Beispiel Unit-Test, welcher die Methode, die für das Aktualisieren des Vorschaubildes eines Objektes zuständig ist, testet diese Methode auf gewisse Grenzfälle und wird in Quelltext 6.1 dargestellt.\\
+
+\begin{minipage}{\linewidth}
+	\begin{lstlisting}[language=Java, breaklines=true, caption={Ausschnitt aus Unit-Test für Datenbankhelfer-Methoden}]
+	// ...
+	
+    @Test
+	public void updateImageBlob_objectNameIsInvalidOrNull_doesNothing() {
+		// Save string representation of DB before method
+		String before = dbHelper.cursorToString(dbHelper.getAllObjects());
+		// Run with invalid name
+		dbHelper.updateImageBlob("invalid object", Bitmap.createBitmap(10,10,Bitmap.Config.ARGB_8888));
+		String afterInvalid = dbHelper.cursorToString(dbHelper.getAllObjects());
+		// Run with null as name
+		dbHelper.updateImageBlob(null, Bitmap.createBitmap(10,10, Bitmap.Config.ARGB_8888));
+		String afterNull = dbHelper.cursorToString(dbHelper.getAllObjects());
+
+		assertThat(before).isEqualTo(afterInvalid);
+		assertThat(before).isEqualTo(afterNull);
+	}
+	
+	// ...
+	\end{lstlisting}
+\end{minipage}
+\label{lst:unit tests}
+Um eine vollständig getestete Applikation gewährleisten zu können wären Integrationstests, die das Zusammenarbeiten der einzelnen Komponenten Testen, sowie UI-Tests, die die graphische Nutzeroberfläche automatisiert testen notwendig gewesen.
 
 \section{Akzeptanztest}
 Die durch Unit-Tests getestete Applikation, wurde als Beta-Test im Rahmen einer Feldstudie getestet. Mithilfe eines Fragebogens, der von den Testern ausgefüllt wurde, konnten Ergebnisse und Eindrücke gesammelt werden, die für die weitere Entwicklung der Applikation von Bedeutung sein können. Außerdem konnten noch einige Bugs identifiziert und gelöst werden.\\
@@ -624,14 +652,21 @@ Diverse Darstellungsbugs, wie sich überlappende Elemente der graphischen Oberfl
 %---
 \chapter{Zusammenfassung und Ausblick}
 \label{cha:zusammenfassung}
-
+Im Folgenden werden die erreichten Ziele und Ergebnisse dieser Arbeit zusammengefasst.\\ Für die Weiterentwicklung der erstellten Lösung werden weitere Ideen aufgezeigt, um den gegebenen Anwendungsfall zu erweitern und um die erreichten Ergebnisse auf andere Problemstellungen übertragen zu können.
 \section{Erreichte Ergebnisse}
 \label{sec:ergebnisse}
-
-Die Zusammenfassung dient dazu, die wesentlichen Ergebnisse des 
-Praktikums und vor allem die entwickelte Problemlösung und den 
-erreichten Fortschritt darzustellen. (Sie haben Ihr Ziel erreicht und 
-dies nachgewiesen).
+Das zu Beginn der Arbeit gesetzte Ziel der Implementierung einer Augmented-Reality-Applikation für das Wiedererkennen bereits eingelernter Objekte, wurde mithilfe verschiedener Deep Learning Technologien und Werkzeugen, wie beispielsweise Continual Learning und Tensorflow Lite für den Einsatz auf einem mobilen Android-Gerät unter Nutzung der integrierten Kamera, erreicht. Die in der Anforderungsanalyse aufgearbeiteten funktionalen und nicht-funktionalen Anforderungen konnten ebenfalls größtenteils erfüllt werden.\\
+Die Wiedererkennungsqualität in sehr guten Lichtverhältnissen ist aufgrund eines höheren Kontrast der Eingabedaten besser, jedoch ist es auch bei relativ schlechten Lichtverhältnissen möglich einige eingespeicherte Objekte voneinander zu unterscheiden.\\
+Die Informationen, welche zum zu erkennenden Objekt gespeichert wurden, werden durch ein Bildschirm-Overlay angezeigt und ermöglichen es in Echtzeit die Objekte korrekt zu klassifizieren. Somit ist ein Augmented-Reality-Erlebnis gewährleistet.\\
+Aufgrund des Phänomen des Katastrophalen Vergessens ist der Puffer des Latent-Replay-Algorithmus beim Schließen und Wechseln der einzelnen Fragments zu aktualisieren, um bereits eingelernte Objekte nicht mit neuen Objekten zu überschreiben. Dies benötigt jedoch bei einer hohen Anzahl von eingespeicherten Objekten eine gewisse Zeit. Dem Nutzer wird dies durch einen Ladekreis mitgeteilt.\\
+Das Einlernen der Objekte ist jedoch in einer annehmbaren Zeit möglich. Bei bis zu vier Objekten sind unter Verwendung der Standard-Trainingskonfiguration meistens keine 15 Sekunden für das Einlernen notwendig, um akzeptable Erkennungsergebnisse zu erhalten. Bei zehn Objekten konnte eine maximale Dauer von 70 Sekunden subjektiv festgestellt werden.\\
+Bei einer Anzahl von etwa 150 Trainingsdaten pro Objekt, ist eine relativ hohe Erkennungsrate zu erwarten, welche jedoch aufgrund des Fehlens eines für den Anwendungsfall spezifizierten Testframeworks nicht anhand einer Genauigkeitsmetrik gemessen, sondern lediglich subjektiv bewertet wurde.\\
+Das Speichern von objektbezogenen Daten konnte mittels SQLite in einer strukturierten relationalen Datenbank persistent abgespeichert und wieder aufgerufen werden.
+Durch das Einführen der Objektordnerfunktionalität, ist es demnach möglich beliebig viele Objekte einzulernen.\\
+Es ist möglich bis zu zehn Objekte in einen Objektordner einzuspeichern.\\
+Eine möglichst intuitive graphische Oberfläche wurde entworfen und anhand eines Betatests evaluiert.\\
+Auf die Wart- und Erweiterbarkeit wurde im gesamten Entwurfs- und Implementierungsprozess geachtet. Es wurde versucht die SOLID-Prinzipien einzuhalten, um diese Anforderung erfüllen zu können.\\
+Der Quellcode wurde ausführlich dokumentiert und komplexe Algorithmen und Abläufe wurden mithilfe von Kommentaren erklärt. Bei Bedarf ist eine Dokumentation mithilfe von \textit{Doxygen} beziehungsweise von \textit{Javadoc} in wenigen Schritten generierbar.
 
 \section{Ausblick}
 \label{sec:ausblick}
@@ -644,15 +679,17 @@ Probleme übertragen werden können.
 
 \subsection{Erweiterbarkeit der Ergebnisse}
 \label{sub:erweiterbarkeit}
-
-Hier kann man was über die Erweiterbarkeit der Ergebnisse sagen.
+Da auf die Erweiterbarkeit, durch das Entwerfen einer modularen App, bestehend aus  lose-gekoppelten Komponenten, geachtet wurde, ist es möglich einige Erweiterungen hinzuzügen, welche im Folgenden erklärt werden.\\
+Es ist möglich, die Applikation um eine Social-Media-Funktionalität zu erweitern und das Teilen von Objektordnern oder einzelnen Objekte zwischen verschiedenen Nutzern zu ermöglichen.\\
+Falls die Verwendung eines externen Servers und dem dafür benötigten Zugang zum Internet gewünscht ist, ist es außerdem möglich das gesamte Training auf einen leistungstarken Rechner zu verlagern, um das verwendete mobile Endgerät nicht mit den rechenintensiven Prozessen zu belasten. Dies könnte den Energieverbrauch der Applikation massiv senken, falls dies eine Anforderung für die Weiterentwicklung der App sei.\\
+Falls ein nicht vollständig generisches Klassifizierungsmodell gefordert wird, ist es möglich das Modell auf einen spezifischeren Datensatz vorzutrainieren. Dies könnte zwar die Wiedererkennungsgenauigkeit bestimmter Objekte, die keine Ähnlichkeit zum vortrainierten Datensatz aufweisen verschlechtern, aber dafür die Genauigkeit bei ähnlichen Objekten stark verbessern.
 
 \subsection{Übertragbarkeit der Ergebnisse}
 \label{sub:uebertragbarkeit}
-
-Und hier etwas über deren Übertragbarkeit.
-
-\chapter{Fazit}
+Die entwickelte Applikation kann mithilfe der angewendeten Technologien, an eine Vielzahl an Anwendungsgebieten angepasst werden.\\
+Das Prinzip des Continual Learnings kann zudem nicht nur für Klassifizierungsalgorithmen angewandt werden, sondern auch für andere Teilgebiete des maschinellen Sehens, wie beispielsweise der Objektdetektion oder der semantischen Segmentierung. Hierfür müsste das zugrundeliegende Netz mit einem anderen Deep-Learning-Modell ausgetauscht werden und der Einlernprozess könnte durch das Markieren der Objekte durch das Einzeichnen auf dem Touchscreen erweitert werden. Es ist jedoch zu beachten, dass die eben genannten Anwendungsfälle eine weitaus höhere Rechenleistung benötigen für den Inferenzvorgang.\\
+Die Grundfunktionalität der Applikation ist in einer Vielzahl von unterschiedlichen Branchen und Industrien einsetzbar. Es ist beispielsweise möglich für die Realisierung eines \glqq Schnitzeljagd\grqq-Spiels eine Augmented Reality App mithilfe von Continual Learning zu implementieren.\\
+Im Bereich des E-Learnings könnte der Unterricht an Schulen durch die Visualisierung von bestimmten Themen unterstützt werden. Lehrer könnten selbsterstellte Klassifizierungsmodelle erstellen, um Schülern eine weitere Visualisierungsmöglichkeit für den Unterricht bieten zu können.
 
 %-----------------------------------------------------------------------
 \appendix
@@ -670,10 +707,10 @@ Und hier etwas über deren Übertragbarkeit.
 		\hline
 		\textbf{Nummer} & \textbf{AF-M1} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Modell hinzufügen} \\ \hline
-		\textbf{Beschreibung} & Beliebig viele neue Modelle sollen hinzufügt werden können \\ \hline
+		\textbf{Beschreibung} & Beliebig viele neue Modelle sollen hinzugefügt werden können \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
-		\textbf{Auslöser} & Der Nutzer betätigt den "+"-Button in der Modellübersicht oder startet die Applikation zum ersten Mal  \\ \hline
-		\textbf{Vorbedingung} & Der Nutzer befindete sich in der Modellübersicht oder hat bisher noch kein Modell hinzugefügt  \\ \hline	
+		\textbf{Auslöser} & Der Nutzer betätigt den \glqq+\grqq-Button in der Modellübersicht oder startet die Applikation zum ersten Mal  \\ \hline
+		\textbf{Vorbedingung} & Der Nutzer befindet sich in der Modellübersicht oder hat bisher noch kein Modell hinzugefügt  \\ \hline	
 		\textbf{Nachbedingung/Ziel} & Ein Modell zu welchem weitere Objekte hinzugefügt werden können, wurde gespeichert \\ \hline
 		\textbf{Nachbedingung im Sonderfall} & Das Modell wurde nicht gespeichert und der Nutzer wird darüber durch eine Fehlermeldung informiert \\ \hline
 		\textbf{Standardablauf} & 1. Dialogfenster öffnet sich \\ 
@@ -718,9 +755,9 @@ Und hier etwas über deren Übertragbarkeit.
 		\textbf{Akteur} & Nutzer \\ \hline
 		\textbf{Auslöser} & Der Nutzer betätigt den Button welcher sich rechts neben dem Modellnamen befindet  \\ \hline
 		\textbf{Vorbedingung} & Der Nutzer befindet sich in der Modellübersicht und ein Modell wurde bereits abgespeichert \\ \hline	
-		\textbf{Nachbedingung/Ziel} & Ein Dialogfenster, welches zum Modell alle gespeicherten Objekte anzeigt wurde geöffnet \\ \hline
+		\textbf{Nachbedingung/Ziel} & Ein Dialogfenster, welches zum Modell alle gespeicherten Objekte anzeigt, wurde geöffnet \\ \hline
 		\textbf{Nachbedingung im Sonderfall} & Es wurden noch keine Objekte für das Modell abgespeichert und ein Hilfetext befindet sich im geöffneten Dialog \\ \hline
-		\textbf{Standardablauf} & 1. Nutzer betätigt den Button, welcher sich rechts neben dem Modell befindet, dessen Objekte betrachtet werden sollen \\
+		\textbf{Standardablauf} & 1. Nutzer betätigt den Button, welcher sich rechts neben dem Modell befindet, um dessen Objekte betrachten zu können\\
 		& 2. Ein Dialogfenster öffnet sich, welches eine Listenansicht aller zum Modell gespeicherten Objekte enthält \\ \hline
 		\textbf{Sonderfälle} & 2a. Es öffnet sich keine Listenansicht, da noch kein Objekt für das jeweilige Modell abgespeichert wurde \\ & $\rightarrow$ Der Nutzer wird über das Fehlen von Objekten durch einen Text in der Mitte des Dialogfensters informiert \\ \hline
 		
@@ -777,7 +814,7 @@ Und hier etwas über deren Übertragbarkeit.
 
 \begin{table}[htbp]
 	\centering
-	\begin{tabular}{|l|p{80mm}|}
+	\begin{tabular}{|l|p{90mm}|}
 		\hline
 		\textbf{Nummer} & \textbf{AF-O1} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Objekt hinzufügen} \\ \hline
@@ -861,7 +898,7 @@ Und hier etwas über deren Übertragbarkeit.
 		\textbf{Auslöser} & Der Nutzer betätigt den \glqq + \grqq-Button der sich unterhalb des Vorschaubildes des Objekts in der Listenansicht befindet  \\ \hline
 		\textbf{Vorbedingung} & Es wurde bereits ein Objekt abgespeichert und der Nutzer befindet sich in der Objektübersicht\\ \hline	
 		\textbf{Nachbedingung/Ziel} & Es wurde eine neue Trainingssitzung gestartet und dem Objekt wurde weitere Trainingsdaten hinzugefügt \\ \hline
-		\textbf{Nachbedingung im Sonderfall} & Das Training wurde nicht gestarte\\ \hline
+		\textbf{Nachbedingung im Sonderfall} & Das Training wurde nicht gestartet\\ \hline
 		\textbf{Standardablauf} & 1. Nutzer betätigt den \glqq +\grqq-Button \\
 		& 2. Die Applikation wechselt in die Kamera-Ansicht und das Training wird nach Ablauf des Countdowns gestartet \\ \hline
 		\textbf{Sonderfälle} & 2a. Das Training konnte nicht gestartet werden \\ & $\rightarrow$ Der Nutzer wird darüber mit einer Fehlermeldung informiert \\ \hline
@@ -902,7 +939,7 @@ Und hier etwas über deren Übertragbarkeit.
 		\textbf{Beschreibung} & Alle eingespeicherten Objekte sollen mitsamt aller Attribute des Objektes betrachtet werden können \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
 		\textbf{Auslöser} & Der Nutzer wechselt in die Objektübersicht  \\ \hline
-		\textbf{Vorbedingung} & Der Nutzer bereits Objekte eingespeichert \\ \hline	
+		\textbf{Vorbedingung} & Der Nutzer hat bereits Objekte eingespeichert \\ \hline	
 		\textbf{Nachbedingung/Ziel} & Der Nutzer kann nun eine Listenansicht über alle abgespeicherten Objekte betrachten \\ \hline
 		\textbf{Nachbedingung im Sonderfall} & Es wurden noch keine Objekte abgespeichert. Dementsprechend wurde keine Listenansicht erzeugt \\ \hline
 		\textbf{Standardablauf} & 1. Nutzer wechselt durch Betätigen des jeweiligen Buttons in der Navigationsleiste in die Objektübersicht \\
@@ -962,7 +999,7 @@ Und hier etwas über deren Übertragbarkeit.
 		\hline\\
 		\textbf{Nummer} & \textbf{AF-E3} \\ \hline
 		\textbf{Anwendungsfall} & \textbf{Einstellen der Auflösung der hinzuzufügenden Trainingsdaten} \\ \hline
-		\textbf{Beschreibung} & Die Größe der Fokusbox im Kamerahauptbildschirm soll konfigurierbar sein, um nahe beziehungs Objekte in der Ferne zu erfassen, ohne zu viel Hintergrund einzufangen \\ \hline
+		\textbf{Beschreibung} & Die Größe der Fokusbox im Kamerahauptbildschirm soll konfigurierbar sein, um nahe beziehungsweise Objekte in der Ferne zu erfassen, ohne zu viel Hintergrund einzufangen \\ \hline
 		\textbf{Akteur} & Nutzer \\ \hline
 		\textbf{Auslöser} & Der Nutzer betätigt den jeweiligen Schieberegler in den App-Einstellungen \\ \hline
 		\textbf{Vorbedingung} & Der Nutzer befindet sich in den App-Einstellungen \\ \hline	

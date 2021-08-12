@@ -48,7 +48,7 @@
 \contentsline {subsection}{\numberline {4.3.3}Trainingsdaten}{16}{subsection.4.3.3}%
 \contentsline {subsection}{\numberline {4.3.4}Latent-Replay-Puffer}{16}{subsection.4.3.4}%
 \contentsline {section}{\numberline {4.4}Architektur}{17}{section.4.4}%
-\contentsline {section}{\numberline {4.5}Feinentwurf}{18}{section.4.5}%
+\contentsline {section}{\numberline {4.5}Feinentwurf}{20}{section.4.5}%
 \contentsline {subsection}{\numberline {4.5.1}Klassendiagramme}{20}{subsection.4.5.1}%
 \contentsline {subsubsection}{\nonumberline Persistenz-Komponente}{20}{section*.22}%
 \contentsline {subsubsection}{\nonumberline Kamera Fragment}{20}{section*.24}%
@@ -73,13 +73,12 @@
 \contentsline {chapter}{\numberline {6}Tests}{39}{chapter.6}%
 \contentsline {section}{\numberline {6.1}Unit-Tests}{39}{section.6.1}%
 \contentsline {section}{\numberline {6.2}Akzeptanztest}{40}{section.6.2}%
-\contentsline {chapter}{\numberline {7}Zusammenfassung und Ausblick}{41}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Erreichte Ergebnisse}{41}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Ausblick}{41}{section.7.2}%
-\contentsline {subsection}{\numberline {7.2.1}Erweiterbarkeit der Ergebnisse}{41}{subsection.7.2.1}%
-\contentsline {subsection}{\numberline {7.2.2}Übertragbarkeit der Ergebnisse}{41}{subsection.7.2.2}%
-\contentsline {chapter}{\numberline {8}Fazit}{42}{chapter.8}%
-\contentsline {chapter}{\nonumberline Literatur}{43}{chapter*.33}%
-\contentsline {chapter}{\numberline {A}Beschreibung der Anwendungsfälle}{45}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Umfrageergebnisse Beta-Test}{61}{appendix.B}%
-\contentsline {chapter}{\numberline {C}Screenshots der graphischen Benutzeroberfläche}{65}{appendix.C}%
+\contentsline {chapter}{\numberline {7}Zusammenfassung und Ausblick}{42}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Erreichte Ergebnisse}{42}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Ausblick}{43}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Erweiterbarkeit der Ergebnisse}{43}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Übertragbarkeit der Ergebnisse}{44}{subsection.7.2.2}%
+\contentsline {chapter}{\nonumberline Literatur}{45}{chapter*.33}%
+\contentsline {chapter}{\numberline {A}Beschreibung der Anwendungsfälle}{47}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Umfrageergebnisse Beta-Test}{63}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Screenshots der graphischen Benutzeroberfläche}{67}{appendix.C}%
