@@ -1,13 +1,22 @@
-# Augmented Reality Applikation zur Wiedererkennung bereits eingelernter Objekte
-Software Engineering Projektarbeit HS Aalen
+# ARORA
+
+## **A**ugmented **R**eality **O**bject **R**ecognition **A**pplication
+
+Software Engineering Projektarbeit Aalen University
+
+ |Main Screen (Train / Detect)|Overview of trained objects|Settings|
+ |-------|----|---|
+ |![main screen](screenshots/training.png)|![overview of objects](screenshots/object-overview.png)|![settings in darkmode](screenshots/settings-dark.png)|
 
 ## Usage
 
-- Clone the project and open it in Android Studio. After building with gradle it should be executable on the device.
+- Clone the project and open it in Android Studio.
+- Build with gradle
 
 - You can also load the APK provided in the root directory of this repository directly onto your device to start the app.
 
 ## About
+
 **ARORA** (Augmented Reality and Object Recognition Application) is an Android application that was developed as part of a project at Aalen University in Germany. With this application it is possible to train a model for custom objects and mapping them to information and other metadata like their type and additional information.
 
 This is made possible by extending an already trained object recognition AI with additional objects using so-called Transfer Learning or more specifically Continual Learning.
